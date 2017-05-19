@@ -1,0 +1,13 @@
+.buttonArea {
+	margin-bottom: 10px;
+}
+
+.buttonArea button {
+	float: right;
+	margin-left: 10px;
+	padding: 8px 20px;
+}
+
+#page-wrapper {
+	padding-bottom: 50px;
+}

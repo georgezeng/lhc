@@ -1,0 +1,73 @@
+<!doctype html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+<meta http-equiv="content-type" content="text/html; charset=UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<title th:text="${title}"></title>
+<link rel="stylesheet" th:href="@{/resource/lib/bootstrap/css/bootstrap.min.css}" />
+<link rel="stylesheet" th:href="@{/resource/lib/metisMenu/css/metisMenu.min.css}" />
+<link rel="stylesheet" th:href="@{/resource/lib/font-awesome/css/font-awesome.min.css}" />
+<link rel="stylesheet" th:href="@{/resource/lib/framework/sb-admin-2.min.css}" />
+<link rel="stylesheet" th:href="@{/resource/lib/datatable/datatables-plugins/dataTables.bootstrap.css}" />
+<link rel="stylesheet" th:href="@{/resource/lib/datatable/datatables-responsive/dataTables.responsive.css}" />
+<link rel="stylesheet" th:href="@{/resource/lib/combobox/combobox.css}" />
+<link rel="stylesheet" th:href="@{/resource/system/css/common.css}" />
+<link rel="stylesheet" th:href="@{/resource/system/css/datatable.css}" />
+<link rel="stylesheet" th:href="@{'/resource/system' + ${view} + '/index.css'}" />
+</head>
+
+<body>
+	<div id="wrapper">
+
+        <!-- Navigation -->
+        <nav class="navbar navbar-default navbar-static-top" role="navigation" style="margin-bottom: 0">
+            <div class="navbar-header">
+                <a class="navbar-brand" th:href="@{/}" th:text="${title}"></a>
+			</div>
+            <!-- /.navbar-header -->
+
+            <ul class="nav navbar-top-links navbar-right">
+            	<li>
+            		欢迎您, 今天是 <strong style="color: blue;" th:text="${date}"></strong>
+            	</li>
+            </ul>
+            <!-- /.navbar-top-links -->
+
+			<div class="navbar-default sidebar" role="navigation">
+                <div id="navList" class="sidebar-nav navbar-collapse">
+                	<ul class="nav" id="side-menu">
+                        <li>
+                            <a href="/kj/list.html"><i class="fa fa-table fa-fw"></i> 历史记录</a>
+                        </li>
+                        <li>
+                            <a href="/yz/sx.html"><i class="fa fa-bar-chart-o fa-fw"></i> 生肖遗值</a>
+                        </li>
+                    </ul>
+                </div>
+            </div>
+			<!-- /.navbar-dynamic-side -->
+		</nav>
+        <!-- /#nav -->
+        
+        <div id="page-wrapper" th:replace="${view} :: content"></div>
+
+    </div>
+
+	<script type="text/javascript" th:src="@{/resource/lib/json/json2.js}"></script>
+	<script type="text/javascript" th:src="@{/resource/lib/lodash/lodash.js}"></script>
+	<script type="text/javascript" th:src="@{/resource/lib/jquery/jquery-3.1.0.min.js}"></script>
+	<script type="text/javascript" th:src="@{/resource/lib/bootstrap/js/bootstrap.min.js}"></script>
+	<script type="text/javascript" th:src="@{/resource/lib/metisMenu/js/metisMenu.min.js}"></script>
+	<script type="text/javascript" th:src="@{/resource/lib/datatable/datatables/js/jquery.dataTables.min.js}"></script>
+	<script type="text/javascript" th:src="@{/resource/lib/datatable/datatables-plugins/dataTables.bootstrap.min.js}"></script>
+	<script type="text/javascript" th:src="@{/resource/lib/datatable/datatables-responsive/dataTables.responsive.js}"></script>
+	<script type="text/javascript" th:src="@{/resource/lib/combobox/combobox.js}"></script>
+	<script type="text/javascript" th:src="@{/resource/lib/framework/sb-admin-2.min.js}"></script>
+	<script type="text/javascript" th:src="@{/resource/system/js/keycode.js}"></script>
+	<script type="text/javascript" th:src="@{/resource/system/js/common.js}"></script>
+	<script type="text/javascript" th:src="@{/resource/system/js/datatable.js}"></script>
+	<script type="text/javascript" th:src="@{/resource/system/js/main.js}"></script>
+	<script type="text/javascript" th:src="@{'/resource/system' + ${view} + '/index.js'}"></script>
+	
+</body>
+</html>
