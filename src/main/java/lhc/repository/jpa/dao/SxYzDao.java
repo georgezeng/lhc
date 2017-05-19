@@ -23,7 +23,7 @@ public class SxYzDao {
 	@Autowired
 	private EntityManager em;
 
-	public PageResult<SxYz> query(QueryInfo<Integer> queryInfo) {
+	public PageResult<SxYz> query(QueryInfo<SxYz> queryInfo) {
 		PageRequest pageRequest = null;
 		if (queryInfo.getPageInfo() != null) {
 			pageRequest = queryInfo.getPageInfo().toPageRequest();
@@ -33,10 +33,12 @@ public class SxYzDao {
 		condition.append("where 1=1").append("\n");
 		List<Object> args = new ArrayList<Object>();
 		if (queryInfo.getObject() != null) {
-			Integer value = queryInfo.getObject();
-			if (value != null) {
-				condition.append("and year = ?").append("\n");
-				args.add(value);
+			SxYz yz = queryInfo.getObject();
+			if (yz != null) {
+				condition.append("and year >= ?").append("\n");
+				args.add(yz.getYear());
+				condition.append("and phase >= ?").append("\n");
+				args.add(yz.getPhase());
 			}
 		}
 		StringBuilder countSql = new StringBuilder("select count(id)");

@@ -10,6 +10,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 import lhc.domain.KaiJiang;
+import lhc.domain.SxYz;
 import lhc.dto.BaseResult;
 import lhc.dto.query.QueryInfo;
 import lhc.repository.jpa.api.KaiJiangRepository;
@@ -59,7 +60,7 @@ public class YZController {
 	}
 
 	@RequestMapping("/listSX")
-	public BaseResult listSX(@RequestBody QueryInfo<Integer> queryInfo) {
+	public BaseResult listSX(@RequestBody QueryInfo<SxYz> queryInfo) {
 		return new BaseResult(sxYzDao.query(queryInfo));
 	}
 }

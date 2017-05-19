@@ -3,6 +3,7 @@ $(document).ready(function() {
 		url: '/mvc/yz/years',
 		success: function(list) {
 			var years = $("#years");
+			years.append("<option value='0'>0</option>");
 			for(var i in list) {
 				years.append("<option value='" + list[i] + "'>" + list[i] + "</option>");
 			}
@@ -12,6 +13,7 @@ $(document).ready(function() {
 					success: function(list) {
 						var phases = $("#phases");
 						phases.empty();
+						phases.append("<option value='0'>0</option>");
 						for(var i in list) {
 							phases.append("<option value='" + list[i] + "'>" + list[i] + "</option>");
 						}
@@ -31,7 +33,9 @@ $(document).ready(function() {
 		url : "/mvc/yz/listSX",
 		searchPlaceholder : "年份",
 		data : function(queryInfo, infoSettings) {
-			queryInfo.object = parseInt(infoSettings.search.value);
+			queryInfo.object = {};
+			queryInfo.object.year = parseInt($("#years").val());
+			queryInfo.object.phase = parseInt($("#phases").val());
 		},
 		lengthMenu : [ 50, 100, 150, 200, 300 ],
 		order: [[0, 'asc'], [1, 'asc']],
@@ -227,6 +231,10 @@ $(document).ready(function() {
 			}
 		]
 	});
+	
+	$("#searchBtn").click(function() {
+		datatable.ajax.reload();
+	})
 	
 });
 
