@@ -1,8 +1,7 @@
 $(document).ready(function() {
 	var query;
-	var tableId = "dataTable";
 	var datatable = createDataTable({
-		id : tableId,
+		id : "dataTable",
 		url : "/mvc/kj/list",
 		searchPlaceholder : "年份/日期/特码生肖",
 		data : function(queryInfo, infoSettings) {
@@ -28,7 +27,8 @@ $(document).ready(function() {
 		order: [[1, 'desc']],
 		columns : [ {
 			name : "year",
-			data : "year"
+			data : "year",
+			sortable: false
 		}, {
 			name : "date",
 			data : "date"
@@ -67,11 +67,17 @@ $(document).ready(function() {
 		if(!year) {
 			return;
 		}
+		openLoading();
 		post({
 			url: '/mvc/kj/sync/' + year,
 			success: function() {
 				alert("抓取成功");
 				datatable.ajax.reload();
+				closeLoading();
+			},
+			error: function(msg) {
+				alert(msg);
+				closeLoading();
 			}
 		});
 	});
@@ -81,15 +87,6 @@ $(document).ready(function() {
 		$("#download").submit();
 	});
 	
-	$("#calSXYZBtn").click(function() {
-		post({
-			url: '/mvc/yz/calSX/',
-			success: function() {
-				alert("生肖遗值计算完成");
-			}
-		});
-	});
-
 });
 
 function renderNumberAndSX(item, cls) {

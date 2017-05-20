@@ -49,10 +49,12 @@ public class SxYzDao {
 		if (count > 0) {
 			StringBuilder sql = new StringBuilder("select *");
 			sql.append("\n").append(condition);
+			if (pageRequest != null) {
+				QueryUtil.setOrder(sql, pageRequest);
+			}
 			Query query = em.createNativeQuery(sql.toString(), SxYz.class);
 			QueryUtil.setArgs(args, query);
 			if (pageRequest != null) {
-				QueryUtil.setOrder(sql, pageRequest);
 				QueryUtil.setPage(pageRequest, query);
 			} else {
 				queryInfo.setPageInfo(new PageInfo(1, 1));

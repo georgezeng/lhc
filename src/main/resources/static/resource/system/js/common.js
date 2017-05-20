@@ -81,6 +81,19 @@ function formatDateBoxFull(val){
 		} 
 }
 
+function openLoading() {
+	return $("#loading").dialog({
+		modal: true,
+		open: function(event, ui) {
+	        $(".ui-dialog-titlebar-close", ui.dialog | ui).hide();
+	    }
+	});
+}
+
+function closeLoading() {
+	$("#loading").dialog("close");
+}
+
 /*
  * Simplified Chinese translation for bootstrap-datetimepicker Yuan Cheung
  * <advanimal@gmail.com>

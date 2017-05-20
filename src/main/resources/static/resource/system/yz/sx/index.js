@@ -3,7 +3,7 @@ $(document).ready(function() {
 		url: '/mvc/yz/years',
 		success: function(list) {
 			var years = $("#years");
-			years.append("<option value='0'>0</option>");
+			years.append("<option value='0'>全部</option>");
 			for(var i in list) {
 				years.append("<option value='" + list[i] + "'>" + list[i] + "</option>");
 			}
@@ -13,7 +13,7 @@ $(document).ready(function() {
 					success: function(list) {
 						var phases = $("#phases");
 						phases.empty();
-						phases.append("<option value='0'>0</option>");
+						phases.append("<option value='0'>全部</option>");
 						for(var i in list) {
 							phases.append("<option value='" + list[i] + "'>" + list[i] + "</option>");
 						}
@@ -27,9 +27,43 @@ $(document).ready(function() {
 		}
 	});
 	
-	var tableId = "dataTable";
-	var datatable = createDataTable({
-		id : tableId,
+	var sxlist = ["shu", "niu", "hu", "tu", "long", "she", "ma", "yang", "hou", "ji", "gou", "zhu"];
+	var datatables = [];
+	var cols = ["year", "phase"];
+	for(var i in sxlist) {
+		cols.push(sxlist[i]);
+	}
+	cols.push("total");
+	cols.push("delta");
+	cols.push("lastYz");
+	var columns = [];
+	for(var i in cols) {
+		var col = cols[i];
+		columns.push({
+			name : col,
+			data : col,
+			sortable: false
+		});
+	}
+	var columnDefs = [];
+	for(var i = 2; i < 14; i++) {
+		(function(index) {
+			columnDefs.push({
+				aTargets: [index],
+				fnCreatedCell: function(nTd, sData, item, iRow, iCol) {
+					var value = item[sxlist[index-2]];
+					if(value == 0) {
+						$(nTd).css("color", "white").css("backgroundColor", "red");
+					} else {
+						$(nTd).css("backgroundColor", "#ffc");
+					}
+					$(nTd).text(value);
+				}
+			});
+		})(i);
+	}
+	datatables.push(createDataTable({
+		id : "dataTable",
 		url : "/mvc/yz/listSX",
 		searchPlaceholder : "年份",
 		data : function(queryInfo, infoSettings) {
@@ -39,202 +73,101 @@ $(document).ready(function() {
 		},
 		lengthMenu : [ 50, 100, 150, 200, 300 ],
 		order: [[0, 'asc'], [1, 'asc']],
-		columns : [ {
-			name : "year",
-			data : "year",
+		columns : columns,
+		aoColumnDefs: columnDefs
+	}));
+	
+	cols = ["year", "phase"];
+	columns = [];
+	for(var i in cols) {
+		var col = cols[i];
+		columns.push({
+			name : col,
+			data : col,
 			sortable: false
-		}, {
-			name : "phase",
-			data : "phase",
-			sortable: false
-		}, {
-			name : "shu",
-			data : "shu",
-			sortable: false
-		}, {
-			name : "niu",
-			data : "niu",
-			sortable: false
-		} , {
-			name : "hu",
-			data : "hu",
-			sortable: false
-		} , {
-			name : "tu",
-			data : "tu",
-			sortable: false
-		} , {
-			name : "long",
-			data : "long",
-			sortable: false
-		} , {
-			name : "she",
-			data : "she",
-			sortable: false
-		} , {
-			name : "ma",
-			data : "ma",
-			sortable: false
-		} , {
-			name : "yang",
-			data : "yang",
-			sortable: false
-		} , {
-			name : "hou",
-			data : "hou",
-			sortable: false
-		} , {
-			name : "ji",
-			data : "ji",
-			sortable: false
-		} , {
-			name : "gou",
-			data : "gou",
-			sortable: false
-		} , {
-			name : "zhu",
-			data : "zhu",
-			sortable: false
-		} , {
-			name : "total",
-			data : "total",
-			sortable: false
-		} , {
-			name : "delta",
-			data : "delta",
-			sortable: false
-		} , {
-			name : "lastYz",
+		})
+	}
+	for(var i = 0; i < 21; i++) {
+		var col = "lastYZ" + i;
+		columns.push({
+			name: col,
 			data : "lastYz",
 			sortable: false
-		} ],
-		aoColumnDefs: [
-			{
-				aTargets: [2],
+		});
+	}
+	cols = ["21-30", "31-40", "41-50", "51+"];
+	for(var i in cols) {
+		var col = "lastYZ-" + cols[i];
+		columns.push({
+			name : col,
+			data : "lastYz",
+			sortable: false
+		})
+	}
+	columnDefs = [];
+	for(var i = 2; i < 27; i++) {
+		(function(index) {
+			columnDefs.push({
+				aTargets: [index],
 				fnCreatedCell: function(nTd, sData, item, iRow, iCol) {
-					var value = item.shu;
-					if(value == 0) {
+					var value = item.lastYz;
+					var isRed = false;
+					if(index < 23) {
+						isRed = value == index-2;
+					} else if(index == 23) {
+						isRed = value > 20 && value < 31;
+					} else if(index == 24) {
+						isRed = value > 30 && value < 41;
+					} else if(index == 25) {
+						isRed = value > 40 && value < 51;
+					} else if(index == 26) {
+						isRed = value > 50;
+					}
+					if(isRed) {
 						$(nTd).css("color", "white").css("backgroundColor", "red");
 					}
 					$(nTd).text(value);
 				}
-			},
-			{
-				aTargets: [3],
-				fnCreatedCell: function(nTd, sData, item, iRow, iCol) {
-					var value = item.niu;
-					if(value == 0) {
-						$(nTd).css("color", "white").css("backgroundColor", "red");
-					}
-					$(nTd).text(value);
-				}
-			},
-			{
-				aTargets: [4],
-				fnCreatedCell: function(nTd, sData, item, iRow, iCol) {
-					var value = item.hu;
-					if(value == 0) {
-						$(nTd).css("color", "white").css("backgroundColor", "red");
-					}
-					$(nTd).text(value);
-				}
-			},
-			{
-				aTargets: [5],
-				fnCreatedCell: function(nTd, sData, item, iRow, iCol) {
-					var value = item.tu;
-					if(value == 0) {
-						$(nTd).css("color", "white").css("backgroundColor", "red");
-					}
-					$(nTd).text(value);
-				}
-			},
-			{
-				aTargets: [6],
-				fnCreatedCell: function(nTd, sData, item, iRow, iCol) {
-					var value = item.long;
-					if(value == 0) {
-						$(nTd).css("color", "white").css("backgroundColor", "red");
-					}
-					$(nTd).text(value);
-				}
-			},
-			{
-				aTargets: [7],
-				fnCreatedCell: function(nTd, sData, item, iRow, iCol) {
-					var value = item.she;
-					if(value == 0) {
-						$(nTd).css("color", "white").css("backgroundColor", "red");
-					}
-					$(nTd).text(value);
-				}
-			},
-			{
-				aTargets: [8],
-				fnCreatedCell: function(nTd, sData, item, iRow, iCol) {
-					var value = item.ma;
-					if(value == 0) {
-						$(nTd).css("color", "white").css("backgroundColor", "red");
-					}
-					$(nTd).text(value);
-				}
-			},
-			{
-				aTargets: [9],
-				fnCreatedCell: function(nTd, sData, item, iRow, iCol) {
-					var value = item.yang;
-					if(value == 0) {
-						$(nTd).css("color", "white").css("backgroundColor", "red");
-					}
-					$(nTd).text(value);
-				}
-			},
-			{
-				aTargets: [10],
-				fnCreatedCell: function(nTd, sData, item, iRow, iCol) {
-					var value = item.hou;
-					if(value == 0) {
-						$(nTd).css("color", "white").css("backgroundColor", "red");
-					}
-					$(nTd).text(value);
-				}
-			},
-			{
-				aTargets: [11],
-				fnCreatedCell: function(nTd, sData, item, iRow, iCol) {
-					var value = item.ji;
-					if(value == 0) {
-						$(nTd).css("color", "white").css("backgroundColor", "red");
-					}
-					$(nTd).text(value);
-				}
-			},
-			{
-				aTargets: [12],
-				fnCreatedCell: function(nTd, sData, item, iRow, iCol) {
-					var value = item.gou;
-					if(value == 0) {
-						$(nTd).css("color", "white").css("backgroundColor", "red");
-					}
-					$(nTd).text(value);
-				}
-			},
-			{
-				aTargets: [13],
-				fnCreatedCell: function(nTd, sData, item, iRow, iCol) {
-					var value = item.zhu;
-					if(value == 0) {
-						$(nTd).css("color", "white").css("backgroundColor", "red");
-					}
-					$(nTd).text(value);
-				}
-			}
-		]
-	});
+			});
+		})(i);
+	}
+	datatables.push(createDataTable({
+		id : "lastYZDatatable",
+		url : "/mvc/yz/listSX",
+		searchPlaceholder : "年份",
+		data : function(queryInfo, infoSettings) {
+			queryInfo.object = {};
+			queryInfo.object.year = parseInt($("#years").val());
+			queryInfo.object.phase = parseInt($("#phases").val());
+		},
+		lengthMenu : [ 50, 100, 150, 200, 300 ],
+		order: [[0, 'asc'], [1, 'asc']],
+		columns : columns,
+		aoColumnDefs: columnDefs
+	}));
 	
 	$("#searchBtn").click(function() {
-		datatable.ajax.reload();
-	})
+		reloadTables();
+	});
+	
+	$("#calSXYZBtn").click(function() {
+		openLoading();
+		post({
+			url: '/mvc/yz/calSX/',
+			success: function() {
+				alert("生肖遗值计算完成");
+				reloadTables();
+				closeLoading();
+			}
+		});
+	});
+	
+	function reloadTables() {
+		for(var i in datatables) {
+			datatables[i].ajax.reload();
+		}
+	}
 	
 });
+
 
