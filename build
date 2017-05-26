@@ -1,4 +1,3 @@
 git pull
-./mvnw clean install
 sudo docker build -t lhc .
 sudo docker run -d lhc
