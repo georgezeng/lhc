@@ -2,23 +2,16 @@ package lhc.config;
 
 import java.util.concurrent.Executor;
 
-import javax.annotation.PostConstruct;
-
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
-import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.data.jpa.repository.config.EnableJpaRepositories;
 import org.springframework.scheduling.annotation.AsyncConfigurerSupport;
 import org.springframework.scheduling.annotation.EnableAsync;
 import org.springframework.scheduling.concurrent.ThreadPoolTaskExecutor;
-import org.springframework.session.data.redis.RedisOperationsSessionRepository;
-import org.springframework.session.data.redis.config.ConfigureRedisAction;
-import org.springframework.session.data.redis.config.annotation.web.http.EnableRedisHttpSession;
 
 @Configuration
 @EnableAsync
-@EnableRedisHttpSession
+//@EnableRedisHttpSession
 //@EnableRedisRepositories(basePackages = { "lhc.repository.redis.api" })
 @EnableJpaRepositories(basePackages = { "lhc.repository.jpa.api" })
 public class AppConfig extends AsyncConfigurerSupport {
@@ -38,19 +31,19 @@ public class AppConfig extends AsyncConfigurerSupport {
 	 * 
 	 * @return
 	 */
-	@Bean
-	public static ConfigureRedisAction configureRedisAction() {
-		return ConfigureRedisAction.NO_OP;
-	}
+//	@Bean
+//	public static ConfigureRedisAction configureRedisAction() {
+//		return ConfigureRedisAction.NO_OP;
+//	}
 
-	@Value("${spring.session.redis.namespace}")
-	private String sessionKeyNamespace;
+//	@Value("${spring.session.redis.namespace}")
+//	private String sessionKeyNamespace;
 
-	@Autowired
-	private RedisOperationsSessionRepository sessionReporitory;
-
-	@PostConstruct
-	public void init() {
-		sessionReporitory.setRedisKeyNamespace(sessionKeyNamespace);
-	}
+//	@Autowired
+//	private RedisOperationsSessionRepository sessionReporitory;
+//
+//	@PostConstruct
+//	public void init() {
+//		sessionReporitory.setRedisKeyNamespace(sessionKeyNamespace);
+//	}
 }

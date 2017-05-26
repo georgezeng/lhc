@@ -30,12 +30,6 @@ $(document).ready(function() {
 	var sxlist = ["shu", "niu", "hu", "tu", "long", "she", "ma", "yang", "hou", "ji", "gou", "zhu"];
 	var datatables = [];
 	var cols = ["year", "phase"];
-	for(var i in sxlist) {
-		cols.push(sxlist[i]);
-	}
-	cols.push("total");
-	cols.push("delta");
-	cols.push("lastYz");
 	var columns = [];
 	for(var i in cols) {
 		var col = cols[i];
@@ -44,48 +38,6 @@ $(document).ready(function() {
 			data : col,
 			sortable: false
 		});
-	}
-	var columnDefs = [];
-	for(var i = 2; i < 14; i++) {
-		(function(index) {
-			columnDefs.push({
-				aTargets: [index],
-				fnCreatedCell: function(nTd, sData, item, iRow, iCol) {
-					var value = item[sxlist[index-2]];
-					if(value == 0) {
-						$(nTd).css("color", "white").css("backgroundColor", "red");
-					} else {
-						$(nTd).css("backgroundColor", "#ffc");
-					}
-					$(nTd).text(value);
-				}
-			});
-		})(i);
-	}
-	datatables.push(createDataTable({
-		id : "dataTable",
-		url : "/mvc/yz/listSX",
-		searchPlaceholder : "年份",
-		data : function(queryInfo, infoSettings) {
-			queryInfo.object = {};
-			queryInfo.object.year = parseInt($("#years").val());
-			queryInfo.object.phase = parseInt($("#phases").val());
-		},
-		lengthMenu : [ 50, 100, 150, 200, 300 ],
-		order: [[0, 'asc'], [1, 'asc']],
-		columns : columns,
-		aoColumnDefs: columnDefs
-	}));
-	
-	cols = ["year", "phase"];
-	columns = [];
-	for(var i in cols) {
-		var col = cols[i];
-		columns.push({
-			name : col,
-			data : col,
-			sortable: false
-		})
 	}
 	for(var i = 0; i < 21; i++) {
 		var col = "lastYZ" + i;
@@ -102,9 +54,9 @@ $(document).ready(function() {
 			name : col,
 			data : "lastYz",
 			sortable: false
-		})
+		});
 	}
-	columnDefs = [];
+	var columnDefs = [];
 	for(var i = 2; i < 27; i++) {
 		(function(index) {
 			columnDefs.push({
@@ -134,7 +86,7 @@ $(document).ready(function() {
 	datatables.push(createDataTable({
 		id : "lastYZDatatable",
 		url : "/mvc/yz/listSX",
-		searchPlaceholder : "年份",
+		bFilter: false,
 		data : function(queryInfo, infoSettings) {
 			queryInfo.object = {};
 			queryInfo.object.year = parseInt($("#years").val());

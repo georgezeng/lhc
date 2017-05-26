@@ -27,6 +27,7 @@ function createDataTable(opt) {
 				},
 				lengthMenu : opt.lengthMenu ? opt.lengthMenu : [ 10, 20, 50, 100 ],
 				aoColumnDefs: opt.aoColumnDefs,
+				"bFilter": opt.bFilter == false ? false : true,
 				ajax : function(infoSettings, callback, settings) {
 					var successHandler = opt.success;
 					var queryInfo = createQueryInfo(infoSettings);

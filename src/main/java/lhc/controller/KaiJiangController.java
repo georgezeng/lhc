@@ -47,7 +47,12 @@ public class KaiJiangController {
 				content.append(data.getYear()).append(",");
 				content.append(data.getDate()).append(",");
 				content.append(data.getPhase()).append(",");
-				content.append(data.getNum1Sx().getText()).append(",");
+				content.append(data.getNum1Sx().getText() + "(" + data.getNum1() + ")").append(" ");
+				content.append(data.getNum2Sx().getText() + "(" + data.getNum2() + ")").append(" ");
+				content.append(data.getNum3Sx().getText() + "(" + data.getNum3() + ")").append(" ");
+				content.append(data.getNum4Sx().getText() + "(" + data.getNum4() + ")").append(" ");
+				content.append(data.getNum5Sx().getText() + "(" + data.getNum5() + ")").append(" ");
+				content.append(data.getNum6Sx().getText() + "(" + data.getNum6() + ")").append(",");
 				content.append(data.getSpecialSx().getText()).append("\n");
 			}
 			response.setContentType("application/octet-stream");

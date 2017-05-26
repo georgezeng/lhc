@@ -41,7 +41,19 @@
                             <a href="/kj/list.html"><i class="fa fa-table fa-fw"></i> 历史记录</a>
                         </li>
                         <li>
-                            <a href="/yz/sx.html"><i class="fa fa-bar-chart-o fa-fw"></i> 生肖遗值</a>
+                            <a href="javascript:;"><i class="fa fa-bar-chart-o fa-fw"></i> 生肖遗值<span class="fa arrow"></span></a>
+                            <ul class="nav nav-second-level">
+                                <li>
+                                    <a href="/sxyz/list.html">历史列表</a>
+                                </li>
+                                <li>
+                                    <a href="/sxyz/lastYz.html">上期遗值列表</a>
+                                </li>
+                                <li>
+                                    <a href="/sxyz/chart.html">图表&amp;统计</a>
+                                </li>
+                            </ul>
+                            <!-- /.nav-second-level -->
                         </li>
                     </ul>
                 </div>
@@ -67,6 +79,7 @@
 	<script type="text/javascript" th:src="@{/resource/lib/datatable/datatables/js/jquery.dataTables.min.js}"></script>
 	<script type="text/javascript" th:src="@{/resource/lib/datatable/datatables-plugins/dataTables.bootstrap.min.js}"></script>
 	<script type="text/javascript" th:src="@{/resource/lib/datatable/datatables-responsive/dataTables.responsive.js}"></script>
+	<script type="text/javascript" th:src="@{/resource/lib/highcharts/highcharts.js}"></script>
 	<script type="text/javascript" th:src="@{/resource/lib/combobox/combobox.js}"></script>
 	<script type="text/javascript" th:src="@{/resource/lib/framework/sb-admin-2.min.js}"></script>
 	<script type="text/javascript" th:src="@{/resource/system/js/keycode.js}"></script>
