@@ -1,5 +1,5 @@
 FROM java:8
-FROM maven:3.2-jdk-7-onbuild
+FROM maven:3.5.0
 WORKDIR /lhc
 ADD . /lhc
 RUN mvn clean install
