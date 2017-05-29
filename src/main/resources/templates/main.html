@@ -14,7 +14,7 @@
 <link rel="stylesheet" th:href="@{/resource/lib/combobox/combobox.css}" />
 <link rel="stylesheet" th:href="@{/resource/system/css/common.css}" />
 <link rel="stylesheet" th:href="@{/resource/system/css/datatable.css}" />
-<link rel="stylesheet" th:href="@{'/resource/system' + ${view} + '/index.css'}" />
+<link rel="stylesheet" th:href="@{'/resource/system/' + ${view} + '/index.css'}" />
 </head>
 
 <body>
@@ -50,7 +50,16 @@
                                     <a href="/sxyz/lastYz.html">上期遗值列表</a>
                                 </li>
                                 <li>
-                                    <a href="/sxyz/chart.html">图表&amp;统计</a>
+                                    <a href="/sxyz/zflist.html">振幅列表</a>
+                                </li>
+                                <li>
+                                    <a href="/sxyz/zfcountlist.html">振幅次数列表</a>
+                                </li>
+                                <li>
+                                    <a href="/sxyz/yzchart.html">遗值图表</a>
+                                </li>
+                                <li>
+                                    <a href="/sxyz/zfchart.html">振幅图表</a>
                                 </li>
                             </ul>
                             <!-- /.nav-second-level -->
@@ -86,7 +95,7 @@
 	<script type="text/javascript" th:src="@{/resource/system/js/common.js}"></script>
 	<script type="text/javascript" th:src="@{/resource/system/js/datatable.js}"></script>
 	<script type="text/javascript" th:src="@{/resource/system/js/main.js}"></script>
-	<script type="text/javascript" th:src="@{'/resource/system' + ${view} + '/index.js'}"></script>
+	<script type="text/javascript" th:src="@{'/resource/system/' + ${view} + '/index.js'}"></script>
 	
 </body>
 </html>

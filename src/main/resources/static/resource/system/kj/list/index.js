@@ -8,6 +8,7 @@ $(document).ready(function() {
 			query = queryInfo;
 			queryInfo.object = infoSettings.search.value;
 		},
+		lengthMenu : [ 10, 20, 50, 100, 200, 300 ],
 		success : function(result) {
 			for (var i = 0; i < result.list.length; i++) {
 				var item = result.list[i];

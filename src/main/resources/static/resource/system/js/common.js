@@ -39,6 +39,10 @@ function postOpt(option) {
 					option.requestError(jqXHR, textStatus, errorThrown);
 					return;
 				}
+				if(typeof option.jsonError === 'function') {
+					option.jsonError(jqXHR.responseJSON.message);
+					return;
+				}
 				if(jqXHR.responseJSON && jqXHR.responseJSON.message) {
 					alert(jqXHR.responseJSON.message);
 				} else {

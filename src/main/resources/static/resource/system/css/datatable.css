@@ -5,3 +5,9 @@ table.table thead > tr > th {
 .operationAnchor {
 	margin-left: 10px;	
 }
+
+tfoot td {
+	border-top: 3px solid #DDDDDD !important;
+	border-bottom: none !important;
+	border-left: none !important;
+}

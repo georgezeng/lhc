@@ -25,7 +25,7 @@ function createDataTable(opt) {
 						sPrevious : "上一页"
 					}
 				},
-				lengthMenu : opt.lengthMenu ? opt.lengthMenu : [ 10, 20, 50, 100 ],
+				lengthMenu : opt.lengthMenu ? opt.lengthMenu : [ 10, 30, 100, 200, 300, 400, 500 ],
 				aoColumnDefs: opt.aoColumnDefs,
 				"bFilter": opt.bFilter == false ? false : true,
 				ajax : function(infoSettings, callback, settings) {

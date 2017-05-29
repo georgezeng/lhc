@@ -85,7 +85,6 @@ $(document).ready(function() {
 			queryInfo.object.year = parseInt($("#years").val());
 			queryInfo.object.phase = parseInt($("#phases").val());
 		},
-		lengthMenu : [ 50, 100, 150, 200, 300 ],
 		order: [[0, 'asc'], [1, 'asc']],
 		columns : columns,
 		aoColumnDefs: columnDefs
@@ -102,6 +101,10 @@ $(document).ready(function() {
 			success: function() {
 				alert("生肖遗值计算完成");
 				reloadTables();
+				closeLoading();
+			},
+			jsonError: function(msg) {
+				alert(msg);
 				closeLoading();
 			}
 		});

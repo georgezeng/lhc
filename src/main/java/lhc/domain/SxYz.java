@@ -2,10 +2,14 @@ package lhc.domain;
 
 import javax.persistence.Column;
 import javax.persistence.Entity;
+import javax.persistence.EnumType;
+import javax.persistence.Enumerated;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.Table;
+
+import lhc.enums.SX;
 
 @Entity
 @Table(name = "sx_yz")
@@ -16,6 +20,7 @@ public class SxYz {
 
 	private int year;
 	private int phase;
+	private String date;
 	private Integer Shu;
 	private Integer Niu;
 	private Integer Hu;
@@ -32,6 +37,24 @@ public class SxYz {
 	private Integer total;
 	private Integer delta;
 	private Integer lastYz;
+	@Enumerated(EnumType.STRING)
+	private SX currentSx;
+	
+	public SX getCurrentSx() {
+		return currentSx;
+	}
+
+	public void setCurrentSx(SX currentSx) {
+		this.currentSx = currentSx;
+	}
+
+	public String getDate() {
+		return date;
+	}
+
+	public void setDate(String date) {
+		this.date = date;
+	}
 
 	public int getYear() {
 		return year;

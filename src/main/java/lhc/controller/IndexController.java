@@ -21,7 +21,7 @@ public class IndexController {
 	public String index(HttpServletRequest request, Model model) {
 		model.addAttribute("title", systemTitle);
 		model.addAttribute("date", DateFormat.getDateInstance(DateFormat.FULL, Locale.CHINA).format(new Date()));
-		model.addAttribute("view", request.getRequestURI().replace(".html", ""));
+		model.addAttribute("view", request.getRequestURI().replaceFirst("/", "").replace(".html", ""));
 		return "main";
 	}
 

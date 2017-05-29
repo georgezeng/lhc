@@ -37,6 +37,10 @@ $(document).ready(function() {
 				alert("生肖遗值计算完成");
 				loadChart();
 				closeLoading();
+			},
+			jsonError: function(msg) {
+				alert(msg);
+				closeLoading();
 			}
 		});
 	});
@@ -86,7 +90,7 @@ $(document).ready(function() {
 				Highcharts.chart('charts', {
 					
 					title: {
-						text: '遗值图表'
+						text: ''
 					},
 					
 					yAxis: {

@@ -11,3 +11,7 @@
 #page-wrapper {
 	padding-bottom: 50px;
 }
+
+.combobox-container, .input-group {
+	width: 180px;
+}
