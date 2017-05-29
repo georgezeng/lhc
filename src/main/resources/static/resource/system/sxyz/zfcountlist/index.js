@@ -19,6 +19,7 @@ $(document).ready(function() {
 							phases.prev().remove();
 						}
 						phases.combobox();
+						$("#searchBtn").click();
 					}
 				});
 			}).change();
@@ -67,9 +68,7 @@ $(document).ready(function() {
 			queryInfo.object = {};
 			queryInfo.object.year = parseInt($("#years").val());
 			queryInfo.object.phase = parseInt($("#phases").val());
-			queryInfo.object.date = "desc";
 		},
-		order: [[0, 'desc'], [1, 'desc']],
 		columns : columns,
 		aoColumnDefs: columnDefs
 	}));

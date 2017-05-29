@@ -1,6 +1,7 @@
 package lhc.repository.jpa.dao;
 
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.List;
 
 import javax.persistence.EntityManager;
@@ -14,6 +15,8 @@ import lhc.domain.SxZfYz;
 import lhc.dto.query.PageInfo;
 import lhc.dto.query.PageResult;
 import lhc.dto.query.QueryInfo;
+import lhc.dto.query.SortInfo;
+import lhc.enums.SortOrder;
 import lhc.util.DatabaseUtil;
 import lhc.util.QueryUtil;
 
@@ -26,6 +29,10 @@ public class SxZfYzDao {
 	public PageResult<SxZfYz> query(QueryInfo<SxZfYz> queryInfo) {
 		PageRequest pageRequest = null;
 		if (queryInfo.getPageInfo() != null) {
+			List<SortInfo> sorts = new ArrayList<SortInfo>();
+			sorts.add(new SortInfo("year", SortOrder.DESC));
+			sorts.add(new SortInfo("phase", SortOrder.DESC));
+			queryInfo.getPageInfo().setSorts(sorts);
 			pageRequest = queryInfo.getPageInfo().toPageRequest();
 		}
 		StringBuilder condition = new StringBuilder();
@@ -35,17 +42,10 @@ public class SxZfYzDao {
 		if (queryInfo.getObject() != null) {
 			SxZfYz yz = queryInfo.getObject();
 			if (yz != null) {
-				if (!"desc".equals(yz.getDate())) {
-					condition.append("and year >= ?").append("\n");
-					args.add(yz.getYear());
-					condition.append("and phase >= ?").append("\n");
-					args.add(yz.getPhase());
-				} else {
-					condition.append("and year <= ?").append("\n");
-					args.add(yz.getYear());
-					condition.append("and phase <= ?").append("\n");
-					args.add(yz.getPhase());
-				}
+				condition.append("and year <= ?").append("\n");
+				args.add(yz.getYear());
+				condition.append("and phase <= ?").append("\n");
+				args.add(yz.getPhase());
 			}
 		}
 		StringBuilder countSql = new StringBuilder("select count(id)");
@@ -67,6 +67,7 @@ public class SxZfYzDao {
 				queryInfo.setPageInfo(new PageInfo(1, 1));
 			}
 			List<SxZfYz> list = query.getResultList();
+			Collections.reverse(list);
 			return new PageResult<SxZfYz>(list, count, queryInfo.getPageInfo());
 		}
 		return new PageResult<SxZfYz>(new ArrayList<SxZfYz>(), 0, queryInfo.getPageInfo());

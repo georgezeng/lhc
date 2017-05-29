@@ -106,7 +106,7 @@ $(document).ready(function() {
 				            }
 				        },
 						series: {
-			                pointWidth: 10
+			                pointWidth: 16
 			            }
 				    },
 					

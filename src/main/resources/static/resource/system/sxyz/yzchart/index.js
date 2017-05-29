@@ -3,7 +3,6 @@ $(document).ready(function() {
 		url: '/mvc/yz/years',
 		success: function(list) {
 			var years = $("#years");
-			years.append("<option value='0'>全部</option>");
 			for(var i in list) {
 				years.append("<option value='" + list[i] + "'>" + list[i] + "</option>");
 			}
@@ -13,7 +12,6 @@ $(document).ready(function() {
 					success: function(list) {
 						var phases = $("#phases");
 						phases.empty();
-						phases.append("<option value='0'>全部</option>");
 						for(var i in list) {
 							phases.append("<option value='" + list[i] + "'>" + list[i] + "</option>");
 						}
@@ -21,6 +19,7 @@ $(document).ready(function() {
 							phases.prev().remove();
 						}
 						phases.combobox();
+						loadChart();
 					}
 				});
 			}).change();
@@ -59,17 +58,7 @@ $(document).ready(function() {
 				},
 				pageInfo: {
 					pageNo: 1,
-					pageSize: parseInt($("#phaseTotal").val()),
-					sorts: [
-						{
-							order: "ASC",
-							property: "year"
-						},
-						{
-							order: "ASC",
-							property: "phase"
-						}
-					]
+					pageSize: parseInt($("#phaseTotal").val())
 				}
 			},
 			success: function(result) {

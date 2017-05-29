@@ -1,6 +1,7 @@
 package lhc.repository.jpa.dao;
 
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.List;
 
 import javax.persistence.EntityManager;
@@ -14,6 +15,8 @@ import lhc.domain.SxYz;
 import lhc.dto.query.PageInfo;
 import lhc.dto.query.PageResult;
 import lhc.dto.query.QueryInfo;
+import lhc.dto.query.SortInfo;
+import lhc.enums.SortOrder;
 import lhc.util.DatabaseUtil;
 import lhc.util.QueryUtil;
 
@@ -26,6 +29,10 @@ public class SxYzDao {
 	public PageResult<SxYz> query(QueryInfo<SxYz> queryInfo) {
 		PageRequest pageRequest = null;
 		if (queryInfo.getPageInfo() != null) {
+			List<SortInfo> sorts = new ArrayList<SortInfo>();
+			sorts.add(new SortInfo("year", SortOrder.DESC));
+			sorts.add(new SortInfo("phase", SortOrder.DESC));
+			queryInfo.getPageInfo().setSorts(sorts);
 			pageRequest = queryInfo.getPageInfo().toPageRequest();
 		}
 		StringBuilder condition = new StringBuilder();
@@ -35,9 +42,9 @@ public class SxYzDao {
 		if (queryInfo.getObject() != null) {
 			SxYz yz = queryInfo.getObject();
 			if (yz != null) {
-				condition.append("and year >= ?").append("\n");
+				condition.append("and year <= ?").append("\n");
 				args.add(yz.getYear());
-				condition.append("and phase >= ?").append("\n");
+				condition.append("and phase <= ?").append("\n");
 				args.add(yz.getPhase());
 			}
 		}
@@ -60,6 +67,7 @@ public class SxYzDao {
 				queryInfo.setPageInfo(new PageInfo(1, 1));
 			}
 			List<SxYz> list = query.getResultList();
+			Collections.reverse(list);
 			return new PageResult<SxYz>(list, count, queryInfo.getPageInfo());
 		}
 		return new PageResult<SxYz>(new ArrayList<SxYz>(), 0, queryInfo.getPageInfo());

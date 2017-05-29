@@ -83,7 +83,6 @@ public class YZController {
 		PageResult<SxZfYz> result = sxZfYzDao.query(queryInfo);
 		List<SxZfYz> list = new ArrayList<SxZfYz>();
 		if (result != null && result.getTotal() > 0) {
-			Collections.reverse(result.getList());
 			SxZfYz lastZF = new SxZfYz();
 			for (int i = 0; i < 12; i++) {
 				Method m = SxZfYz.class.getDeclaredMethod("setZf" + i, Integer.class);
