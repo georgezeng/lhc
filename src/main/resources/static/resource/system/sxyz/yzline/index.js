@@ -28,13 +28,13 @@ $(document).ready(function() {
 	
 	$("#phaseTotal").combobox();
 	
-	$("#calSXYZBtn").click(function() {
+	$("#calYZBtn").click(function() {
 		openLoading();
 		post({
-			url: '/mvc/yz/calSX/',
+			url: '/mvc/yz/calYZ/',
 			success: function() {
-				alert("生肖遗值计算完成");
-				loadChart();
+				alert("遗值计算完成");
+				reloadTables();
 				closeLoading();
 			},
 			jsonError: function(msg) {

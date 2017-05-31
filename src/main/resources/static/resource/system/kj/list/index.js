@@ -88,6 +88,26 @@ $(document).ready(function() {
 		$("#download").submit();
 	});
 	
+	$("#clearBtn").click(function() {
+		var year = checkYear();
+		if(!year) {
+			return;
+		}
+		openLoading();
+		post({
+			url: '/mvc/kj/delete/' + year,
+			success: function() {
+				alert("清除成功");
+				datatable.ajax.reload();
+				closeLoading();
+			},
+			error: function(msg) {
+				alert(msg);
+				closeLoading();
+			}
+		});
+	});
+	
 });
 
 function renderNumberAndSX(item, cls) {

@@ -123,3 +123,7 @@ function closeLoading() {
    }
 }(jQuery));
 
+$(function() {
+    $('#side-menu').metisMenu();
+});
+

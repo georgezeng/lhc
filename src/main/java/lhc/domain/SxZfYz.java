@@ -5,6 +5,7 @@ import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.Table;
+import javax.persistence.Transient;
 
 @Entity
 @Table(name = "sx_zf_yz")
@@ -31,6 +32,37 @@ public class SxZfYz {
 	private Integer total;
 	private Integer delta;
 	private Integer lastYz;
+	private Integer currentPos;
+
+	@Transient
+	private Integer[] posList = new Integer[12];
+
+	@Transient
+	private int[] lastYzList = new int[25];
+
+	public int[] getLastYzList() {
+		return lastYzList;
+	}
+
+	public void setLastYzList(int[] lastYzList) {
+		this.lastYzList = lastYzList;
+	}
+
+	public Integer[] getPosList() {
+		return posList;
+	}
+
+	public void setPosList(Integer[] posList) {
+		this.posList = posList;
+	}
+
+	public Integer getCurrentPos() {
+		return currentPos;
+	}
+
+	public void setCurrentPos(Integer currentPos) {
+		this.currentPos = currentPos;
+	}
 
 	public String getDate() {
 		return date;

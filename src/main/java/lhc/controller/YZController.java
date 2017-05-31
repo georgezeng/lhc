@@ -1,9 +1,13 @@
 package lhc.controller;
 
 import java.lang.reflect.Method;
+import java.math.BigDecimal;
+import java.math.RoundingMode;
 import java.util.ArrayList;
 import java.util.Collections;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -12,12 +16,18 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 import lhc.domain.KaiJiang;
+import lhc.domain.QwYz;
 import lhc.domain.SxYz;
 import lhc.domain.SxZfYz;
 import lhc.dto.BaseResult;
+import lhc.dto.PmDTO;
+import lhc.dto.PmNum;
+import lhc.dto.SpecialNum;
 import lhc.dto.query.PageResult;
 import lhc.dto.query.QueryInfo;
 import lhc.repository.jpa.api.KaiJiangRepository;
+import lhc.repository.jpa.dao.KaiJiangDao;
+import lhc.repository.jpa.dao.QwYzDao;
 import lhc.repository.jpa.dao.SxYzDao;
 import lhc.repository.jpa.dao.SxZfYzDao;
 import lhc.service.YZService;
@@ -36,6 +46,12 @@ public class YZController {
 
 	@Autowired
 	private SxZfYzDao sxZfYzDao;
+
+	@Autowired
+	private KaiJiangDao kaiJiangDao;
+
+	@Autowired
+	private QwYzDao qwYzDao;
 
 	@RequestMapping("/years")
 	public BaseResult years() {
@@ -61,16 +77,49 @@ public class YZController {
 		return new BaseResult(phases);
 	}
 
-	@RequestMapping("/calSX")
-	public BaseResult calSX() {
+	@RequestMapping("/calYZ")
+	public BaseResult calYZ() {
 		yzService.calSX();
 		yzService.calSXZF();
+		yzService.calHMQWYZ();
 		return BaseResult.EMPTY;
 	}
 
 	@RequestMapping("/listSX")
 	public BaseResult listSX(@RequestBody QueryInfo<SxYz> queryInfo) {
 		return new BaseResult(sxYzDao.query(queryInfo));
+	}
+
+	@RequestMapping("/listSXZH")
+	public BaseResult listSXZH(@RequestBody QueryInfo<SxYz> queryInfo) throws Exception {
+		queryInfo.setToReverse(false);
+		PageResult<SxYz> result = sxYzDao.query(queryInfo);
+		if (result != null && result.getList() != null && !result.getList().isEmpty()) {
+			SxYz last = result.getList().get(0);
+			SxYz next = null;
+			SxYz totalLine = new SxYz();
+			for (int i = 0; i < result.getList().size(); i++) {
+				SxYz data = result.getList().get(i);
+				data.setTopSx(last.getCurrentSx());
+				if (data.getCurrentSx().equals(last.getCurrentSx())) {
+					if (i > 0) {
+						next = result.getList().get(i - 1);
+						next.setLastSx(data.getCurrentSx());
+						Method sm = SxYz.class.getDeclaredMethod("set" + next.getCurrentSx().name(), Integer.class);
+						Method gm = SxYz.class.getDeclaredMethod("get" + next.getCurrentSx().name());
+						Integer count = (Integer) gm.invoke(totalLine);
+						if (count == null) {
+							count = 0;
+						}
+						count++;
+						sm.invoke(totalLine, count);
+					}
+				}
+			}
+			Collections.reverse(result.getList());
+			result.getList().add(totalLine);
+		}
+		return new BaseResult(result);
 	}
 
 	@RequestMapping("/listSXZF")
@@ -112,5 +161,208 @@ public class YZController {
 		}
 		result.setList(list);
 		return new BaseResult(result);
+	}
+
+	@RequestMapping("/countSXJZ")
+	public BaseResult countSXJZ(@RequestBody QueryInfo<SxYz> queryInfo) throws Exception {
+		PageResult<SxYz> result = sxYzDao.query(queryInfo);
+		if (result != null && result.getList() != null && !result.getList().isEmpty()) {
+			SxYz totalLine = new SxYz();
+			for (SxYz data : result.getList()) {
+				Integer lastYz = data.getLastYz();
+				if (lastYz != null) {
+					if (lastYz < 21) {
+						totalLine.getLastYzList()[lastYz]++;
+					} else if (lastYz > 20 && lastYz < 31) {
+						totalLine.getLastYzList()[21]++;
+					} else if (lastYz > 30 && lastYz < 41) {
+						totalLine.getLastYzList()[22]++;
+					} else if (lastYz > 40 && lastYz < 51) {
+						totalLine.getLastYzList()[23]++;
+					} else {
+						totalLine.getLastYzList()[24]++;
+					}
+				}
+			}
+			result.getList().add(totalLine);
+		}
+		return new BaseResult(result);
+	}
+
+	@RequestMapping("/countSXZFJZ")
+	public BaseResult countSXZFJZ(@RequestBody QueryInfo<SxZfYz> queryInfo) throws Exception {
+		PageResult<SxZfYz> result = sxZfYzDao.query(queryInfo);
+		if (result != null && result.getList() != null && !result.getList().isEmpty()) {
+			SxZfYz totalLine = new SxZfYz();
+			for (SxZfYz data : result.getList()) {
+				Integer lastYz = data.getLastYz();
+				if (lastYz != null) {
+					if (lastYz < 21) {
+						totalLine.getLastYzList()[lastYz]++;
+					} else if (lastYz > 20 && lastYz < 31) {
+						totalLine.getLastYzList()[21]++;
+					} else if (lastYz > 30 && lastYz < 41) {
+						totalLine.getLastYzList()[22]++;
+					} else if (lastYz > 40 && lastYz < 51) {
+						totalLine.getLastYzList()[23]++;
+					} else {
+						totalLine.getLastYzList()[24]++;
+					}
+				}
+			}
+			result.getList().add(totalLine);
+		}
+		return new BaseResult(result);
+	}
+
+	@RequestMapping("/countSXZF10Loop")
+	public BaseResult countSXZF10Loop(@RequestBody QueryInfo<SxZfYz> queryInfo) throws Exception {
+		PageResult<SxZfYz> result = sxZfYzDao.query(queryInfo);
+		if (result != null && result.getList() != null && !result.getList().isEmpty()) {
+			for (int i = result.getList().size() - 1; i >= 0; i--) {
+				SxZfYz data = result.getList().get(i);
+				int k = i - 10;
+				for (int j = 0; j < 11; j++) {
+					if (k > -1 && k < result.getList().size()) {
+						data.getPosList()[j] = result.getList().get(k).getCurrentPos();
+					}
+					k++;
+				}
+				if (i < result.getList().size() - 2) {
+					data.getPosList()[11] = result.getList().get(i + 1).getCurrentPos();
+				}
+			}
+		}
+		return new BaseResult(result);
+	}
+
+	@RequestMapping("/countSX10Loop")
+	public BaseResult countSX10Loop(@RequestBody QueryInfo<SxYz> queryInfo) throws Exception {
+		PageResult<SxYz> result = sxYzDao.query(queryInfo);
+		if (result != null && result.getList() != null && !result.getList().isEmpty()) {
+			for (int i = result.getList().size() - 1; i >= 0; i--) {
+				SxYz data = result.getList().get(i);
+				int k = i - 10;
+				for (int j = 0; j < 11; j++) {
+					if (k > -1 && k < result.getList().size()) {
+						data.getLastYzList()[j] = result.getList().get(k).getLastYz();
+					}
+					k++;
+				}
+				if (i < result.getList().size() - 2) {
+					data.getLastYzList()[11] = result.getList().get(i + 1).getLastYz();
+				}
+			}
+		}
+		return new BaseResult(result);
+	}
+
+	@RequestMapping("/pmList")
+	public BaseResult pmList(@RequestBody QueryInfo<KaiJiang> queryInfo) throws Exception {
+		PageResult<KaiJiang> pResult = kaiJiangDao.queryForPM(queryInfo);
+		PageResult<PmDTO> result = new PageResult<PmDTO>();
+		result.setPage(pResult.getPage());
+		result.setTotal(pResult.getTotal());
+		result.setTotalPage(pResult.getTotalPage());
+		if (pResult != null && pResult.getList() != null && !pResult.getList().isEmpty()) {
+			List<PmDTO> list = new ArrayList<PmDTO>();
+			Map<String, PmDTO> map = new HashMap<String, PmDTO>();
+			PmDTO totalDTO = new PmDTO();
+			for (int i = pResult.getList().size() - 1; i >= 0; i--) {
+				KaiJiang specialData = pResult.getList().get(i);
+				for (int j = i; j >= 0; j--) {
+					KaiJiang pmData = pResult.getList().get(j);
+					PmDTO dto = map.get(pmData.getDate());
+					if (dto == null) {
+						dto = new PmDTO();
+						dto.setYear(pmData.getYear());
+						dto.setPhase(pmData.getPhase());
+						SpecialNum specialNum = new SpecialNum();
+						specialNum.setNum(pmData.getSpecialNum());
+						dto.setSpecialNum(specialNum);
+						map.put(pmData.getDate(), dto);
+					}
+					boolean in = false;
+					for (int k = 1; k < 7; k++) {
+						Method dtoSm = PmDTO.class.getDeclaredMethod("setNum" + k, PmNum.class);
+						Method gm = KaiJiang.class.getDeclaredMethod("getNum" + k);
+						Integer num = (Integer) gm.invoke(pmData);
+						if (!in) {
+							in = num == specialData.getSpecialNum();
+						}
+						Method dtoGm = PmDTO.class.getDeclaredMethod("getNum" + k);
+						PmNum pmNum = (PmNum) dtoGm.invoke(dto);
+						if (pmNum == null) {
+							pmNum = new PmNum(num, in);
+						}
+						if (in) {
+							pmNum.setMatchedForSpecialNum(true);
+							Method tpGm = PmDTO.class.getDeclaredMethod("getTp" + k);
+							Method tpSm = PmDTO.class.getDeclaredMethod("setTp" + k, BigDecimal.class);
+							BigDecimal total = (BigDecimal) tpGm.invoke(totalDTO);
+							tpSm.invoke(totalDTO, total.add(new BigDecimal(1)));
+						}
+						dtoSm.invoke(dto, pmNum);
+					}
+					if (in) {
+						dto = map.get(specialData.getDate());
+						dto.getSpecialNum().setDelta(i - j);
+						break;
+					}
+				}
+				list.add(map.get(specialData.getDate()));
+			}
+			Collections.reverse(list);
+			for (int k = 1; k < 7; k++) {
+				Method tpGm = PmDTO.class.getDeclaredMethod("getTp" + k);
+				Method tpSm = PmDTO.class.getDeclaredMethod("setTp" + k, BigDecimal.class);
+				BigDecimal total = (BigDecimal) tpGm.invoke(totalDTO);
+				tpSm.invoke(totalDTO, total.divide(new BigDecimal(result.getPage().getPageSize()), 4, RoundingMode.HALF_UP)
+						.multiply(new BigDecimal(100)).setScale(2, RoundingMode.HALF_UP));
+			}
+			list.add(totalDTO);
+			result.setList(list);
+		}
+		return new BaseResult(result);
+	}
+
+	@RequestMapping("/listQWYZ")
+	public BaseResult listQWYZ(@RequestBody QueryInfo<QwYz> queryInfo) throws Exception {
+		return new BaseResult(qwYzDao.query(queryInfo));
+	}
+
+	@RequestMapping("/listQWZH")
+	public BaseResult listQWZH(@RequestBody QueryInfo<QwYz> queryInfo) throws Exception {
+		PageResult<QwYz> pResult = qwYzDao.query(queryInfo);
+		if (pResult != null && pResult.getList() != null && !pResult.getList().isEmpty()) {
+			List<QwYz> list = new ArrayList<QwYz>();
+			int[][] pairs = { { 0, 0 }, { 0, 1 }, { 1, 0 }, { 1, 2 }, { 2, 0 }, { 2, 3 }, { 3, 0 }, { 3, 4 }, { 4, 0 },
+					{ 4, 5 }, { 5, 0 }, { 5, 6 }, { 6, 0 }, { 6, 7 }, { 7, 0 }, { 7, 8 }, { 8, 0 }, { 8, 9 }, { 9, 0 },
+					{ 9, 10 } };
+			for (int k = 0; k < pairs.length; k++) {
+				int[] pair = pairs[k];
+				QwYz data = new QwYz();
+				for (int j = 0; j < 10; j++) {
+					for (int i = pResult.getList().size() - 1; i > 0; i--) {
+						QwYz current = pResult.getList().get(i);
+						QwYz last = pResult.getList().get(i - 1);
+						Method gm = QwYz.class.getDeclaredMethod("getW" + j);
+						Integer[] currentPair = { (Integer) gm.invoke(current), (Integer) gm.invoke(last) };
+						if (currentPair[0] != null && currentPair[1] != null && currentPair[0] == pair[0]
+								&& currentPair[1] == pair[1]) {
+							Method sm = QwYz.class.getDeclaredMethod("setW" + j, Integer.class);
+							Integer value = (Integer) gm.invoke(data);
+							if (value == null) {
+								value = 0;
+							}
+							sm.invoke(data, value + 1);
+						}
+					}
+				}
+				list.add(data);
+			}
+			pResult.setList(list);
+		}
+		return new BaseResult(pResult);
 	}
 }

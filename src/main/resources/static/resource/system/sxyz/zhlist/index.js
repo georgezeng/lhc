@@ -19,7 +19,9 @@ $(document).ready(function() {
 							phases.prev().remove();
 						}
 						phases.combobox();
-						$("#searchBtn").click();
+						phases.change(function() {
+							reloadTables();
+						}).change();
 					}
 				});
 			}).change();
@@ -29,6 +31,9 @@ $(document).ready(function() {
 	var sxlist = ["shu", "niu", "hu", "tu", "long", "she", "ma", "yang", "hou", "ji", "gou", "zhu"];
 	var datatables = [];
 	var cols = ["year", "phase"];
+	for(var i in sxlist) {
+		cols.push(sxlist[i]);
+	}
 	var columns = [];
 	for(var i in cols) {
 		var col = cols[i];
@@ -38,44 +43,53 @@ $(document).ready(function() {
 			sortable: false
 		});
 	}
-	for(var i = 0; i < 21; i++) {
-		var col = "lastYZ" + i;
-		columns.push({
-			name: col,
-			data : "lastYz",
-			sortable: false
-		});
-	}
-	cols = ["21-30", "31-40", "41-50", "51+"];
-	for(var i in cols) {
-		var col = "lastYZ-" + cols[i];
-		columns.push({
-			name : col,
-			data : "lastYz",
-			sortable: false
-		});
-	}
 	var columnDefs = [];
-	for(var i = 2; i < 27; i++) {
+	for(var i = 0; i < 2; i++) {
 		(function(index) {
 			columnDefs.push({
 				aTargets: [index],
 				fnCreatedCell: function(nTd, sData, item, iRow, iCol) {
-					var value = item.lastYz;
-					var isRed = false;
-					if(index < 23) {
-						isRed = value == index-2;
-					} else if(index == 23) {
-						isRed = value > 20 && value < 31;
-					} else if(index == 24) {
-						isRed = value > 30 && value < 41;
-					} else if(index == 25) {
-						isRed = value > 40 && value < 51;
-					} else if(index == 26) {
-						isRed = value > 50;
+					var value = null;
+					var isTotal = false;
+					if(index == 0) {
+						value = item.year;
+						if(value == 0) {
+							value = "合计";
+							isTotal = true;
+						}
+					} else {
+						value = item.phase;
+						if(value == 0) {
+							value = "";
+							isTotal = true;
+						}
 					}
-					if(isRed) {
-						$(nTd).css("color", "white").css("backgroundColor", "red");
+					if(isTotal) {
+						$(nTd).css("fontWeight", "bold").css("color", "blue");
+					}
+					$(nTd).text(value);
+				}
+			});
+		})(i);
+	}
+	for(var i = 2; i < 14; i++) {
+		(function(index) {
+			columnDefs.push({
+				aTargets: [index],
+				fnCreatedCell: function(nTd, sData, item, iRow, iCol) {
+					var value = item[sxlist[index-2]];
+					if(item.topSx) {
+						if(item.topSx.name == item.currentSx.name || item.lastSx && item.lastSx.name == item.topSx.name) {
+							if(value == 0) {
+								$(nTd).css("color", "white").css("backgroundColor", "red");
+							} else {
+								$(nTd).css("backgroundColor", "#ffc");
+							}
+						} else {
+							$(nTd).css("backgroundColor", "#ffc");
+						}
+					} else {
+						$(nTd).css("fontWeight", "bold").css("color", "blue");
 					}
 					$(nTd).text(value);
 				}
@@ -83,8 +97,8 @@ $(document).ready(function() {
 		})(i);
 	}
 	datatables.push(createDataTable({
-		id : "lastYZDatatable",
-		url : "/mvc/yz/listSX",
+		id : "dataTable",
+		url : "/mvc/yz/listSXZH",
 		bFilter: false,
 		data : function(queryInfo, infoSettings) {
 			queryInfo.object = {};
@@ -99,12 +113,12 @@ $(document).ready(function() {
 		reloadTables();
 	});
 	
-	$("#calSXYZBtn").click(function() {
+	$("#calYZBtn").click(function() {
 		openLoading();
 		post({
-			url: '/mvc/yz/calSX/',
+			url: '/mvc/yz/calYZ/',
 			success: function() {
-				alert("生肖遗值计算完成");
+				alert("遗值计算完成");
 				reloadTables();
 				closeLoading();
 			},
@@ -120,6 +134,7 @@ $(document).ready(function() {
 			datatables[i].ajax.reload();
 		}
 	}
+	
 	
 });
 

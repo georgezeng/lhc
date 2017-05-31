@@ -1,0 +1,107 @@
+$(document).ready(function() {
+	post({
+		url: '/mvc/yz/years',
+		success: function(list) {
+			var years = $("#years");
+			for(var i in list) {
+				years.append("<option value='" + list[i] + "'>" + list[i] + "</option>");
+			}
+			years.combobox().change(function() {
+				post({
+					url: '/mvc/yz/phases/' + $(this).val(),
+					success: function(list) {
+						var phases = $("#phases");
+						phases.empty();
+						for(var i in list) {
+							phases.append("<option value='" + list[i] + "'>" + list[i] + "</option>");
+						}
+						if(phases.prev().hasClass("combobox-container")){
+							phases.prev().remove();
+						}
+						phases.combobox();
+						phases.change(function() {
+							reloadTables();
+						}).change();
+					}
+				});
+			}).change();
+		}
+	});
+	
+	var sxlist = ["w0", "w1", "w2", "w3", "w4", "w5", "w6", "w7", "w8", "w9"];
+	var datatables = [];
+	var cols = ["year", "phase"];
+	for(var i in sxlist) {
+		cols.push(sxlist[i]);
+	}
+	cols.push("total");
+	cols.push("currentYz");
+	var columns = [];
+	for(var i in cols) {
+		var col = cols[i];
+		columns.push({
+			name : col,
+			data : col,
+			sortable: false
+		});
+	}
+	var columnDefs = [];
+	for(var i = 2; i < 12; i++) {
+		(function(index) {
+			columnDefs.push({
+				aTargets: [index],
+				fnCreatedCell: function(nTd, sData, item, iRow, iCol) {
+					var num = item[sxlist[index-2]];
+					if(num == 0) {
+						$(nTd).css("color", "white").css("backgroundColor", "red");
+					} else {
+						$(nTd).css("backgroundColor", "#ffc");
+					}
+					$(nTd).text(num);
+				}
+			});
+		})(i);
+	}
+	datatables.push(createDataTable({
+		id : "dataTable",
+		url : "/mvc/yz/listQWYZ",
+		bFilter: false,
+		data : function(queryInfo, infoSettings) {
+			queryInfo.object = {};
+			queryInfo.object.year = parseInt($("#years").val());
+			queryInfo.object.phase = parseInt($("#phases").val());
+		},
+		columns : columns,
+		aoColumnDefs: columnDefs
+	}));
+	
+	$("#searchBtn").click(function() {
+		reloadTables();
+	});
+	
+	$("#calYZBtn").click(function() {
+		openLoading();
+		post({
+			url: '/mvc/yz/calYZ/',
+			success: function() {
+				alert("生肖遗值计算完成");
+				reloadTables();
+				closeLoading();
+			},
+			jsonError: function(msg) {
+				alert(msg);
+				closeLoading();
+			}
+		});
+	});
+	
+	function reloadTables() {
+		for(var i in datatables) {
+			datatables[i].ajax.reload();
+		}
+	}
+	
+	
+});
+
+

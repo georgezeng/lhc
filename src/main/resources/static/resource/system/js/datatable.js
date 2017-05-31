@@ -25,7 +25,7 @@ function createDataTable(opt) {
 						sPrevious : "上一页"
 					}
 				},
-				lengthMenu : opt.lengthMenu ? opt.lengthMenu : [ 10, 30, 100, 200, 300, 400, 500 ],
+				lengthMenu : opt.lengthMenu ? opt.lengthMenu : [ 10, 30, 100, 200, 300, 400, 500, 1000, 2000, 3000 ],
 				aoColumnDefs: opt.aoColumnDefs,
 				"bFilter": opt.bFilter == false ? false : true,
 				ajax : function(infoSettings, callback, settings) {
@@ -86,7 +86,7 @@ function createDataTable(opt) {
 				},
 				columns : opt.columns,
 				columnDefs : opt.columnDefs,
-				order : opt.order ? opt.order : [ [ 1, "asc" ] ]
+//				order : opt.order ? opt.order : [ [ 1, "asc" ] ]
 			});
 
 	datatable.find("input.allCB").click(function() {

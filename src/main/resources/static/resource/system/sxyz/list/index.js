@@ -19,7 +19,9 @@ $(document).ready(function() {
 							phases.prev().remove();
 						}
 						phases.combobox();
-						$("#searchBtn").click();
+						phases.change(function() {
+							reloadTables();
+						}).change();
 					}
 				});
 			}).change();
@@ -92,12 +94,12 @@ $(document).ready(function() {
 		reloadTables();
 	});
 	
-	$("#calSXYZBtn").click(function() {
+	$("#calYZBtn").click(function() {
 		openLoading();
 		post({
-			url: '/mvc/yz/calSX/',
+			url: '/mvc/yz/calYZ/',
 			success: function() {
-				alert("生肖遗值计算完成");
+				alert("遗值计算完成");
 				reloadTables();
 				closeLoading();
 			},

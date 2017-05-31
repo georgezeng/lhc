@@ -30,31 +30,32 @@ public class SxYzDao {
 		PageRequest pageRequest = null;
 		if (queryInfo.getPageInfo() != null) {
 			List<SortInfo> sorts = new ArrayList<SortInfo>();
-			sorts.add(new SortInfo("year", SortOrder.DESC));
-			sorts.add(new SortInfo("phase", SortOrder.DESC));
+			sorts.add(new SortInfo("d.date", SortOrder.DESC));
 			queryInfo.getPageInfo().setSorts(sorts);
 			pageRequest = queryInfo.getPageInfo().toPageRequest();
 		}
 		StringBuilder condition = new StringBuilder();
-		condition.append("from sx_yz").append("\n");
-		condition.append("where 1=1").append("\n");
+		condition.append("from sx_yz d").append("\n");
 		List<Object> args = new ArrayList<Object>();
 		if (queryInfo.getObject() != null) {
+			condition.append(", (select yp.date from sx_yz yp").append("\n");
+			condition.append("where yp.year = ?").append("\n");
+			condition.append("and yp.phase = ?) t").append("\n");
 			SxYz yz = queryInfo.getObject();
-			if (yz != null) {
-				condition.append("and year <= ?").append("\n");
-				args.add(yz.getYear());
-				condition.append("and phase <= ?").append("\n");
-				args.add(yz.getPhase());
-			}
+			args.add(yz.getYear());
+			args.add(yz.getPhase());
 		}
-		StringBuilder countSql = new StringBuilder("select count(id)");
+		condition.append("where 1=1").append("\n");
+		if (queryInfo.getObject() != null) {
+			condition.append("and d.date<=t.date").append("\n");
+		}
+		StringBuilder countSql = new StringBuilder("select count(d.id)");
 		countSql.append("\n").append(condition);
 		Query countQuery = em.createNativeQuery(countSql.toString());
 		QueryUtil.setArgs(args, countQuery);
 		long count = DatabaseUtil.getCount(countQuery.getSingleResult());
 		if (count > 0) {
-			StringBuilder sql = new StringBuilder("select *");
+			StringBuilder sql = new StringBuilder("select d.*");
 			sql.append("\n").append(condition);
 			if (pageRequest != null) {
 				QueryUtil.setOrder(sql, pageRequest);
@@ -67,7 +68,9 @@ public class SxYzDao {
 				queryInfo.setPageInfo(new PageInfo(1, 1));
 			}
 			List<SxYz> list = query.getResultList();
-			Collections.reverse(list);
+			if (queryInfo.isToReverse()) {
+				Collections.reverse(list);
+			}
 			return new PageResult<SxYz>(list, count, queryInfo.getPageInfo());
 		}
 		return new PageResult<SxYz>(new ArrayList<SxYz>(), 0, queryInfo.getPageInfo());

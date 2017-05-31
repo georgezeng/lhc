@@ -8,6 +8,7 @@ import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.Table;
+import javax.persistence.Transient;
 
 import lhc.enums.SX;
 
@@ -25,7 +26,7 @@ public class SxYz {
 	private Integer Niu;
 	private Integer Hu;
 	private Integer Tu;
-	@Column(name="lonng")
+	@Column(name = "lonng")
 	private Integer Long;
 	private Integer She;
 	private Integer Ma;
@@ -39,7 +40,38 @@ public class SxYz {
 	private Integer lastYz;
 	@Enumerated(EnumType.STRING)
 	private SX currentSx;
-	
+
+	@Transient
+	private SX topSx;
+	@Transient
+	private SX lastSx;
+	@Transient
+	private int[] lastYzList = new int[25];
+
+	public int[] getLastYzList() {
+		return lastYzList;
+	}
+
+	public void setLastYzList(int[] lastYzList) {
+		this.lastYzList = lastYzList;
+	}
+
+	public SX getTopSx() {
+		return topSx;
+	}
+
+	public void setTopSx(SX topSx) {
+		this.topSx = topSx;
+	}
+
+	public SX getLastSx() {
+		return lastSx;
+	}
+
+	public void setLastSx(SX lastSx) {
+		this.lastSx = lastSx;
+	}
+
 	public SX getCurrentSx() {
 		return currentSx;
 	}

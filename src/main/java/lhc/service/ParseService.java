@@ -1,7 +1,6 @@
 package lhc.service;
 
 import java.lang.reflect.Method;
-import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -24,7 +23,6 @@ public class ParseService {
 
 	public void syncKaiJiang(int year) {
 		try {
-			SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd");
 			String url = "http://138lh.com/kj/" + year + ".html";
 			Document doc = Jsoup.connect(url).get();
 			List<Element> trs = doc.getElementById("main").getElementsByTag("tr");

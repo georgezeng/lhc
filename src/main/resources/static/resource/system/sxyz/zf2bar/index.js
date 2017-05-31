@@ -28,13 +28,13 @@ $(document).ready(function() {
 	
 	$("#phaseTotal").combobox();
 	
-	$("#calSXYZBtn").click(function() {
+	$("#calYZBtn").click(function() {
 		openLoading();
 		post({
-			url: '/mvc/yz/calSX/',
+			url: '/mvc/yz/calYZ/',
 			success: function() {
-				alert("生肖遗值计算完成");
-				loadChart();
+				alert("遗值计算完成");
+				reloadTables();
 				closeLoading();
 			},
 			jsonError: function(msg) {
@@ -54,27 +54,16 @@ $(document).ready(function() {
 			data: {
 				object: {
 					year: parseInt($("#years").val()),
-					phase: parseInt($("#phases").val()),
-					date: "desc"
+					phase: parseInt($("#phases").val())
 				},
 				pageInfo: {
 					pageNo: 1,
-					pageSize: parseInt($("#phaseTotal").val()),
-					sorts: [
-						{
-							order: "DESC",
-							property: "year"
-						},
-						{
-							order: "DESC",
-							property: "phase"
-						}
-					]
+					pageSize: parseInt($("#phaseTotal").val())
 				}
 			},
 			success: function(result) {
 				var series = [{name: '振幅', data: []}];
-				for(var i = result.list.length - 1; i >= 0; i--) {
+				for(var i = 0; i < result.list.length; i++) {
 					var item = result.list[i];
 					for(var j = 0; j < 12; j++) {
 						if(item["zf"+j] == 0) {

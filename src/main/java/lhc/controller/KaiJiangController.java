@@ -12,6 +12,7 @@ import lhc.domain.KaiJiang;
 import lhc.dto.BaseResult;
 import lhc.dto.query.PageResult;
 import lhc.dto.query.QueryInfo;
+import lhc.repository.jpa.api.KaiJiangRepository;
 import lhc.repository.jpa.dao.KaiJiangDao;
 import lhc.service.ParseService;
 
@@ -23,10 +24,19 @@ public class KaiJiangController {
 
 	@Autowired
 	private KaiJiangDao kaiJiangDao;
-
+	
+	@Autowired
+	private KaiJiangRepository kaiJiangRepository;
+	
 	@RequestMapping("/sync/{year}")
 	public BaseResult sync(@PathVariable int year) {
 		parseService.syncKaiJiang(year);
+		return BaseResult.EMPTY;
+	}
+
+	@RequestMapping("/delete/{year}")
+	public BaseResult delete(@PathVariable int year) {
+		kaiJiangRepository.deleteByYear(year);
 		return BaseResult.EMPTY;
 	}
 

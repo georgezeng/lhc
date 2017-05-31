@@ -1,0 +1,61 @@
+<!doctype html>
+<html xmlns:th="http://www.thymeleaf.org">
+<body>
+	<div id="page-wrapper" th:fragment="content">
+		<div class="row">
+			<div class="col-lg-12">
+				<h3 class="page-header">生肖遗值-振幅十期循环列表</h3>
+				<div class="buttonArea">
+					<span class="title">截止年份:</span><select id="years"></select>
+					<span class="title">截止期数:</span><select id="phases"></select>
+					<button id="calYZBtn" class="btn btn-info">遗值计算</button>
+					<button id="searchBtn" class="btn btn-primary">搜索</button>
+					<div class="clearfix"></div>
+				</div>
+			</div>
+		</div>
+
+		<div class="row">
+			<div class="col-lg-12">
+				<table width="100%"
+					class="table table-striped table-bordered table-hover"
+					id="dataTable">
+					<thead>
+						<tr>
+							<th>年份</th>
+							<th>期数</th>
+							<th>前9期</th>
+							<th>前8期</th>
+							<th>前7期</th>
+							<th>前6期</th>
+							<th>前5期</th>
+							<th>前4期</th>
+							<th>前3期</th>
+							<th>前2期</th>
+							<th>前1期</th>
+							<th>当前期</th>
+						</tr>
+					</thead>
+					<tfoot>
+						<tr>
+							<td>年份</td>
+							<td>期数</td>
+							<td>前9期</td>
+							<td>前8期</td>
+							<td>前7期</td>
+							<td>前6期</td>
+							<td>前5期</td>
+							<td>前4期</td>
+							<td>前3期</td>
+							<td>前2期</td>
+							<td>前1期</td>
+							<td>当前期</td>
+						</tr>
+					</tfoot>
+				</table>
+			</div>
+		</div>
+		
+	</div>
+</body>
+</html>

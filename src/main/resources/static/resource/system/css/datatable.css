@@ -10,4 +10,5 @@ tfoot td {
 	border-top: 3px solid #DDDDDD !important;
 	border-bottom: none !important;
 	border-left: none !important;
+	font-weight: bold !important;
 }
