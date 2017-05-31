@@ -59,8 +59,12 @@ $(document).ready(function() {
 	columnDefs.push({
 		aTargets: [0],
 		fnCreatedCell: function(nTd, sData, item, iRow, iCol) {
-			var pair = pairs[iRow];
-			$(nTd).css("color", "blue").text(pair[0] + "/" + pair[1]);
+			if(item.year > 0) {
+				var pair = pairs[iRow];
+				$(nTd).css("color", "blue").text(pair[0] + "/" + pair[1]);
+			} else {
+				$(nTd).css("color", "blue").text("合计");
+			}
 		}
 	});
 	for(var i = 1; i < 11; i++) {
@@ -68,8 +72,12 @@ $(document).ready(function() {
 			columnDefs.push({
 				aTargets: [index],
 				fnCreatedCell: function(nTd, sData, item, iRow, iCol) {
-					var num = item[sxlist[index-1]];
-					$(nTd).css("fontWeight", "bold").text(num);
+					if(item.year > 0) {
+						var num = item[sxlist[index-1]];
+						$(nTd).css("fontWeight", "bold").text(num);
+					} else {
+						$(nTd).css("fontWeight", "bold").css("fontSize", "20px").text(num);
+					}
 				}
 			});
 		})(i);
