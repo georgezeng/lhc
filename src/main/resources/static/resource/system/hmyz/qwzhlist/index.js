@@ -69,7 +69,7 @@ $(document).ready(function() {
 				aTargets: [index],
 				fnCreatedCell: function(nTd, sData, item, iRow, iCol) {
 					var num = item[sxlist[index-1]];
-					$(nTd).text(num);
+					$(nTd).css("fontWeight", "bold").text(num);
 				}
 			});
 		})(i);

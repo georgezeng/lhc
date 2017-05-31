@@ -283,12 +283,16 @@ public class YZController {
 						map.put(pmData.getDate(), dto);
 					}
 					boolean in = false;
+					boolean in2 = false;
 					for (int k = 1; k < 7; k++) {
 						Method dtoSm = PmDTO.class.getDeclaredMethod("setNum" + k, PmNum.class);
 						Method gm = KaiJiang.class.getDeclaredMethod("getNum" + k);
 						Integer num = (Integer) gm.invoke(pmData);
 						if (!in) {
 							in = num == specialData.getSpecialNum();
+							if (in) {
+								in2 = in;
+							}
 						}
 						Method dtoGm = PmDTO.class.getDeclaredMethod("getNum" + k);
 						PmNum pmNum = (PmNum) dtoGm.invoke(dto);
@@ -301,10 +305,11 @@ public class YZController {
 							Method tpSm = PmDTO.class.getDeclaredMethod("setTp" + k, BigDecimal.class);
 							BigDecimal total = (BigDecimal) tpGm.invoke(totalDTO);
 							tpSm.invoke(totalDTO, total.add(new BigDecimal(1)));
+							in = false;
 						}
 						dtoSm.invoke(dto, pmNum);
 					}
-					if (in) {
+					if (in2) {
 						dto = map.get(specialData.getDate());
 						dto.getSpecialNum().setDelta(i - j);
 						break;
@@ -347,7 +352,7 @@ public class YZController {
 						QwYz current = pResult.getList().get(i);
 						QwYz last = pResult.getList().get(i - 1);
 						Method gm = QwYz.class.getDeclaredMethod("getW" + j);
-						Integer[] currentPair = { (Integer) gm.invoke(current), (Integer) gm.invoke(last) };
+						Integer[] currentPair = { (Integer) gm.invoke(last), (Integer) gm.invoke(current) };
 						if (currentPair[0] != null && currentPair[1] != null && currentPair[0] == pair[0]
 								&& currentPair[1] == pair[1]) {
 							Method sm = QwYz.class.getDeclaredMethod("setW" + j, Integer.class);
