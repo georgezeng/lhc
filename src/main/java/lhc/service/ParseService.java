@@ -47,8 +47,8 @@ public class ParseService {
 				data.setSpecialSx(SX.textOf(specialSxEl.text().trim()));
 				data.setSpecialNum(Integer.valueOf(specialNumEl.text().trim()));
 				for (int j = 0; j < 6; j++) {
-					Method setNum = data.getClass().getDeclaredMethod("setNum" + (j + 1), int.class);
-					Method setSx = data.getClass().getDeclaredMethod("setNum" + (j + 1) + "Sx", SX.class);
+					Method setNum = KaiJiang.class.getDeclaredMethod("setNum" + (j + 1), Integer.class);
+					Method setSx = KaiJiang.class.getDeclaredMethod("setNum" + (j + 1) + "Sx", SX.class);
 					setNum.invoke(data, Integer.valueOf(numEls.get(j).text()));
 					setSx.invoke(data, SX.textOf(sxEls.get(j).text()));
 				}

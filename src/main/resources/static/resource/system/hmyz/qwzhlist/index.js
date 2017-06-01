@@ -63,7 +63,7 @@ $(document).ready(function() {
 				var pair = pairs[iRow];
 				$(nTd).css("color", "blue").text(pair[0] + "/" + pair[1]);
 			} else {
-				$(nTd).css("color", "blue").text("合计");
+				$(nTd).css("fontWeight", "bold").css("fontSize", "20px").text("合计: " + item.phase);
 			}
 		}
 	});
