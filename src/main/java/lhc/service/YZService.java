@@ -214,6 +214,8 @@ public class YZService {
 							numStr = numStr.substring(numStr.length() - 1);
 							num = Integer.valueOf(numStr);
 						}
+						sm = QwYz.class.getDeclaredMethod("setW" + num, Integer.class);
+						sm.invoke(yz, 0);
 
 						if (lastYz != null) {
 							for (int j = 0; j < 10; j++) {

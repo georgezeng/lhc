@@ -76,7 +76,7 @@ $(document).ready(function() {
 				datatable.ajax.reload();
 				closeLoading();
 			},
-			error: function(msg) {
+			systemError: function(msg) {
 				alert(msg);
 				closeLoading();
 			}
@@ -101,7 +101,7 @@ $(document).ready(function() {
 				datatable.ajax.reload();
 				closeLoading();
 			},
-			error: function(msg) {
+			systemError: function(msg) {
 				alert(msg);
 				closeLoading();
 			}

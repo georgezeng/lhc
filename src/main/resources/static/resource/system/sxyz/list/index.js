@@ -103,7 +103,7 @@ $(document).ready(function() {
 				reloadTables();
 				closeLoading();
 			},
-			jsonError: function(msg) {
+			systemError: function(msg) {
 				alert(msg);
 				closeLoading();
 			}

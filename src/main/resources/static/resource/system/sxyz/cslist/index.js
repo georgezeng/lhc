@@ -15,7 +15,7 @@ $(document).ready(function() {
 						for(var i in list) {
 							phases.append("<option value='" + list[i] + "'>" + list[i] + "</option>");
 						}
-						if(phases.prev().hasClass("combobox-container")){
+						if(phases.prev().hasClass("combobox-container")) {
 							phases.prev().remove();
 						}
 						phases.combobox();
@@ -28,7 +28,7 @@ $(document).ready(function() {
 		}
 	});
 	
-	var sxlist = ["top10", "top9", "top8", "top7", "top6", "top5", "top4", "top3", "top2", "top1"];
+	var sxlist = ["shu", "niu", "hu", "tu", "long", "she", "ma", "yang", "hou", "ji", "gou", "zhu"];
 	var datatables = [];
 	var cols = ["year", "phase"];
 	for(var i in sxlist) {
@@ -37,41 +37,26 @@ $(document).ready(function() {
 	var columns = [];
 	for(var i in cols) {
 		var col = cols[i];
-		if(i < 2) {
-			columns.push({
-				name : col,
-				data : col,
-				sortable: false
-			});
-		} else {
-			columns.push({
-				name : col,
-				data : "year",
-				sortable: false
-			});
-		}
+		columns.push({
+			name : col,
+			data : col,
+			sortable: false
+		});
 	}
 	var columnDefs = [];
-	for(var i = 2; i < 12; i++) {
+	for(var i = 2; i < 14; i++) {
 		(function(index) {
 			columnDefs.push({
 				aTargets: [index],
 				fnCreatedCell: function(nTd, sData, item, iRow, iCol) {
-					var value = item.posList[index-1];
-					var isRed = false;
-					if(index == 2) {
-						if(value && value == item.posList[11]) {
-							isRed = true;
-							$(nTd).css("color", "white").css("backgroundColor", "red");
-						}
-					} else if(index == 11) {
-						if(value && value == item.posList[0]) {
-							isRed = true;
-							$(nTd).css("color", "white").css("backgroundColor", "red");
-						}
-					}
-					if(!isRed) {
-						$(nTd).css("backgroundColor", "#ffc");
+					var value = item[sxlist[index-2]];
+					var avg = item.total;
+					if(value < avg - 1) {
+						$(nTd).css("color", "white").css("backgroundColor", "green");
+					} else if(value > avg - 2 && value < avg + 2) {
+						$(nTd).css("backgroundColor", "yellow");
+					} else if(value > avg + 1) {
+						$(nTd).css("color", "white").css("backgroundColor", "red");
 					}
 					$(nTd).text(value);
 				}
@@ -80,7 +65,7 @@ $(document).ready(function() {
 	}
 	datatables.push(createDataTable({
 		id : "dataTable",
-		url : "/mvc/yz/countSXZF10Loop",
+		url : "/mvc/yz/countSXYZ",
 		bFilter: false,
 		data : function(queryInfo, infoSettings) {
 			queryInfo.object = {};

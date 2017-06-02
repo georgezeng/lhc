@@ -5,6 +5,7 @@ import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.Table;
+import javax.persistence.Transient;
 
 @Entity
 @Table(name = "qw_yz")
@@ -28,6 +29,16 @@ public class QwYz {
 	private Integer w0;
 	private Integer total;
 	private Integer currentYz;
+	@Transient
+	private int maxTimes;
+
+	public int getMaxTimes() {
+		return maxTimes;
+	}
+
+	public void setMaxTimes(int maxTimes) {
+		this.maxTimes = maxTimes;
+	}
 
 	public int getYear() {
 		return year;

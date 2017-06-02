@@ -34,6 +34,7 @@ $(document).ready(function() {
 	for(var i in sxlist) {
 		cols.push(sxlist[i]);
 	}
+	cols.push("total");
 	var columns = [];
 	for(var i in cols) {
 		var col = cols[i];
@@ -44,6 +45,24 @@ $(document).ready(function() {
 		});
 	}
 	var columnDefs = [];
+	columnDefs.push({
+		aTargets: [0],
+		fnCreatedCell: function(nTd, sData, item, iRow, iCol) {
+			var value = item.year;
+			var isTotal = false;
+			if(value == 0) {
+				value = "合计: " + item.phase;
+				isTotal = true;
+			}
+			if(isTotal) {
+				$(nTd).css("fontWeight", "bold").css("color", "red");
+				$(nTd).text(value);
+			} else {
+				var pair = pairs[iRow];
+				$(nTd).css("color", "blue").text(pair[0] + "/" + pair[1]);
+			}
+		}
+	});
 	var pairs = [
 		[0,0], [0,1],
 		[1,0], [1,2],
@@ -56,17 +75,6 @@ $(document).ready(function() {
 		[8,0], [8,9],
 		[9,0], [9,10]
 	];
-	columnDefs.push({
-		aTargets: [0],
-		fnCreatedCell: function(nTd, sData, item, iRow, iCol) {
-			if(item.year > 0) {
-				var pair = pairs[iRow];
-				$(nTd).css("color", "blue").text(pair[0] + "/" + pair[1]);
-			} else {
-				$(nTd).css("fontWeight", "bold").css("fontSize", "20px").text("合计: " + item.phase);
-			}
-		}
-	});
 	for(var i = 1; i < 11; i++) {
 		(function(index) {
 			columnDefs.push({
@@ -76,12 +84,24 @@ $(document).ready(function() {
 						var num = item[sxlist[index-1]];
 						$(nTd).css("fontWeight", "bold").text(num);
 					} else {
-						$(nTd).css("fontWeight", "bold").css("fontSize", "20px").text(num);
+						$(nTd).css("fontWeight", "bold").css("backgroundColor", "yellow").text(num);
 					}
 				}
 			});
 		})(i);
 	}
+	columnDefs.push({
+		aTargets: [11],
+		fnCreatedCell: function(nTd, sData, item, iRow, iCol) {
+			if(item.year > 0) {
+				var total = 0;
+				for(var i in sxlist) {
+					total += item[sxlist[i]];
+				}
+				$(nTd).css("color", "white").css("fontWeight", "bold").css("backgroundColor", "green").text(total);
+			}
+		}
+	});
 	datatables.push(createDataTable({
 		id : "dataTable",
 		url : "/mvc/yz/listQWZH",
@@ -108,7 +128,7 @@ $(document).ready(function() {
 				reloadTables();
 				closeLoading();
 			},
-			jsonError: function(msg) {
+			systemError: function(msg) {
 				alert(msg);
 				closeLoading();
 			}

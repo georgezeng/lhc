@@ -25,6 +25,7 @@ import lhc.dto.PmNum;
 import lhc.dto.SpecialNum;
 import lhc.dto.query.PageResult;
 import lhc.dto.query.QueryInfo;
+import lhc.enums.SX;
 import lhc.repository.jpa.api.KaiJiangRepository;
 import lhc.repository.jpa.dao.KaiJiangDao;
 import lhc.repository.jpa.dao.QwYzDao;
@@ -94,7 +95,7 @@ public class YZController {
 	public BaseResult listSXZH(@RequestBody QueryInfo<SxYz> queryInfo) throws Exception {
 		queryInfo.setToReverse(false);
 		PageResult<SxYz> result = sxYzDao.query(queryInfo);
-		if (result != null && result.getList() != null && !result.getList().isEmpty()) {
+		if (result != null && result.getTotal() > 0) {
 			SxYz last = result.getList().get(0);
 			SxYz next = null;
 			SxYz totalLine = new SxYz();
@@ -142,7 +143,7 @@ public class YZController {
 				for (int i = 0; i < 12; i++) {
 					Method sm = SxZfYz.class.getDeclaredMethod("setZf" + i, Integer.class);
 					Method gm = SxZfYz.class.getDeclaredMethod("getZf" + i);
-					sm.invoke(dto, 0 + (Integer) gm.invoke(lastZF));
+					sm.invoke(dto, (Integer) gm.invoke(lastZF));
 				}
 				dto.setYear(data.getYear());
 				dto.setPhase(data.getPhase());
@@ -158,6 +159,68 @@ public class YZController {
 				list.add(dto);
 				lastZF = dto;
 			}
+			
+			int total = 0;
+			for (int i = 0; i < 12; i++) {
+				Method gm = SxZfYz.class.getDeclaredMethod("getZf" + i);
+				Integer value = (Integer) gm.invoke(lastZF);
+				if (value != null) {
+					total += value;
+				}
+			}
+			total = total / 12;
+			for (SxZfYz data : list) {
+				data.setTotal(total);
+			}
+		}
+		result.setList(list);
+		return new BaseResult(result);
+	}
+
+	@RequestMapping("/countSXYZ")
+	public BaseResult countSXYZ(@RequestBody QueryInfo<SxYz> queryInfo) throws Exception {
+		PageResult<SxYz> result = sxYzDao.query(queryInfo);
+		List<SxYz> list = new ArrayList<SxYz>();
+		if (result != null && result.getTotal() > 0) {
+			SxYz lastYZ = new SxYz();
+			for (SX sx : SX.seq()) {
+				Method m = SxYz.class.getDeclaredMethod("set" + sx.name(), Integer.class);
+				m.invoke(lastYZ, 0);
+			}
+			for (SxYz data : result.getList()) {
+				SxYz dto = new SxYz();
+				for (SX sx : SX.seq()) {
+					Method sm = SxYz.class.getDeclaredMethod("set" + sx.name(), Integer.class);
+					Method gm = SxYz.class.getDeclaredMethod("get" + sx.name());
+					sm.invoke(dto, (Integer) gm.invoke(lastYZ));
+				}
+				dto.setYear(data.getYear());
+				dto.setPhase(data.getPhase());
+				for (SX sx : SX.seq()) {
+					Method gm = SxYz.class.getDeclaredMethod("get" + sx.name());
+					Integer value = (Integer) gm.invoke(data);
+					if (value != null && value == 0) {
+						Method sm = SxYz.class.getDeclaredMethod("set" + sx.name(), Integer.class);
+						sm.invoke(dto, 1 + (Integer) gm.invoke(dto));
+						break;
+					}
+				}
+				list.add(dto);
+				lastYZ = dto;
+			}
+
+			int total = 0;
+			for (SX sx : SX.seq()) {
+				Method gm = SxYz.class.getDeclaredMethod("get" + sx.name());
+				Integer value = (Integer) gm.invoke(lastYZ);
+				if (value != null) {
+					total += value;
+				}
+			}
+			total = total / SX.values().length;
+			for (SxYz data : list) {
+				data.setTotal(total);
+			}
 		}
 		result.setList(list);
 		return new BaseResult(result);
@@ -166,7 +229,7 @@ public class YZController {
 	@RequestMapping("/countSXJZ")
 	public BaseResult countSXJZ(@RequestBody QueryInfo<SxYz> queryInfo) throws Exception {
 		PageResult<SxYz> result = sxYzDao.query(queryInfo);
-		if (result != null && result.getList() != null && !result.getList().isEmpty()) {
+		if (result != null && result.getTotal() > 0) {
 			SxYz totalLine = new SxYz();
 			for (SxYz data : result.getList()) {
 				Integer lastYz = data.getLastYz();
@@ -192,7 +255,7 @@ public class YZController {
 	@RequestMapping("/countSXZFJZ")
 	public BaseResult countSXZFJZ(@RequestBody QueryInfo<SxZfYz> queryInfo) throws Exception {
 		PageResult<SxZfYz> result = sxZfYzDao.query(queryInfo);
-		if (result != null && result.getList() != null && !result.getList().isEmpty()) {
+		if (result != null && result.getTotal() > 0) {
 			SxZfYz totalLine = new SxZfYz();
 			for (SxZfYz data : result.getList()) {
 				Integer lastYz = data.getLastYz();
@@ -218,7 +281,7 @@ public class YZController {
 	@RequestMapping("/countSXZF10Loop")
 	public BaseResult countSXZF10Loop(@RequestBody QueryInfo<SxZfYz> queryInfo) throws Exception {
 		PageResult<SxZfYz> result = sxZfYzDao.query(queryInfo);
-		if (result != null && result.getList() != null && !result.getList().isEmpty()) {
+		if (result != null && result.getTotal() > 0) {
 			for (int i = result.getList().size() - 1; i >= 0; i--) {
 				SxZfYz data = result.getList().get(i);
 				int k = i - 10;
@@ -239,7 +302,7 @@ public class YZController {
 	@RequestMapping("/countSX10Loop")
 	public BaseResult countSX10Loop(@RequestBody QueryInfo<SxYz> queryInfo) throws Exception {
 		PageResult<SxYz> result = sxYzDao.query(queryInfo);
-		if (result != null && result.getList() != null && !result.getList().isEmpty()) {
+		if (result != null && result.getTotal() > 0) {
 			for (int i = result.getList().size() - 1; i >= 0; i--) {
 				SxYz data = result.getList().get(i);
 				int k = i - 10;
@@ -333,7 +396,44 @@ public class YZController {
 
 	@RequestMapping("/listQWYZ")
 	public BaseResult listQWYZ(@RequestBody QueryInfo<QwYz> queryInfo) throws Exception {
-		return new BaseResult(qwYzDao.query(queryInfo));
+		PageResult<QwYz> result = qwYzDao.query(queryInfo);
+		if (result != null && result.getTotal() > 0) {
+			QwYz totalLine = new QwYz();
+			for (int i = result.getList().size() - 1; i >= 0; i--) {
+				QwYz data = result.getList().get(i);
+				for (int j = 0; j < 10; j++) {
+					Method gm = QwYz.class.getDeclaredMethod("getW" + j);
+					Integer value = (Integer) gm.invoke(data);
+					if (value != null && value == 0) {
+						Method sm = QwYz.class.getDeclaredMethod("setW" + j, Integer.class);
+						Integer count = (Integer) gm.invoke(totalLine);
+						if (count == null) {
+							count = 0;
+						}
+						sm.invoke(totalLine, count + 1);
+					}
+
+					int k = i;
+					int maxTimes = 0;
+					value = null;
+					boolean forback = false;
+					do {
+						QwYz countMaxTimesData = result.getList().get(k);
+						value = (Integer) gm.invoke(countMaxTimesData);
+						forback = value != null && value == 0;
+						if (forback) {
+							k--;
+							maxTimes++;
+						}
+					} while (forback && k >= 0);
+					if (maxTimes > data.getMaxTimes()) {
+						data.setMaxTimes(maxTimes);
+					}
+				}
+			}
+			result.getList().add(totalLine);
+		}
+		return new BaseResult(result);
 	}
 
 	@RequestMapping("/listQWZH")

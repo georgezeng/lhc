@@ -86,7 +86,7 @@ function createDataTable(opt) {
 				},
 				columns : opt.columns,
 				columnDefs : opt.columnDefs,
-//				order : opt.order ? opt.order : [ [ 1, "asc" ] ]
+				order : opt.order ? opt.order : [ [ 1, "desc" ] ]
 			});
 
 	datatable.find("input.allCB").click(function() {
