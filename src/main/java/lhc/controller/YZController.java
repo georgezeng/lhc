@@ -90,20 +90,7 @@ public class YZController {
 	public BaseResult listSX(@RequestBody QueryInfo<SxYz> queryInfo) throws Exception {
 		PageResult<SxYz> result = sxYzDao.query(queryInfo);
 		if (result != null && result.getTotal() > 0) {
-			SxYz last = result.getList().get(result.getList().size() - 1);
-			int total = 0;
-			for (SX sx : SX.seq()) {
-				Method gm = SxYz.class.getDeclaredMethod("get" + sx.name());
-				Integer value = (Integer) gm.invoke(last);
-				if (value != null) {
-					total += value;
-				}
-			}
-			BigDecimal avg = new BigDecimal(1d * total / SX.values().length);
-			for (SxYz data : result.getList()) {
-				data.setAvg(avg);
-			}
-			last = new SxYz();
+			SxYz last = new SxYz();
 			last.setTotal(result.getList().size());
 			result.getList().add(last);
 		}
@@ -143,8 +130,15 @@ public class YZController {
 	}
 
 	@RequestMapping("/listSXZF")
-	public BaseResult listSXZF(@RequestBody QueryInfo<SxZfYz> queryInfo) {
-		return new BaseResult(sxZfYzDao.query(queryInfo));
+	public BaseResult listSXZF(@RequestBody QueryInfo<SxZfYz> queryInfo) throws Exception {
+		PageResult<SxZfYz> result = sxZfYzDao.query(queryInfo);
+		if (result != null && result.getTotal() > 0) {
+			SxZfYz last = new SxZfYz();
+			last.setTotal(result.getList().size());
+			result.getList().add(last);
+		}
+
+		return new BaseResult(result);
 	}
 
 	@RequestMapping("/listSXZFLevel2")
@@ -160,6 +154,9 @@ public class YZController {
 				data.setDate(current.getDate());
 				data.setYear(current.getYear());
 				data.setPhase(current.getPhase());
+				data.setId(current.getId());
+
+				int currentValue = 0;
 				if (last != null) {
 					for (int i = 0; i < 12; i++) {
 						Method gm = SxZfYz.class.getDeclaredMethod("getZf" + i);
@@ -178,10 +175,27 @@ public class YZController {
 						if (value == null) {
 							value = 0;
 						}
-						value++;
+						currentValue = value + 1;
 						Method sm = SxZfYz.class.getDeclaredMethod("setZf" + pos.intValue(), Integer.class);
-						sm.invoke(data, value);
+						sm.invoke(data, currentValue);
 						data.setCurrentPos(pos.intValue());
+					}
+				}
+				data.setDelta(currentValue);
+
+				if (lastData != null) {
+					int total = 0;
+					for (int i = 0; i < 12; i++) {
+						Method gm = SxZfYz.class.getDeclaredMethod("getZf" + i);
+						Integer value = (Integer) gm.invoke(lastData);
+						if (value != null) {
+							total += value;
+						}
+					}
+					data.setTotal(total);
+					data.setAvg(new BigDecimal(total / 12d));
+					if (currentValue > 1) {
+						data.setLastCountYz(currentValue - 2);
 					}
 				}
 
@@ -190,18 +204,9 @@ public class YZController {
 				list.add(data);
 			}
 
-			int total = 0;
-			for (int i = 0; i < 12; i++) {
-				Method gm = SxZfYz.class.getDeclaredMethod("getZf" + i);
-				Integer value = (Integer) gm.invoke(lastData);
-				if (value != null) {
-					total += value;
-				}
-			}
-			total = total / 12;
-			for (SxZfYz current : list) {
-				current.setTotal(total);
-			}
+			data = new SxZfYz();
+			data.setTotal(list.size());
+			list.add(data);
 			result.setList(list);
 		}
 		return new BaseResult(result);
@@ -226,31 +231,42 @@ public class YZController {
 				}
 				dto.setYear(data.getYear());
 				dto.setPhase(data.getPhase());
+				dto.setId(data.getId());
+				int currentValue = 0;
 				for (int i = 0; i < 12; i++) {
 					Method gm = SxZfYz.class.getDeclaredMethod("getZf" + i);
 					Integer zf = (Integer) gm.invoke(data);
 					if (zf != null && zf == 0) {
 						Method sm = SxZfYz.class.getDeclaredMethod("setZf" + i, Integer.class);
-						sm.invoke(dto, 1 + (Integer) gm.invoke(dto));
+						currentValue = 1 + (Integer) gm.invoke(dto);
+						sm.invoke(dto, currentValue);
 						break;
 					}
 				}
+				dto.setDelta(currentValue);
+
+				int total = 0;
+				for (int i = 0; i < 12; i++) {
+					Method gm = SxZfYz.class.getDeclaredMethod("getZf" + i);
+					Integer value = (Integer) gm.invoke(lastZF);
+					if (value != null) {
+						total += value;
+					}
+				}
+				dto.setTotal(total);
+				dto.setAvg(new BigDecimal(total / 12d));
+				if (currentValue > 1) {
+					dto.setLastCountYz(currentValue - 2);
+				}
+
 				list.add(dto);
 				lastZF = dto;
 			}
 
-			int total = 0;
-			for (int i = 0; i < 12; i++) {
-				Method gm = SxZfYz.class.getDeclaredMethod("getZf" + i);
-				Integer value = (Integer) gm.invoke(lastZF);
-				if (value != null) {
-					total += value;
-				}
-			}
-			total = total / 12;
-			for (SxZfYz data : list) {
-				data.setTotal(total);
-			}
+			lastZF = new SxZfYz();
+			lastZF.setTotal(result.getList().size());
+			list.add(lastZF);
+
 		}
 		result.setList(list);
 		return new BaseResult(result);

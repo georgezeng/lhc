@@ -207,6 +207,9 @@ $(document).ready(function() {
 						lastRed = true;
 						lastGreen = false;
 					}
+				} else {
+					lastRed = false;
+					lastGreen = false;
 				}
 			} else {
 				value = Math.round(count / item.total * 10000) / 100 + "%";
