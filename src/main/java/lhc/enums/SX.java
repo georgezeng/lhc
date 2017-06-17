@@ -5,15 +5,23 @@ import com.fasterxml.jackson.annotation.JsonFormat.Shape;
 
 @JsonFormat(shape = Shape.OBJECT)
 public enum SX {
-	Shu(1, "鼠"), Niu(2, "牛"), Hu(3, "虎"), Tu(4, "兔"), Long(5, "龙"), She(6, "蛇"), Ma(7, "马"), Yang(8, "羊"), Hou(9, "猴"), Ji(10, "鸡"), Gou(11, "狗"), Zhu(12, "猪");
+	Shu(1, "鼠", 2), Niu(2, "牛", 3), Hu(3, "虎", 4), Tu(4, "兔", 3), Long(5, "龙", 4), She(6, "蛇", 5), Ma(7, "马", 4), Yang(8,
+			"羊", 5), Hou(9, "猴", 6), Ji(10, "鸡", 5), Gou(11, "狗", 6), Zhu(12, "猪", 7);
 
 	private String text;
 
 	private int pos;
-	
-	private SX(int pos, String text) {
+
+	private int sector;
+
+	private SX(int pos, String text, int sector) {
 		this.text = text;
 		this.pos = pos;
+		this.sector = sector;
+	}
+
+	public int getSector() {
+		return sector;
 	}
 
 	public int getPos() {

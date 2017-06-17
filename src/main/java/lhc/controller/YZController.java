@@ -15,11 +15,13 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
+import lhc.domain.BsYz;
 import lhc.domain.KaiJiang;
 import lhc.domain.LhYz;
 import lhc.domain.MwYz;
 import lhc.domain.QqYz;
 import lhc.domain.QwYz;
+import lhc.domain.SqYz;
 import lhc.domain.SwYz;
 import lhc.domain.SxYz;
 import lhc.domain.SxZfYz;
@@ -31,11 +33,13 @@ import lhc.dto.query.PageResult;
 import lhc.dto.query.QueryInfo;
 import lhc.enums.SX;
 import lhc.repository.jpa.api.KaiJiangRepository;
+import lhc.repository.jpa.dao.BsYzDao;
 import lhc.repository.jpa.dao.KaiJiangDao;
 import lhc.repository.jpa.dao.LhYzDao;
 import lhc.repository.jpa.dao.MwYzDao;
 import lhc.repository.jpa.dao.QqYzDao;
 import lhc.repository.jpa.dao.QwYzDao;
+import lhc.repository.jpa.dao.SqYzDao;
 import lhc.repository.jpa.dao.SwYzDao;
 import lhc.repository.jpa.dao.SxYzDao;
 import lhc.repository.jpa.dao.SxZfYzDao;
@@ -74,6 +78,12 @@ public class YZController {
 	@Autowired
 	private QqYzDao qqYzDao;
 
+	@Autowired
+	private BsYzDao bsYzDao;
+
+	@Autowired
+	private SqYzDao sqYzDao;
+
 	@RequestMapping("/years")
 	public BaseResult years() {
 		List<KaiJiang> list = KaiJiangRepository.findGroupByYear();
@@ -107,6 +117,8 @@ public class YZController {
 		yzService.calMWYZ();
 		yzService.calLHYZ();
 		yzService.calQQYZ();
+		yzService.calBSYZ();
+		yzService.calSQYZ();
 		return BaseResult.EMPTY;
 	}
 
@@ -159,6 +171,28 @@ public class YZController {
 		PageResult<QqYz> result = qqYzDao.query(queryInfo);
 		if (result != null && result.getTotal() > 0) {
 			QqYz last = new QqYz();
+			last.setTotal(result.getList().size());
+			result.getList().add(last);
+		}
+		return new BaseResult(result);
+	}
+
+	@RequestMapping("/listSQYZ")
+	public BaseResult listSQYZ(@RequestBody QueryInfo<SqYz> queryInfo) throws Exception {
+		PageResult<SqYz> result = sqYzDao.query(queryInfo);
+		if (result != null && result.getTotal() > 0) {
+			SqYz last = new SqYz();
+			last.setTotal(result.getList().size());
+			result.getList().add(last);
+		}
+		return new BaseResult(result);
+	}
+
+	@RequestMapping("/listBSYZ")
+	public BaseResult listBSYZ(@RequestBody QueryInfo<BsYz> queryInfo) throws Exception {
+		PageResult<BsYz> result = bsYzDao.query(queryInfo);
+		if (result != null && result.getTotal() > 0) {
+			BsYz last = new BsYz();
 			last.setTotal(result.getList().size());
 			result.getList().add(last);
 		}

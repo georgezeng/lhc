@@ -15,7 +15,7 @@ $(document).ready(function() {
 						for(var i in list) {
 							phases.append("<option value='" + list[i] + "'>" + list[i] + "</option>");
 						}
-						if(phases.prev().hasClass("combobox-container")) {
+						if(phases.prev().hasClass("combobox-container")){
 							phases.prev().remove();
 						}
 						phases.combobox();
@@ -28,17 +28,20 @@ $(document).ready(function() {
 		}
 	});
 	
-	var lastRed = false;
 	var lastGreen = false;
+	var lastRed = false;
 	var count = 0;
-	var sxlist = ["shu", "niu", "hu", "tu", "long", "she", "ma", "yang", "hou", "ji", "gou", "zhu"];
+	var count2 = 0;
+	var sxlist = ["red", "green", "blue"];
 	var datatables = [];
 	var cols = ["year", "phase"];
 	for(var i in sxlist) {
 		cols.push(sxlist[i]);
 	}
-	cols.push("year");
-	cols.push("phase");
+	cols.push("total");
+	cols.push("delta");
+	cols.push("lastYz");
+	cols.push("lastYz");
 	var columns = [];
 	for(var i in cols) {
 		var col = cols[i];
@@ -72,104 +75,17 @@ $(document).ready(function() {
 			});
 		})(i);
 	}
-	for(var i = 2; i < 14; i++) {
+	for(var i = 2; i < 5; i++) {
 		(function(index) {
 			columnDefs.push({
 				aTargets: [index],
 				fnCreatedCell: function(nTd, sData, item, iRow, iCol) {
-					var value = null;
+					var value = item[sxlist[index-2]];
 					if(item.id) {
-						value = item[sxlist[index-2]];
-						var small = 0;
-						var large = 0;
-						
-						var uniqueArr = [];
-						for(var j in sxlist) {
-							var found = false;
-							for(var k in uniqueArr) {
-								if(uniqueArr[k] == item[sxlist[j]]) {
-									found = true;
-									break;
-								}
-							}
-							if(!found) {
-								uniqueArr.push(item[sxlist[j]]);
-							}
-						}
-						uniqueArr.sort(function(a, b){return a-b});
-						
-						// 1,1
-						if(uniqueArr.length == 2) {
-							small = uniqueArr[0];
-							large = uniqueArr[1];
-						}
-						
-						// 1,1,1
-						else if(uniqueArr.length == 3) {
-							small = uniqueArr[0];
-							large = uniqueArr[2];
-						}
-						
-						// 2,1,1
-						else if(uniqueArr.length == 4) {
-							small = uniqueArr[1];
-							large = uniqueArr[3];
-						}
-						
-						// 2,1,2
-						else if(uniqueArr.length == 5) {
-							small = uniqueArr[1];
-							large = uniqueArr[3];
-						}
-						
-						// 2,2,2
-						else if(uniqueArr.length == 6) {
-							small = uniqueArr[1];
-							large = uniqueArr[4];
-						}
-						
-						// 3,1,3
-						else if(uniqueArr.length == 7) {
-							small = uniqueArr[2];
-							large = uniqueArr[4];
-						}
-						
-						// 3,2,3
-						else if(uniqueArr.length == 8) {
-							small = uniqueArr[2];
-							large = uniqueArr[5];
-						}
-						
-						// 3,3,3
-						else if(uniqueArr.length == 9) {
-							small = uniqueArr[2];
-							large = uniqueArr[6];
-						}
-						
-						// 4,2,4
-						else if(uniqueArr.length == 10) {
-							small = uniqueArr[3];
-							large = uniqueArr[6];
-						}
-						
-						// 4,3,4
-						else if(uniqueArr.length == 11) {
-							small = uniqueArr[3];
-							large = uniqueArr[7];
-						}
-						
-						// 4,4,4
-						else {
-							small = uniqueArr[3];
-							large = uniqueArr[8];
-						}
-						
-						if(value < small + 1) {
-							$(nTd).css("color", "white").css("backgroundColor", "green");
-						} else if(value > small && value < large) {
-							$(nTd).css("backgroundColor", "yellow");
-						} else if(value > large - 1) {
+						if(value == 0) {
 							$(nTd).css("color", "white").css("backgroundColor", "red");
+						} else {
+							$(nTd).css("backgroundColor", "#ffc");
 						}
 					}
 					$(nTd).text(value);
@@ -178,37 +94,36 @@ $(document).ready(function() {
 		})(i);
 	}
 	columnDefs.push({
-		aTargets: [14],
-		fnCreatedCell: function(nTd, sData, item, iRow, iCol) {
-			$(nTd).text("");
-		}
-	});
-	columnDefs.push({
-		aTargets: [15],
+		aTargets: [5],
 		fnCreatedCell: function(nTd, sData, item, iRow, iCol) {
 			var value = null;
 			if(item.id) {
-				var avg = item.avg;
-				value = item.delta;
-				var lastCount = item.lastCountYz;
-				if(lastCount != null) {
-					if(lastCount < avg) {
-						if(lastGreen) {
-							count++;
-						}
-						$(nTd).css("color", "white").css("backgroundColor", "green");
-						lastRed = false;
-						lastGreen = true;
-					} else {
-						if(lastRed) {
-							count++;
-						}
-						$(nTd).css("color", "white").css("backgroundColor", "red");
-						lastRed = true;
-						lastGreen = false;
+				value = item.total;
+			} else {
+				value = "";
+			}
+			$(nTd).text(value);
+		}
+	});
+	columnDefs.push({
+		aTargets: [7],
+		fnCreatedCell: function(nTd, sData, item, iRow, iCol) {
+			var value = null;
+			if(item.id) {
+				value = item.lastYz;
+				if(value > 5) {
+					if(lastGreen) {
+						count++;
 					}
-				} else {
+					$(nTd).css("color", "white").css("backgroundColor", "green");
 					lastRed = false;
+					lastGreen = true;
+				} else {
+					if(lastRed) {
+						count++;
+					}
+					$(nTd).css("color", "white").css("backgroundColor", "red");
+					lastRed = true;
 					lastGreen = false;
 				}
 			} else {
@@ -217,12 +132,40 @@ $(document).ready(function() {
 			$(nTd).text(value);
 		}
 	});
+	columnDefs.push({
+		aTargets: [8],
+		fnCreatedCell: function(nTd, sData, item, iRow, iCol) {
+			var value = null;
+			if(item.id) {
+				value = item.lastYz;
+				if(value > 1) {
+					if(lastGreen) {
+						count2++;
+					}
+					$(nTd).css("color", "white").css("backgroundColor", "green");
+					lastRed = false;
+					lastGreen = true;
+				} else {
+					if(lastRed) {
+						count2++;
+					}
+					$(nTd).css("color", "white").css("backgroundColor", "red");
+					lastRed = true;
+					lastGreen = false;
+				}
+			} else {
+				value = Math.round(count2 / item.total * 10000) / 100 + "%";
+			}
+			$(nTd).text(value);
+		}
+	});
 	datatables.push(createDataTable({
 		id : "dataTable",
-		url : "/mvc/yz/countSXYZ",
+		url : "/mvc/yz/listBSYZ",
 		bFilter: false,
 		data : function(queryInfo, infoSettings) {
 			count = 0;
+			count2 = 0;
 			lastRed = false;
 			lastGreen = false;
 			queryInfo.object = {};

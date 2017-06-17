@@ -6,7 +6,7 @@ $(document).ready(function() {
 			for(var i in list) {
 				years.append("<option value='" + list[i] + "'>" + list[i] + "</option>");
 			}
-			years.combobox().change(function() {
+			years.combobox().unbind().change(function() {
 				post({
 					url: '/mvc/yz/phases/' + $(this).val(),
 					success: function(list) {

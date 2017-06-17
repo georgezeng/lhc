@@ -2,6 +2,8 @@ package lhc.service;
 
 import java.lang.reflect.Method;
 import java.math.BigDecimal;
+import java.util.ArrayList;
+import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
@@ -11,20 +13,24 @@ import org.springframework.data.domain.Sort;
 import org.springframework.data.domain.Sort.Direction;
 import org.springframework.stereotype.Service;
 
+import lhc.domain.BsYz;
 import lhc.domain.KaiJiang;
 import lhc.domain.LhYz;
 import lhc.domain.MwYz;
 import lhc.domain.QqYz;
 import lhc.domain.QwYz;
+import lhc.domain.SqYz;
 import lhc.domain.SwYz;
 import lhc.domain.SxYz;
 import lhc.domain.SxZfYz;
 import lhc.enums.SX;
+import lhc.repository.jpa.api.BsYzRepository;
 import lhc.repository.jpa.api.KaiJiangRepository;
 import lhc.repository.jpa.api.LhYzRepository;
 import lhc.repository.jpa.api.MwYzRepository;
 import lhc.repository.jpa.api.QqYzRepository;
 import lhc.repository.jpa.api.QwYzRepository;
+import lhc.repository.jpa.api.SqYzRepository;
 import lhc.repository.jpa.api.SwYzRepository;
 import lhc.repository.jpa.api.SxYzRepository;
 import lhc.repository.jpa.api.SxZfYzRepository;
@@ -55,6 +61,12 @@ public class YZService {
 
 	@Autowired
 	private QqYzRepository qqyzRepository;
+
+	@Autowired
+	private BsYzRepository bsyzRepository;
+
+	@Autowired
+	private SqYzRepository sqyzRepository;
 
 	public void calSX() {
 		try {
@@ -565,6 +577,206 @@ public class YZService {
 						}
 
 						qqyzRepository.save(yz);
+						lastYz = yz;
+
+					}
+				}
+				request = result.nextPageable();
+			} while (result != null && result.hasNext());
+		} catch (Exception e) {
+			throw new RuntimeException(e.getMessage(), e);
+		}
+	}
+
+	private static final List<Integer> RED_NUMS = new ArrayList<Integer>();
+	private static final List<Integer> GREEN_NUMS = new ArrayList<Integer>();
+	private static final List<Integer> BLUE_NUMS = new ArrayList<Integer>();
+	static {
+		RED_NUMS.add(1);
+		RED_NUMS.add(2);
+		RED_NUMS.add(7);
+		RED_NUMS.add(8);
+		RED_NUMS.add(12);
+		RED_NUMS.add(13);
+		RED_NUMS.add(18);
+		RED_NUMS.add(19);
+		RED_NUMS.add(23);
+		RED_NUMS.add(24);
+		RED_NUMS.add(29);
+		RED_NUMS.add(30);
+		RED_NUMS.add(34);
+		RED_NUMS.add(35);
+		RED_NUMS.add(40);
+		RED_NUMS.add(45);
+		RED_NUMS.add(46);
+
+		GREEN_NUMS.add(5);
+		GREEN_NUMS.add(6);
+		GREEN_NUMS.add(11);
+		GREEN_NUMS.add(16);
+		GREEN_NUMS.add(17);
+		GREEN_NUMS.add(21);
+		GREEN_NUMS.add(22);
+		GREEN_NUMS.add(27);
+		GREEN_NUMS.add(28);
+		GREEN_NUMS.add(32);
+		GREEN_NUMS.add(33);
+		GREEN_NUMS.add(38);
+		GREEN_NUMS.add(39);
+		GREEN_NUMS.add(43);
+		GREEN_NUMS.add(44);
+		GREEN_NUMS.add(49);
+
+		BLUE_NUMS.add(3);
+		BLUE_NUMS.add(4);
+		BLUE_NUMS.add(9);
+		BLUE_NUMS.add(10);
+		BLUE_NUMS.add(14);
+		BLUE_NUMS.add(15);
+		BLUE_NUMS.add(20);
+		BLUE_NUMS.add(25);
+		BLUE_NUMS.add(26);
+		BLUE_NUMS.add(31);
+		BLUE_NUMS.add(36);
+		BLUE_NUMS.add(37);
+		BLUE_NUMS.add(41);
+		BLUE_NUMS.add(42);
+		BLUE_NUMS.add(47);
+		BLUE_NUMS.add(48);
+
+	}
+
+	public void calBSYZ() {
+		try {
+			Pageable request = new PageRequest(0, 200, new Sort(Direction.ASC, "date"));
+			Page<KaiJiang> result = null;
+			BsYz lastYz = null;
+			String[] colors = { "Red", "Green", "Blue" };
+			do {
+				result = kaiJiangRepository.findAll(request);
+				Method gm = null;
+				Method sm = null;
+				if (result != null && result.hasContent()) {
+					for (KaiJiang data : result.getContent()) {
+						BsYz yz = bsyzRepository.findByDate(data.getDate());
+						if (yz == null) {
+							yz = new BsYz();
+							yz.setYear(data.getYear());
+							yz.setPhase(data.getPhase());
+							yz.setDate(data.getDate());
+						}
+
+						Integer num = data.getSpecialNum();
+						String zeroColor = null;
+						if (RED_NUMS.contains(num)) {
+							yz.setRed(0);
+							zeroColor = "Red";
+						} else if (GREEN_NUMS.contains(num)) {
+							yz.setGreen(0);
+							zeroColor = "Green";
+						} else {
+							yz.setBlue(0);
+							zeroColor = "Blue";
+						}
+
+						if (lastYz != null) {
+							for (int j = 0; j < colors.length; j++) {
+								String color = colors[j];
+								gm = BsYz.class.getDeclaredMethod("get" + color);
+								Integer lastValue = (Integer) gm.invoke(lastYz);
+								if (lastValue != null) {
+									Integer value = (Integer) gm.invoke(yz);
+									if (value == null || value > 0) {
+										sm = BsYz.class.getDeclaredMethod("set" + color, Integer.class);
+										sm.invoke(yz, lastValue + 1);
+									}
+								}
+							}
+							gm = BsYz.class.getDeclaredMethod("get" + zeroColor);
+							yz.setLastYz((Integer) gm.invoke(lastYz));
+						}
+
+						int total = 0;
+						for (int j = 0; j < colors.length; j++) {
+							String color = colors[j];
+							gm = BsYz.class.getDeclaredMethod("get" + color);
+							Integer value = (Integer) gm.invoke(yz);
+							if (value != null) {
+								total += value;
+							}
+						}
+						yz.setTotal(total);
+
+						if (lastYz != null) {
+							yz.setDelta(total - lastYz.getTotal());
+						}
+
+						bsyzRepository.save(yz);
+						lastYz = yz;
+
+					}
+				}
+				request = result.nextPageable();
+			} while (result != null && result.hasNext());
+		} catch (Exception e) {
+			throw new RuntimeException(e.getMessage(), e);
+		}
+	}
+
+	public void calSQYZ() {
+		try {
+			Pageable request = new PageRequest(0, 200, new Sort(Direction.ASC, "date"));
+			Page<KaiJiang> result = null;
+			SqYz lastYz = null;
+			do {
+				result = kaiJiangRepository.findAll(request);
+				Method gm = null;
+				Method sm = null;
+				if (result != null && result.hasContent()) {
+					for (KaiJiang data : result.getContent()) {
+						SqYz yz = sqyzRepository.findByDate(data.getDate());
+						if (yz == null) {
+							yz = new SqYz();
+							yz.setYear(data.getYear());
+							yz.setPhase(data.getPhase());
+							yz.setDate(data.getDate());
+						}
+
+						SX sx = data.getSpecialSx();
+						sm = SqYz.class.getDeclaredMethod("setW" + sx.getSector(), Integer.class);
+						sm.invoke(yz, 0);
+
+						if (lastYz != null) {
+							for (int j = 2; j < 8; j++) {
+								gm = SqYz.class.getDeclaredMethod("getW" + j);
+								Integer lastValue = (Integer) gm.invoke(lastYz);
+								if (lastValue != null) {
+									Integer value = (Integer) gm.invoke(yz);
+									if (value == null || value > 0) {
+										sm = SqYz.class.getDeclaredMethod("setW" + j, Integer.class);
+										sm.invoke(yz, lastValue + 1);
+									}
+								}
+							}
+							gm = SqYz.class.getDeclaredMethod("getW" + sx.getSector());
+							yz.setLastYz((Integer) gm.invoke(lastYz));
+						}
+
+						int total = 0;
+						for (int j = 2; j < 8; j++) {
+							gm = SqYz.class.getDeclaredMethod("getW" + j);
+							Integer value = (Integer) gm.invoke(yz);
+							if (value != null) {
+								total += value;
+							}
+						}
+						yz.setTotal(total);
+
+						if (lastYz != null) {
+							yz.setDelta(total - lastYz.getTotal());
+						}
+
+						sqyzRepository.save(yz);
 						lastYz = yz;
 
 					}
