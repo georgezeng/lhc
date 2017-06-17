@@ -92,9 +92,10 @@ $(document).ready(function() {
 				fnCreatedCell: function(nTd, sData, item, iRow, iCol) {
 					var value = null;
 					if(item.year > 0) {
+						value = item.lastYz;
 						var isRed = false;
 						if(index < 23) {
-							isRed = item.lastYz == index-2;
+							isRed = value == index-2;
 						} else if(index == 23) {
 							isRed = value > 20 && value < 31;
 						} else if(index == 24) {
@@ -105,7 +106,6 @@ $(document).ready(function() {
 							isRed = value > 50;
 						}
 						if(isRed) {
-							value = item.lastYz;
 							count[index-2] = 1;
 							$(nTd).css("color", "white").css("backgroundColor", "red");
 						} else {

@@ -80,12 +80,95 @@ $(document).ready(function() {
 					var value = null;
 					if(item.id) {
 						value = item[sxlist[index-2]];
-						var avg = item.avg;
-						if(value < avg - 1) {
+						var small = 0;
+						var large = 0;
+						
+						var uniqueArr = [];
+						for(var j in sxlist) {
+							var found = false;
+							for(var k in uniqueArr) {
+								if(uniqueArr[k] == item[sxlist[j]]) {
+									found = true;
+									break;
+								}
+							}
+							if(!found) {
+								uniqueArr.push(item[sxlist[j]]);
+							}
+						}
+						uniqueArr.sort(function(a, b){return a-b});
+						
+						// 1,1
+						if(uniqueArr.length == 2) {
+							small = uniqueArr[0];
+							large = uniqueArr[1];
+						}
+						
+						// 1,1,1
+						else if(uniqueArr.length == 3) {
+							small = uniqueArr[0];
+							large = uniqueArr[2];
+						}
+						
+						// 2,1,1
+						else if(uniqueArr.length == 4) {
+							small = uniqueArr[1];
+							large = uniqueArr[3];
+						}
+						
+						// 2,1,2
+						else if(uniqueArr.length == 5) {
+							small = uniqueArr[1];
+							large = uniqueArr[3];
+						}
+						
+						// 2,2,2
+						else if(uniqueArr.length == 6) {
+							small = uniqueArr[1];
+							large = uniqueArr[4];
+						}
+						
+						// 3,1,3
+						else if(uniqueArr.length == 7) {
+							small = uniqueArr[2];
+							large = uniqueArr[4];
+						}
+						
+						// 3,2,3
+						else if(uniqueArr.length == 8) {
+							small = uniqueArr[2];
+							large = uniqueArr[5];
+						}
+						
+						// 3,3,3
+						else if(uniqueArr.length == 9) {
+							small = uniqueArr[2];
+							large = uniqueArr[6];
+						}
+						
+						// 4,2,4
+						else if(uniqueArr.length == 10) {
+							small = uniqueArr[3];
+							large = uniqueArr[6];
+						}
+						
+						// 4,3,4
+						else if(uniqueArr.length == 11) {
+							small = uniqueArr[3];
+							large = uniqueArr[7];
+						}
+						
+						// 4,4,4
+						else {
+							small = uniqueArr[3];
+							large = uniqueArr[8];
+						}
+						
+						if(value < small + 1) {
 							$(nTd).css("color", "white").css("backgroundColor", "green");
-						} else if(value > avg - 2 && value < avg + 2) {
+						} else if(value > small && value < large) {
 							$(nTd).css("backgroundColor", "yellow");
-						} else if(value > avg + 1) {
+						} else if(value > large - 1) {
 							$(nTd).css("color", "white").css("backgroundColor", "red");
 						}
 					}
