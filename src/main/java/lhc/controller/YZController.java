@@ -16,7 +16,9 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 import lhc.domain.KaiJiang;
+import lhc.domain.MwYz;
 import lhc.domain.QwYz;
+import lhc.domain.SwYz;
 import lhc.domain.SxYz;
 import lhc.domain.SxZfYz;
 import lhc.dto.BaseResult;
@@ -28,7 +30,9 @@ import lhc.dto.query.QueryInfo;
 import lhc.enums.SX;
 import lhc.repository.jpa.api.KaiJiangRepository;
 import lhc.repository.jpa.dao.KaiJiangDao;
+import lhc.repository.jpa.dao.MwYzDao;
 import lhc.repository.jpa.dao.QwYzDao;
+import lhc.repository.jpa.dao.SwYzDao;
 import lhc.repository.jpa.dao.SxYzDao;
 import lhc.repository.jpa.dao.SxZfYzDao;
 import lhc.service.YZService;
@@ -53,6 +57,12 @@ public class YZController {
 
 	@Autowired
 	private QwYzDao qwYzDao;
+
+	@Autowired
+	private SwYzDao swYzDao;
+
+	@Autowired
+	private MwYzDao mwYzDao;
 
 	@RequestMapping("/years")
 	public BaseResult years() {
@@ -83,6 +93,8 @@ public class YZController {
 		yzService.calSX();
 		yzService.calSXZF();
 		yzService.calHMQWYZ();
+		yzService.calSWYZ();
+		yzService.calMWYZ();
 		return BaseResult.EMPTY;
 	}
 
@@ -91,6 +103,28 @@ public class YZController {
 		PageResult<SxYz> result = sxYzDao.query(queryInfo);
 		if (result != null && result.getTotal() > 0) {
 			SxYz last = new SxYz();
+			last.setTotal(result.getList().size());
+			result.getList().add(last);
+		}
+		return new BaseResult(result);
+	}
+
+	@RequestMapping("/listSWYZ")
+	public BaseResult listSWYZ(@RequestBody QueryInfo<SwYz> queryInfo) throws Exception {
+		PageResult<SwYz> result = swYzDao.query(queryInfo);
+		if (result != null && result.getTotal() > 0) {
+			SwYz last = new SwYz();
+			last.setTotal(result.getList().size());
+			result.getList().add(last);
+		}
+		return new BaseResult(result);
+	}
+
+	@RequestMapping("/listMWYZ")
+	public BaseResult listMWYZ(@RequestBody QueryInfo<MwYz> queryInfo) throws Exception {
+		PageResult<MwYz> result = mwYzDao.query(queryInfo);
+		if (result != null && result.getTotal() > 0) {
+			MwYz last = new MwYz();
 			last.setTotal(result.getList().size());
 			result.getList().add(last);
 		}

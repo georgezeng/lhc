@@ -8,4 +8,8 @@
 	<include file="/db/v2.sql" />
 	<include file="/db/v3.sql" />
 	<include file="/db/v4.sql" />
+	<include file="/db/v5.sql" />
+	<include file="/db/v6.sql" />
+	<include file="/db/v7.sql" />
+	<include file="/db/v8.sql" />
 </databaseChangeLog>

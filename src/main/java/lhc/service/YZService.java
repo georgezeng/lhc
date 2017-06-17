@@ -12,12 +12,16 @@ import org.springframework.data.domain.Sort.Direction;
 import org.springframework.stereotype.Service;
 
 import lhc.domain.KaiJiang;
+import lhc.domain.MwYz;
 import lhc.domain.QwYz;
+import lhc.domain.SwYz;
 import lhc.domain.SxYz;
 import lhc.domain.SxZfYz;
 import lhc.enums.SX;
 import lhc.repository.jpa.api.KaiJiangRepository;
+import lhc.repository.jpa.api.MwYzRepository;
 import lhc.repository.jpa.api.QwYzRepository;
+import lhc.repository.jpa.api.SwYzRepository;
 import lhc.repository.jpa.api.SxYzRepository;
 import lhc.repository.jpa.api.SxZfYzRepository;
 
@@ -35,6 +39,12 @@ public class YZService {
 
 	@Autowired
 	private QwYzRepository qwyzRepository;
+
+	@Autowired
+	private SwYzRepository swyzRepository;
+
+	@Autowired
+	private MwYzRepository mwyzRepository;
 
 	public void calSX() {
 		try {
@@ -247,6 +257,148 @@ public class YZService {
 						yz.setTotal(total);
 
 						qwyzRepository.save(yz);
+						lastYz = yz;
+
+					}
+				}
+				request = result.nextPageable();
+			} while (result != null && result.hasNext());
+		} catch (Exception e) {
+			throw new RuntimeException(e.getMessage(), e);
+		}
+	}
+
+	public void calSWYZ() {
+		try {
+			Pageable request = new PageRequest(0, 200, new Sort(Direction.ASC, "date"));
+			Page<KaiJiang> result = null;
+			SwYz lastYz = null;
+			do {
+				result = kaiJiangRepository.findAll(request);
+				Method gm = null;
+				Method sm = null;
+				if (result != null && result.hasContent()) {
+					for (KaiJiang data : result.getContent()) {
+						SwYz yz = swyzRepository.findByDate(data.getDate());
+						if (yz == null) {
+							yz = new SwYz();
+							yz.setYear(data.getYear());
+							yz.setPhase(data.getPhase());
+							yz.setDate(data.getDate());
+						}
+
+						Integer num = data.getSpecialNum();
+						String numStr = num.toString();
+						if (numStr.length() > 1) {
+							numStr = numStr.substring(0, numStr.length() - 1);
+							num = Integer.valueOf(numStr);
+						} else {
+							num = 0;
+						}
+						sm = SwYz.class.getDeclaredMethod("setW" + num, Integer.class);
+						sm.invoke(yz, 0);
+
+						if (lastYz != null) {
+							for (int j = 0; j < 5; j++) {
+								gm = SwYz.class.getDeclaredMethod("getW" + j);
+								Integer lastValue = (Integer) gm.invoke(lastYz);
+								if (lastValue != null) {
+									Integer value = (Integer) gm.invoke(yz);
+									if (value == null || value > 0) {
+										sm = SwYz.class.getDeclaredMethod("setW" + j, Integer.class);
+										sm.invoke(yz, lastValue + 1);
+									}
+								}
+							}
+							gm = SwYz.class.getDeclaredMethod("getW" + num);
+							yz.setLastYz((Integer) gm.invoke(lastYz));
+						}
+
+						int total = 0;
+						for (int j = 0; j < 5; j++) {
+							gm = SwYz.class.getDeclaredMethod("getW" + j);
+							Integer value = (Integer) gm.invoke(yz);
+							if (value != null) {
+								total += value;
+							}
+						}
+						yz.setTotal(total);
+
+						if (lastYz != null) {
+							yz.setDelta(total - lastYz.getTotal());
+						}
+
+						swyzRepository.save(yz);
+						lastYz = yz;
+
+					}
+				}
+				request = result.nextPageable();
+			} while (result != null && result.hasNext());
+		} catch (Exception e) {
+			throw new RuntimeException(e.getMessage(), e);
+		}
+	}
+
+	public void calMWYZ() {
+		try {
+			Pageable request = new PageRequest(0, 200, new Sort(Direction.ASC, "date"));
+			Page<KaiJiang> result = null;
+			MwYz lastYz = null;
+			do {
+				result = kaiJiangRepository.findAll(request);
+				Method gm = null;
+				Method sm = null;
+				if (result != null && result.hasContent()) {
+					for (KaiJiang data : result.getContent()) {
+						MwYz yz = mwyzRepository.findByDate(data.getDate());
+						if (yz == null) {
+							yz = new MwYz();
+							yz.setYear(data.getYear());
+							yz.setPhase(data.getPhase());
+							yz.setDate(data.getDate());
+						}
+
+						Integer num = data.getSpecialNum();
+						String numStr = num.toString();
+						if (numStr.length() > 1) {
+							numStr = numStr.substring(numStr.length() - 1);
+							num = Integer.valueOf(numStr);
+						}
+						sm = MwYz.class.getDeclaredMethod("setW" + num, Integer.class);
+						sm.invoke(yz, 0);
+
+						if (lastYz != null) {
+							for (int j = 0; j < 10; j++) {
+								gm = MwYz.class.getDeclaredMethod("getW" + j);
+								Integer lastValue = (Integer) gm.invoke(lastYz);
+								if (lastValue != null) {
+									Integer value = (Integer) gm.invoke(yz);
+									if (value == null || value > 0) {
+										sm = MwYz.class.getDeclaredMethod("setW" + j, Integer.class);
+										sm.invoke(yz, lastValue + 1);
+									}
+								}
+							}
+							gm = MwYz.class.getDeclaredMethod("getW" + num);
+							yz.setLastYz((Integer) gm.invoke(lastYz));
+						}
+
+						int total = 0;
+						for (int j = 0; j < 10; j++) {
+							gm = MwYz.class.getDeclaredMethod("getW" + j);
+							Integer value = (Integer) gm.invoke(yz);
+							if (value != null) {
+								total += value;
+							}
+						}
+						yz.setTotal(total);
+
+						if (lastYz != null) {
+							yz.setDelta(total - lastYz.getTotal());
+						}
+
+						mwyzRepository.save(yz);
 						lastYz = yz;
 
 					}
