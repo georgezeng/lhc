@@ -16,7 +16,9 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 import lhc.domain.KaiJiang;
+import lhc.domain.LhYz;
 import lhc.domain.MwYz;
+import lhc.domain.QqYz;
 import lhc.domain.QwYz;
 import lhc.domain.SwYz;
 import lhc.domain.SxYz;
@@ -30,7 +32,9 @@ import lhc.dto.query.QueryInfo;
 import lhc.enums.SX;
 import lhc.repository.jpa.api.KaiJiangRepository;
 import lhc.repository.jpa.dao.KaiJiangDao;
+import lhc.repository.jpa.dao.LhYzDao;
 import lhc.repository.jpa.dao.MwYzDao;
+import lhc.repository.jpa.dao.QqYzDao;
 import lhc.repository.jpa.dao.QwYzDao;
 import lhc.repository.jpa.dao.SwYzDao;
 import lhc.repository.jpa.dao.SxYzDao;
@@ -64,6 +68,12 @@ public class YZController {
 	@Autowired
 	private MwYzDao mwYzDao;
 
+	@Autowired
+	private LhYzDao lhYzDao;
+
+	@Autowired
+	private QqYzDao qqYzDao;
+
 	@RequestMapping("/years")
 	public BaseResult years() {
 		List<KaiJiang> list = KaiJiangRepository.findGroupByYear();
@@ -95,6 +105,8 @@ public class YZController {
 		yzService.calHMQWYZ();
 		yzService.calSWYZ();
 		yzService.calMWYZ();
+		yzService.calLHYZ();
+		yzService.calQQYZ();
 		return BaseResult.EMPTY;
 	}
 
@@ -125,6 +137,28 @@ public class YZController {
 		PageResult<MwYz> result = mwYzDao.query(queryInfo);
 		if (result != null && result.getTotal() > 0) {
 			MwYz last = new MwYz();
+			last.setTotal(result.getList().size());
+			result.getList().add(last);
+		}
+		return new BaseResult(result);
+	}
+
+	@RequestMapping("/listLHYZ")
+	public BaseResult listLHYZ(@RequestBody QueryInfo<LhYz> queryInfo) throws Exception {
+		PageResult<LhYz> result = lhYzDao.query(queryInfo);
+		if (result != null && result.getTotal() > 0) {
+			LhYz last = new LhYz();
+			last.setTotal(result.getList().size());
+			result.getList().add(last);
+		}
+		return new BaseResult(result);
+	}
+
+	@RequestMapping("/listQQYZ")
+	public BaseResult listQQYZ(@RequestBody QueryInfo<QqYz> queryInfo) throws Exception {
+		PageResult<QqYz> result = qqYzDao.query(queryInfo);
+		if (result != null && result.getTotal() > 0) {
+			QqYz last = new QqYz();
 			last.setTotal(result.getList().size());
 			result.getList().add(last);
 		}
