@@ -28,6 +28,9 @@ $(document).ready(function() {
 		}
 	});
 	
+	var lastGreen = false;
+	var lastRed = false;
+	var count = 0;
 	var sxlist = ["shu", "niu", "hu", "tu", "long", "she", "ma", "yang", "hou", "ji", "gou", "zhu"];
 	var datatables = [];
 	var cols = ["year", "phase"];
@@ -47,16 +50,41 @@ $(document).ready(function() {
 		});
 	}
 	var columnDefs = [];
+	for(var i = 0; i < 2; i++) {
+		(function(index) {
+			columnDefs.push({
+				aTargets: [index],
+				fnCreatedCell: function(nTd, sData, item, iRow, iCol) {
+					var value = null;
+					if(index == 0) {
+						value = item.year;
+						if(!item.id) {
+							value = "顺概率";
+							$(nTd).css("color", "blue");
+						} 
+					} else {
+						value = item.phase;
+						if(!item.id) {
+							value = "";
+						}
+					}
+					$(nTd).text(value);
+				}
+			});
+		})(i);
+	}
 	for(var i = 2; i < 14; i++) {
 		(function(index) {
 			columnDefs.push({
 				aTargets: [index],
 				fnCreatedCell: function(nTd, sData, item, iRow, iCol) {
 					var value = item[sxlist[index-2]];
-					if(value == 0) {
-						$(nTd).css("color", "white").css("backgroundColor", "red");
-					} else {
-						$(nTd).css("backgroundColor", "#ffc");
+					if(item.id) {
+						if(value == 0) {
+							$(nTd).css("color", "white").css("backgroundColor", "red");
+						} else {
+							$(nTd).css("backgroundColor", "#ffc");
+						}
 					}
 					$(nTd).text(value);
 				}
@@ -64,15 +92,40 @@ $(document).ready(function() {
 		})(i);
 	}
 	columnDefs.push({
+		aTargets: [14],
+		fnCreatedCell: function(nTd, sData, item, iRow, iCol) {
+			var value = null;
+			if(item.id) {
+				value = item.total;
+			} else {
+				value = "";
+			}
+			$(nTd).text(value);
+		}
+	});
+	columnDefs.push({
 		aTargets: [16],
 		fnCreatedCell: function(nTd, sData, item, iRow, iCol) {
-			var value = item.lastYz;
-			if(value > 0 && value < 7) {
-				$(nTd).css("color", "white").css("backgroundColor", "red");
-			} else if(value > 6 && value < 10) {
-				$(nTd).css("backgroundColor", "yellow");
-			} else if(value > 9) {
-				$(nTd).css("color", "white").css("backgroundColor", "green");
+			var value = null;
+			if(item.id) {
+				value = item.lastYz;
+				if(value > 7) {
+					if(lastGreen) {
+						count++;
+					}
+					$(nTd).css("color", "white").css("backgroundColor", "green");
+					lastRed = false;
+					lastGreen = true;
+				} else {
+					if(lastRed) {
+						count++;
+					}
+					$(nTd).css("color", "white").css("backgroundColor", "red");
+					lastRed = true;
+					lastGreen = false;
+				}
+			} else {
+				value = Math.round(count / item.total * 10000) / 100 + "%";
 			}
 			$(nTd).text(value);
 		}
@@ -82,6 +135,9 @@ $(document).ready(function() {
 		url : "/mvc/yz/listSX",
 		bFilter: false,
 		data : function(queryInfo, infoSettings) {
+			count = 0;
+			lastRed = false;
+			lastGreen = false;
 			queryInfo.object = {};
 			queryInfo.object.year = parseInt($("#years").val());
 			queryInfo.object.phase = parseInt($("#phases").val());

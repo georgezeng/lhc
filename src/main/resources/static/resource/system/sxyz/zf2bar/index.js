@@ -50,7 +50,7 @@ $(document).ready(function() {
 	
 	function loadChart() {
 		post({
-			url: '/mvc/yz/listSXZF/',
+			url: '/mvc/yz/listSXZFLevel2/',
 			data: {
 				object: {
 					year: parseInt($("#years").val()),
@@ -65,18 +65,19 @@ $(document).ready(function() {
 				var series = [{name: '振幅', data: []}];
 				for(var i = 0; i < result.list.length; i++) {
 					var item = result.list[i];
-					for(var j = 0; j < 12; j++) {
-						if(item["zf"+j] == 0) {
-							series[0].data.push({
-								y: j,
-								name: item.year + "-" + item.phase
-							});
-							break;
-						}
-					}
+					series[0].data.push({
+						y: item.currentPos,
+						name: item.year + "-" + item.phase
+					});
 				}
 				
-				var height = 1000 * parseInt($("#phaseTotal").val()) / 50;
+				var height = result.list.length;
+				if(height > 10) {
+					height *= 20;
+				} else {
+					height *= 30;
+				}
+				
 				Highcharts.chart('charts', {
 					
 					chart: {
@@ -95,6 +96,7 @@ $(document).ready(function() {
 				            }
 				        },
 						series: {
+							turboThreshold: 3000,
 			                pointWidth: 16
 			            }
 				    },

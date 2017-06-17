@@ -93,6 +93,12 @@ $(document).ready(function() {
 						minRange: 1
 					},
 					
+					plotOptions: {
+						series: {
+							turboThreshold: 3000
+			            }
+				    },
+					
 					series: series
 					
 				});

@@ -50,11 +50,15 @@ $(document).ready(function() {
 				aTargets: [index],
 				fnCreatedCell: function(nTd, sData, item, iRow, iCol) {
 					var value = item[sxlist[index-2]];
-					if(value > 0 && value < 7) {
+					if(!value) {
+						value = 0;
+					}
+					var avg = item.total;
+					if(value < avg - 1) {
 						$(nTd).css("color", "white").css("backgroundColor", "green");
-					} else if(value > 6 && value < 11) {
+					} else if(value > avg - 2 && value < avg + 2) {
 						$(nTd).css("backgroundColor", "yellow");
-					} else if(value > 10) {
+					} else if(value > avg + 1) {
 						$(nTd).css("color", "white").css("backgroundColor", "red");
 					}
 					$(nTd).text(value);
@@ -64,7 +68,7 @@ $(document).ready(function() {
 	}
 	datatables.push(createDataTable({
 		id : "dataTable",
-		url : "/mvc/yz/countSXZF",
+		url : "/mvc/yz/listSXZFLevel2",
 		bFilter: false,
 		data : function(queryInfo, infoSettings) {
 			queryInfo.object = {};

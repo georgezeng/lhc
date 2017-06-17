@@ -1,6 +1,6 @@
 function createDataTable(opt) {
 	var datatable = $('#' + opt.id);
-
+	var successHandler = opt.success;
 	var datatableObj = datatable
 			.DataTable({
 				responsive : true,
@@ -29,7 +29,6 @@ function createDataTable(opt) {
 				aoColumnDefs: opt.aoColumnDefs,
 				"bFilter": opt.bFilter == false ? false : true,
 				ajax : function(infoSettings, callback, settings) {
-					var successHandler = opt.success;
 					var queryInfo = createQueryInfo(infoSettings);
 					if (!opt.dataCallback) {
 						opt.dataCallback = opt.data;

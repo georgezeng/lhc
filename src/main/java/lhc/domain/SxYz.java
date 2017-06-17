@@ -1,5 +1,7 @@
 package lhc.domain;
 
+import java.math.BigDecimal;
+
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.EnumType;
@@ -47,6 +49,30 @@ public class SxYz {
 	private SX lastSx;
 	@Transient
 	private int[] lastYzList = new int[25];
+	@Transient
+	private BigDecimal avg;
+	@Transient
+	private Integer lastCountYz;
+
+	public Integer getLastCountYz() {
+		return lastCountYz;
+	}
+
+	public void setLastCountYz(Integer lastCountYz) {
+		this.lastCountYz = lastCountYz;
+	}
+
+	public void setId(Long id) {
+		this.id = id;
+	}
+
+	public BigDecimal getAvg() {
+		return avg;
+	}
+
+	public void setAvg(BigDecimal avg) {
+		this.avg = avg;
+	}
 
 	public int[] getLastYzList() {
 		return lastYzList;
