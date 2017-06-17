@@ -145,7 +145,7 @@ $(document).ready(function() {
 							$(nTd).css("color", "white").css("backgroundColor", "green");
 						} else if(value > small && value < large) {
 							$(nTd).css("backgroundColor", "yellow");
-						} else if(value > large - 1) {
+						} else {
 							$(nTd).css("color", "white").css("backgroundColor", "red");
 						}
 					}
