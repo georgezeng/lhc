@@ -1,5 +1,7 @@
 package lhc.controller;
 
+import java.io.Writer;
+
 import javax.servlet.http.HttpServletResponse;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -66,28 +68,34 @@ public class KaiJiangController {
 	}
 
 	@RequestMapping("/download")
-	public String download(String searchKey, HttpServletResponse response) {
+	public String download(String searchKey, HttpServletResponse response) throws Exception {
+		response.setContentType("text/csv;charset=gbk;");
+		response.addHeader("Content-Disposition", "attachment;filename=kaijiang.csv");
 		QueryInfo<String> queryInfo = new QueryInfo<String>();
 		queryInfo.setObject(searchKey);
 		PageResult<KaiJiang> result = kaiJiangDao.query(queryInfo);
 		if (result != null && result.getList() != null && !result.getList().isEmpty()) {
-			StringBuilder content = new StringBuilder();
-			content.append("年份, 日期, 期数, 平码, 特码").append("\n");
+			Writer writer = response.getWriter();
+			writer.append("日期, 年份, 期数, 平码(生肖), 平码(号码), 特码(生肖), 特码(号码)").append("\n");
 			for (KaiJiang data : result.getList()) {
-				content.append(data.getYear()).append(",");
-				content.append(data.getDate()).append(",");
-				content.append(data.getPhase()).append(",");
-				content.append(data.getNum1Sx().getText() + "(" + data.getNum1() + ")").append(" ");
-				content.append(data.getNum2Sx().getText() + "(" + data.getNum2() + ")").append(" ");
-				content.append(data.getNum3Sx().getText() + "(" + data.getNum3() + ")").append(" ");
-				content.append(data.getNum4Sx().getText() + "(" + data.getNum4() + ")").append(" ");
-				content.append(data.getNum5Sx().getText() + "(" + data.getNum5() + ")").append(" ");
-				content.append(data.getNum6Sx().getText() + "(" + data.getNum6() + ")").append(",");
-				content.append(data.getSpecialSx().getText()).append("\n");
+				writer.append(data.getDate()).append(",");
+				writer.append(data.getYear() + "").append(",");
+				writer.append(data.getPhase() + "").append(",");
+				writer.append(data.getNum1Sx().getText()).append(" ");
+				writer.append(data.getNum2Sx().getText()).append(" ");
+				writer.append(data.getNum3Sx().getText()).append(" ");
+				writer.append(data.getNum4Sx().getText()).append(" ");
+				writer.append(data.getNum5Sx().getText()).append(" ");
+				writer.append(data.getNum6Sx().getText()).append(", ");
+				writer.append(data.getNum1() + "").append(" ");
+				writer.append(data.getNum2() + "").append(" ");
+				writer.append(data.getNum3() + "").append(" ");
+				writer.append(data.getNum4() + "").append(" ");
+				writer.append(data.getNum5() + "").append(" ");
+				writer.append(data.getNum6() + "").append(", ");
+				writer.append(data.getSpecialSx().getText()).append(", ");
+				writer.append(data.getSpecialNum() + "").append("\n");
 			}
-			response.setContentType("application/octet-stream");
-			response.addHeader("Content-Disposition", "attachment;filename=kaijiang.csv");
-			return content.toString();
 		}
 		return null;
 	}
