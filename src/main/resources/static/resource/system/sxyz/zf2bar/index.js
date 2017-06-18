@@ -18,15 +18,18 @@ $(document).ready(function() {
 						if(phases.prev().hasClass("combobox-container")){
 							phases.prev().remove();
 						}
-						phases.combobox();
-						loadChart();
+						phases.combobox().unbind().change(function() {
+							loadChart();
+						}).change();
 					}
 				});
 			}).change();
 		}
 	});
 	
-	$("#phaseTotal").combobox();
+	$("#phaseTotal").combobox().change(function() {
+		loadChart();
+	});
 	
 	$("#calYZBtn").click(function() {
 		openLoading();
@@ -72,7 +75,7 @@ $(document).ready(function() {
 				}
 				
 				var height = result.list.length;
-				if(height > 10) {
+				if(height > 11) {
 					height *= 20;
 				} else {
 					height *= 30;

@@ -91,6 +91,16 @@ $(document).ready(function() {
 			});
 		})(i);
 	}
+	columnDefs.push({
+		aTargets: [14],
+		fnCreatedCell: function(nTd, sData, item, iRow, iCol) {
+			if(item.id) {
+				$(nTd).text(item.maxTimes);
+			} else {
+				$(nTd).text("");
+			}
+		}
+	});
 	datatables.push(createDataTable({
 		id : "dataTable",
 		url : "/mvc/yz/listQWYZ",
@@ -130,7 +140,12 @@ $(document).ready(function() {
 		}
 	}
 	
-	
+	$("#downloadBtn").click(function() {
+		$("#size").val($("select[name='dataTable_length']").val());
+		$("#endYear").val($("#years").val());
+		$("#endPhase").val($("#phases").val());
+		$("#download").submit();
+	});
 });
 
 

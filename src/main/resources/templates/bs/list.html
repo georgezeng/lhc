@@ -8,9 +8,15 @@
 				<div class="buttonArea">
 					<span class="title">截止年份:</span><select id="years"></select>
 					<span class="title">截止期数:</span><select id="phases"></select>
+					<button id="downloadBtn" class="btn btn-success">导出</button>
 					<button id="calYZBtn" class="btn btn-info">遗值计算</button>
 					<button id="searchBtn" class="btn btn-primary">搜索</button>
 					<div class="clearfix"></div>
+					<form id="download" name="download" action="/mvc/yz/downloadBSYZ" class="hidden">
+						<input id="size" type="hidden" name="size" />
+						<input id="endYear" type="hidden" name="year" />
+						<input id="endPhase" type="hidden" name="phase" />
+					</form>
 				</div>
 			</div>
 		</div>
@@ -29,8 +35,6 @@
 							<th style="background-color:blue; color:white;">蓝区</th>
 							<th>和（当期）</th>
 							<th>差值</th>
-							<th>遗值（上期，上限5）</th>
-							<th>遗值（上期，上限3）</th>
 						</tr>
 					</thead>
 					<tfoot>
@@ -42,8 +46,6 @@
 							<td style="background-color:blue; color:white;">蓝区</td>
 							<td>和（当期）</td>
 							<td>差值</td>
-							<td>遗值（上期，上限5）</td>
-							<td>遗值（上期，上限1）</td>
 						</tr>
 					</tfoot>
 				</table>

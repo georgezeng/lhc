@@ -4,7 +4,7 @@
 	<div id="page-wrapper" th:fragment="content">
 		<div class="row">
 			<div class="col-lg-12">
-				<h3 class="page-header">合数-遗值列表</h3>
+				<h3 class="page-header">单双-遗值列表</h3>
 				<div class="buttonArea">
 					<span class="title">截止年份:</span><select id="years"></select>
 					<span class="title">截止期数:</span><select id="phases"></select>
@@ -12,7 +12,7 @@
 					<button id="calYZBtn" class="btn btn-info">遗值计算</button>
 					<button id="searchBtn" class="btn btn-primary">搜索</button>
 					<div class="clearfix"></div>
-					<form id="download" name="download" action="/mvc/yz/downloadLHYZ" class="hidden">
+					<form id="download" name="download" action="/mvc/yz/downloadDSYZ" class="hidden">
 						<input id="size" type="hidden" name="size" />
 						<input id="endYear" type="hidden" name="year" />
 						<input id="endPhase" type="hidden" name="phase" />
@@ -30,38 +30,36 @@
 						<tr>
 							<th>年份</th>
 							<th>期数</th>
-							<th>末位0</th>
-							<th>末位1</th>
-							<th>末位2</th>
-							<th>末位3</th>
-							<th>末位4</th>
-							<th>末位5</th>
-							<th>末位6</th>
-							<th>末位7</th>
-							<th>末位8</th>
-							<th>末位9</th>
-							<th>和（当期）</th>
-							<th>差值</th>
-							<th>遗值（上期）</th>
+							<th>大（生肖）</th>
+							<th>小（生肖）</th>
+							<th>遗值（上期，生肖）</th>
+							<th>单（生肖）</th>
+							<th>双（生肖）</th>
+							<th>遗值（上期，生肖）</th>
+							<th>大（号码）</th>
+							<th>小（号码）</th>
+							<th>遗值（上期，号码）</th>
+							<th>单（号码）</th>
+							<th>双（号码）</th>
+							<th>遗值（上期，号码）</th>
 						</tr>
 					</thead>
 					<tfoot>
 						<tr>
 							<td>年份</td>
 							<td>期数</td>
-							<td>末位0</td>
-							<td>末位1</td>
-							<td>末位2</td>
-							<td>末位3</td>
-							<td>末位4</td>
-							<td>末位5</td>
-							<td>末位6</td>
-							<td>末位7</td>
-							<td>末位8</td>
-							<td>末位9</td>
-							<td>和（当期）</td>
-							<td>差值</td>
-							<td>遗值（上期）</td>
+							<td>大（生肖）</td>
+							<td>小（生肖）</td>
+							<td>遗值（上期，生肖）</td>
+							<td>单（生肖）</td>
+							<td>双（生肖）</td>
+							<td>遗值（上期，生肖）</td>
+							<td>大（号码）</td>
+							<td>小（号码）</td>
+							<td>遗值（上期，号码）</td>
+							<td>单（号码）</td>
+							<td>双（号码）</td>
+							<td>遗值（上期，号码）</td>
 						</tr>
 					</tfoot>
 				</table>

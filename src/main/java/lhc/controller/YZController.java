@@ -1,5 +1,6 @@
 package lhc.controller;
 
+import java.io.Writer;
 import java.lang.reflect.Method;
 import java.math.BigDecimal;
 import java.math.RoundingMode;
@@ -9,6 +10,8 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
+import javax.servlet.http.HttpServletResponse;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestBody;
@@ -16,6 +19,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 import lhc.domain.BsYz;
+import lhc.domain.DsYz;
 import lhc.domain.KaiJiang;
 import lhc.domain.LhYz;
 import lhc.domain.MwYz;
@@ -26,14 +30,17 @@ import lhc.domain.SwYz;
 import lhc.domain.SxYz;
 import lhc.domain.SxZfYz;
 import lhc.dto.BaseResult;
+import lhc.dto.DownloadDTO;
 import lhc.dto.PmDTO;
 import lhc.dto.PmNum;
 import lhc.dto.SpecialNum;
+import lhc.dto.query.PageInfo;
 import lhc.dto.query.PageResult;
 import lhc.dto.query.QueryInfo;
 import lhc.enums.SX;
 import lhc.repository.jpa.api.KaiJiangRepository;
 import lhc.repository.jpa.dao.BsYzDao;
+import lhc.repository.jpa.dao.DsYzDao;
 import lhc.repository.jpa.dao.KaiJiangDao;
 import lhc.repository.jpa.dao.LhYzDao;
 import lhc.repository.jpa.dao.MwYzDao;
@@ -47,6 +54,7 @@ import lhc.service.YZService;
 
 @RestController
 @RequestMapping("/mvc/yz")
+@SuppressWarnings("unchecked")
 public class YZController {
 	@Autowired
 	private YZService yzService;
@@ -84,6 +92,9 @@ public class YZController {
 	@Autowired
 	private SqYzDao sqYzDao;
 
+	@Autowired
+	private DsYzDao dsYzDao;
+
 	@RequestMapping("/years")
 	public BaseResult years() {
 		List<KaiJiang> list = KaiJiangRepository.findGroupByYear();
@@ -119,6 +130,7 @@ public class YZController {
 		yzService.calQQYZ();
 		yzService.calBSYZ();
 		yzService.calSQYZ();
+		yzService.calDSYZ();
 		return BaseResult.EMPTY;
 	}
 
@@ -190,9 +202,14 @@ public class YZController {
 
 	@RequestMapping("/listBSYZ")
 	public BaseResult listBSYZ(@RequestBody QueryInfo<BsYz> queryInfo) throws Exception {
-		PageResult<BsYz> result = bsYzDao.query(queryInfo);
+		return new BaseResult(bsYzDao.query(queryInfo));
+	}
+
+	@RequestMapping("/listDSYZ")
+	public BaseResult listDSYZ(@RequestBody QueryInfo<DsYz> queryInfo) throws Exception {
+		PageResult<DsYz> result = dsYzDao.query(queryInfo);
 		if (result != null && result.getTotal() > 0) {
-			BsYz last = new BsYz();
+			DsYz last = new DsYz();
 			last.setTotal(result.getList().size());
 			result.getList().add(last);
 		}
@@ -331,6 +348,7 @@ public class YZController {
 					Method gm = SxZfYz.class.getDeclaredMethod("getZf" + i);
 					sm.invoke(dto, (Integer) gm.invoke(lastZF));
 				}
+				dto.setDate(data.getDate());
 				dto.setYear(data.getYear());
 				dto.setPhase(data.getPhase());
 				dto.setId(data.getId());
@@ -685,5 +703,353 @@ public class YZController {
 			pResult.setList(list);
 		}
 		return new BaseResult(pResult);
+	}
+
+	@RequestMapping("/downloadSXYZ")
+	public String downloadSXYZ(DownloadDTO dto, HttpServletResponse response) throws Exception {
+		response.setContentType("text/csv;charset=gbk;");
+		response.addHeader("Content-Disposition", "attachment;filename=sxyz.csv");
+		QueryInfo<SxYz> queryInfo = new QueryInfo<SxYz>();
+		SxYz queryObj = new SxYz();
+		queryObj.setYear(dto.getYear());
+		queryObj.setPhase(dto.getPhase());
+		queryInfo.setObject(queryObj);
+		PageInfo pageInfo = new PageInfo();
+		pageInfo.setPageNo(1);
+		pageInfo.setPageSize(dto.getSize());
+		queryInfo.setPageInfo(pageInfo);
+		PageResult<SxYz> result = sxYzDao.query(queryInfo);
+		if (result != null && result.getList() != null && !result.getList().isEmpty()) {
+			Writer writer = response.getWriter();
+			writer.append("日期, 年份, 期数, 和, 差值, 遗值").append("\n");
+			for (SxYz data : result.getList()) {
+				writer.append(data.getDate()).append(", ");
+				writer.append(data.getYear() + "").append(", ");
+				writer.append(data.getPhase() + "").append(", ");
+				writer.append(data.getTotal() + "").append(", ");
+				writer.append(data.getDelta() + "").append(", ");
+				writer.append(data.getLastYz() + "").append("\n");
+			}
+		}
+		return null;
+	}
+
+	@RequestMapping("/downloadSXZF")
+	public String downloadSXZF(DownloadDTO dto, HttpServletResponse response) throws Exception {
+		response.setContentType("text/csv;charset=gbk;");
+		response.addHeader("Content-Disposition", "attachment;filename=sxzf.csv");
+		QueryInfo<SxZfYz> queryInfo = new QueryInfo<SxZfYz>();
+		SxZfYz queryObj = new SxZfYz();
+		queryObj.setYear(dto.getYear());
+		queryObj.setPhase(dto.getPhase());
+		queryInfo.setObject(queryObj);
+		PageInfo pageInfo = new PageInfo();
+		pageInfo.setPageNo(1);
+		pageInfo.setPageSize(dto.getSize());
+		queryInfo.setPageInfo(pageInfo);
+		PageResult<SxZfYz> result = sxZfYzDao.query(queryInfo);
+		if (result != null && result.getList() != null && !result.getList().isEmpty()) {
+			Writer writer = response.getWriter();
+			writer.append("日期, 年份, 期数, 和, 差值, 遗值").append("\n");
+			for (SxZfYz data : result.getList()) {
+				writer.append(data.getDate()).append(", ");
+				writer.append(data.getYear() + "").append(", ");
+				writer.append(data.getPhase() + "").append(", ");
+				writer.append(data.getTotal() + "").append(", ");
+				writer.append(data.getDelta() + "").append(", ");
+				writer.append(data.getLastYz() + "").append("\n");
+			}
+		}
+		return null;
+	}
+
+	@RequestMapping("/downloadZFCS")
+	public String downloadZFCS(DownloadDTO dto, HttpServletResponse response) throws Exception {
+		response.setContentType("text/csv;charset=gbk;");
+		response.addHeader("Content-Disposition", "attachment;filename=sxzfcs.csv");
+		QueryInfo<SxZfYz> queryInfo = new QueryInfo<SxZfYz>();
+		SxZfYz queryObj = new SxZfYz();
+		queryObj.setYear(dto.getYear());
+		queryObj.setPhase(dto.getPhase());
+		queryInfo.setObject(queryObj);
+		PageInfo pageInfo = new PageInfo();
+		pageInfo.setPageNo(1);
+		pageInfo.setPageSize(dto.getSize());
+		queryInfo.setPageInfo(pageInfo);
+		PageResult<SxZfYz> result = (PageResult<SxZfYz>) countSXZF(queryInfo).getData();
+		result.getList().remove(result.getList().size() - 1);
+		if (result != null && result.getList() != null && !result.getList().isEmpty()) {
+			Writer writer = response.getWriter();
+			writer.append("日期, 年份, 期数, 当期次数").append("\n");
+			for (SxZfYz data : result.getList()) {
+				writer.append(data.getDate()).append(", ");
+				writer.append(data.getYear() + "").append(", ");
+				writer.append(data.getPhase() + "").append(", ");
+				writer.append(data.getDelta() + "").append("\n");
+			}
+		}
+		return null;
+	}
+
+	@RequestMapping("/downloadZFCSLevel2")
+	public String downloadZFCSLevel2(DownloadDTO dto, HttpServletResponse response) throws Exception {
+		response.setContentType("text/csv;charset=gbk;");
+		response.addHeader("Content-Disposition", "attachment;filename=sxzfcs_level2.csv");
+		QueryInfo<SxZfYz> queryInfo = new QueryInfo<SxZfYz>();
+		SxZfYz queryObj = new SxZfYz();
+		queryObj.setYear(dto.getYear());
+		queryObj.setPhase(dto.getPhase());
+		queryInfo.setObject(queryObj);
+		PageInfo pageInfo = new PageInfo();
+		pageInfo.setPageNo(1);
+		pageInfo.setPageSize(dto.getSize());
+		queryInfo.setPageInfo(pageInfo);
+		PageResult<SxZfYz> result = (PageResult<SxZfYz>) listSXZFLevel2(queryInfo).getData();
+		result.getList().remove(result.getList().size() - 1);
+		if (result != null && result.getList() != null && !result.getList().isEmpty()) {
+			Writer writer = response.getWriter();
+			writer.append("日期, 年份, 期数, 当期次数").append("\n");
+			for (SxZfYz data : result.getList()) {
+				writer.append(data.getDate()).append(", ");
+				writer.append(data.getYear() + "").append(", ");
+				writer.append(data.getPhase() + "").append(", ");
+				writer.append(data.getDelta() + "").append("\n");
+			}
+		}
+		return null;
+	}
+
+	@RequestMapping("/downloadQWYZ")
+	public String downloadQWYZ(DownloadDTO dto, HttpServletResponse response) throws Exception {
+		response.setContentType("text/csv;charset=gbk;");
+		response.addHeader("Content-Disposition", "attachment;filename=qwyz.csv");
+		QueryInfo<QwYz> queryInfo = new QueryInfo<QwYz>();
+		QwYz queryObj = new QwYz();
+		queryObj.setYear(dto.getYear());
+		queryObj.setPhase(dto.getPhase());
+		queryInfo.setObject(queryObj);
+		PageInfo pageInfo = new PageInfo();
+		pageInfo.setPageNo(1);
+		pageInfo.setPageSize(dto.getSize());
+		queryInfo.setPageInfo(pageInfo);
+		PageResult<QwYz> result = (PageResult<QwYz>) listQWYZ(queryInfo).getData();
+		result.getList().remove(result.getList().size() - 1);
+		if (result != null && result.getList() != null && !result.getList().isEmpty()) {
+			Writer writer = response.getWriter();
+			writer.append("日期, 年份, 期数, 和, 最大遗值, 最大连续期数").append("\n");
+			for (QwYz data : result.getList()) {
+				writer.append(data.getDate()).append(", ");
+				writer.append(data.getYear() + "").append(", ");
+				writer.append(data.getPhase() + "").append(", ");
+				writer.append(data.getTotal() + "").append(", ");
+				writer.append(data.getCurrentYz() + "").append(", ");
+				writer.append(data.getMaxTimes() + "").append("\n");
+			}
+		}
+		return null;
+	}
+
+	@RequestMapping("/downloadDSYZ")
+	public String downloadDSYZ(DownloadDTO dto, HttpServletResponse response) throws Exception {
+		response.setContentType("text/csv;charset=gbk;");
+		response.addHeader("Content-Disposition", "attachment;filename=dsyz.csv");
+		QueryInfo<DsYz> queryInfo = new QueryInfo<DsYz>();
+		DsYz queryObj = new DsYz();
+		queryObj.setYear(dto.getYear());
+		queryObj.setPhase(dto.getPhase());
+		queryInfo.setObject(queryObj);
+		PageInfo pageInfo = new PageInfo();
+		pageInfo.setPageNo(1);
+		pageInfo.setPageSize(dto.getSize());
+		queryInfo.setPageInfo(pageInfo);
+		PageResult<DsYz> result = dsYzDao.query(queryInfo);
+		result.getList().remove(result.getList().size() - 1);
+		if (result != null && result.getList() != null && !result.getList().isEmpty()) {
+			Writer writer = response.getWriter();
+			writer.append("日期, 年份, 期数, 遗值（生肖,大小）, 遗值（生肖,单双）, 遗值（号码,大小）, 遗值（号码,单双）").append("\n");
+			for (DsYz data : result.getList()) {
+				writer.append(data.getDate()).append(", ");
+				writer.append(data.getYear() + "").append(", ");
+				writer.append(data.getPhase() + "").append(", ");
+				writer.append(data.getLastSxDxYz() + "").append(", ");
+				writer.append(data.getLastSxDsYz() + "").append(", ");
+				writer.append(data.getLastHmDxYz() + "").append(", ");
+				writer.append(data.getLastHmDsYz() + "").append("\n");
+			}
+		}
+		return null;
+	}
+
+	@RequestMapping("/downloadSWYZ")
+	public String downloadSWYZ(DownloadDTO dto, HttpServletResponse response) throws Exception {
+		response.setContentType("text/csv;charset=gbk;");
+		response.addHeader("Content-Disposition", "attachment;filename=swyz.csv");
+		QueryInfo<SwYz> queryInfo = new QueryInfo<SwYz>();
+		SwYz queryObj = new SwYz();
+		queryObj.setYear(dto.getYear());
+		queryObj.setPhase(dto.getPhase());
+		queryInfo.setObject(queryObj);
+		PageInfo pageInfo = new PageInfo();
+		pageInfo.setPageNo(1);
+		pageInfo.setPageSize(dto.getSize());
+		queryInfo.setPageInfo(pageInfo);
+		PageResult<SwYz> result = swYzDao.query(queryInfo);
+		if (result != null && result.getList() != null && !result.getList().isEmpty()) {
+			Writer writer = response.getWriter();
+			writer.append("日期, 年份, 期数, 和, 差值, 遗值").append("\n");
+			for (SwYz data : result.getList()) {
+				writer.append(data.getDate()).append(", ");
+				writer.append(data.getYear() + "").append(", ");
+				writer.append(data.getPhase() + "").append(", ");
+				writer.append(data.getTotal() + "").append(", ");
+				writer.append(data.getDelta() + "").append(", ");
+				writer.append(data.getLastYz() + "").append("\n");
+			}
+		}
+		return null;
+	}
+
+	@RequestMapping("/downloadMWYZ")
+	public String downloadMWYZ(DownloadDTO dto, HttpServletResponse response) throws Exception {
+		response.setContentType("text/csv;charset=gbk;");
+		response.addHeader("Content-Disposition", "attachment;filename=mwyz.csv");
+		QueryInfo<MwYz> queryInfo = new QueryInfo<MwYz>();
+		MwYz queryObj = new MwYz();
+		queryObj.setYear(dto.getYear());
+		queryObj.setPhase(dto.getPhase());
+		queryInfo.setObject(queryObj);
+		PageInfo pageInfo = new PageInfo();
+		pageInfo.setPageNo(1);
+		pageInfo.setPageSize(dto.getSize());
+		queryInfo.setPageInfo(pageInfo);
+		PageResult<MwYz> result = mwYzDao.query(queryInfo);
+		if (result != null && result.getList() != null && !result.getList().isEmpty()) {
+			Writer writer = response.getWriter();
+			writer.append("日期, 年份, 期数, 和, 差值, 遗值").append("\n");
+			for (MwYz data : result.getList()) {
+				writer.append(data.getDate()).append(", ");
+				writer.append(data.getYear() + "").append(", ");
+				writer.append(data.getPhase() + "").append(", ");
+				writer.append(data.getTotal() + "").append(", ");
+				writer.append(data.getDelta() + "").append(", ");
+				writer.append(data.getLastYz() + "").append("\n");
+			}
+		}
+		return null;
+	}
+
+	@RequestMapping("/downloadLHYZ")
+	public String downloadLHYZ(DownloadDTO dto, HttpServletResponse response) throws Exception {
+		response.setContentType("text/csv;charset=gbk;");
+		response.addHeader("Content-Disposition", "attachment;filename=lhyz.csv");
+		QueryInfo<LhYz> queryInfo = new QueryInfo<LhYz>();
+		LhYz queryObj = new LhYz();
+		queryObj.setYear(dto.getYear());
+		queryObj.setPhase(dto.getPhase());
+		queryInfo.setObject(queryObj);
+		PageInfo pageInfo = new PageInfo();
+		pageInfo.setPageNo(1);
+		pageInfo.setPageSize(dto.getSize());
+		queryInfo.setPageInfo(pageInfo);
+		PageResult<LhYz> result = lhYzDao.query(queryInfo);
+		if (result != null && result.getList() != null && !result.getList().isEmpty()) {
+			Writer writer = response.getWriter();
+			writer.append("日期, 年份, 期数, 和, 差值, 遗值").append("\n");
+			for (LhYz data : result.getList()) {
+				writer.append(data.getDate()).append(", ");
+				writer.append(data.getYear() + "").append(", ");
+				writer.append(data.getPhase() + "").append(", ");
+				writer.append(data.getTotal() + "").append(", ");
+				writer.append(data.getDelta() + "").append(", ");
+				writer.append(data.getLastYz() + "").append("\n");
+			}
+		}
+		return null;
+	}
+
+	@RequestMapping("/downloadQQYZ")
+	public String downloadQQYZ(DownloadDTO dto, HttpServletResponse response) throws Exception {
+		response.setContentType("text/csv;charset=gbk;");
+		response.addHeader("Content-Disposition", "attachment;filename=qqyz.csv");
+		QueryInfo<QqYz> queryInfo = new QueryInfo<QqYz>();
+		QqYz queryObj = new QqYz();
+		queryObj.setYear(dto.getYear());
+		queryObj.setPhase(dto.getPhase());
+		queryInfo.setObject(queryObj);
+		PageInfo pageInfo = new PageInfo();
+		pageInfo.setPageNo(1);
+		pageInfo.setPageSize(dto.getSize());
+		queryInfo.setPageInfo(pageInfo);
+		PageResult<QqYz> result = qqYzDao.query(queryInfo);
+		if (result != null && result.getList() != null && !result.getList().isEmpty()) {
+			Writer writer = response.getWriter();
+			writer.append("日期, 年份, 期数, 和, 差值, 遗值").append("\n");
+			for (QqYz data : result.getList()) {
+				writer.append(data.getDate()).append(", ");
+				writer.append(data.getYear() + "").append(", ");
+				writer.append(data.getPhase() + "").append(", ");
+				writer.append(data.getTotal() + "").append(", ");
+				writer.append(data.getDelta() + "").append(", ");
+				writer.append(data.getLastYz() + "").append("\n");
+			}
+		}
+		return null;
+	}
+
+	@RequestMapping("/downloadSQYZ")
+	public String downloadSQYZ(DownloadDTO dto, HttpServletResponse response) throws Exception {
+		response.setContentType("text/csv;charset=gbk;");
+		response.addHeader("Content-Disposition", "attachment;filename=sqyz.csv");
+		QueryInfo<SqYz> queryInfo = new QueryInfo<SqYz>();
+		SqYz queryObj = new SqYz();
+		queryObj.setYear(dto.getYear());
+		queryObj.setPhase(dto.getPhase());
+		queryInfo.setObject(queryObj);
+		PageInfo pageInfo = new PageInfo();
+		pageInfo.setPageNo(1);
+		pageInfo.setPageSize(dto.getSize());
+		queryInfo.setPageInfo(pageInfo);
+		PageResult<SqYz> result = sqYzDao.query(queryInfo);
+		if (result != null && result.getList() != null && !result.getList().isEmpty()) {
+			Writer writer = response.getWriter();
+			writer.append("日期, 年份, 期数, 和, 差值, 遗值").append("\n");
+			for (SqYz data : result.getList()) {
+				writer.append(data.getDate()).append(", ");
+				writer.append(data.getYear() + "").append(", ");
+				writer.append(data.getPhase() + "").append(", ");
+				writer.append(data.getTotal() + "").append(", ");
+				writer.append(data.getDelta() + "").append(", ");
+				writer.append(data.getLastYz() + "").append("\n");
+			}
+		}
+		return null;
+	}
+
+	@RequestMapping("/downloadBSYZ")
+	public String downloadBSYZ(DownloadDTO dto, HttpServletResponse response) throws Exception {
+		response.setContentType("text/csv;charset=gbk;");
+		response.addHeader("Content-Disposition", "attachment;filename=bsyz.csv");
+		QueryInfo<BsYz> queryInfo = new QueryInfo<BsYz>();
+		BsYz queryObj = new BsYz();
+		queryObj.setYear(dto.getYear());
+		queryObj.setPhase(dto.getPhase());
+		queryInfo.setObject(queryObj);
+		PageInfo pageInfo = new PageInfo();
+		pageInfo.setPageNo(1);
+		pageInfo.setPageSize(dto.getSize());
+		queryInfo.setPageInfo(pageInfo);
+		PageResult<BsYz> result = bsYzDao.query(queryInfo);
+		if (result != null && result.getList() != null && !result.getList().isEmpty()) {
+			Writer writer = response.getWriter();
+			writer.append("日期, 年份, 期数, 和, 差值").append("\n");
+			for (BsYz data : result.getList()) {
+				writer.append(data.getDate()).append(", ");
+				writer.append(data.getYear() + "").append(", ");
+				writer.append(data.getPhase() + "").append(", ");
+				writer.append(data.getTotal() + "").append(", ");
+				writer.append(data.getDelta() + "").append("\n");
+			}
+		}
+		return null;
 	}
 }

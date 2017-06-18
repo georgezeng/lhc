@@ -16,4 +16,5 @@
 	<include file="/db/v10.sql" />
 	<include file="/db/v11.sql" />
 	<include file="/db/v12.sql" />
+	<include file="/db/v13.sql" />
 </databaseChangeLog>

@@ -5,8 +5,10 @@ import com.fasterxml.jackson.annotation.JsonFormat.Shape;
 
 @JsonFormat(shape = Shape.OBJECT)
 public enum SX {
-	Shu(1, "鼠", 2), Niu(2, "牛", 3), Hu(3, "虎", 4), Tu(4, "兔", 3), Long(5, "龙", 4), She(6, "蛇", 5), Ma(7, "马", 4), Yang(8,
-			"羊", 5), Hou(9, "猴", 6), Ji(10, "鸡", 5), Gou(11, "狗", 6), Zhu(12, "猪", 7);
+	Shu(1, "鼠", 2, true, true), Niu(2, "牛", 3, false, true), Hu(3, "虎", 4, true, true), Tu(4, "兔", 3, false, true), Long(
+			5, "龙", 4, true,
+			true), She(6, "蛇", 5, false, true), Ma(7, "马", 4, true, false), Yang(8, "羊", 5, false, false), Hou(9, "猴", 6,
+					true, false), Ji(10, "鸡", 5, false, false), Gou(11, "狗", 6, true, false), Zhu(12, "猪", 7, false, false);
 
 	private String text;
 
@@ -14,10 +16,24 @@ public enum SX {
 
 	private int sector;
 
-	private SX(int pos, String text, int sector) {
+	private boolean single;
+
+	private boolean small;
+
+	private SX(int pos, String text, int sector, boolean single, boolean small) {
 		this.text = text;
 		this.pos = pos;
 		this.sector = sector;
+		this.single = single;
+		this.small = small;
+	}
+
+	public boolean isSmall() {
+		return small;
+	}
+
+	public boolean isSingle() {
+		return single;
 	}
 
 	public int getSector() {

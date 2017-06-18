@@ -236,7 +236,12 @@ $(document).ready(function() {
 		}
 	}
 	
-	
+	$("#downloadBtn").click(function() {
+		$("#size").val($("select[name='dataTable_length']").val());
+		$("#endYear").val($("#years").val());
+		$("#endPhase").val($("#phases").val());
+		$("#download").submit();
+	});
 });
 
 

@@ -14,6 +14,7 @@ import org.springframework.data.domain.Sort.Direction;
 import org.springframework.stereotype.Service;
 
 import lhc.domain.BsYz;
+import lhc.domain.DsYz;
 import lhc.domain.KaiJiang;
 import lhc.domain.LhYz;
 import lhc.domain.MwYz;
@@ -25,6 +26,7 @@ import lhc.domain.SxYz;
 import lhc.domain.SxZfYz;
 import lhc.enums.SX;
 import lhc.repository.jpa.api.BsYzRepository;
+import lhc.repository.jpa.api.DsYzRepository;
 import lhc.repository.jpa.api.KaiJiangRepository;
 import lhc.repository.jpa.api.LhYzRepository;
 import lhc.repository.jpa.api.MwYzRepository;
@@ -67,6 +69,9 @@ public class YZService {
 
 	@Autowired
 	private SqYzRepository sqyzRepository;
+
+	@Autowired
+	private DsYzRepository dsyzRepository;
 
 	public void calSX() {
 		try {
@@ -777,6 +782,104 @@ public class YZService {
 						}
 
 						sqyzRepository.save(yz);
+						lastYz = yz;
+
+					}
+				}
+				request = result.nextPageable();
+			} while (result != null && result.hasNext());
+		} catch (Exception e) {
+			throw new RuntimeException(e.getMessage(), e);
+		}
+	}
+
+	public void calDSYZ() {
+		try {
+			Pageable request = new PageRequest(0, 200, new Sort(Direction.ASC, "date"));
+			Page<KaiJiang> result = null;
+			DsYz lastYz = null;
+			String[] arr = { "SxSmall", "SxLarge", "SxSingle", "SxEven", "HmSmall", "HmLarge", "HmSingle", "HmEven" };
+			do {
+				result = kaiJiangRepository.findAll(request);
+				Method gm = null;
+				Method sm = null;
+				if (result != null && result.hasContent()) {
+					for (KaiJiang data : result.getContent()) {
+						DsYz yz = dsyzRepository.findByDate(data.getDate());
+						if (yz == null) {
+							yz = new DsYz();
+							yz.setYear(data.getYear());
+							yz.setPhase(data.getPhase());
+							yz.setDate(data.getDate());
+						}
+
+						SX sx = data.getSpecialSx();
+						boolean isSmall = sx.isSmall();
+						boolean isSingle = sx.isSingle();
+						if (isSmall) {
+							yz.setSxSmall(0);
+							if (lastYz != null) {
+								yz.setLastSxDxYz(lastYz.getSxSmall());
+							}
+						} else {
+							yz.setSxLarge(0);
+							if (lastYz != null) {
+								yz.setLastSxDxYz(lastYz.getSxLarge());
+							}
+						}
+						if (isSingle) {
+							yz.setSxSingle(0);
+							if (lastYz != null) {
+								yz.setLastSxDsYz(lastYz.getSxSingle());
+							}
+						} else {
+							yz.setSxEven(0);
+							if (lastYz != null) {
+								yz.setLastSxDsYz(lastYz.getSxEven());
+							}
+						}
+						Integer num = data.getSpecialNum();
+						isSmall = num < 26;
+						isSingle = num % 2 != 0;
+						if (isSmall) {
+							yz.setHmSmall(0);
+							if (lastYz != null) {
+								yz.setLastHmDxYz(lastYz.getHmSmall());
+							}
+						} else {
+							yz.setHmLarge(0);
+							if (lastYz != null) {
+								yz.setLastHmDxYz(lastYz.getHmLarge());
+							}
+						}
+						if (isSingle) {
+							yz.setHmSingle(0);
+							if (lastYz != null) {
+								yz.setLastHmDsYz(lastYz.getHmSingle());
+							}
+						} else {
+							yz.setHmEven(0);
+							if (lastYz != null) {
+								yz.setLastHmDsYz(lastYz.getHmEven());
+							}
+						}
+
+						if (lastYz != null) {
+							for (int j = 0; j < arr.length; j++) {
+								String suffix = arr[j];
+								gm = DsYz.class.getDeclaredMethod("get" + suffix);
+								Integer lastValue = (Integer) gm.invoke(lastYz);
+								if (lastValue != null) {
+									Integer value = (Integer) gm.invoke(yz);
+									if (value == null || value > 0) {
+										sm = DsYz.class.getDeclaredMethod("set" + suffix, Integer.class);
+										sm.invoke(yz, lastValue + 1);
+									}
+								}
+							}
+						}
+
+						dsyzRepository.save(yz);
 						lastYz = yz;
 
 					}
