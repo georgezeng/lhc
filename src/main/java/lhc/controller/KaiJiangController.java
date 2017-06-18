@@ -46,7 +46,7 @@ public class KaiJiangController {
 	private YZController yZController;
 
 	@RequestMapping("/sync/{year}")
-	public BaseResult sync(@PathVariable int year) {
+	public BaseResult sync(@PathVariable int year) throws Exception {
 		delete(year);
 		parseService.syncKaiJiang(year);
 		yZController.calYZ();

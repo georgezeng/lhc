@@ -9,6 +9,7 @@ import java.util.Collections;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.concurrent.Future;
 
 import javax.servlet.http.HttpServletResponse;
 
@@ -120,17 +121,29 @@ public class YZController {
 	}
 
 	@RequestMapping("/calYZ")
-	public BaseResult calYZ() {
-		yzService.calSX();
-		yzService.calSXZF();
-		yzService.calHMQWYZ();
-		yzService.calSWYZ();
-		yzService.calMWYZ();
-		yzService.calLHYZ();
-		yzService.calQQYZ();
-		yzService.calBSYZ();
-		yzService.calSQYZ();
-		yzService.calDSYZ();
+	public BaseResult calYZ() throws Exception {
+		List<Future<Integer>> futures = new ArrayList<Future<Integer>>();
+		futures.add(yzService.calSX());
+		futures.add(yzService.calHMQWYZ());
+		futures.add(yzService.calSWYZ());
+		futures.add(yzService.calMWYZ());
+		futures.add(yzService.calLHYZ());
+		futures.add(yzService.calQQYZ());
+		futures.add(yzService.calBSYZ());
+		futures.add(yzService.calSQYZ());
+		futures.add(yzService.calDSYZ());
+		while (true) {
+			int count = 0;
+			for (Future<Integer> f : futures) {
+				if (f.isDone()) {
+					count++;
+				}
+			}
+			if (count == futures.size()) {
+				break;
+			}
+			Thread.sleep(1000);
+		}
 		return BaseResult.EMPTY;
 	}
 

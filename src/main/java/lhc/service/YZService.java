@@ -4,6 +4,7 @@ import java.lang.reflect.Method;
 import java.math.BigDecimal;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.concurrent.Future;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
@@ -11,6 +12,8 @@ import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Sort;
 import org.springframework.data.domain.Sort.Direction;
+import org.springframework.scheduling.annotation.Async;
+import org.springframework.scheduling.annotation.AsyncResult;
 import org.springframework.stereotype.Service;
 
 import lhc.domain.BsYz;
@@ -73,7 +76,8 @@ public class YZService {
 	@Autowired
 	private DsYzRepository dsyzRepository;
 
-	public void calSX() {
+	@Async
+	public Future<Integer> calSX() {
 		try {
 			Pageable request = new PageRequest(0, 200, new Sort(Direction.ASC, "date"));
 			Page<KaiJiang> result = null;
@@ -137,6 +141,9 @@ public class YZService {
 			throw new RuntimeException(e.getMessage(), e);
 		}
 
+		calSXZF();
+
+		return new AsyncResult<Integer>(1);
 	}
 
 	public void calSXZF() {
@@ -208,9 +215,11 @@ public class YZService {
 		} catch (Exception e) {
 			throw new RuntimeException(e.getMessage(), e);
 		}
+
 	}
 
-	public void calHMQWYZ() {
+	@Async
+	public Future<Integer> calHMQWYZ() {
 		try {
 			Pageable request = new PageRequest(0, 200, new Sort(Direction.ASC, "date"));
 			Page<KaiJiang> result = null;
@@ -293,9 +302,12 @@ public class YZService {
 		} catch (Exception e) {
 			throw new RuntimeException(e.getMessage(), e);
 		}
+
+		return new AsyncResult<Integer>(1);
 	}
 
-	public void calSWYZ() {
+	@Async
+	public Future<Integer> calSWYZ() {
 		try {
 			Pageable request = new PageRequest(0, 200, new Sort(Direction.ASC, "date"));
 			Page<KaiJiang> result = null;
@@ -365,9 +377,12 @@ public class YZService {
 		} catch (Exception e) {
 			throw new RuntimeException(e.getMessage(), e);
 		}
+
+		return new AsyncResult<Integer>(1);
 	}
 
-	public void calMWYZ() {
+	@Async
+	public Future<Integer> calMWYZ() {
 		try {
 			Pageable request = new PageRequest(0, 200, new Sort(Direction.ASC, "date"));
 			Page<KaiJiang> result = null;
@@ -435,9 +450,11 @@ public class YZService {
 		} catch (Exception e) {
 			throw new RuntimeException(e.getMessage(), e);
 		}
+		return new AsyncResult<Integer>(1);
 	}
 
-	public void calLHYZ() {
+	@Async
+	public Future<Integer> calLHYZ() {
 		try {
 			Pageable request = new PageRequest(0, 200, new Sort(Direction.ASC, "date"));
 			Page<KaiJiang> result = null;
@@ -511,9 +528,12 @@ public class YZService {
 		} catch (Exception e) {
 			throw new RuntimeException(e.getMessage(), e);
 		}
+
+		return new AsyncResult<Integer>(1);
 	}
 
-	public void calQQYZ() {
+	@Async
+	public Future<Integer> calQQYZ() {
 		try {
 			Pageable request = new PageRequest(0, 200, new Sort(Direction.ASC, "date"));
 			Page<KaiJiang> result = null;
@@ -591,6 +611,7 @@ public class YZService {
 		} catch (Exception e) {
 			throw new RuntimeException(e.getMessage(), e);
 		}
+		return new AsyncResult<Integer>(1);
 	}
 
 	private static final List<Integer> RED_NUMS = new ArrayList<Integer>();
@@ -651,7 +672,8 @@ public class YZService {
 
 	}
 
-	public void calBSYZ() {
+	@Async
+	public Future<Integer> calBSYZ() {
 		try {
 			Pageable request = new PageRequest(0, 200, new Sort(Direction.ASC, "date"));
 			Page<KaiJiang> result = null;
@@ -726,9 +748,11 @@ public class YZService {
 		} catch (Exception e) {
 			throw new RuntimeException(e.getMessage(), e);
 		}
+		return new AsyncResult<Integer>(1);
 	}
 
-	public void calSQYZ() {
+	@Async
+	public Future<Integer> calSQYZ() {
 		try {
 			Pageable request = new PageRequest(0, 200, new Sort(Direction.ASC, "date"));
 			Page<KaiJiang> result = null;
@@ -791,9 +815,11 @@ public class YZService {
 		} catch (Exception e) {
 			throw new RuntimeException(e.getMessage(), e);
 		}
+		return new AsyncResult<Integer>(1);
 	}
 
-	public void calDSYZ() {
+	@Async
+	public Future<Integer> calDSYZ() {
 		try {
 			Pageable request = new PageRequest(0, 200, new Sort(Direction.ASC, "date"));
 			Page<KaiJiang> result = null;
@@ -889,5 +915,6 @@ public class YZService {
 		} catch (Exception e) {
 			throw new RuntimeException(e.getMessage(), e);
 		}
+		return new AsyncResult<Integer>(1);
 	}
 }
