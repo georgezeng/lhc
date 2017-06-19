@@ -1,6 +1,8 @@
 package lhc.controller;
 
 import java.io.Writer;
+import java.util.Collections;
+import java.util.Comparator;
 
 import javax.servlet.http.HttpServletResponse;
 
@@ -11,6 +13,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 import lhc.domain.KaiJiang;
+import lhc.domain.SxYz;
 import lhc.dto.BaseResult;
 import lhc.dto.query.PageResult;
 import lhc.dto.query.QueryInfo;
@@ -74,6 +77,20 @@ public class KaiJiangController {
 		QueryInfo<String> queryInfo = new QueryInfo<String>();
 		queryInfo.setObject(searchKey);
 		PageResult<KaiJiang> result = kaiJiangDao.query(queryInfo);
+		Collections.sort(result.getList(), new Comparator<KaiJiang>() {
+
+			@Override
+			public int compare(KaiJiang o1, KaiJiang o2) {
+				Integer a = o1.getYear();
+				Integer b = o2.getYear();
+				if (a.equals(b)) {
+					a = o2.getPhase();
+					b = o1.getPhase();
+				}
+				return a.compareTo(b);
+			}
+
+		});
 		if (result != null && result.getList() != null && !result.getList().isEmpty()) {
 			Writer writer = response.getWriter();
 			writer.append("日期, 年份, 期数, 平码(生肖), 平码(号码), 特码(生肖), 特码(号码)").append("\n");
