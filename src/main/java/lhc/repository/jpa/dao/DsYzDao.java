@@ -27,13 +27,12 @@ public class DsYzDao {
 	private EntityManager em;
 
 	public PageResult<DsYz> query(QueryInfo<DsYz> queryInfo) {
-		PageRequest pageRequest = null;
-		if (queryInfo.getPageInfo() != null) {
+		if (queryInfo.getPageInfo() != null && !queryInfo.getPageInfo().isToSort()) {
 			List<SortInfo> sorts = new ArrayList<SortInfo>();
 			sorts.add(new SortInfo("d.date", SortOrder.DESC));
 			queryInfo.getPageInfo().setSorts(sorts);
-			pageRequest = queryInfo.getPageInfo().toPageRequest();
 		}
+		PageRequest pageRequest = queryInfo.getPageInfo().toPageRequest();
 		StringBuilder condition = new StringBuilder();
 		condition.append("from ds_yz d").append("\n");
 		List<Object> args = new ArrayList<Object>();

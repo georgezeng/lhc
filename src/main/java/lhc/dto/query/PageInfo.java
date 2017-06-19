@@ -11,6 +11,7 @@ import org.springframework.data.domain.Sort.Order;
 public class PageInfo {
 	private int pageNo;
 	private int pageSize;
+	private boolean toSort = false;
 	private List<SortInfo> sorts = new ArrayList<SortInfo>();
 
 	public PageInfo() {
@@ -26,6 +27,14 @@ public class PageInfo {
 		this.pageNo = pageNo;
 		this.pageSize = pageSize;
 		sorts.add(sortInfo);
+	}
+
+	public boolean isToSort() {
+		return toSort;
+	}
+
+	public void setToSort(boolean toSort) {
+		this.toSort = toSort;
 	}
 
 	public int getPageNo() {

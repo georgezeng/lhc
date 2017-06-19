@@ -5,7 +5,9 @@ import java.lang.reflect.Method;
 import java.math.BigDecimal;
 import java.math.RoundingMode;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.Collections;
+import java.util.Comparator;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -38,7 +40,9 @@ import lhc.dto.SpecialNum;
 import lhc.dto.query.PageInfo;
 import lhc.dto.query.PageResult;
 import lhc.dto.query.QueryInfo;
+import lhc.dto.query.SortInfo;
 import lhc.enums.SX;
+import lhc.enums.SortOrder;
 import lhc.repository.jpa.api.KaiJiangRepository;
 import lhc.repository.jpa.dao.BsYzDao;
 import lhc.repository.jpa.dao.DsYzDao;
@@ -730,7 +734,11 @@ public class YZController {
 		PageInfo pageInfo = new PageInfo();
 		pageInfo.setPageNo(1);
 		pageInfo.setPageSize(dto.getSize());
+		pageInfo.setToSort(true);
+		pageInfo.setSorts(Arrays
+				.asList(new SortInfo[] { new SortInfo("d.year", SortOrder.ASC), new SortInfo("d.phase", SortOrder.DESC) }));
 		queryInfo.setPageInfo(pageInfo);
+		queryInfo.setToReverse(false);
 		PageResult<SxYz> result = sxYzDao.query(queryInfo);
 		if (result != null && result.getList() != null && !result.getList().isEmpty()) {
 			Writer writer = response.getWriter();
@@ -759,7 +767,11 @@ public class YZController {
 		PageInfo pageInfo = new PageInfo();
 		pageInfo.setPageNo(1);
 		pageInfo.setPageSize(dto.getSize());
+		pageInfo.setToSort(true);
+		pageInfo.setSorts(Arrays
+				.asList(new SortInfo[] { new SortInfo("d.year", SortOrder.ASC), new SortInfo("d.phase", SortOrder.DESC) }));
 		queryInfo.setPageInfo(pageInfo);
+		queryInfo.setToReverse(false);
 		PageResult<SxZfYz> result = sxZfYzDao.query(queryInfo);
 		if (result != null && result.getList() != null && !result.getList().isEmpty()) {
 			Writer writer = response.getWriter();
@@ -791,6 +803,20 @@ public class YZController {
 		queryInfo.setPageInfo(pageInfo);
 		PageResult<SxZfYz> result = (PageResult<SxZfYz>) countSXZF(queryInfo).getData();
 		result.getList().remove(result.getList().size() - 1);
+		Collections.sort(result.getList(), new Comparator<SxZfYz>() {
+
+			@Override
+			public int compare(SxZfYz o1, SxZfYz o2) {
+				Integer a = o1.getYear();
+				Integer b = o2.getYear();
+				if (a.equals(b)) {
+					a = o2.getPhase();
+					b = o1.getPhase();
+				}
+				return a.compareTo(b);
+			}
+
+		});
 		if (result != null && result.getList() != null && !result.getList().isEmpty()) {
 			Writer writer = response.getWriter();
 			writer.append("日期, 年份, 期数, 当期次数").append("\n");
@@ -819,6 +845,20 @@ public class YZController {
 		queryInfo.setPageInfo(pageInfo);
 		PageResult<SxZfYz> result = (PageResult<SxZfYz>) listSXZFLevel2(queryInfo).getData();
 		result.getList().remove(result.getList().size() - 1);
+		Collections.sort(result.getList(), new Comparator<SxZfYz>() {
+
+			@Override
+			public int compare(SxZfYz o1, SxZfYz o2) {
+				Integer a = o1.getYear();
+				Integer b = o2.getYear();
+				if (a.equals(b)) {
+					a = o2.getPhase();
+					b = o1.getPhase();
+				}
+				return a.compareTo(b);
+			}
+
+		});
 		if (result != null && result.getList() != null && !result.getList().isEmpty()) {
 			Writer writer = response.getWriter();
 			writer.append("日期, 年份, 期数, 当期次数").append("\n");
@@ -847,6 +887,20 @@ public class YZController {
 		queryInfo.setPageInfo(pageInfo);
 		PageResult<QwYz> result = (PageResult<QwYz>) listQWYZ(queryInfo).getData();
 		result.getList().remove(result.getList().size() - 1);
+		Collections.sort(result.getList(), new Comparator<QwYz>() {
+
+			@Override
+			public int compare(QwYz o1, QwYz o2) {
+				Integer a = o1.getYear();
+				Integer b = o2.getYear();
+				if (a.equals(b)) {
+					a = o2.getPhase();
+					b = o1.getPhase();
+				}
+				return a.compareTo(b);
+			}
+
+		});
 		if (result != null && result.getList() != null && !result.getList().isEmpty()) {
 			Writer writer = response.getWriter();
 			writer.append("日期, 年份, 期数, 和, 最大遗值, 最大连续期数").append("\n");
@@ -874,9 +928,12 @@ public class YZController {
 		PageInfo pageInfo = new PageInfo();
 		pageInfo.setPageNo(1);
 		pageInfo.setPageSize(dto.getSize());
+		pageInfo.setToSort(true);
+		pageInfo.setSorts(Arrays
+				.asList(new SortInfo[] { new SortInfo("d.year", SortOrder.ASC), new SortInfo("d.phase", SortOrder.DESC) }));
 		queryInfo.setPageInfo(pageInfo);
+		queryInfo.setToReverse(false);
 		PageResult<DsYz> result = dsYzDao.query(queryInfo);
-		result.getList().remove(result.getList().size() - 1);
 		if (result != null && result.getList() != null && !result.getList().isEmpty()) {
 			Writer writer = response.getWriter();
 			writer.append("日期, 年份, 期数, 遗值（生肖,大小）, 遗值（生肖,单双）, 遗值（号码,大小）, 遗值（号码,单双）").append("\n");
@@ -905,7 +962,11 @@ public class YZController {
 		PageInfo pageInfo = new PageInfo();
 		pageInfo.setPageNo(1);
 		pageInfo.setPageSize(dto.getSize());
+		pageInfo.setToSort(true);
+		pageInfo.setSorts(Arrays
+				.asList(new SortInfo[] { new SortInfo("d.year", SortOrder.ASC), new SortInfo("d.phase", SortOrder.DESC) }));
 		queryInfo.setPageInfo(pageInfo);
+		queryInfo.setToReverse(false);
 		PageResult<SwYz> result = swYzDao.query(queryInfo);
 		if (result != null && result.getList() != null && !result.getList().isEmpty()) {
 			Writer writer = response.getWriter();
@@ -934,7 +995,11 @@ public class YZController {
 		PageInfo pageInfo = new PageInfo();
 		pageInfo.setPageNo(1);
 		pageInfo.setPageSize(dto.getSize());
+		pageInfo.setToSort(true);
+		pageInfo.setSorts(Arrays
+				.asList(new SortInfo[] { new SortInfo("d.year", SortOrder.ASC), new SortInfo("d.phase", SortOrder.DESC) }));
 		queryInfo.setPageInfo(pageInfo);
+		queryInfo.setToReverse(false);
 		PageResult<MwYz> result = mwYzDao.query(queryInfo);
 		if (result != null && result.getList() != null && !result.getList().isEmpty()) {
 			Writer writer = response.getWriter();
@@ -963,7 +1028,11 @@ public class YZController {
 		PageInfo pageInfo = new PageInfo();
 		pageInfo.setPageNo(1);
 		pageInfo.setPageSize(dto.getSize());
+		pageInfo.setToSort(true);
+		pageInfo.setSorts(Arrays
+				.asList(new SortInfo[] { new SortInfo("d.year", SortOrder.ASC), new SortInfo("d.phase", SortOrder.DESC) }));
 		queryInfo.setPageInfo(pageInfo);
+		queryInfo.setToReverse(false);
 		PageResult<LhYz> result = lhYzDao.query(queryInfo);
 		if (result != null && result.getList() != null && !result.getList().isEmpty()) {
 			Writer writer = response.getWriter();
@@ -992,7 +1061,11 @@ public class YZController {
 		PageInfo pageInfo = new PageInfo();
 		pageInfo.setPageNo(1);
 		pageInfo.setPageSize(dto.getSize());
+		pageInfo.setToSort(true);
+		pageInfo.setSorts(Arrays
+				.asList(new SortInfo[] { new SortInfo("d.year", SortOrder.ASC), new SortInfo("d.phase", SortOrder.DESC) }));
 		queryInfo.setPageInfo(pageInfo);
+		queryInfo.setToReverse(false);
 		PageResult<QqYz> result = qqYzDao.query(queryInfo);
 		if (result != null && result.getList() != null && !result.getList().isEmpty()) {
 			Writer writer = response.getWriter();
@@ -1021,7 +1094,11 @@ public class YZController {
 		PageInfo pageInfo = new PageInfo();
 		pageInfo.setPageNo(1);
 		pageInfo.setPageSize(dto.getSize());
+		pageInfo.setToSort(true);
+		pageInfo.setSorts(Arrays
+				.asList(new SortInfo[] { new SortInfo("d.year", SortOrder.ASC), new SortInfo("d.phase", SortOrder.DESC) }));
 		queryInfo.setPageInfo(pageInfo);
+		queryInfo.setToReverse(false);
 		PageResult<SqYz> result = sqYzDao.query(queryInfo);
 		if (result != null && result.getList() != null && !result.getList().isEmpty()) {
 			Writer writer = response.getWriter();
@@ -1050,7 +1127,11 @@ public class YZController {
 		PageInfo pageInfo = new PageInfo();
 		pageInfo.setPageNo(1);
 		pageInfo.setPageSize(dto.getSize());
+		pageInfo.setToSort(true);
+		pageInfo.setSorts(Arrays
+				.asList(new SortInfo[] { new SortInfo("d.year", SortOrder.ASC), new SortInfo("d.phase", SortOrder.DESC) }));
 		queryInfo.setPageInfo(pageInfo);
+		queryInfo.setToReverse(false);
 		PageResult<BsYz> result = bsYzDao.query(queryInfo);
 		if (result != null && result.getList() != null && !result.getList().isEmpty()) {
 			Writer writer = response.getWriter();
