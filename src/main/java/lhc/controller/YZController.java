@@ -733,20 +733,6 @@ public class YZController {
 		pageInfo.setPageSize(dto.getSize());
 		queryInfo.setPageInfo(pageInfo);
 		PageResult<SxYz> result = sxYzDao.query(queryInfo);
-		Collections.sort(result.getList(), new Comparator<SxYz>() {
-
-			@Override
-			public int compare(SxYz o1, SxYz o2) {
-				Integer a = o1.getYear();
-				Integer b = o2.getYear();
-				if (a.equals(b)) {
-					a = o2.getPhase();
-					b = o1.getPhase();
-				}
-				return a.compareTo(b);
-			}
-
-		});
 		if (result != null && result.getList() != null && !result.getList().isEmpty()) {
 			Writer writer = response.getWriter();
 			writer.append("日期, 年份, 期数, 和, 差值, 遗值").append("\n");
@@ -776,20 +762,6 @@ public class YZController {
 		pageInfo.setPageSize(dto.getSize());
 		queryInfo.setPageInfo(pageInfo);
 		PageResult<SxZfYz> result = sxZfYzDao.query(queryInfo);
-		Collections.sort(result.getList(), new Comparator<SxZfYz>() {
-
-			@Override
-			public int compare(SxZfYz o1, SxZfYz o2) {
-				Integer a = o1.getYear();
-				Integer b = o2.getYear();
-				if (a.equals(b)) {
-					a = o2.getPhase();
-					b = o1.getPhase();
-				}
-				return a.compareTo(b);
-			}
-
-		});
 		if (result != null && result.getList() != null && !result.getList().isEmpty()) {
 			Writer writer = response.getWriter();
 			writer.append("日期, 年份, 期数, 和, 差值, 遗值").append("\n");
@@ -820,20 +792,6 @@ public class YZController {
 		queryInfo.setPageInfo(pageInfo);
 		PageResult<SxZfYz> result = (PageResult<SxZfYz>) countSXZF(queryInfo).getData();
 		result.getList().remove(result.getList().size() - 1);
-		Collections.sort(result.getList(), new Comparator<SxZfYz>() {
-
-			@Override
-			public int compare(SxZfYz o1, SxZfYz o2) {
-				Integer a = o1.getYear();
-				Integer b = o2.getYear();
-				if (a.equals(b)) {
-					a = o2.getPhase();
-					b = o1.getPhase();
-				}
-				return a.compareTo(b);
-			}
-
-		});
 		if (result != null && result.getList() != null && !result.getList().isEmpty()) {
 			Writer writer = response.getWriter();
 			writer.append("日期, 年份, 期数, 当期次数").append("\n");
@@ -862,20 +820,6 @@ public class YZController {
 		queryInfo.setPageInfo(pageInfo);
 		PageResult<SxZfYz> result = (PageResult<SxZfYz>) listSXZFLevel2(queryInfo).getData();
 		result.getList().remove(result.getList().size() - 1);
-		Collections.sort(result.getList(), new Comparator<SxZfYz>() {
-
-			@Override
-			public int compare(SxZfYz o1, SxZfYz o2) {
-				Integer a = o1.getYear();
-				Integer b = o2.getYear();
-				if (a.equals(b)) {
-					a = o2.getPhase();
-					b = o1.getPhase();
-				}
-				return a.compareTo(b);
-			}
-
-		});
 		if (result != null && result.getList() != null && !result.getList().isEmpty()) {
 			Writer writer = response.getWriter();
 			writer.append("日期, 年份, 期数, 当期次数").append("\n");
@@ -904,20 +848,6 @@ public class YZController {
 		queryInfo.setPageInfo(pageInfo);
 		PageResult<QwYz> result = (PageResult<QwYz>) listQWYZ(queryInfo).getData();
 		result.getList().remove(result.getList().size() - 1);
-		Collections.sort(result.getList(), new Comparator<QwYz>() {
-
-			@Override
-			public int compare(QwYz o1, QwYz o2) {
-				Integer a = o1.getYear();
-				Integer b = o2.getYear();
-				if (a.equals(b)) {
-					a = o2.getPhase();
-					b = o1.getPhase();
-				}
-				return a.compareTo(b);
-			}
-
-		});
 		if (result != null && result.getList() != null && !result.getList().isEmpty()) {
 			Writer writer = response.getWriter();
 			writer.append("日期, 年份, 期数, 和, 最大遗值, 最大连续期数").append("\n");
@@ -947,20 +877,6 @@ public class YZController {
 		pageInfo.setPageSize(dto.getSize());
 		queryInfo.setPageInfo(pageInfo);
 		PageResult<DsYz> result = dsYzDao.query(queryInfo);
-		Collections.sort(result.getList(), new Comparator<DsYz>() {
-
-			@Override
-			public int compare(DsYz o1, DsYz o2) {
-				Integer a = o1.getYear();
-				Integer b = o2.getYear();
-				if (a.equals(b)) {
-					a = o2.getPhase();
-					b = o1.getPhase();
-				}
-				return a.compareTo(b);
-			}
-
-		});
 		if (result != null && result.getList() != null && !result.getList().isEmpty()) {
 			Writer writer = response.getWriter();
 			writer.append("日期, 年份, 期数, 遗值（生肖,大小）, 遗值（生肖,单双）, 遗值（号码,大小）, 遗值（号码,单双）").append("\n");
@@ -991,20 +907,6 @@ public class YZController {
 		pageInfo.setPageSize(dto.getSize());
 		queryInfo.setPageInfo(pageInfo);
 		PageResult<SwYz> result = swYzDao.query(queryInfo);
-		Collections.sort(result.getList(), new Comparator<SwYz>() {
-
-			@Override
-			public int compare(SwYz o1, SwYz o2) {
-				Integer a = o1.getYear();
-				Integer b = o2.getYear();
-				if (a.equals(b)) {
-					a = o2.getPhase();
-					b = o1.getPhase();
-				}
-				return a.compareTo(b);
-			}
-
-		});
 		if (result != null && result.getList() != null && !result.getList().isEmpty()) {
 			Writer writer = response.getWriter();
 			writer.append("日期, 年份, 期数, 和, 差值, 遗值").append("\n");
@@ -1034,20 +936,6 @@ public class YZController {
 		pageInfo.setPageSize(dto.getSize());
 		queryInfo.setPageInfo(pageInfo);
 		PageResult<MwYz> result = mwYzDao.query(queryInfo);
-		Collections.sort(result.getList(), new Comparator<MwYz>() {
-
-			@Override
-			public int compare(MwYz o1, MwYz o2) {
-				Integer a = o1.getYear();
-				Integer b = o2.getYear();
-				if (a.equals(b)) {
-					a = o2.getPhase();
-					b = o1.getPhase();
-				}
-				return a.compareTo(b);
-			}
-
-		});
 		if (result != null && result.getList() != null && !result.getList().isEmpty()) {
 			Writer writer = response.getWriter();
 			writer.append("日期, 年份, 期数, 和, 差值, 遗值").append("\n");
@@ -1077,20 +965,6 @@ public class YZController {
 		pageInfo.setPageSize(dto.getSize());
 		queryInfo.setPageInfo(pageInfo);
 		PageResult<LhYz> result = lhYzDao.query(queryInfo);
-		Collections.sort(result.getList(), new Comparator<LhYz>() {
-
-			@Override
-			public int compare(LhYz o1, LhYz o2) {
-				Integer a = o1.getYear();
-				Integer b = o2.getYear();
-				if (a.equals(b)) {
-					a = o2.getPhase();
-					b = o1.getPhase();
-				}
-				return a.compareTo(b);
-			}
-
-		});
 		if (result != null && result.getList() != null && !result.getList().isEmpty()) {
 			Writer writer = response.getWriter();
 			writer.append("日期, 年份, 期数, 和, 差值, 遗值").append("\n");
@@ -1120,20 +994,6 @@ public class YZController {
 		pageInfo.setPageSize(dto.getSize());
 		queryInfo.setPageInfo(pageInfo);
 		PageResult<QqYz> result = qqYzDao.query(queryInfo);
-		Collections.sort(result.getList(), new Comparator<QqYz>() {
-
-			@Override
-			public int compare(QqYz o1, QqYz o2) {
-				Integer a = o1.getYear();
-				Integer b = o2.getYear();
-				if (a.equals(b)) {
-					a = o2.getPhase();
-					b = o1.getPhase();
-				}
-				return a.compareTo(b);
-			}
-
-		});
 		if (result != null && result.getList() != null && !result.getList().isEmpty()) {
 			Writer writer = response.getWriter();
 			writer.append("日期, 年份, 期数, 和, 差值, 遗值").append("\n");
@@ -1163,20 +1023,6 @@ public class YZController {
 		pageInfo.setPageSize(dto.getSize());
 		queryInfo.setPageInfo(pageInfo);
 		PageResult<SqYz> result = sqYzDao.query(queryInfo);
-		Collections.sort(result.getList(), new Comparator<SqYz>() {
-
-			@Override
-			public int compare(SqYz o1, SqYz o2) {
-				Integer a = o1.getYear();
-				Integer b = o2.getYear();
-				if (a.equals(b)) {
-					a = o2.getPhase();
-					b = o1.getPhase();
-				}
-				return a.compareTo(b);
-			}
-
-		});
 		if (result != null && result.getList() != null && !result.getList().isEmpty()) {
 			Writer writer = response.getWriter();
 			writer.append("日期, 年份, 期数, 和, 差值, 遗值").append("\n");
@@ -1206,20 +1052,6 @@ public class YZController {
 		pageInfo.setPageSize(dto.getSize());
 		queryInfo.setPageInfo(pageInfo);
 		PageResult<BsYz> result = bsYzDao.query(queryInfo);
-		Collections.sort(result.getList(), new Comparator<BsYz>() {
-
-			@Override
-			public int compare(BsYz o1, BsYz o2) {
-				Integer a = o1.getYear();
-				Integer b = o2.getYear();
-				if (a.equals(b)) {
-					a = o2.getPhase();
-					b = o1.getPhase();
-				}
-				return a.compareTo(b);
-			}
-
-		});
 		if (result != null && result.getList() != null && !result.getList().isEmpty()) {
 			Writer writer = response.getWriter();
 			writer.append("日期, 年份, 期数, 和, 差值").append("\n");

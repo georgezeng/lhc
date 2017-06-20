@@ -84,8 +84,8 @@ public class KaiJiangController {
 				Integer a = o1.getYear();
 				Integer b = o2.getYear();
 				if (a.equals(b)) {
-					a = o2.getPhase();
-					b = o1.getPhase();
+					a = o1.getPhase();
+					b = o2.getPhase();
 				}
 				return a.compareTo(b);
 			}
