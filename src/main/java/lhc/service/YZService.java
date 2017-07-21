@@ -3,9 +3,13 @@ package lhc.service;
 import java.lang.reflect.Method;
 import java.math.BigDecimal;
 import java.util.ArrayList;
+import java.util.Collections;
+import java.util.Comparator;
 import java.util.List;
 import java.util.concurrent.Future;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
@@ -27,6 +31,8 @@ import lhc.domain.SqYz;
 import lhc.domain.SwYz;
 import lhc.domain.SxYz;
 import lhc.domain.SxZfYz;
+import lhc.domain.TmFdYz;
+import lhc.domain.TmYz;
 import lhc.enums.SX;
 import lhc.repository.jpa.api.BsYzRepository;
 import lhc.repository.jpa.api.DsYzRepository;
@@ -39,9 +45,12 @@ import lhc.repository.jpa.api.SqYzRepository;
 import lhc.repository.jpa.api.SwYzRepository;
 import lhc.repository.jpa.api.SxYzRepository;
 import lhc.repository.jpa.api.SxZfYzRepository;
+import lhc.repository.jpa.api.TmFdYzRepository;
+import lhc.repository.jpa.api.TmYzRepository;
 
 @Service
 public class YZService {
+	private Logger logger = LoggerFactory.getLogger(getClass());
 
 	@Autowired
 	private KaiJiangRepository kaiJiangRepository;
@@ -75,6 +84,12 @@ public class YZService {
 
 	@Autowired
 	private DsYzRepository dsyzRepository;
+
+	@Autowired
+	private TmYzRepository tmyzRepository;
+
+	@Autowired
+	private TmFdYzRepository tmfdyzRepository;
 
 	@Async
 	public Future<Integer> calSX() {
@@ -138,7 +153,7 @@ public class YZService {
 				request = result.nextPageable();
 			} while (result != null && result.hasNext());
 		} catch (Exception e) {
-			throw new RuntimeException(e.getMessage(), e);
+			logger.error(e.getMessage(), e);
 		}
 
 		calSXZF();
@@ -300,7 +315,7 @@ public class YZService {
 				request = result.nextPageable();
 			} while (result != null && result.hasNext());
 		} catch (Exception e) {
-			throw new RuntimeException(e.getMessage(), e);
+			logger.error(e.getMessage(), e);
 		}
 
 		return new AsyncResult<Integer>(1);
@@ -375,7 +390,7 @@ public class YZService {
 				request = result.nextPageable();
 			} while (result != null && result.hasNext());
 		} catch (Exception e) {
-			throw new RuntimeException(e.getMessage(), e);
+			logger.error(e.getMessage(), e);
 		}
 
 		return new AsyncResult<Integer>(1);
@@ -448,7 +463,7 @@ public class YZService {
 				request = result.nextPageable();
 			} while (result != null && result.hasNext());
 		} catch (Exception e) {
-			throw new RuntimeException(e.getMessage(), e);
+			logger.error(e.getMessage(), e);
 		}
 		return new AsyncResult<Integer>(1);
 	}
@@ -526,7 +541,7 @@ public class YZService {
 				request = result.nextPageable();
 			} while (result != null && result.hasNext());
 		} catch (Exception e) {
-			throw new RuntimeException(e.getMessage(), e);
+			logger.error(e.getMessage(), e);
 		}
 
 		return new AsyncResult<Integer>(1);
@@ -609,7 +624,7 @@ public class YZService {
 				request = result.nextPageable();
 			} while (result != null && result.hasNext());
 		} catch (Exception e) {
-			throw new RuntimeException(e.getMessage(), e);
+			logger.error(e.getMessage(), e);
 		}
 		return new AsyncResult<Integer>(1);
 	}
@@ -746,7 +761,7 @@ public class YZService {
 				request = result.nextPageable();
 			} while (result != null && result.hasNext());
 		} catch (Exception e) {
-			throw new RuntimeException(e.getMessage(), e);
+			logger.error(e.getMessage(), e);
 		}
 		return new AsyncResult<Integer>(1);
 	}
@@ -813,7 +828,7 @@ public class YZService {
 				request = result.nextPageable();
 			} while (result != null && result.hasNext());
 		} catch (Exception e) {
-			throw new RuntimeException(e.getMessage(), e);
+			logger.error(e.getMessage(), e);
 		}
 		return new AsyncResult<Integer>(1);
 	}
@@ -913,8 +928,203 @@ public class YZService {
 				request = result.nextPageable();
 			} while (result != null && result.hasNext());
 		} catch (Exception e) {
-			throw new RuntimeException(e.getMessage(), e);
+			logger.error(e.getMessage(), e);
 		}
 		return new AsyncResult<Integer>(1);
 	}
+
+	@Async
+	public Future<Integer> calTMYZ() {
+		try {
+			Pageable request = new PageRequest(0, 200, new Sort(Direction.ASC, "date"));
+			Page<KaiJiang> result = null;
+			TmYz lastYz = null;
+			do {
+				result = kaiJiangRepository.findAll(request);
+				Method gm = null;
+				Method sm = null;
+				if (result != null && result.hasContent()) {
+					for (KaiJiang data : result.getContent()) {
+						TmYz yz = tmyzRepository.findByDate(data.getDate());
+						if (yz == null) {
+							yz = new TmYz();
+							yz.setYear(data.getYear());
+							yz.setPhase(data.getPhase());
+							yz.setDate(data.getDate());
+						}
+
+						Integer num = data.getSpecialNum();
+						sm = TmYz.class.getDeclaredMethod("setHm" + num, Integer.class);
+						sm.invoke(yz, 0);
+
+						if (lastYz != null) {
+							for (int j = 1; j < 50; j++) {
+								gm = TmYz.class.getDeclaredMethod("getHm" + j);
+								Integer lastValue = (Integer) gm.invoke(lastYz);
+								if (lastValue != null) {
+									Integer value = (Integer) gm.invoke(yz);
+									if (value == null || value > 0) {
+										sm = TmYz.class.getDeclaredMethod("setHm" + j, Integer.class);
+										sm.invoke(yz, lastValue + 1);
+									}
+								}
+							}
+							gm = TmYz.class.getDeclaredMethod("getHm" + num);
+							yz.setLastYz((Integer) gm.invoke(lastYz));
+						}
+
+						int total = 0;
+						int max = 0;
+						for (int j = 1; j < 50; j++) {
+							gm = TmYz.class.getDeclaredMethod("getHm" + j);
+							Integer value = (Integer) gm.invoke(yz);
+							if (value != null) {
+								if (value > max) {
+									max = value;
+								}
+								total += value;
+							}
+						}
+						yz.setMaxYz(max);
+						yz.setTotal(total);
+
+						if (lastYz != null) {
+							yz.setDelta(total - lastYz.getTotal());
+						}
+
+						tmyzRepository.save(yz);
+						lastYz = yz;
+
+					}
+				}
+				request = result.nextPageable();
+			} while (result != null && result.hasNext());
+
+			calTMFDYZ();
+		} catch (Exception e) {
+			logger.error(e.getMessage(), e);
+		}
+
+		return new AsyncResult<Integer>(1);
+	}
+
+	private void calTMFDYZ() throws Exception {
+		Pageable request = new PageRequest(0, 200, new Sort(Direction.ASC, "date"));
+		Page<TmYz> result = null;
+		TmFdYz lastYz = null;
+		do {
+			result = tmyzRepository.findAll(request);
+			Method gm = null;
+			Method sm = null;
+			if (result != null && result.hasContent()) {
+				for (TmYz data : result.getContent()) {
+					TmFdYz yz = tmfdyzRepository.findByDate(data.getDate());
+					if (yz == null) {
+						yz = new TmFdYz();
+						yz.setYear(data.getYear());
+						yz.setPhase(data.getPhase());
+						yz.setDate(data.getDate());
+					}
+
+					List<TmYzInfo> infos = new ArrayList<TmYzInfo>();
+					for (int i = 1; i < 50; i++) {
+						gm = TmYz.class.getDeclaredMethod("getHm" + i);
+						Integer value = (Integer) gm.invoke(data);
+						infos.add(new TmYzInfo(i, value));
+					}
+					Collections.sort(infos, new Comparator<TmYzInfo>() {
+
+						@Override
+						public int compare(TmYzInfo o1, TmYzInfo o2) {
+							if (o1.yz != null && o2.yz != null) {
+								if (data.getLastYz() != null) {
+									if (o1.yz == 0) {
+										o1.yz = data.getLastYz();
+									}
+									if (o2.yz == 0) {
+										o2.yz = data.getLastYz();
+									}
+								}
+								return o1.yz < o2.yz ? -1 : (o1.yz == o2.yz ? 0 : 1);
+							} else if (o1.yz == null && o2.yz != null) {
+								return -1;
+							} else if (o1.yz != null && o2.yz == null) {
+								return 1;
+							} else {
+								return 0;
+							}
+						}
+					});
+
+					int num = 1;
+					for (TmYzInfo info : infos) {
+						if (info.tm) {
+							break;
+						}
+						num++;
+					}
+					if (num < 49) {
+						num = num / 7 + 1;
+					} else {
+						num = 7;
+					}
+					sm = TmFdYz.class.getDeclaredMethod("setFd" + num, Integer.class);
+					sm.invoke(yz, 0);
+
+					if (lastYz != null) {
+						for (int j = 1; j < 8; j++) {
+							gm = TmFdYz.class.getDeclaredMethod("getFd" + j);
+							Integer lastValue = (Integer) gm.invoke(lastYz);
+							if (lastValue != null) {
+								Integer value = (Integer) gm.invoke(yz);
+								if (value == null || value > 0) {
+									sm = TmFdYz.class.getDeclaredMethod("setFd" + j, Integer.class);
+									sm.invoke(yz, lastValue + 1);
+								}
+							}
+						}
+						gm = TmFdYz.class.getDeclaredMethod("getFd" + num);
+						yz.setLastYz((Integer) gm.invoke(lastYz));
+					}
+
+					int total = 0;
+					int max = 0;
+					for (int j = 1; j < 8; j++) {
+						gm = TmFdYz.class.getDeclaredMethod("getFd" + j);
+						Integer value = (Integer) gm.invoke(yz);
+						if (value != null) {
+							if (value > max) {
+								max = value;
+							}
+							total += value;
+						}
+					}
+					yz.setMaxYz(max);
+					yz.setTotal(total);
+
+					if (lastYz != null) {
+						yz.setDelta(total - lastYz.getTotal());
+					}
+
+					tmfdyzRepository.save(yz);
+					lastYz = yz;
+
+				}
+			}
+			request = result.nextPageable();
+		} while (result != null && result.hasNext());
+	}
+}
+
+class TmYzInfo {
+	Integer num;
+	Integer yz;
+	boolean tm;
+
+	public TmYzInfo(Integer num, Integer yz) {
+		this.num = num;
+		this.yz = yz;
+		tm = yz != null && yz == 0;
+	}
+
 }

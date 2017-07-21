@@ -6,7 +6,6 @@ import java.math.BigDecimal;
 import java.math.RoundingMode;
 import java.util.ArrayList;
 import java.util.Collections;
-import java.util.Comparator;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -31,6 +30,8 @@ import lhc.domain.SqYz;
 import lhc.domain.SwYz;
 import lhc.domain.SxYz;
 import lhc.domain.SxZfYz;
+import lhc.domain.TmFdYz;
+import lhc.domain.TmYz;
 import lhc.dto.BaseResult;
 import lhc.dto.DownloadDTO;
 import lhc.dto.PmDTO;
@@ -52,6 +53,8 @@ import lhc.repository.jpa.dao.SqYzDao;
 import lhc.repository.jpa.dao.SwYzDao;
 import lhc.repository.jpa.dao.SxYzDao;
 import lhc.repository.jpa.dao.SxZfYzDao;
+import lhc.repository.jpa.dao.TmFdYzDao;
+import lhc.repository.jpa.dao.TmYzDao;
 import lhc.service.YZService;
 
 @RestController
@@ -97,6 +100,12 @@ public class YZController {
 	@Autowired
 	private DsYzDao dsYzDao;
 
+	@Autowired
+	private TmYzDao tmYzDao;
+
+	@Autowired
+	private TmFdYzDao tmfdYzDao;
+
 	@RequestMapping("/years")
 	public BaseResult years() {
 		List<KaiJiang> list = KaiJiangRepository.findGroupByYear();
@@ -133,6 +142,7 @@ public class YZController {
 		futures.add(yzService.calBSYZ());
 		futures.add(yzService.calSQYZ());
 		futures.add(yzService.calDSYZ());
+		futures.add(yzService.calTMYZ());
 		while (true) {
 			int count = 0;
 			for (Future<Integer> f : futures) {
@@ -719,6 +729,16 @@ public class YZController {
 		return new BaseResult(pResult);
 	}
 
+	@RequestMapping("/listTMYZ")
+	public BaseResult listTMYZ(@RequestBody QueryInfo<TmYz> queryInfo) throws Exception {
+		return new BaseResult(tmYzDao.query(queryInfo));
+	}
+
+	@RequestMapping("/listTMFDYZ")
+	public BaseResult listTMFDYZ(@RequestBody QueryInfo<TmFdYz> queryInfo) throws Exception {
+		return new BaseResult(tmfdYzDao.query(queryInfo));
+	}
+
 	@RequestMapping("/downloadSXYZ")
 	public String downloadSXYZ(DownloadDTO dto, HttpServletResponse response) throws Exception {
 		response.setContentType("text/csv;charset=gbk;");
@@ -1061,6 +1081,33 @@ public class YZController {
 				writer.append(data.getPhase() + "").append(", ");
 				writer.append(data.getTotal() + "").append(", ");
 				writer.append(data.getDelta() + "").append("\n");
+			}
+		}
+		return null;
+	}
+
+	@RequestMapping("/downloadTMYZ")
+	public String downloadTMYZ(DownloadDTO dto, HttpServletResponse response) throws Exception {
+		response.setContentType("text/csv;charset=gbk;");
+		response.addHeader("Content-Disposition", "attachment;filename=tmyz.csv");
+		QueryInfo<TmYz> queryInfo = new QueryInfo<TmYz>();
+		TmYz queryObj = new TmYz();
+		queryObj.setYear(dto.getYear());
+		queryObj.setPhase(dto.getPhase());
+		queryInfo.setObject(queryObj);
+		PageInfo pageInfo = new PageInfo();
+		pageInfo.setPageNo(1);
+		pageInfo.setPageSize(dto.getSize());
+		queryInfo.setPageInfo(pageInfo);
+		PageResult<TmYz> result = tmYzDao.query(queryInfo);
+		if (result != null && result.getList() != null && !result.getList().isEmpty()) {
+			Writer writer = response.getWriter();
+			writer.append("日期, 年份, 期数, 遗值（上期）").append("\n");
+			for (TmYz data : result.getList()) {
+				writer.append(data.getDate()).append(", ");
+				writer.append(data.getYear() + "").append(", ");
+				writer.append(data.getPhase() + "").append(", ");
+				writer.append(data.getLastYz() + "").append(", ");
 			}
 		}
 		return null;

@@ -62,6 +62,8 @@ function createDataTable(opt) {
 							datatable.find("input.allCB").prop("checked",
 									count == rowCB.length);
 						});
+						
+						datatableObj.columns().visible(true);
 
 						if (opt.operations) {
 							datatable
