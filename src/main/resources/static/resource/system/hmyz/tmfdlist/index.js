@@ -73,7 +73,7 @@ $(document).ready(function() {
 		})(i);
 	}
 	columnDefs.push({
-		aTargets: [12],
+		aTargets: [11],
 		fnCreatedCell: function(nTd, sData, item, iRow, iCol) {
 			var value = item.lastYz;
 			if(value > 7) {
