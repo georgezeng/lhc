@@ -1,10 +1,15 @@
 package lhc.domain;
 
+import java.util.List;
+
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.Table;
+import javax.persistence.Transient;
+
+import lhc.dto.TmYzInfo;
 
 @Entity
 @Table(name = "tm_fd_yz")
@@ -27,6 +32,16 @@ public class TmFdYz {
 	private Integer lastYz;
 	private Integer delta;
 	private Integer maxYz;
+	@Transient
+	private List<TmYzInfo> list;
+
+	public List<TmYzInfo> getList() {
+		return list;
+	}
+
+	public void setList(List<TmYzInfo> list) {
+		this.list = list;
+	}
 
 	public Integer getTotal() {
 		return total;

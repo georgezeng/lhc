@@ -15,6 +15,7 @@
 						<span>年份: </span><input id="year" type="text" />
 						<button id="downloadBtn" class="btn btn-success">导出</button>
 						<button id="clearBtn" class="btn btn-danger">清除</button>
+						<button id="editBtn" class="btn btn-primary">编辑</button>
 						<button id="fetchBtn" class="btn btn-primary">抓取</button>
 						<form id="download" name="download" action="/mvc/kj/download" class="hidden">
 							<input id="searchKey" type="hidden" name="searchKey" />
@@ -51,6 +52,186 @@
 				</table>
 			</div>
 		</div>
+		
+		<div id="editPanel" title="编辑数据">
+	  <table id="editTable">
+	  	<tr>
+	  		<td>日期</td>
+	  		<td><input id="date" name="editInfo" txt="日期" type="text"/></td>
+	  	</tr>
+	  	<tr>
+	  		<td>年份</td>
+	  		<td><input id="year" name="editInfo" txt="年份" type="text"/></td>
+	  	</tr>
+	  	<tr>
+	  		<td>期数</td>
+	  		<td><input id="phase" name="editInfo" txt="期数" type="text"/></td>
+	  	</tr>
+	  	<tr>
+	  		<td>平码1-号码</td>
+	  		<td><input id="num1" name="editInfo" txt="平码1-号码" type="text"/></td>
+	  	</tr>
+	  	<tr>
+	  		<td>平码1-生肖</td>
+	  		<td>
+	  			<select id="num1Sx" name="editInfo" txt="平码1-生肖">
+	  				<option value="Shu">鼠</option>
+	  				<option value="Niu">牛</option>
+	  				<option value="Hu">虎</option>
+	  				<option value="Tu">兔</option>
+	  				<option value="Long">龙</option>
+	  				<option value="She">蛇</option>
+	  				<option value="Ma">马</option>
+	  				<option value="Yang">羊</option>
+	  				<option value="Hou">猴</option>
+	  				<option value="Ji">鸡</option>
+	  				<option value="Gou">狗</option>
+	  				<option value="Zhu">猪</option>
+	  			</select>
+	  		</td>
+	  	</tr>
+	  	<tr>
+	  		<td>平码2-号码</td>
+	  		<td><input id="num2" name="editInfo" txt="平码2-号码" type="text"/></td>
+	  	</tr>
+	  	<tr>
+	  		<td>平码2-生肖</td>
+	  		<td>
+				<select id="num2Sx" name="editInfo" txt="平码2-生肖">
+	  				<option value="Shu">鼠</option>
+	  				<option value="Niu">牛</option>
+	  				<option value="Hu">虎</option>
+	  				<option value="Tu">兔</option>
+	  				<option value="Long">龙</option>
+	  				<option value="She">蛇</option>
+	  				<option value="Ma">马</option>
+	  				<option value="Yang">羊</option>
+	  				<option value="Hou">猴</option>
+	  				<option value="Ji">鸡</option>
+	  				<option value="Gou">狗</option>
+	  				<option value="Zhu">猪</option>
+	  			</select>
+			</td>
+	  	</tr>
+	  	<tr>
+	  		<td>平码3-号码</td>
+	  		<td><input id="num3" name="editInfo" txt="平码3-号码" type="text"/></td>
+	  	</tr>
+	  	<tr>
+	  		<td>平码3-生肖</td>
+	  		<td>
+				<select id="num3Sx" name="editInfo" txt="平码3-生肖">
+	  				<option value="Shu">鼠</option>
+	  				<option value="Niu">牛</option>
+	  				<option value="Hu">虎</option>
+	  				<option value="Tu">兔</option>
+	  				<option value="Long">龙</option>
+	  				<option value="She">蛇</option>
+	  				<option value="Ma">马</option>
+	  				<option value="Yang">羊</option>
+	  				<option value="Hou">猴</option>
+	  				<option value="Ji">鸡</option>
+	  				<option value="Gou">狗</option>
+	  				<option value="Zhu">猪</option>
+	  			</select>
+			</td>
+	  	</tr>
+	  	<tr>
+	  		<td>平码4-号码</td>
+	  		<td><input id="num4" name="editInfo" txt="平码4-号码" type="text"/></td>
+	  	</tr>
+	  	<tr>
+	  		<td>平码4-生肖</td>
+	  		<td>
+				<select id="num4Sx" name="editInfo" txt="平码4-生肖">
+	  				<option value="Shu">鼠</option>
+	  				<option value="Niu">牛</option>
+	  				<option value="Hu">虎</option>
+	  				<option value="Tu">兔</option>
+	  				<option value="Long">龙</option>
+	  				<option value="She">蛇</option>
+	  				<option value="Ma">马</option>
+	  				<option value="Yang">羊</option>
+	  				<option value="Hou">猴</option>
+	  				<option value="Ji">鸡</option>
+	  				<option value="Gou">狗</option>
+	  				<option value="Zhu">猪</option>
+	  			</select>
+			</td>
+	  	</tr>
+	  	<tr>
+	  		<td>平码5-号码</td>
+	  		<td><input id="num5" name="editInfo" txt="平码5-号码" type="text"/></td>
+	  	</tr>
+	  	<tr>
+	  		<td>平码5-生肖</td>
+	  		<td>
+				<select id="num5Sx" name="editInfo" txt="平码5-生肖">
+	  				<option value="Shu">鼠</option>
+	  				<option value="Niu">牛</option>
+	  				<option value="Hu">虎</option>
+	  				<option value="Tu">兔</option>
+	  				<option value="Long">龙</option>
+	  				<option value="She">蛇</option>
+	  				<option value="Ma">马</option>
+	  				<option value="Yang">羊</option>
+	  				<option value="Hou">猴</option>
+	  				<option value="Ji">鸡</option>
+	  				<option value="Gou">狗</option>
+	  				<option value="Zhu">猪</option>
+	  			</select>
+			</td>
+	  	</tr>
+	  	<tr>
+	  		<td>平码6-号码</td>
+	  		<td><input id="num6" name="editInfo" txt="平码6-号码" type="text"/></td>
+	  	</tr>
+	  	<tr>
+	  		<td>平码6-生肖</td>
+	  		<td>
+				<select id="num6Sx" name="editInfo" txt="平码6-生肖">
+	  				<option value="Shu">鼠</option>
+	  				<option value="Niu">牛</option>
+	  				<option value="Hu">虎</option>
+	  				<option value="Tu">兔</option>
+	  				<option value="Long">龙</option>
+	  				<option value="She">蛇</option>
+	  				<option value="Ma">马</option>
+	  				<option value="Yang">羊</option>
+	  				<option value="Hou">猴</option>
+	  				<option value="Ji">鸡</option>
+	  				<option value="Gou">狗</option>
+	  				<option value="Zhu">猪</option>
+	  			</select>
+			</td>
+	  	</tr>
+	  	<tr>
+	  		<td>特码-号码</td>
+	  		<td><input id="specialNum" name="editInfo" txt="特码-号码" type="text"/></td>
+	  	</tr>
+	  	<tr>
+	  		<td>特码-生肖</td>
+	  		<td>
+				<select id="specialSx" name="editInfo" txt="特码-生肖">
+	  				<option value="Shu">鼠</option>
+	  				<option value="Niu">牛</option>
+	  				<option value="Hu">虎</option>
+	  				<option value="Tu">兔</option>
+	  				<option value="Long">龙</option>
+	  				<option value="She">蛇</option>
+	  				<option value="Ma">马</option>
+	  				<option value="Yang">羊</option>
+	  				<option value="Hou">猴</option>
+	  				<option value="Ji">鸡</option>
+	  				<option value="Gou">狗</option>
+	  				<option value="Zhu">猪</option>
+	  			</select>
+			</td>
+	  	</tr>
+	  </table>
 	</div>
+	</div>
+	
+	
 </body>
 </html>

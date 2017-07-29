@@ -2,21 +2,16 @@ package lhc.domain;
 
 import java.math.BigDecimal;
 
-import javax.persistence.Column;
 import javax.persistence.Entity;
-import javax.persistence.EnumType;
-import javax.persistence.Enumerated;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.Table;
 import javax.persistence.Transient;
 
-import lhc.enums.SX;
-
 @Entity
-@Table(name = "sx_yz")
-public class SxYz {
+@Table(name = "sx_zf_yz2")
+public class SxZfYz2 {
 	@Id
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
 	private Long id;
@@ -24,23 +19,23 @@ public class SxYz {
 	private int year;
 	private int phase;
 	private String date;
-	private Integer Shu;
-	private Integer Niu;
-	private Integer Hu;
-	private Integer Tu;
-	@Column(name = "lonng")
-	private Integer Long;
-	private Integer She;
-	private Integer Ma;
-	private Integer Yang;
-	private Integer Hou;
-	private Integer Ji;
-	private Integer Gou;
-	private Integer Zhu;
+	private Integer zf0;
+	private Integer zf1;
+	private Integer zf2;
+	private Integer zf3;
+	private Integer zf4;
+	private Integer zf5;
+	private Integer zf6;
+	private Integer zf7;
+	private Integer zf8;
+	private Integer zf9;
+	private Integer zf10;
+	private Integer zf11;
 	private Integer total;
 	private BigDecimal totalAvg;
 	private Integer delta;
 	private Integer lastYz;
+	private Integer currentPos;
 	private Integer max;
 	private BigDecimal maxAvg;
 	private Integer min0;
@@ -57,17 +52,16 @@ public class SxYz {
 	private BigDecimal min5Avg;
 	private Integer min6;
 	private BigDecimal min6Avg;
-	@Enumerated(EnumType.STRING)
-	private SX currentSx;
 
 	@Transient
-	private SX topSx;
-	@Transient
-	private SX lastSx;
+	private Integer[] posList = new Integer[12];
+
 	@Transient
 	private int[] lastYzList = new int[25];
+
 	@Transient
 	private BigDecimal avg;
+
 	@Transient
 	private Integer lastCountYz;
 
@@ -77,6 +71,22 @@ public class SxYz {
 
 	public void setTotalAvg(BigDecimal totalAvg) {
 		this.totalAvg = totalAvg;
+	}
+
+	public Integer getMax() {
+		return max;
+	}
+
+	public void setMax(Integer max) {
+		this.max = max;
+	}
+
+	public BigDecimal getMaxAvg() {
+		return maxAvg;
+	}
+
+	public void setMaxAvg(BigDecimal maxAvg) {
+		this.maxAvg = maxAvg;
 	}
 
 	public Integer getMin0() {
@@ -191,22 +201,6 @@ public class SxYz {
 		this.min6Avg = min6Avg;
 	}
 
-	public Integer getMax() {
-		return max;
-	}
-
-	public void setMax(Integer max) {
-		this.max = max;
-	}
-
-	public BigDecimal getMaxAvg() {
-		return maxAvg;
-	}
-
-	public void setMaxAvg(BigDecimal maxAvg) {
-		this.maxAvg = maxAvg;
-	}
-
 	public Integer getLastCountYz() {
 		return lastCountYz;
 	}
@@ -235,28 +229,20 @@ public class SxYz {
 		this.lastYzList = lastYzList;
 	}
 
-	public SX getTopSx() {
-		return topSx;
+	public Integer[] getPosList() {
+		return posList;
 	}
 
-	public void setTopSx(SX topSx) {
-		this.topSx = topSx;
+	public void setPosList(Integer[] posList) {
+		this.posList = posList;
 	}
 
-	public SX getLastSx() {
-		return lastSx;
+	public Integer getCurrentPos() {
+		return currentPos;
 	}
 
-	public void setLastSx(SX lastSx) {
-		this.lastSx = lastSx;
-	}
-
-	public SX getCurrentSx() {
-		return currentSx;
-	}
-
-	public void setCurrentSx(SX currentSx) {
-		this.currentSx = currentSx;
+	public void setCurrentPos(Integer currentPos) {
+		this.currentPos = currentPos;
 	}
 
 	public String getDate() {
@@ -283,100 +269,100 @@ public class SxYz {
 		this.phase = phase;
 	}
 
-	public Integer getShu() {
-		return Shu;
+	public Integer getZf0() {
+		return zf0;
 	}
 
-	public void setShu(Integer Shu) {
-		this.Shu = Shu;
+	public void setZf0(Integer zf0) {
+		this.zf0 = zf0;
 	}
 
-	public Integer getNiu() {
-		return Niu;
+	public Integer getZf1() {
+		return zf1;
 	}
 
-	public void setNiu(Integer Niu) {
-		this.Niu = Niu;
+	public void setZf1(Integer zf1) {
+		this.zf1 = zf1;
 	}
 
-	public Integer getHu() {
-		return Hu;
+	public Integer getZf2() {
+		return zf2;
 	}
 
-	public void setHu(Integer Hu) {
-		this.Hu = Hu;
+	public void setZf2(Integer zf2) {
+		this.zf2 = zf2;
 	}
 
-	public Integer getTu() {
-		return Tu;
+	public Integer getZf3() {
+		return zf3;
 	}
 
-	public void setTu(Integer Tu) {
-		this.Tu = Tu;
+	public void setZf3(Integer zf3) {
+		this.zf3 = zf3;
 	}
 
-	public Integer getLong() {
-		return Long;
+	public Integer getZf4() {
+		return zf4;
 	}
 
-	public void setLong(Integer Long) {
-		this.Long = Long;
+	public void setZf4(Integer zf4) {
+		this.zf4 = zf4;
 	}
 
-	public Integer getShe() {
-		return She;
+	public Integer getZf5() {
+		return zf5;
 	}
 
-	public void setShe(Integer She) {
-		this.She = She;
+	public void setZf5(Integer zf5) {
+		this.zf5 = zf5;
 	}
 
-	public Integer getMa() {
-		return Ma;
+	public Integer getZf6() {
+		return zf6;
 	}
 
-	public void setMa(Integer Ma) {
-		this.Ma = Ma;
+	public void setZf6(Integer zf6) {
+		this.zf6 = zf6;
 	}
 
-	public Integer getYang() {
-		return Yang;
+	public Integer getZf7() {
+		return zf7;
 	}
 
-	public void setYang(Integer Yang) {
-		this.Yang = Yang;
+	public void setZf7(Integer zf7) {
+		this.zf7 = zf7;
 	}
 
-	public Integer getHou() {
-		return Hou;
+	public Integer getZf8() {
+		return zf8;
 	}
 
-	public void setHou(Integer Hou) {
-		this.Hou = Hou;
+	public void setZf8(Integer zf8) {
+		this.zf8 = zf8;
 	}
 
-	public Integer getJi() {
-		return Ji;
+	public Integer getZf9() {
+		return zf9;
 	}
 
-	public void setJi(Integer Ji) {
-		this.Ji = Ji;
+	public void setZf9(Integer zf9) {
+		this.zf9 = zf9;
 	}
 
-	public Integer getGou() {
-		return Gou;
+	public Integer getZf10() {
+		return zf10;
 	}
 
-	public void setGou(Integer Gou) {
-		this.Gou = Gou;
+	public void setZf10(Integer zf10) {
+		this.zf10 = zf10;
 	}
 
-	public Integer getZhu() {
-		return Zhu;
+	public Integer getZf11() {
+		return zf11;
 	}
 
-	public void setZhu(Integer Zhu) {
-		this.Zhu = Zhu;
+	public void setZf11(Integer zf11) {
+		this.zf11 = zf11;
 	}
 
 	public Integer getTotal() {

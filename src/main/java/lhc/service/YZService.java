@@ -8,14 +8,13 @@ import java.util.Comparator;
 import java.util.List;
 import java.util.concurrent.Future;
 
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Sort;
 import org.springframework.data.domain.Sort.Direction;
+import org.springframework.data.domain.Sort.Order;
 import org.springframework.scheduling.annotation.Async;
 import org.springframework.scheduling.annotation.AsyncResult;
 import org.springframework.stereotype.Service;
@@ -31,8 +30,10 @@ import lhc.domain.SqYz;
 import lhc.domain.SwYz;
 import lhc.domain.SxYz;
 import lhc.domain.SxZfYz;
+import lhc.domain.SxZfYz2;
 import lhc.domain.TmFdYz;
 import lhc.domain.TmYz;
+import lhc.dto.TmYzInfo;
 import lhc.enums.SX;
 import lhc.repository.jpa.api.BsYzRepository;
 import lhc.repository.jpa.api.DsYzRepository;
@@ -44,13 +45,13 @@ import lhc.repository.jpa.api.QwYzRepository;
 import lhc.repository.jpa.api.SqYzRepository;
 import lhc.repository.jpa.api.SwYzRepository;
 import lhc.repository.jpa.api.SxYzRepository;
+import lhc.repository.jpa.api.SxZfYz2Repository;
 import lhc.repository.jpa.api.SxZfYzRepository;
 import lhc.repository.jpa.api.TmFdYzRepository;
 import lhc.repository.jpa.api.TmYzRepository;
 
 @Service
 public class YZService {
-	private Logger logger = LoggerFactory.getLogger(getClass());
 
 	@Autowired
 	private KaiJiangRepository kaiJiangRepository;
@@ -60,6 +61,9 @@ public class YZService {
 
 	@Autowired
 	private SxZfYzRepository sxzfyzRepository;
+
+	@Autowired
+	private SxZfYz2Repository sxzfyz2Repository;
 
 	@Autowired
 	private QwYzRepository qwyzRepository;
@@ -91,8 +95,12 @@ public class YZService {
 	@Autowired
 	private TmFdYzRepository tmfdyzRepository;
 
+	@Autowired
+	private ParallelYzService parallelYzService;
+
 	@Async
-	public Future<Integer> calSX() {
+	public Future<Exception> calSX() {
+		Exception t = null;
 		try {
 			Pageable request = new PageRequest(0, 200, new Sort(Direction.ASC, "date"));
 			Page<KaiJiang> result = null;
@@ -116,6 +124,7 @@ public class YZService {
 							method = SxYz.class.getDeclaredMethod("get" + data.getSpecialSx().name());
 							Integer lastValue = (Integer) method.invoke(lastYZ);
 							yz.setLastYz(lastValue);
+							Integer maxValue = 0;
 							for (SX sx : SX.seq()) {
 								method = SX.class.getDeclaredMethod("is" + sx.name());
 								Boolean isCurrentSX = (Boolean) method.invoke(data.getSpecialSx());
@@ -123,8 +132,30 @@ public class YZService {
 									method = SxYz.class.getDeclaredMethod("get" + sx.name());
 									lastValue = (Integer) method.invoke(lastYZ);
 									if (lastValue != null) {
+										lastValue++;
 										method = SxYz.class.getDeclaredMethod("set" + sx.name(), Integer.class);
-										method.invoke(yz, lastValue + 1);
+										method.invoke(yz, lastValue);
+										if (maxValue < lastValue) {
+											maxValue = lastValue;
+										}
+									}
+								}
+							}
+							if (maxValue > 0) {
+								yz.setMax(maxValue);
+							}
+
+							if (yz.getLastYz() != null) {
+								for (int k = 0; k < 7; k++) {
+									Method sm = yz.getClass().getDeclaredMethod("setMin" + k, Integer.class);
+									if (yz.getLastYz() == k) {
+										sm.invoke(yz, 0);
+									} else {
+										Method gm = yz.getClass().getDeclaredMethod("getMin" + k);
+										Integer minValue = (Integer) gm.invoke(lastYZ);
+										if (minValue != null) {
+											sm.invoke(yz, minValue + 1);
+										}
 									}
 								}
 							}
@@ -152,13 +183,38 @@ public class YZService {
 				}
 				request = result.nextPageable();
 			} while (result != null && result.hasNext());
+
+			List<SxYz> list = (List<SxYz>) sxyzRepository.findAll(new Sort(new Order(Direction.DESC, "date")));
+			if (list != null) {
+				int count = 0;
+				List<Future<Exception>> tasks = new ArrayList<Future<Exception>>();
+				for (SxYz yz : list) {
+					tasks.add(parallelYzService.calAvg(yz, list, count++));
+				}
+				while (true) {
+					count = 0;
+					for (Future<Exception> f : tasks) {
+						if (f.isDone()) {
+							if (f.get() != null) {
+								throw f.get();
+							}
+							count++;
+						}
+					}
+					if (count == tasks.size()) {
+						break;
+					} else {
+						Thread.sleep(10);
+					}
+				}
+			}
+			calSXZF();
+			calSXZF2();
 		} catch (Exception e) {
-			logger.error(e.getMessage(), e);
+			t = e;
 		}
 
-		calSXZF();
-
-		return new AsyncResult<Integer>(1);
+		return new AsyncResult<Exception>(t);
 	}
 
 	public void calSXZF() {
@@ -233,8 +289,134 @@ public class YZService {
 
 	}
 
+	public void calSXZF2() {
+		int sxLength = SX.values().length;
+		try {
+			Pageable request = new PageRequest(0, 200, new Sort(Direction.ASC, "date"));
+			Page<SxYz> result = null;
+			SxYz lastYZ = null;
+			SxZfYz2 lastZFYZ = null;
+			do {
+				result = sxyzRepository.findAll(request);
+				if (result != null && result.hasContent()) {
+					for (SxYz data : result.getContent()) {
+						SxZfYz2 zfYz = sxzfyz2Repository.findByDate(data.getDate());
+						if (zfYz == null) {
+							zfYz = new SxZfYz2();
+							zfYz.setYear(data.getYear());
+							zfYz.setPhase(data.getPhase());
+							zfYz.setDate(data.getDate());
+						}
+
+						Integer pos = null;
+						if (lastYZ != null) {
+							pos = sxLength - lastYZ.getCurrentSx().getPos() + data.getCurrentSx().getPos() - 1;
+							if (pos > 11) {
+								pos -= 12;
+							}
+							Method m = SxZfYz2.class.getDeclaredMethod("setZf" + pos, Integer.class);
+							m.invoke(zfYz, 0);
+						}
+						zfYz.setCurrentPos(pos);
+
+						if (lastZFYZ != null) {
+							if (pos != null) {
+								Method m = SxZfYz2.class.getDeclaredMethod("getZf" + pos);
+								Integer lastValue = (Integer) m.invoke(lastZFYZ);
+								zfYz.setLastYz(lastValue);
+								Integer maxValue = 0;
+								for (int i = 0; i < 12; i++) {
+									if (i != pos) {
+										m = SxZfYz2.class.getDeclaredMethod("getZf" + i);
+										lastValue = (Integer) m.invoke(lastZFYZ);
+										if (lastValue != null) {
+											lastValue++;
+											m = SxZfYz2.class.getDeclaredMethod("setZf" + i, Integer.class);
+											m.invoke(zfYz, lastValue);
+										}
+									}
+									if (lastValue != null && maxValue < lastValue) {
+										maxValue = lastValue;
+									}
+								}
+								if (maxValue > 0) {
+									zfYz.setMax(maxValue);
+								}
+							}
+						}
+
+						if (zfYz.getLastYz() != null) {
+							for (int k = 0; k < 7; k++) {
+								Method sm = zfYz.getClass().getDeclaredMethod("setMin" + k, Integer.class);
+								if (zfYz.getLastYz() == k) {
+									sm.invoke(zfYz, 0);
+								} else {
+									Method gm = zfYz.getClass().getDeclaredMethod("getMin" + k);
+									Integer minValue = (Integer) gm.invoke(lastZFYZ);
+									if (minValue != null) {
+										sm.invoke(zfYz, minValue + 1);
+									}
+								}
+							}
+						}
+
+						Integer total = 0;
+						for (int i = 0; i < 12; i++) {
+							Method m = SxZfYz2.class.getDeclaredMethod("getZf" + i);
+							Integer value = (Integer) m.invoke(zfYz);
+							if (value != null) {
+								total += value;
+							}
+						}
+						zfYz.setTotal(total);
+
+						if (lastZFYZ != null) {
+							zfYz.setDelta(total - lastZFYZ.getTotal());
+						} else {
+							zfYz.setDelta(total);
+						}
+
+						sxzfyz2Repository.save(zfYz);
+						lastYZ = data;
+						lastZFYZ = zfYz;
+					}
+				}
+				request = result.nextPageable();
+			} while (result != null && result.hasNext());
+
+			List<SxZfYz2> list = (List<SxZfYz2>) sxzfyz2Repository.findAll(new Sort(new Order(Direction.DESC, "date")));
+			if (list != null) {
+				int count = 0;
+				List<Future<Exception>> tasks = new ArrayList<Future<Exception>>();
+				for (SxZfYz2 yz : list) {
+					tasks.add(parallelYzService.calAvg(yz, list, count++));
+				}
+				while (true) {
+					count = 0;
+					for (Future<Exception> f : tasks) {
+						if (f.isDone()) {
+							if (f.get() != null) {
+								throw f.get();
+							}
+							count++;
+						}
+					}
+					if (count == tasks.size()) {
+						break;
+					} else {
+						Thread.sleep(10);
+					}
+				}
+			}
+		} catch (Exception e) {
+			throw new RuntimeException(e.getMessage(), e);
+		}
+
+	}
+
 	@Async
-	public Future<Integer> calHMQWYZ() {
+	public Future<Exception> calHMQWYZ() {
+		Exception t = null;
 		try {
 			Pageable request = new PageRequest(0, 200, new Sort(Direction.ASC, "date"));
 			Page<KaiJiang> result = null;
@@ -315,14 +497,15 @@ public class YZService {
 				request = result.nextPageable();
 			} while (result != null && result.hasNext());
 		} catch (Exception e) {
-			logger.error(e.getMessage(), e);
+			t = e;
 		}
 
-		return new AsyncResult<Integer>(1);
+		return new AsyncResult<Exception>(t);
 	}
 
 	@Async
-	public Future<Integer> calSWYZ() {
+	public Future<Exception> calSWYZ() {
+		Exception t = null;
 		try {
 			Pageable request = new PageRequest(0, 200, new Sort(Direction.ASC, "date"));
 			Page<KaiJiang> result = null;
@@ -390,14 +573,15 @@ public class YZService {
 				request = result.nextPageable();
 			} while (result != null && result.hasNext());
 		} catch (Exception e) {
-			logger.error(e.getMessage(), e);
+			t = e;
 		}
 
-		return new AsyncResult<Integer>(1);
+		return new AsyncResult<Exception>(t);
 	}
 
 	@Async
-	public Future<Integer> calMWYZ() {
+	public Future<Exception> calMWYZ() {
+		Exception t = null;
 		try {
 			Pageable request = new PageRequest(0, 200, new Sort(Direction.ASC, "date"));
 			Page<KaiJiang> result = null;
@@ -463,13 +647,14 @@ public class YZService {
 				request = result.nextPageable();
 			} while (result != null && result.hasNext());
 		} catch (Exception e) {
-			logger.error(e.getMessage(), e);
+			t = e;
 		}
-		return new AsyncResult<Integer>(1);
+		return new AsyncResult<Exception>(t);
 	}
 
 	@Async
-	public Future<Integer> calLHYZ() {
+	public Future<Exception> calLHYZ() {
+		Exception t = null;
 		try {
 			Pageable request = new PageRequest(0, 200, new Sort(Direction.ASC, "date"));
 			Page<KaiJiang> result = null;
@@ -541,14 +726,15 @@ public class YZService {
 				request = result.nextPageable();
 			} while (result != null && result.hasNext());
 		} catch (Exception e) {
-			logger.error(e.getMessage(), e);
+			t = e;
 		}
 
-		return new AsyncResult<Integer>(1);
+		return new AsyncResult<Exception>(t);
 	}
 
 	@Async
-	public Future<Integer> calQQYZ() {
+	public Future<Exception> calQQYZ() {
+		Exception t = null;
 		try {
 			Pageable request = new PageRequest(0, 200, new Sort(Direction.ASC, "date"));
 			Page<KaiJiang> result = null;
@@ -624,9 +810,9 @@ public class YZService {
 				request = result.nextPageable();
 			} while (result != null && result.hasNext());
 		} catch (Exception e) {
-			logger.error(e.getMessage(), e);
+			t = e;
 		}
-		return new AsyncResult<Integer>(1);
+		return new AsyncResult<Exception>(t);
 	}
 
 	private static final List<Integer> RED_NUMS = new ArrayList<Integer>();
@@ -688,7 +874,8 @@ public class YZService {
 	}
 
 	@Async
-	public Future<Integer> calBSYZ() {
+	public Future<Exception> calBSYZ() {
+		Exception t = null;
 		try {
 			Pageable request = new PageRequest(0, 200, new Sort(Direction.ASC, "date"));
 			Page<KaiJiang> result = null;
@@ -761,13 +948,14 @@ public class YZService {
 				request = result.nextPageable();
 			} while (result != null && result.hasNext());
 		} catch (Exception e) {
-			logger.error(e.getMessage(), e);
+			t = e;
 		}
-		return new AsyncResult<Integer>(1);
+		return new AsyncResult<Exception>(t);
 	}
 
 	@Async
-	public Future<Integer> calSQYZ() {
+	public Future<Exception> calSQYZ() {
+		Exception t = null;
 		try {
 			Pageable request = new PageRequest(0, 200, new Sort(Direction.ASC, "date"));
 			Page<KaiJiang> result = null;
@@ -828,13 +1016,14 @@ public class YZService {
 				request = result.nextPageable();
 			} while (result != null && result.hasNext());
 		} catch (Exception e) {
-			logger.error(e.getMessage(), e);
+			t = e;
 		}
-		return new AsyncResult<Integer>(1);
+		return new AsyncResult<Exception>(t);
 	}
 
 	@Async
-	public Future<Integer> calDSYZ() {
+	public Future<Exception> calDSYZ() {
+		Exception t = null;
 		try {
 			Pageable request = new PageRequest(0, 200, new Sort(Direction.ASC, "date"));
 			Page<KaiJiang> result = null;
@@ -928,13 +1117,14 @@ public class YZService {
 				request = result.nextPageable();
 			} while (result != null && result.hasNext());
 		} catch (Exception e) {
-			logger.error(e.getMessage(), e);
+			t = e;
 		}
-		return new AsyncResult<Integer>(1);
+		return new AsyncResult<Exception>(t);
 	}
 
 	@Async
-	public Future<Integer> calTMYZ() {
+	public Future<Exception> calTMYZ() {
+		Exception t = null;
 		try {
 			Pageable request = new PageRequest(0, 200, new Sort(Direction.ASC, "date"));
 			Page<KaiJiang> result = null;
@@ -1002,10 +1192,10 @@ public class YZService {
 
 			calTMFDYZ();
 		} catch (Exception e) {
-			logger.error(e.getMessage(), e);
+			t = e;
 		}
 
-		return new AsyncResult<Integer>(1);
+		return new AsyncResult<Exception>(t);
 	}
 
 	private void calTMFDYZ() throws Exception {
@@ -1026,39 +1216,11 @@ public class YZService {
 						yz.setDate(data.getDate());
 					}
 
-					List<TmYzInfo> infos = new ArrayList<TmYzInfo>();
-					for (int i = 1; i < 50; i++) {
-						gm = TmYz.class.getDeclaredMethod("getHm" + i);
-						Integer value = (Integer) gm.invoke(data);
-						infos.add(new TmYzInfo(i, value));
-					}
-					Collections.sort(infos, new Comparator<TmYzInfo>() {
-
-						@Override
-						public int compare(TmYzInfo o1, TmYzInfo o2) {
-							if (o1.yz != null && o2.yz != null) {
-								if (data.getLastYz() != null) {
-									if (o1.yz == 0) {
-										o1.yz = data.getLastYz();
-									}
-									if (o2.yz == 0) {
-										o2.yz = data.getLastYz();
-									}
-								}
-								return o1.yz < o2.yz ? -1 : (o1.yz == o2.yz ? 0 : 1);
-							} else if (o1.yz == null && o2.yz != null) {
-								return -1;
-							} else if (o1.yz != null && o2.yz == null) {
-								return 1;
-							} else {
-								return 0;
-							}
-						}
-					});
+					List<TmYzInfo> infos = getTMFDList(data);
 
 					int num = 1;
 					for (TmYzInfo info : infos) {
-						if (info.tm) {
+						if (info.isTm()) {
 							break;
 						}
 						num++;
@@ -1114,17 +1276,41 @@ public class YZService {
 			request = result.nextPageable();
 		} while (result != null && result.hasNext());
 	}
-}
 
-class TmYzInfo {
-	Integer num;
-	Integer yz;
-	boolean tm;
+	public List<TmYzInfo> getTMFDList(TmYz data) {
+		try {
+			List<TmYzInfo> infos = new ArrayList<TmYzInfo>();
+			for (int i = 1; i < 50; i++) {
+				Method gm = TmYz.class.getDeclaredMethod("getHm" + i);
+				Integer value = (Integer) gm.invoke(data);
+				infos.add(new TmYzInfo(i, value));
+			}
+			Collections.sort(infos, new Comparator<TmYzInfo>() {
 
-	public TmYzInfo(Integer num, Integer yz) {
-		this.num = num;
-		this.yz = yz;
-		tm = yz != null && yz == 0;
+				@Override
+				public int compare(TmYzInfo o1, TmYzInfo o2) {
+					if (o1.getYz() != null && o2.getYz() != null) {
+						if (data.getLastYz() != null) {
+							if (o1.getYz() == 0) {
+								o1.setYz(data.getLastYz());
+							}
+							if (o2.getYz() == 0) {
+								o2.setYz(data.getLastYz());
+							}
+						}
+						return o1.getYz() < o2.getYz() ? -1 : (o1.getYz() == o2.getYz() ? 0 : 1);
+					} else if (o1.getYz() == null && o2.getYz() != null) {
+						return -1;
+					} else if (o1.getYz() != null && o2.getYz() == null) {
+						return 1;
+					} else {
+						return 0;
+					}
+				}
+			});
+			return infos;
+		} catch (Exception e) {
+			throw new RuntimeException(e.getMessage(), e);
+		}
 	}
-
 }

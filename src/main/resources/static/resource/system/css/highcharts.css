@@ -1,0 +1,7 @@
+g.highcharts-label path {
+	display: none;	
+}
+
+g.highcharts-label tspan {
+	font-size: 16px !important;
+}

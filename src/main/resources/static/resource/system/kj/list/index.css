@@ -33,3 +33,7 @@
     color: #666;
     font-weight: normal;
 }
+
+#editTable td {
+	padding: 5px;
+}

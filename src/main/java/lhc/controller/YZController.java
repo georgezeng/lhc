@@ -14,9 +14,13 @@ import java.util.concurrent.Future;
 import javax.servlet.http.HttpServletResponse;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Sort.Direction;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
 import lhc.domain.BsYz;
@@ -30,6 +34,7 @@ import lhc.domain.SqYz;
 import lhc.domain.SwYz;
 import lhc.domain.SxYz;
 import lhc.domain.SxZfYz;
+import lhc.domain.SxZfYz2;
 import lhc.domain.TmFdYz;
 import lhc.domain.TmYz;
 import lhc.dto.BaseResult;
@@ -37,11 +42,13 @@ import lhc.dto.DownloadDTO;
 import lhc.dto.PmDTO;
 import lhc.dto.PmNum;
 import lhc.dto.SpecialNum;
+import lhc.dto.TmYzInfo;
 import lhc.dto.query.PageInfo;
 import lhc.dto.query.PageResult;
 import lhc.dto.query.QueryInfo;
 import lhc.enums.SX;
 import lhc.repository.jpa.api.KaiJiangRepository;
+import lhc.repository.jpa.api.TmYzRepository;
 import lhc.repository.jpa.dao.BsYzDao;
 import lhc.repository.jpa.dao.DsYzDao;
 import lhc.repository.jpa.dao.KaiJiangDao;
@@ -52,6 +59,7 @@ import lhc.repository.jpa.dao.QwYzDao;
 import lhc.repository.jpa.dao.SqYzDao;
 import lhc.repository.jpa.dao.SwYzDao;
 import lhc.repository.jpa.dao.SxYzDao;
+import lhc.repository.jpa.dao.SxZfYz2Dao;
 import lhc.repository.jpa.dao.SxZfYzDao;
 import lhc.repository.jpa.dao.TmFdYzDao;
 import lhc.repository.jpa.dao.TmYzDao;
@@ -72,6 +80,9 @@ public class YZController {
 
 	@Autowired
 	private SxZfYzDao sxZfYzDao;
+
+	@Autowired
+	private SxZfYz2Dao sxZfYz2Dao;
 
 	@Autowired
 	private KaiJiangDao kaiJiangDao;
@@ -106,6 +117,9 @@ public class YZController {
 	@Autowired
 	private TmFdYzDao tmfdYzDao;
 
+	@Autowired
+	private TmYzRepository tmYzRepository;
+
 	@RequestMapping("/years")
 	public BaseResult years() {
 		List<KaiJiang> list = KaiJiangRepository.findGroupByYear();
@@ -132,7 +146,7 @@ public class YZController {
 
 	@RequestMapping("/calYZ")
 	public BaseResult calYZ() throws Exception {
-		List<Future<Integer>> futures = new ArrayList<Future<Integer>>();
+		List<Future<Exception>> futures = new ArrayList<Future<Exception>>();
 		futures.add(yzService.calSX());
 		futures.add(yzService.calHMQWYZ());
 		futures.add(yzService.calSWYZ());
@@ -145,8 +159,11 @@ public class YZController {
 		futures.add(yzService.calTMYZ());
 		while (true) {
 			int count = 0;
-			for (Future<Integer> f : futures) {
+			for (Future<Exception> f : futures) {
 				if (f.isDone()) {
+					if (f.get() != null) {
+						throw f.get();
+					}
 					count++;
 				}
 			}
@@ -159,12 +176,14 @@ public class YZController {
 	}
 
 	@RequestMapping("/listSX")
-	public BaseResult listSX(@RequestBody QueryInfo<SxYz> queryInfo) throws Exception {
+	public BaseResult listSX(@RequestBody QueryInfo<SxYz> queryInfo, @RequestParam String mode) throws Exception {
 		PageResult<SxYz> result = sxYzDao.query(queryInfo);
-		if (result != null && result.getTotal() > 0) {
-			SxYz last = new SxYz();
-			last.setTotal(result.getList().size());
-			result.getList().add(last);
+		if ("1".equals(mode)) {
+			if (result != null && result.getTotal() > 0) {
+				SxYz last = new SxYz();
+				last.setTotal(result.getList().size());
+				result.getList().add(last);
+			}
 		}
 		return new BaseResult(result);
 	}
@@ -277,6 +296,18 @@ public class YZController {
 		PageResult<SxZfYz> result = sxZfYzDao.query(queryInfo);
 		if (result != null && result.getTotal() > 0) {
 			SxZfYz last = new SxZfYz();
+			last.setTotal(result.getList().size());
+			result.getList().add(last);
+		}
+
+		return new BaseResult(result);
+	}
+
+	@RequestMapping("/listSXZF2")
+	public BaseResult listSXZF2(@RequestBody QueryInfo<SxZfYz2> queryInfo) throws Exception {
+		PageResult<SxZfYz2> result = sxZfYz2Dao.query(queryInfo);
+		if (result != null && result.getTotal() > 0) {
+			SxZfYz2 last = new SxZfYz2();
 			last.setTotal(result.getList().size());
 			result.getList().add(last);
 		}
@@ -736,7 +767,17 @@ public class YZController {
 
 	@RequestMapping("/listTMFDYZ")
 	public BaseResult listTMFDYZ(@RequestBody QueryInfo<TmFdYz> queryInfo) throws Exception {
-		return new BaseResult(tmfdYzDao.query(queryInfo));
+		PageResult<TmFdYz> result = tmfdYzDao.query(queryInfo);
+		Page<TmYz> tmResult = tmYzRepository.findAll(new PageRequest(0, 1, Direction.DESC, "date"));
+		if (tmResult != null && tmResult.hasContent()) {
+			List<TmYzInfo> fdList = yzService.getTMFDList(tmResult.getContent().get(0));
+			if (result != null && result.getTotal() > 0) {
+				TmFdYz data = new TmFdYz();
+				data.setList(fdList);
+				result.getList().add(data);
+			}
+		}
+		return new BaseResult(result);
 	}
 
 	@RequestMapping("/downloadSXYZ")

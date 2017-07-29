@@ -14,6 +14,7 @@
 <link rel="stylesheet" th:href="@{/resource/lib/combobox/combobox.css}" />
 <link rel="stylesheet" th:href="@{/resource/system/css/common.css}" />
 <link rel="stylesheet" th:href="@{/resource/system/css/datatable.css}" />
+<link rel="stylesheet" th:href="@{/resource/system/css/highcharts.css}" />
 <link rel="stylesheet" th:href="@{'/resource/system/' + ${view} + '/index.css'}" />
 </head>
 
@@ -24,14 +25,15 @@
         <nav class="navbar navbar-default navbar-static-top" role="navigation" style="margin-bottom: 0">
             <div class="navbar-header">
                 <div class="navbar-header">
-                <button type="button" class="navbar-toggle" data-toggle="collapse" data-target=".navbar-collapse">
-                    <span class="sr-only">Toggle navigation</span>
-                    <span class="icon-bar"></span>
-                    <span class="icon-bar"></span>
-                    <span class="icon-bar"></span>
-                </button>
-                <a class="navbar-brand" th:href="@{/}" th:text="${title}"></a>
-            </div>
+	                <button type="button" class="navbar-toggle" data-toggle="collapse" data-target=".navbar-collapse">
+	                    <span class="sr-only">Toggle navigation</span>
+	                    <span class="icon-bar"></span>
+	                    <span class="icon-bar"></span>
+	                    <span class="icon-bar"></span>
+	                </button>
+	                <a class="navbar-brand" th:href="@{/}" th:text="${title}"></a>
+            	</div>
+	           	<button id="menuBtn" class="btn btn-info" style="position:relative; top: 8px;">隐藏菜单</button>
 			</div>
             <!-- /.navbar-header -->
 
@@ -42,7 +44,7 @@
             </ul>
             <!-- /.navbar-top-links -->
 
-			<div class="navbar-default sidebar" role="navigation">
+			<div id="menus" class="navbar-default sidebar" role="navigation">
                 <div id="navList" class="sidebar-nav navbar-collapse">
                 	<ul class="nav" id="side-menu">
                         <li>
@@ -78,7 +80,7 @@
 		                            </ul>
 	                            </li>
                                 <li>
-                                    <a href="javascript:;">振幅<span class="fa arrow"></span></a>
+                                    <a href="javascript:;">振幅1<span class="fa arrow"></span></a>
 		                            <ul class="nav nav-third-level">
 		                            	<li>
 		                            		<a href="/sxyz/zflist.html">遗值振幅列表</a>
@@ -97,6 +99,20 @@
 		                                </li>
 		                                <li>
 		                                    <a href="/sxyz/zf2countlist.html">二级振幅次数列表</a>
+		                                </li>
+		                            </ul>
+                                </li>
+                                <li>
+                                    <a href="javascript:;">振幅2<span class="fa arrow"></span></a>
+		                            <ul class="nav nav-third-level">
+		                            	<li>
+		                            		<a href="/sxyz/zflist2.html">遗值振幅列表</a>
+		                            	</li>
+		                                <li>
+		                                    <a href="/sxyz/zfcountlist2.html">一级振幅次数列表</a>
+		                                </li>
+		                                <li>
+		                                    <a href="/sxyz/zfjzlist2.html">间值列表</a>
 		                                </li>
 		                            </ul>
                                 </li>
@@ -230,6 +246,5 @@
 	<script type="text/javascript" th:src="@{/resource/system/js/datatable.js}"></script>
 	<script type="text/javascript" th:src="@{/resource/system/js/main.js}"></script>
 	<script type="text/javascript" th:src="@{'/resource/system/' + ${view} + '/index.js'}"></script>
-	
 </body>
 </html>

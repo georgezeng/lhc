@@ -6,6 +6,7 @@ import java.util.Comparator;
 
 import javax.servlet.http.HttpServletResponse;
 
+import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestBody;
@@ -13,7 +14,6 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 import lhc.domain.KaiJiang;
-import lhc.domain.SxYz;
 import lhc.dto.BaseResult;
 import lhc.dto.query.PageResult;
 import lhc.dto.query.QueryInfo;
@@ -47,6 +47,18 @@ public class KaiJiangController {
 
 	@Autowired
 	private YZController yZController;
+
+	@RequestMapping("/save")
+	public BaseResult save(@RequestBody KaiJiang data) throws Exception {
+		KaiJiang oldData = kaiJiangRepository.findByDate(data.getDate());
+		if (oldData != null) {
+			BeanUtils.copyProperties(data, oldData, "id");
+		} else {
+			oldData = data;
+		}
+		kaiJiangRepository.save(oldData);
+		return new BaseResult();
+	}
 
 	@RequestMapping("/sync/{year}")
 	public BaseResult sync(@PathVariable int year) throws Exception {

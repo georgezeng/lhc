@@ -19,4 +19,11 @@
 	<include file="/db/v13.sql" />
 	<include file="/db/v14.sql" />
 	<include file="/db/v15.sql" />
+	<include file="/db/v16.sql" />
+	<include file="/db/v17.sql" />
+	<include file="/db/v18.sql" />
+	<include file="/db/v19.sql" />
+	<include file="/db/v20.sql" />
+	<include file="/db/v21.sql" />
+	<include file="/db/v22.sql" />
 </databaseChangeLog>

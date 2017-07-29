@@ -107,6 +107,64 @@ $(document).ready(function() {
 		});
 	});
 	
+	$("#date").datepicker({
+		changeMonth: true,
+		changeYear: true,
+		monthNames: ['1月','2月','3月','4月','5月','6月','7月','8月','9月','10月','11月','12月'],
+		monthNamesShort: ['01', '02', '03', '04', '05', '06', '07', '08', '09', '10', '11', '12'],
+		dateFormat: 'yy-mm-dd'
+	});
+	
+	$("#editPanel").dialog({
+		autoOpen: false,
+		modal: true,
+		width: 600,
+		buttons: {
+			"保存": function() {
+				var errors = 0;
+				$("input[name='editInfo']").each(function() {
+					if($(this).val().trim() == "") {
+						errors++;
+						alert($(this).attr("txt")+"不能为空");
+						return false;
+					}
+				});
+				if(errors) {
+					return;
+				}
+				var dialog = $(this);
+				openLoading();
+				post({
+					url: '/mvc/kj/save/',
+					data: (function() {
+						var obj = {};
+						$("input[name='editInfo']").add($("select[name='editInfo']")).each(function() {
+							obj[$(this).attr("id")] = $(this).val();
+						});
+						return obj;
+					})(),
+					success: function() {
+						closeLoading();
+						alert("保存成功");
+						datatable.ajax.reload();
+						dialog.dialog("close");
+					},
+					systemError: function(msg) {
+						alert(msg);
+						closeLoading();
+					}
+				});
+			}
+		}
+	});
+	
+	$("#editBtn").click(function() {
+		var dialog = $("#editPanel").dialog("open");
+		$(".ui-dialog-titlebar-close").show();
+	});
+	
+	
+	
 });
 
 function renderNumberAndSX(item, cls) {

@@ -12,3 +12,7 @@ tfoot td {
 	border-left: none !important;
 	font-weight: bold !important;
 }
+
+table {
+	background-color: #fff;
+}

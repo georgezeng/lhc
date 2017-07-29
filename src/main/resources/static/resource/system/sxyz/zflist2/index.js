@@ -31,19 +31,32 @@ $(document).ready(function() {
 	var lastGreen = false;
 	var lastRed = false;
 	var count = 0;
-	var sxlist = [];
-	for(var i = 1; i < 8; i++) {
-		sxlist.push("fd" + i);
-	}
+	var sxlist = ["zf0", "zf1", "zf2", "zf3", "zf4", "zf5", "zf6", "zf7", "zf8", "zf9", "zf10", "zf11"];
 	var datatables = [];
 	var cols = ["year", "phase"];
 	for(var i in sxlist) {
 		cols.push(sxlist[i]);
 	}
-	cols.push("total");
 	cols.push("delta");
 	cols.push("lastYz");
-	cols.push("maxYz");
+	cols.push("total");
+	cols.push("totalAvg");
+	cols.push("max");
+	cols.push("maxAvg");
+	cols.push("min0");
+	cols.push("min0Avg");
+	cols.push("min1");
+	cols.push("min1Avg");
+	cols.push("min2");
+	cols.push("min2Avg");
+	cols.push("min3");
+	cols.push("min3Avg");
+	cols.push("min4");
+	cols.push("min4Avg");
+	cols.push("min5");
+	cols.push("min5Avg");
+	cols.push("min6");
+	cols.push("min6Avg");
 	var columns = [];
 	for(var i in cols) {
 		var col = cols[i];
@@ -59,53 +72,48 @@ $(document).ready(function() {
 			columnDefs.push({
 				aTargets: [index],
 				fnCreatedCell: function(nTd, sData, item, iRow, iCol) {
-					if(item.id) {
-						if(index == 0) {
-							$(nTd).text(item.year);
-						} else {
-							$(nTd).text(item.phase);
-						}
+					var value = null;
+					if(index == 0) {
+						value = item.year;
+						if(!item.id) {
+							value = "顺概率";
+							$(nTd).css("color", "blue");
+						} 
 					} else {
-						$(nTd).text("");
+						value = item.phase;
+						if(!item.id) {
+							value = "";
+						}
 					}
+					$(nTd).text(value);
 				}
 			});
 		})(i);
 	}
-	for(var i = 2; i < 9; i++) {
+	for(var i = 2; i < 14; i++) {
 		(function(index) {
 			columnDefs.push({
 				aTargets: [index],
 				fnCreatedCell: function(nTd, sData, item, iRow, iCol) {
+					var value = item[sxlist[index-2]];
 					if(item.id) {
-						var value = item[sxlist[index-2]];
-						if(item.id) {
-							if(value == 0) {
-								$(nTd).css("color", "white").css("backgroundColor", "red");
-							} else {
-								$(nTd).css("backgroundColor", "#ffc");
-							}
+						if(value == 0) {
+							$(nTd).css("color", "white").css("backgroundColor", "red");
+						} else {
+							$(nTd).css("backgroundColor", "#ffc");
 						}
-						$(nTd).text(value);
-					} else {
-						var text = [];
-						for(j in item.list) {
-							var fd = parseInt(j / 7 + 2);
-							if(fd == index) {
-								text.push(item.list[j].num);
-							}
-						}
-						$(nTd).text(text.join(", "));
 					}
+					$(nTd).text(value);
 				}
 			});
 		})(i);
 	}
 	columnDefs.push({
-		aTargets: [11],
+		aTargets: [15],
 		fnCreatedCell: function(nTd, sData, item, iRow, iCol) {
+			var value = null;
 			if(item.id) {
-				var value = item.lastYz;
+				value = item.lastYz;
 				if(value > 7) {
 					if(lastGreen) {
 						count++;
@@ -121,15 +129,27 @@ $(document).ready(function() {
 					lastRed = true;
 					lastGreen = false;
 				}
-				$(nTd).text(value);
 			} else {
-				$(nTd).text("");
+				value = Math.round(count / item.total * 10000) / 100 + "%";
 			}
+			$(nTd).text(value);
+		}
+	});
+	columnDefs.push({
+		aTargets: [16],
+		fnCreatedCell: function(nTd, sData, item, iRow, iCol) {
+			var value = null;
+			if(item.id) {
+				value = item.total;
+			} else {
+				value = "";
+			}
+			$(nTd).text(value);
 		}
 	});
 	datatables.push(createDataTable({
 		id : "dataTable",
-		url : "/mvc/yz/listTMFDYZ",
+		url : "/mvc/yz/listSXZF2",
 		bFilter: false,
 		data : function(queryInfo, infoSettings) {
 			count = 0;
@@ -175,7 +195,6 @@ $(document).ready(function() {
 		$("#endPhase").val($("#phases").val());
 		$("#download").submit();
 	});
-	
 });
 
 
