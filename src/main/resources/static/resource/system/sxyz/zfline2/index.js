@@ -50,7 +50,7 @@ $(document).ready(function() {
 	
 	function loadChart() {
 		post({
-			url: '/mvc/yz/listSX?mode=0',
+			url: '/mvc/yz/listSXZF2?mode=0',
 			data: {
 				object: {
 					year: parseInt($("#years").val()),

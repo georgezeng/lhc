@@ -149,7 +149,7 @@ $(document).ready(function() {
 	});
 	datatables.push(createDataTable({
 		id : "dataTable",
-		url : "/mvc/yz/listSXZF2",
+		url : "/mvc/yz/listSXZF2?mode=1",
 		bFilter: false,
 		data : function(queryInfo, infoSettings) {
 			count = 0;

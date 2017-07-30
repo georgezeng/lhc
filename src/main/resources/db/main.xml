@@ -26,4 +26,6 @@
 	<include file="/db/v20.sql" />
 	<include file="/db/v21.sql" />
 	<include file="/db/v22.sql" />
+	<include file="/db/v23.sql" />
+	<include file="/db/v24.sql" />
 </databaseChangeLog>

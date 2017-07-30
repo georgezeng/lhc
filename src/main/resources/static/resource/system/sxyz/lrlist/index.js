@@ -140,7 +140,7 @@ $(document).ready(function() {
 	});
 	datatables.push(createDataTable({
 		id : "dataTable",
-		url : "/mvc/yz/listSX",
+		url : "/mvc/yz/listSX?mode=1",
 		bFilter: false,
 		data : function(queryInfo, infoSettings) {
 			lastItem = null;

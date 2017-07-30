@@ -50,7 +50,7 @@ $(document).ready(function() {
 	
 	function loadChart() {
 		post({
-			url: '/mvc/yz/listSX?mode=0',
+			url: '/mvc/yz/listBSYZ',
 			data: {
 				object: {
 					year: parseInt($("#years").val()),
@@ -63,7 +63,7 @@ $(document).ready(function() {
 			},
 			success: function(result) {
 				var series = [
-					{name: '上期遗值', data: []},
+					{name: '遗值(上)', data: []}, 
 					{name: '遗值和', data: []}, 
 					{name: '和平均值', data: []}, 
 					{name: '最大值', data: []},

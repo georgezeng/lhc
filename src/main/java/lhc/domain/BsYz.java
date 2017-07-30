@@ -8,7 +8,7 @@ import javax.persistence.Table;
 
 @Entity
 @Table(name = "bs_yz")
-public class BsYz {
+public class BsYz extends Avg {
 	@Id
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
 	private Long id;
@@ -16,10 +16,12 @@ public class BsYz {
 	private int year;
 	private int phase;
 	private String date;
-	private Integer red;
-	private Integer green;
-	private Integer blue;
-	private Integer total;
+	private Integer redOdd;
+	private Integer redEven;
+	private Integer greenOdd;
+	private Integer greenEven;
+	private Integer blueOdd;
+	private Integer blueEven;
 	private Integer lastYz;
 	private Integer delta;
 
@@ -55,36 +57,56 @@ public class BsYz {
 		this.date = date;
 	}
 
-	public Integer getRed() {
-		return red;
+	public Integer getRedOdd() {
+		return redOdd;
 	}
 
-	public void setRed(Integer red) {
-		this.red = red;
+	public void setRedOdd(Integer redOdd) {
+		this.redOdd = redOdd;
 	}
 
-	public Integer getGreen() {
-		return green;
+	public Integer getRedEven() {
+		return redEven;
 	}
 
-	public void setGreen(Integer green) {
-		this.green = green;
+	public void setRedEven(Integer redEven) {
+		this.redEven = redEven;
 	}
 
-	public Integer getBlue() {
-		return blue;
+	public Integer getGreenOdd() {
+		return greenOdd;
 	}
 
-	public void setBlue(Integer blue) {
-		this.blue = blue;
+	public void setGreenOdd(Integer greenOdd) {
+		this.greenOdd = greenOdd;
 	}
 
-	public Integer getTotal() {
-		return total;
+	public Integer getGreenEven() {
+		return greenEven;
 	}
 
-	public void setTotal(Integer total) {
-		this.total = total;
+	public void setGreenEven(Integer greenEven) {
+		this.greenEven = greenEven;
+	}
+
+	public Integer getBlueOdd() {
+		return blueOdd;
+	}
+
+	public void setBlueOdd(Integer blueOdd) {
+		this.blueOdd = blueOdd;
+	}
+
+	public Integer getBlueEven() {
+		return blueEven;
+	}
+
+	public void setBlueEven(Integer blueEven) {
+		this.blueEven = blueEven;
+	}
+
+	public void setId(Long id) {
+		this.id = id;
 	}
 
 	public Integer getLastYz() {

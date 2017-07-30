@@ -31,7 +31,7 @@ $(document).ready(function() {
 	var lastGreen = false;
 	var lastRed = false;
 	var count = 0;
-	var sxlist = ["redOdd", "redEven", "blueOdd", "blueEven", "greenOdd", "greenEven"];
+	var sxlist = ["fd1", "fd2", "fd3", "fd4", "fd5", "fd6", "fd7", "fd8"];
 	var datatables = [];
 	var cols = ["year", "phase"];
 	for(var i in sxlist) {
@@ -67,24 +67,41 @@ $(document).ready(function() {
 		});
 	}
 	var columnDefs = [];
-	for(var i = 2; i < 8; i++) {
+	for(var i = 0; i < 2; i++) {
+		(function(index) {
+			columnDefs.push({
+				aTargets: [index],
+				fnCreatedCell: function(nTd, sData, item, iRow, iCol) {
+					var value = null;
+					if(index == 0) {
+						value = item.year;
+						if(!item.id) {
+							value = "顺概率";
+							$(nTd).css("color", "blue");
+						} 
+					} else {
+						value = item.phase;
+						if(!item.id) {
+							value = "";
+						}
+					}
+					$(nTd).text(value);
+				}
+			});
+		})(i);
+	}
+	for(var i = 2; i < 10; i++) {
 		(function(index) {
 			columnDefs.push({
 				aTargets: [index],
 				fnCreatedCell: function(nTd, sData, item, iRow, iCol) {
 					var value = item[sxlist[index-2]];
-					if(value == 0) {
-						var color = null;
-						if(index < 4) { 
-							color = "red";
-						} else if(index < 6) {
-							color = "blue";
+					if(item.id) {
+						if(value == 0) {
+							$(nTd).css("color", "white").css("backgroundColor", "red");
 						} else {
-							color = "green";
+							$(nTd).css("backgroundColor", "#ffc");
 						}
-						$(nTd).css("color", "white").css("backgroundColor", color);
-					} else {
-						$(nTd).css("backgroundColor", "#ffc");
 					}
 					$(nTd).text(value);
 				}
@@ -92,30 +109,35 @@ $(document).ready(function() {
 		})(i);
 	}
 	columnDefs.push({
-		aTargets: [9],
+		aTargets: [11],
 		fnCreatedCell: function(nTd, sData, item, iRow, iCol) {
-			var value = item.lastYz;
-			if(value > 7) {
-				if(lastGreen) {
-					count++;
+			var value = null;
+			if(item.id) {
+				value = item.lastYz;
+				if(value > 7) {
+					if(lastGreen) {
+						count++;
+					}
+					$(nTd).css("color", "white").css("backgroundColor", "green");
+					lastRed = false;
+					lastGreen = true;
+				} else {
+					if(lastRed) {
+						count++;
+					}
+					$(nTd).css("color", "white").css("backgroundColor", "red");
+					lastRed = true;
+					lastGreen = false;
 				}
-				$(nTd).css("color", "white").css("backgroundColor", "green");
-				lastRed = false;
-				lastGreen = true;
 			} else {
-				if(lastRed) {
-					count++;
-				}
-				$(nTd).css("color", "white").css("backgroundColor", "red");
-				lastRed = true;
-				lastGreen = false;
+				value = Math.round(count / item.total * 10000) / 100 + "%";
 			}
 			$(nTd).text(value);
 		}
 	});
 	datatables.push(createDataTable({
 		id : "dataTable",
-		url : "/mvc/yz/listBSYZ",
+		url : "/mvc/yz/listZSYZ",
 		bFilter: false,
 		data : function(queryInfo, infoSettings) {
 			count = 0;
@@ -161,6 +183,7 @@ $(document).ready(function() {
 		$("#endPhase").val($("#phases").val());
 		$("#download").submit();
 	});
+	
 });
 
 

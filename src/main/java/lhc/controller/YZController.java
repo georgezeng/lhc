@@ -14,9 +14,6 @@ import java.util.concurrent.Future;
 import javax.servlet.http.HttpServletResponse;
 
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.data.domain.Page;
-import org.springframework.data.domain.PageRequest;
-import org.springframework.data.domain.Sort.Direction;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -37,6 +34,7 @@ import lhc.domain.SxZfYz;
 import lhc.domain.SxZfYz2;
 import lhc.domain.TmFdYz;
 import lhc.domain.TmYz;
+import lhc.domain.ZsYz;
 import lhc.dto.BaseResult;
 import lhc.dto.DownloadDTO;
 import lhc.dto.PmDTO;
@@ -47,8 +45,12 @@ import lhc.dto.query.PageInfo;
 import lhc.dto.query.PageResult;
 import lhc.dto.query.QueryInfo;
 import lhc.enums.SX;
+import lhc.repository.jpa.api.BsYzRepository;
 import lhc.repository.jpa.api.KaiJiangRepository;
+import lhc.repository.jpa.api.SxYzRepository;
+import lhc.repository.jpa.api.SxZfYz2Repository;
 import lhc.repository.jpa.api.TmYzRepository;
+import lhc.repository.jpa.api.ZsYzRepository;
 import lhc.repository.jpa.dao.BsYzDao;
 import lhc.repository.jpa.dao.DsYzDao;
 import lhc.repository.jpa.dao.KaiJiangDao;
@@ -63,6 +65,8 @@ import lhc.repository.jpa.dao.SxZfYz2Dao;
 import lhc.repository.jpa.dao.SxZfYzDao;
 import lhc.repository.jpa.dao.TmFdYzDao;
 import lhc.repository.jpa.dao.TmYzDao;
+import lhc.repository.jpa.dao.ZsYzDao;
+import lhc.service.ParallelYzServiceWrapper;
 import lhc.service.YZService;
 
 @RestController
@@ -106,6 +110,9 @@ public class YZController {
 	private BsYzDao bsYzDao;
 
 	@Autowired
+	private ZsYzDao zsYzDao;
+
+	@Autowired
 	private SqYzDao sqYzDao;
 
 	@Autowired
@@ -119,6 +126,21 @@ public class YZController {
 
 	@Autowired
 	private TmYzRepository tmYzRepository;
+
+	@Autowired
+	private SxYzRepository sxYzRepository;
+
+	@Autowired
+	private SxZfYz2Repository sxzfYz2Repository;
+
+	@Autowired
+	private BsYzRepository bsYzRepository;
+
+	@Autowired
+	private ZsYzRepository zsYzRepository;
+
+	@Autowired
+	private ParallelYzServiceWrapper parallelYzService;
 
 	@RequestMapping("/years")
 	public BaseResult years() {
@@ -157,6 +179,27 @@ public class YZController {
 		futures.add(yzService.calSQYZ());
 		futures.add(yzService.calDSYZ());
 		futures.add(yzService.calTMYZ());
+		futures.add(yzService.calZSYZ());
+		while (true) {
+			int count = 0;
+			for (Future<Exception> f : futures) {
+				if (f.isDone()) {
+					if (f.get() != null) {
+						throw f.get();
+					}
+					count++;
+				}
+			}
+			if (count == futures.size()) {
+				break;
+			}
+			Thread.sleep(1000);
+		}
+		futures.clear();
+		futures.add(parallelYzService.calAvg(sxYzRepository));
+		futures.add(parallelYzService.calAvg(sxzfYz2Repository));
+		futures.add(parallelYzService.calAvg(bsYzRepository));
+		futures.add(parallelYzService.calAvg(zsYzRepository));
 		while (true) {
 			int count = 0;
 			for (Future<Exception> f : futures) {
@@ -248,6 +291,11 @@ public class YZController {
 		return new BaseResult(bsYzDao.query(queryInfo));
 	}
 
+	@RequestMapping("/listZSYZ")
+	public BaseResult listZSYZ(@RequestBody QueryInfo<ZsYz> queryInfo) throws Exception {
+		return new BaseResult(zsYzDao.query(queryInfo));
+	}
+
 	@RequestMapping("/listDSYZ")
 	public BaseResult listDSYZ(@RequestBody QueryInfo<DsYz> queryInfo) throws Exception {
 		PageResult<DsYz> result = dsYzDao.query(queryInfo);
@@ -304,14 +352,15 @@ public class YZController {
 	}
 
 	@RequestMapping("/listSXZF2")
-	public BaseResult listSXZF2(@RequestBody QueryInfo<SxZfYz2> queryInfo) throws Exception {
+	public BaseResult listSXZF2(@RequestBody QueryInfo<SxZfYz2> queryInfo, @RequestParam String mode) throws Exception {
 		PageResult<SxZfYz2> result = sxZfYz2Dao.query(queryInfo);
-		if (result != null && result.getTotal() > 0) {
-			SxZfYz2 last = new SxZfYz2();
-			last.setTotal(result.getList().size());
-			result.getList().add(last);
+		if ("1".equals(mode)) {
+			if (result != null && result.getTotal() > 0) {
+				SxZfYz2 last = new SxZfYz2();
+				last.setTotal(result.getList().size());
+				result.getList().add(last);
+			}
 		}
-
 		return new BaseResult(result);
 	}
 
@@ -768,9 +817,10 @@ public class YZController {
 	@RequestMapping("/listTMFDYZ")
 	public BaseResult listTMFDYZ(@RequestBody QueryInfo<TmFdYz> queryInfo) throws Exception {
 		PageResult<TmFdYz> result = tmfdYzDao.query(queryInfo);
-		Page<TmYz> tmResult = tmYzRepository.findAll(new PageRequest(0, 1, Direction.DESC, "date"));
-		if (tmResult != null && tmResult.hasContent()) {
-			List<TmYzInfo> fdList = yzService.getTMFDList(tmResult.getContent().get(0));
+		TmFdYz queryObj = queryInfo.getObject();
+		TmYz tmResult = tmYzRepository.findByYearAndPhase(queryObj.getYear(), queryObj.getPhase());
+		if (tmResult != null) {
+			List<TmYzInfo> fdList = yzService.getTMFDList(tmResult);
 			if (result != null && result.getTotal() > 0) {
 				TmFdYz data = new TmFdYz();
 				data.setList(fdList);
