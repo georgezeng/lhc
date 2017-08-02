@@ -3,9 +3,6 @@ package lhc.domain;
 import java.util.List;
 
 import javax.persistence.Entity;
-import javax.persistence.GeneratedValue;
-import javax.persistence.GenerationType;
-import javax.persistence.Id;
 import javax.persistence.Table;
 import javax.persistence.Transient;
 
@@ -13,14 +10,7 @@ import lhc.dto.TmYzInfo;
 
 @Entity
 @Table(name = "tm_fd_yz")
-public class TmFdYz {
-	@Id
-	@GeneratedValue(strategy = GenerationType.IDENTITY)
-	private Long id;
-
-	private int year;
-	private int phase;
-	private String date;
+public class TmFdYz extends BaseYz {
 	private Integer fd1;
 	private Integer fd2;
 	private Integer fd3;
@@ -123,44 +113,12 @@ public class TmFdYz {
 		this.fd7 = fd7;
 	}
 
-	public void setId(Long id) {
-		this.id = id;
-	}
-
-	public int getYear() {
-		return year;
-	}
-
-	public void setYear(int year) {
-		this.year = year;
-	}
-
-	public int getPhase() {
-		return phase;
-	}
-
-	public void setPhase(int phase) {
-		this.phase = phase;
-	}
-
-	public String getDate() {
-		return date;
-	}
-
-	public void setDate(String date) {
-		this.date = date;
-	}
-
 	public Integer getLastYz() {
 		return lastYz;
 	}
 
 	public void setLastYz(Integer lastYz) {
 		this.lastYz = lastYz;
-	}
-
-	public Long getId() {
-		return id;
 	}
 
 }

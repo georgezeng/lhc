@@ -1,167 +1,100 @@
 package lhc.domain;
 
 import javax.persistence.Entity;
-import javax.persistence.GeneratedValue;
-import javax.persistence.GenerationType;
-import javax.persistence.Id;
 import javax.persistence.Table;
-import javax.persistence.Transient;
 
 @Entity
 @Table(name = "ds_yz")
-public class DsYz {
-	@Id
-	@GeneratedValue(strategy = GenerationType.IDENTITY)
-	private Long id;
+public class DsYz extends Avg {
+	private Integer ds0Odd;
+	private Integer ds0Even;
+	private Integer ds1Odd;
+	private Integer ds1Even;
+	private Integer ds2Odd;
+	private Integer ds2Even;
+	private Integer ds3Odd;
+	private Integer ds3Even;
+	private Integer ds4Odd;
+	private Integer ds4Even;
 
-	private int year;
-	private int phase;
-	private String date;
-	private Integer sxSmall;
-	private Integer sxLarge;
-	private Integer sxSingle;
-	private Integer sxEven;
-	private Integer hmSmall;
-	private Integer hmLarge;
-	private Integer hmSingle;
-	private Integer hmEven;
-	private Integer lastHmDsYz;
-	private Integer lastHmDxYz;
-	private Integer lastSxDsYz;
-	private Integer lastSxDxYz;
-	@Transient
-	private Integer total;
-
-	public Integer getSxSmall() {
-		return sxSmall;
+	public Integer getDs0Odd() {
+		return ds0Odd;
 	}
 
-	public void setSxSmall(Integer sxSmall) {
-		this.sxSmall = sxSmall;
+	public void setDs0Odd(Integer ds0Odd) {
+		this.ds0Odd = ds0Odd;
 	}
 
-	public Integer getSxLarge() {
-		return sxLarge;
+	public Integer getDs0Even() {
+		return ds0Even;
 	}
 
-	public void setSxLarge(Integer sxLarge) {
-		this.sxLarge = sxLarge;
+	public void setDs0Even(Integer ds0Even) {
+		this.ds0Even = ds0Even;
 	}
 
-	public Integer getSxSingle() {
-		return sxSingle;
+	public Integer getDs1Odd() {
+		return ds1Odd;
 	}
 
-	public void setSxSingle(Integer sxSingle) {
-		this.sxSingle = sxSingle;
+	public void setDs1Odd(Integer ds1Odd) {
+		this.ds1Odd = ds1Odd;
 	}
 
-	public Integer getSxEven() {
-		return sxEven;
+	public Integer getDs1Even() {
+		return ds1Even;
 	}
 
-	public void setSxEven(Integer sxEven) {
-		this.sxEven = sxEven;
+	public void setDs1Even(Integer ds1Even) {
+		this.ds1Even = ds1Even;
 	}
 
-	public Integer getHmSmall() {
-		return hmSmall;
+	public Integer getDs2Odd() {
+		return ds2Odd;
 	}
 
-	public void setHmSmall(Integer hmSmall) {
-		this.hmSmall = hmSmall;
+	public void setDs2Odd(Integer ds2Odd) {
+		this.ds2Odd = ds2Odd;
 	}
 
-	public Integer getHmLarge() {
-		return hmLarge;
+	public Integer getDs2Even() {
+		return ds2Even;
 	}
 
-	public void setHmLarge(Integer hmLarge) {
-		this.hmLarge = hmLarge;
+	public void setDs2Even(Integer ds2Even) {
+		this.ds2Even = ds2Even;
 	}
 
-	public Integer getHmSingle() {
-		return hmSingle;
+	public Integer getDs3Odd() {
+		return ds3Odd;
 	}
 
-	public void setHmSingle(Integer hmSingle) {
-		this.hmSingle = hmSingle;
+	public void setDs3Odd(Integer ds3Odd) {
+		this.ds3Odd = ds3Odd;
 	}
 
-	public Integer getHmEven() {
-		return hmEven;
+	public Integer getDs3Even() {
+		return ds3Even;
 	}
 
-	public void setHmEven(Integer hmEven) {
-		this.hmEven = hmEven;
+	public void setDs3Even(Integer ds3Even) {
+		this.ds3Even = ds3Even;
 	}
 
-	public int getYear() {
-		return year;
+	public Integer getDs4Odd() {
+		return ds4Odd;
 	}
 
-	public void setYear(int year) {
-		this.year = year;
+	public void setDs4Odd(Integer ds4Odd) {
+		this.ds4Odd = ds4Odd;
 	}
 
-	public int getPhase() {
-		return phase;
+	public Integer getDs4Even() {
+		return ds4Even;
 	}
 
-	public void setPhase(int phase) {
-		this.phase = phase;
-	}
-
-	public String getDate() {
-		return date;
-	}
-
-	public void setDate(String date) {
-		this.date = date;
-	}
-
-	public Integer getTotal() {
-		return total;
-	}
-
-	public void setTotal(Integer total) {
-		this.total = total;
-	}
-
-	public Integer getLastHmDsYz() {
-		return lastHmDsYz;
-	}
-
-	public void setLastHmDsYz(Integer lastHmDsYz) {
-		this.lastHmDsYz = lastHmDsYz;
-	}
-
-	public Integer getLastHmDxYz() {
-		return lastHmDxYz;
-	}
-
-	public void setLastHmDxYz(Integer lastHmDxYz) {
-		this.lastHmDxYz = lastHmDxYz;
-	}
-
-	public Integer getLastSxDsYz() {
-		return lastSxDsYz;
-	}
-
-	public void setLastSxDsYz(Integer lastSxDsYz) {
-		this.lastSxDsYz = lastSxDsYz;
-	}
-
-	public Integer getLastSxDxYz() {
-		return lastSxDxYz;
-	}
-
-	public void setLastSxDxYz(Integer lastSxDxYz) {
-		this.lastSxDxYz = lastSxDxYz;
-	}
-
-	public Long getId() {
-		return id;
+	public void setDs4Even(Integer ds4Even) {
+		this.ds4Even = ds4Even;
 	}
 
 }

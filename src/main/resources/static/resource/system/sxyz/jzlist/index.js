@@ -1,34 +1,5 @@
 $(document).ready(function() {
-	post({
-		url: '/mvc/yz/years',
-		success: function(list) {
-			var years = $("#years");
-			for(var i in list) {
-				years.append("<option value='" + list[i] + "'>" + list[i] + "</option>");
-			}
-			years.combobox().unbind().change(function() {
-				post({
-					url: '/mvc/yz/phases/' + $(this).val(),
-					success: function(list) {
-						var phases = $("#phases");
-						phases.empty();
-						for(var i in list) {
-							phases.append("<option value='" + list[i] + "'>" + list[i] + "</option>");
-						}
-						if(phases.prev().hasClass("combobox-container")){
-							phases.prev().remove();
-						}
-						phases.combobox();
-						phases.unbind().change(function() {
-							reloadTables();
-						}).change();
-					}
-				});
-			}).change();
-		}
-	});
-	
-	var datatables = [];
+	var count = [];
 	var cols = ["year", "phase"];
 	var columns = [];
 	for(var i in cols) {
@@ -141,6 +112,7 @@ $(document).ready(function() {
 		url : "/mvc/yz/countSXJZ",
 		bFilter: false,
 		data : function(queryInfo, infoSettings) {
+			count = [];
 			queryInfo.object = {};
 			queryInfo.object.year = parseInt($("#years").val());
 			queryInfo.object.phase = parseInt($("#phases").val());
@@ -148,34 +120,6 @@ $(document).ready(function() {
 		columns : columns,
 		aoColumnDefs: columnDefs
 	}));
-	
-	$("#searchBtn").click(function() {
-		reloadTables();
-	});
-	
-	$("#calYZBtn").click(function() {
-		openLoading();
-		post({
-			url: '/mvc/yz/calYZ/',
-			success: function() {
-				alert("遗值计算完成");
-				reloadTables();
-				closeLoading();
-			},
-			systemError: function(msg) {
-				alert(msg);
-				closeLoading();
-			}
-		});
-	});
-	
-	var count = [];
-	function reloadTables() {
-		for(var i in datatables) {
-			count = [];
-			datatables[i].ajax.reload();
-		}
-	}
 	
 });
 

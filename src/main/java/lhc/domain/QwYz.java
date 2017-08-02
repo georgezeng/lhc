@@ -1,22 +1,12 @@
 package lhc.domain;
 
 import javax.persistence.Entity;
-import javax.persistence.GeneratedValue;
-import javax.persistence.GenerationType;
-import javax.persistence.Id;
 import javax.persistence.Table;
 import javax.persistence.Transient;
 
 @Entity
 @Table(name = "qw_yz")
-public class QwYz {
-	@Id
-	@GeneratedValue(strategy = GenerationType.IDENTITY)
-	private Long id;
-
-	private int year;
-	private int phase;
-	private String date;
+public class QwYz extends BaseYz {
 	private Integer w1;
 	private Integer w2;
 	private Integer w3;
@@ -38,30 +28,6 @@ public class QwYz {
 
 	public void setMaxTimes(int maxTimes) {
 		this.maxTimes = maxTimes;
-	}
-
-	public int getYear() {
-		return year;
-	}
-
-	public void setYear(int year) {
-		this.year = year;
-	}
-
-	public int getPhase() {
-		return phase;
-	}
-
-	public void setPhase(int phase) {
-		this.phase = phase;
-	}
-
-	public String getDate() {
-		return date;
-	}
-
-	public void setDate(String date) {
-		this.date = date;
 	}
 
 	public Integer getW0() {
@@ -158,10 +124,6 @@ public class QwYz {
 
 	public void setCurrentYz(Integer currentYz) {
 		this.currentYz = currentYz;
-	}
-
-	public Long getId() {
-		return id;
 	}
 
 }

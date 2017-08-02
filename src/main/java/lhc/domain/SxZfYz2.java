@@ -3,22 +3,12 @@ package lhc.domain;
 import java.math.BigDecimal;
 
 import javax.persistence.Entity;
-import javax.persistence.GeneratedValue;
-import javax.persistence.GenerationType;
-import javax.persistence.Id;
 import javax.persistence.Table;
 import javax.persistence.Transient;
 
 @Entity
 @Table(name = "sx_zf_yz2")
 public class SxZfYz2 extends Avg {
-	@Id
-	@GeneratedValue(strategy = GenerationType.IDENTITY)
-	private Long id;
-
-	private int year;
-	private int phase;
-	private String date;
 	private Integer zf0;
 	private Integer zf1;
 	private Integer zf2;
@@ -31,8 +21,6 @@ public class SxZfYz2 extends Avg {
 	private Integer zf9;
 	private Integer zf10;
 	private Integer zf11;
-	private Integer delta;
-	private Integer lastYz;
 	private Integer currentPos;
 
 	@Transient
@@ -53,10 +41,6 @@ public class SxZfYz2 extends Avg {
 
 	public void setLastCountYz(Integer lastCountYz) {
 		this.lastCountYz = lastCountYz;
-	}
-
-	public void setId(Long id) {
-		this.id = id;
 	}
 
 	public BigDecimal getAvg() {
@@ -89,30 +73,6 @@ public class SxZfYz2 extends Avg {
 
 	public void setCurrentPos(Integer currentPos) {
 		this.currentPos = currentPos;
-	}
-
-	public String getDate() {
-		return date;
-	}
-
-	public void setDate(String date) {
-		this.date = date;
-	}
-
-	public int getYear() {
-		return year;
-	}
-
-	public void setYear(int year) {
-		this.year = year;
-	}
-
-	public int getPhase() {
-		return phase;
-	}
-
-	public void setPhase(int phase) {
-		this.phase = phase;
 	}
 
 	public Integer getZf0() {
@@ -209,26 +169,6 @@ public class SxZfYz2 extends Avg {
 
 	public void setZf11(Integer zf11) {
 		this.zf11 = zf11;
-	}
-
-	public Integer getDelta() {
-		return delta;
-	}
-
-	public void setDelta(Integer delta) {
-		this.delta = delta;
-	}
-
-	public Integer getLastYz() {
-		return lastYz;
-	}
-
-	public void setLastYz(Integer lastYZ) {
-		this.lastYz = lastYZ;
-	}
-
-	public Long getId() {
-		return id;
 	}
 
 }

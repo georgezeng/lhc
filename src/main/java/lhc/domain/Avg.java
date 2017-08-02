@@ -5,7 +5,9 @@ import java.math.BigDecimal;
 import javax.persistence.MappedSuperclass;
 
 @MappedSuperclass
-public abstract class Avg {
+public abstract class Avg extends BaseYz {
+	private Integer delta;
+	private Integer lastYz;
 	private Integer total;
 	private BigDecimal totalAvg;
 	private Integer max;
@@ -24,6 +26,22 @@ public abstract class Avg {
 	private BigDecimal min5Avg;
 	private Integer min6;
 	private BigDecimal min6Avg;
+
+	public Integer getDelta() {
+		return delta;
+	}
+
+	public void setDelta(Integer delta) {
+		this.delta = delta;
+	}
+
+	public Integer getLastYz() {
+		return lastYz;
+	}
+
+	public void setLastYz(Integer lastYz) {
+		this.lastYz = lastYz;
+	}
 
 	public Integer getTotal() {
 		return total;

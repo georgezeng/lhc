@@ -1,38 +1,8 @@
 $(document).ready(function() {
-	post({
-		url: '/mvc/yz/years',
-		success: function(list) {
-			var years = $("#years");
-			for(var i in list) {
-				years.append("<option value='" + list[i] + "'>" + list[i] + "</option>");
-			}
-			years.combobox().unbind().change(function() {
-				post({
-					url: '/mvc/yz/phases/' + $(this).val(),
-					success: function(list) {
-						var phases = $("#phases");
-						phases.empty();
-						for(var i in list) {
-							phases.append("<option value='" + list[i] + "'>" + list[i] + "</option>");
-						}
-						if(phases.prev().hasClass("combobox-container")){
-							phases.prev().remove();
-						}
-						phases.combobox();
-						phases.unbind().change(function() {
-							reloadTables();
-						}).change();
-					}
-				});
-			}).change();
-		}
-	});
-	
 	var lastGreen = false;
 	var lastRed = false;
 	var count = 0;
 	var sxlist = ["w2", "w3", "w4", "w5", "w6", "w7"];
-	var datatables = [];
 	var cols = ["year", "phase"];
 	for(var i in sxlist) {
 		cols.push(sxlist[i]);
@@ -146,38 +116,6 @@ $(document).ready(function() {
 		aoColumnDefs: columnDefs
 	}));
 	
-	$("#searchBtn").click(function() {
-		reloadTables();
-	});
-	
-	$("#calYZBtn").click(function() {
-		openLoading();
-		post({
-			url: '/mvc/yz/calYZ/',
-			success: function() {
-				alert("遗值计算完成");
-				reloadTables();
-				closeLoading();
-			},
-			systemError: function(msg) {
-				alert(msg);
-				closeLoading();
-			}
-		});
-	});
-	
-	function reloadTables() {
-		for(var i in datatables) {
-			datatables[i].ajax.reload();
-		}
-	}
-	
-	$("#downloadBtn").click(function() {
-		$("#size").val($("select[name='dataTable_length']").val());
-		$("#endYear").val($("#years").val());
-		$("#endPhase").val($("#phases").val());
-		$("#download").submit();
-	});
 });
 
 

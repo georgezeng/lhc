@@ -1,9 +1,7 @@
 package lhc.repository.jpa.api;
 
-import org.springframework.data.repository.PagingAndSortingRepository;
-
 import lhc.domain.QwYz;
+import lhc.repository.jpa.BaseYzRepository;
 
-public interface QwYzRepository extends PagingAndSortingRepository<QwYz, Long> {
-	QwYz findByDate(String date);
+public interface QwYzRepository extends BaseYzRepository<QwYz> {
 }

@@ -3,23 +3,13 @@ package lhc.domain;
 import javax.persistence.Entity;
 import javax.persistence.EnumType;
 import javax.persistence.Enumerated;
-import javax.persistence.GeneratedValue;
-import javax.persistence.GenerationType;
-import javax.persistence.Id;
 import javax.persistence.Table;
 
 import lhc.enums.SX;
 
 @Entity
 @Table(name = "kai_jiang")
-public class KaiJiang {
-	@Id
-	@GeneratedValue(strategy = GenerationType.IDENTITY)
-	private Long id;
-
-	private String date;
-
-	private int year;
+public class KaiJiang extends BaseYz {
 
 	@Enumerated(EnumType.STRING)
 	private SX specialSx;
@@ -49,28 +39,6 @@ public class KaiJiang {
 	@Enumerated(EnumType.STRING)
 	private SX num6Sx;
 	private Integer num6;
-
-	private int phase;
-
-	public int getYear() {
-		return year;
-	}
-
-	public void setYear(int year) {
-		this.year = year;
-	}
-
-	public Long getId() {
-		return id;
-	}
-
-	public String getDate() {
-		return date;
-	}
-
-	public void setDate(String date) {
-		this.date = date;
-	}
 
 	public SX getSpecialSx() {
 		return specialSx;
@@ -182,14 +150,6 @@ public class KaiJiang {
 
 	public void setNum6(Integer num6) {
 		this.num6 = num6;
-	}
-
-	public int getPhase() {
-		return phase;
-	}
-
-	public void setPhase(int phase) {
-		this.phase = phase;
 	}
 
 }

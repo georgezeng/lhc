@@ -1,21 +1,11 @@
 package lhc.domain;
 
 import javax.persistence.Entity;
-import javax.persistence.GeneratedValue;
-import javax.persistence.GenerationType;
-import javax.persistence.Id;
 import javax.persistence.Table;
 
 @Entity
 @Table(name = "tm_yz")
-public class TmYz {
-	@Id
-	@GeneratedValue(strategy = GenerationType.IDENTITY)
-	private Long id;
-
-	private int year;
-	private int phase;
-	private String date;
+public class TmYz extends BaseYz {
 	private Integer hm1;
 	private Integer hm2;
 	private Integer hm3;
@@ -486,44 +476,12 @@ public class TmYz {
 		this.hm49 = hm49;
 	}
 
-	public void setId(Long id) {
-		this.id = id;
-	}
-
-	public int getYear() {
-		return year;
-	}
-
-	public void setYear(int year) {
-		this.year = year;
-	}
-
-	public int getPhase() {
-		return phase;
-	}
-
-	public void setPhase(int phase) {
-		this.phase = phase;
-	}
-
-	public String getDate() {
-		return date;
-	}
-
-	public void setDate(String date) {
-		this.date = date;
-	}
-
 	public Integer getLastYz() {
 		return lastYz;
 	}
 
 	public void setLastYz(Integer lastYz) {
 		this.lastYz = lastYz;
-	}
-
-	public Long getId() {
-		return id;
 	}
 
 }

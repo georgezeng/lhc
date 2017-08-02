@@ -6,9 +6,6 @@ import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.EnumType;
 import javax.persistence.Enumerated;
-import javax.persistence.GeneratedValue;
-import javax.persistence.GenerationType;
-import javax.persistence.Id;
 import javax.persistence.Table;
 import javax.persistence.Transient;
 
@@ -17,13 +14,6 @@ import lhc.enums.SX;
 @Entity
 @Table(name = "sx_yz")
 public class SxYz extends Avg {
-	@Id
-	@GeneratedValue(strategy = GenerationType.IDENTITY)
-	private Long id;
-
-	private int year;
-	private int phase;
-	private String date;
 	private Integer Shu;
 	private Integer Niu;
 	private Integer Hu;
@@ -37,8 +27,6 @@ public class SxYz extends Avg {
 	private Integer Ji;
 	private Integer Gou;
 	private Integer Zhu;
-	private Integer delta;
-	private Integer lastYz;
 	@Enumerated(EnumType.STRING)
 	private SX currentSx;
 
@@ -59,10 +47,6 @@ public class SxYz extends Avg {
 
 	public void setLastCountYz(Integer lastCountYz) {
 		this.lastCountYz = lastCountYz;
-	}
-
-	public void setId(Long id) {
-		this.id = id;
 	}
 
 	public BigDecimal getAvg() {
@@ -103,30 +87,6 @@ public class SxYz extends Avg {
 
 	public void setCurrentSx(SX currentSx) {
 		this.currentSx = currentSx;
-	}
-
-	public String getDate() {
-		return date;
-	}
-
-	public void setDate(String date) {
-		this.date = date;
-	}
-
-	public int getYear() {
-		return year;
-	}
-
-	public void setYear(int year) {
-		this.year = year;
-	}
-
-	public int getPhase() {
-		return phase;
-	}
-
-	public void setPhase(int phase) {
-		this.phase = phase;
 	}
 
 	public Integer getShu() {
@@ -223,26 +183,6 @@ public class SxYz extends Avg {
 
 	public void setZhu(Integer Zhu) {
 		this.Zhu = Zhu;
-	}
-
-	public Integer getDelta() {
-		return delta;
-	}
-
-	public void setDelta(Integer delta) {
-		this.delta = delta;
-	}
-
-	public Integer getLastYz() {
-		return lastYz;
-	}
-
-	public void setLastYz(Integer lastYZ) {
-		this.lastYz = lastYZ;
-	}
-
-	public Long getId() {
-		return id;
 	}
 
 }

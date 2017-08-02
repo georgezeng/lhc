@@ -1,45 +1,32 @@
 $(document).ready(function() {
-	post({
-		url: '/mvc/yz/years',
-		success: function(list) {
-			var years = $("#years");
-			for(var i in list) {
-				years.append("<option value='" + list[i] + "'>" + list[i] + "</option>");
-			}
-			years.combobox().unbind().change(function() {
-				post({
-					url: '/mvc/yz/phases/' + $(this).val(),
-					success: function(list) {
-						var phases = $("#phases");
-						phases.empty();
-						for(var i in list) {
-							phases.append("<option value='" + list[i] + "'>" + list[i] + "</option>");
-						}
-						if(phases.prev().hasClass("combobox-container")){
-							phases.prev().remove();
-						}
-						phases.combobox();
-						phases.unbind().change(function() {
-							reloadTables();
-						}).change();
-					}
-				});
-			}).change();
-		}
-	});
-	
 	var lastGreen = false;
 	var lastRed = false;
 	var count = 0;
 	var sxlist = ["w0", "w1", "w2", "w3", "w4"];
-	var datatables = [];
 	var cols = ["year", "phase"];
 	for(var i in sxlist) {
 		cols.push(sxlist[i]);
 	}
-	cols.push("total");
 	cols.push("delta");
 	cols.push("lastYz");
+	cols.push("total");
+	cols.push("totalAvg");
+	cols.push("max");
+	cols.push("maxAvg");
+	cols.push("min0");
+	cols.push("min0Avg");
+	cols.push("min1");
+	cols.push("min1Avg");
+	cols.push("min2");
+	cols.push("min2Avg");
+	cols.push("min3");
+	cols.push("min3Avg");
+	cols.push("min4");
+	cols.push("min4Avg");
+	cols.push("min5");
+	cols.push("min5Avg");
+	cols.push("min6");
+	cols.push("min6Avg");
 	var columns = [];
 	for(var i in cols) {
 		var col = cols[i];
@@ -92,7 +79,7 @@ $(document).ready(function() {
 		})(i);
 	}
 	columnDefs.push({
-		aTargets: [7],
+		aTargets: [9],
 		fnCreatedCell: function(nTd, sData, item, iRow, iCol) {
 			var value = null;
 			if(item.id) {
@@ -104,7 +91,7 @@ $(document).ready(function() {
 		}
 	});
 	columnDefs.push({
-		aTargets: [9],
+		aTargets: [8],
 		fnCreatedCell: function(nTd, sData, item, iRow, iCol) {
 			var value = null;
 			if(item.id) {
@@ -132,7 +119,7 @@ $(document).ready(function() {
 	});
 	datatables.push(createDataTable({
 		id : "dataTable",
-		url : "/mvc/yz/listSWYZ",
+		url : "/mvc/yz/listSWYZ?mode=1",
 		bFilter: false,
 		data : function(queryInfo, infoSettings) {
 			count = 0;
@@ -146,38 +133,6 @@ $(document).ready(function() {
 		aoColumnDefs: columnDefs
 	}));
 	
-	$("#searchBtn").click(function() {
-		reloadTables();
-	});
-	
-	$("#calYZBtn").click(function() {
-		openLoading();
-		post({
-			url: '/mvc/yz/calYZ/',
-			success: function() {
-				alert("遗值计算完成");
-				reloadTables();
-				closeLoading();
-			},
-			systemError: function(msg) {
-				alert(msg);
-				closeLoading();
-			}
-		});
-	});
-	
-	function reloadTables() {
-		for(var i in datatables) {
-			datatables[i].ajax.reload();
-		}
-	}
-	
-	$("#downloadBtn").click(function() {
-		$("#size").val($("select[name='dataTable_length']").val());
-		$("#endYear").val($("#years").val());
-		$("#endPhase").val($("#phases").val());
-		$("#download").submit();
-	});
 });
 
 

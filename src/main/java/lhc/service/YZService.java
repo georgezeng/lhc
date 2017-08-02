@@ -21,9 +21,12 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import lhc.constants.BsNums;
+import lhc.constants.DsNums;
 import lhc.constants.ZsNums;
+import lhc.domain.Avg;
 import lhc.domain.BsYz;
 import lhc.domain.DsYz;
+import lhc.domain.DsZfYz;
 import lhc.domain.KaiJiang;
 import lhc.domain.LhYz;
 import lhc.domain.MwYz;
@@ -31,6 +34,8 @@ import lhc.domain.QqYz;
 import lhc.domain.QwYz;
 import lhc.domain.SqYz;
 import lhc.domain.SwYz;
+import lhc.domain.SwZfYz;
+import lhc.domain.SxDsYz;
 import lhc.domain.SxYz;
 import lhc.domain.SxZfYz;
 import lhc.domain.SxZfYz2;
@@ -39,8 +44,10 @@ import lhc.domain.TmYz;
 import lhc.domain.ZsYz;
 import lhc.dto.TmYzInfo;
 import lhc.enums.SX;
+import lhc.repository.jpa.BaseYzRepository;
 import lhc.repository.jpa.api.BsYzRepository;
 import lhc.repository.jpa.api.DsYzRepository;
+import lhc.repository.jpa.api.DsZfYzRepository;
 import lhc.repository.jpa.api.KaiJiangRepository;
 import lhc.repository.jpa.api.LhYzRepository;
 import lhc.repository.jpa.api.MwYzRepository;
@@ -48,6 +55,8 @@ import lhc.repository.jpa.api.QqYzRepository;
 import lhc.repository.jpa.api.QwYzRepository;
 import lhc.repository.jpa.api.SqYzRepository;
 import lhc.repository.jpa.api.SwYzRepository;
+import lhc.repository.jpa.api.SwZfYzRepository;
+import lhc.repository.jpa.api.SxDsYzRepository;
 import lhc.repository.jpa.api.SxYzRepository;
 import lhc.repository.jpa.api.SxZfYz2Repository;
 import lhc.repository.jpa.api.SxZfYzRepository;
@@ -57,6 +66,7 @@ import lhc.repository.jpa.api.ZsYzRepository;
 
 @Service
 @Transactional
+@SuppressWarnings("unchecked")
 public class YZService {
 
 	@Autowired
@@ -78,6 +88,12 @@ public class YZService {
 	private SwYzRepository swyzRepository;
 
 	@Autowired
+	private SwZfYzRepository swzfyzRepository;
+
+	@Autowired
+	private DsZfYzRepository dszfyzRepository;
+
+	@Autowired
 	private MwYzRepository mwyzRepository;
 
 	@Autowired
@@ -93,10 +109,13 @@ public class YZService {
 	private ZsYzRepository zsyzRepository;
 
 	@Autowired
+	private DsYzRepository dsyzRepository;
+
+	@Autowired
 	private SqYzRepository sqyzRepository;
 
 	@Autowired
-	private DsYzRepository dsyzRepository;
+	private SxDsYzRepository sxdsyzRepository;
 
 	@Autowired
 	private TmYzRepository tmyzRepository;
@@ -193,7 +212,6 @@ public class YZService {
 			calSXZF();
 			calSXZF2();
 
-//			parallelYzService.calAvg(sxyzRepository);
 		} catch (Exception e) {
 			t = e;
 		}
@@ -274,7 +292,7 @@ public class YZService {
 	}
 
 	public void calSXZF2() {
-		int sxLength = SX.values().length;
+		int zfLength = SX.values().length;
 		try {
 			Pageable request = new PageRequest(0, 200, new Sort(Direction.ASC, "date"));
 			Page<SxYz> result = null;
@@ -294,9 +312,9 @@ public class YZService {
 
 						Integer pos = null;
 						if (lastYZ != null) {
-							pos = sxLength - lastYZ.getCurrentSx().getPos() + data.getCurrentSx().getPos() - 1;
-							if (pos > 11) {
-								pos -= 12;
+							pos = zfLength - lastYZ.getCurrentSx().getPos() + data.getCurrentSx().getPos();
+							if (pos >= zfLength) {
+								pos -= zfLength;
 							}
 							Method m = SxZfYz2.class.getDeclaredMethod("setZf" + pos, Integer.class);
 							m.invoke(zfYz, 0);
@@ -309,7 +327,8 @@ public class YZService {
 								Integer lastValue = (Integer) m.invoke(lastZFYZ);
 								zfYz.setLastYz(lastValue);
 								Integer maxValue = 0;
-								for (int i = 0; i < 12; i++) {
+								for (int i = 0; i < zfLength; i++) {
+									lastValue = null;
 									if (i != pos) {
 										m = SxZfYz2.class.getDeclaredMethod("getZf" + i);
 										lastValue = (Integer) m.invoke(lastZFYZ);
@@ -345,7 +364,7 @@ public class YZService {
 						}
 
 						Integer total = 0;
-						for (int i = 0; i < 12; i++) {
+						for (int i = 0; i < zfLength; i++) {
 							Method m = SxZfYz2.class.getDeclaredMethod("getZf" + i);
 							Integer value = (Integer) m.invoke(zfYz);
 							if (value != null) {
@@ -368,7 +387,6 @@ public class YZService {
 				request = result.nextPageable();
 			} while (result != null && result.hasNext());
 
-//			parallelYzService.calAvg(sxzfyz2Repository);
 		} catch (Exception e) {
 			throw new RuntimeException(e.getMessage(), e);
 		}
@@ -471,6 +489,7 @@ public class YZService {
 			Pageable request = new PageRequest(0, 200, new Sort(Direction.ASC, "date"));
 			Page<KaiJiang> result = null;
 			SwYz lastYz = null;
+			Class<SwYz> clazz = SwYz.class;
 			do {
 				result = kaiJiangRepository.findAll(request);
 				Method gm = null;
@@ -493,23 +512,45 @@ public class YZService {
 						} else {
 							num = 0;
 						}
-						sm = SwYz.class.getDeclaredMethod("setW" + num, Integer.class);
+						sm = clazz.getDeclaredMethod("setW" + num, Integer.class);
 						sm.invoke(yz, 0);
 
 						if (lastYz != null) {
+							Integer maxValue = 0;
 							for (int j = 0; j < 5; j++) {
-								gm = SwYz.class.getDeclaredMethod("getW" + j);
-								Integer lastValue = (Integer) gm.invoke(lastYz);
-								if (lastValue != null) {
-									Integer value = (Integer) gm.invoke(yz);
-									if (value == null || value > 0) {
-										sm = SwYz.class.getDeclaredMethod("setW" + j, Integer.class);
-										sm.invoke(yz, lastValue + 1);
+								if (j != num) {
+									gm = clazz.getDeclaredMethod("getW" + j);
+									Integer lastValue = (Integer) gm.invoke(lastYz);
+									if (lastValue != null) {
+										lastValue++;
+										sm = clazz.getDeclaredMethod("setW" + j, Integer.class);
+										sm.invoke(yz, lastValue);
+										if (maxValue < lastValue) {
+											maxValue = lastValue;
+										}
 									}
 								}
 							}
+							if (maxValue > 0) {
+								yz.setMax(maxValue);
+							}
 							gm = SwYz.class.getDeclaredMethod("getW" + num);
 							yz.setLastYz((Integer) gm.invoke(lastYz));
+						}
+
+						if (yz.getLastYz() != null) {
+							for (int k = 0; k < 7; k++) {
+								sm = clazz.getSuperclass().getDeclaredMethod("setMin" + k, Integer.class);
+								if (yz.getLastYz() == k) {
+									sm.invoke(yz, 0);
+								} else {
+									gm = clazz.getSuperclass().getDeclaredMethod("getMin" + k);
+									Integer minValue = (Integer) gm.invoke(lastYz);
+									if (minValue != null) {
+										sm.invoke(yz, minValue + 1);
+									}
+								}
+							}
 						}
 
 						int total = 0;
@@ -533,6 +574,15 @@ public class YZService {
 				}
 				request = result.nextPageable();
 			} while (result != null && result.hasNext());
+
+			calZF(5, SwYz.class, SwZfYz.class, swyzRepository, swzfyzRepository, new GetSuffixHandler() {
+
+				@Override
+				public String process(int index) {
+					return "W" + index;
+				}
+
+			});
 		} catch (Exception e) {
 			t = e;
 		}
@@ -778,122 +828,15 @@ public class YZService {
 
 	@Async
 	public Future<Exception> calBSYZ() {
-		Exception t = null;
-		try {
-			Pageable request = new PageRequest(0, 200, new Sort(Direction.ASC, "date"));
-			Page<KaiJiang> result = null;
-			BsYz lastYz = null;
-			String[] colors = { "RedOdd", "RedEven", "BlueOdd", "BlueEven", "GreenOdd", "GreenEven" };
-			do {
-				result = kaiJiangRepository.findAll(request);
-				Method gm = null;
-				Method sm = null;
-				if (result != null && result.hasContent()) {
-					for (KaiJiang data : result.getContent()) {
-						BsYz yz = bsyzRepository.findByDate(data.getDate());
-						if (yz == null) {
-							yz = new BsYz();
-							yz.setYear(data.getYear());
-							yz.setPhase(data.getPhase());
-							yz.setDate(data.getDate());
-						}
+		return calFDYZ(BsYz.class, BsNums.class,
+				new String[] { "RedOdd", "RedEven", "BlueOdd", "BlueEven", "GreenOdd", "GreenEven" }, bsyzRepository,
+				new ZFHandler() {
 
-						Integer num = data.getSpecialNum();
-						String zeroColor = null;
-						if (BsNums.RED.contains(num)) {
-							if (num % 2 == 0) {
-								yz.setRedEven(0);
-								zeroColor = "RedEven";
-							} else {
-								yz.setRedOdd(0);
-								zeroColor = "RedOdd";
-							}
-						} else if (BsNums.GREEN.contains(num)) {
-							if (num % 2 == 0) {
-								yz.setGreenEven(0);
-								zeroColor = "GreenEven";
-							} else {
-								yz.setGreenOdd(0);
-								zeroColor = "GreenOdd";
-							}
-						} else {
-							if (num % 2 == 0) {
-								yz.setBlueEven(0);
-								zeroColor = "BlueEven";
-							} else {
-								yz.setBlueOdd(0);
-								zeroColor = "BlueOdd";
-							}
-						}
-
-						if (lastYz != null) {
-							Integer maxValue = 0;
-							for (int j = 0; j < colors.length; j++) {
-								String color = colors[j];
-								gm = BsYz.class.getDeclaredMethod("get" + color);
-								Integer lastValue = (Integer) gm.invoke(lastYz);
-								if (lastValue != null) {
-									lastValue++;
-									Integer value = (Integer) gm.invoke(yz);
-									if (value == null || value > 0) {
-										sm = BsYz.class.getDeclaredMethod("set" + color, Integer.class);
-										sm.invoke(yz, lastValue);
-										if (maxValue < lastValue) {
-											maxValue = lastValue;
-										}
-									}
-								}
-							}
-							if (maxValue > 0) {
-								yz.setMax(maxValue);
-							}
-							gm = BsYz.class.getDeclaredMethod("get" + zeroColor);
-							yz.setLastYz((Integer) gm.invoke(lastYz));
-						}
-
-						if (yz.getLastYz() != null) {
-							for (int k = 0; k < 7; k++) {
-								sm = yz.getClass().getSuperclass().getDeclaredMethod("setMin" + k, Integer.class);
-								if (yz.getLastYz() == k) {
-									sm.invoke(yz, 0);
-								} else {
-									gm = yz.getClass().getSuperclass().getDeclaredMethod("getMin" + k);
-									Integer minValue = (Integer) gm.invoke(lastYz);
-									if (minValue != null) {
-										sm.invoke(yz, minValue + 1);
-									}
-								}
-							}
-						}
-
-						int total = 0;
-						for (int j = 0; j < colors.length; j++) {
-							String color = colors[j];
-							gm = BsYz.class.getDeclaredMethod("get" + color);
-							Integer value = (Integer) gm.invoke(yz);
-							if (value != null) {
-								total += value;
-							}
-						}
-						yz.setTotal(total);
-
-						if (lastYz != null) {
-							yz.setDelta(total - lastYz.getTotal());
-						}
-
-						bsyzRepository.save(yz);
-						lastYz = yz;
-
+					@Override
+					public void process() {
 					}
-				}
-				request = result.nextPageable();
-			} while (result != null && result.hasNext());
 
-//			parallelYzService.calAvg(bsyzRepository);
-		} catch (Exception e) {
-			t = e;
-		}
-		return new AsyncResult<Exception>(t);
+				});
 	}
 
 	@Async
@@ -965,12 +908,12 @@ public class YZService {
 	}
 
 	@Async
-	public Future<Exception> calDSYZ() {
+	public Future<Exception> calSXDSYZ() {
 		Exception t = null;
 		try {
 			Pageable request = new PageRequest(0, 200, new Sort(Direction.ASC, "date"));
 			Page<KaiJiang> result = null;
-			DsYz lastYz = null;
+			SxDsYz lastYz = null;
 			String[] arr = { "SxSmall", "SxLarge", "SxSingle", "SxEven", "HmSmall", "HmLarge", "HmSingle", "HmEven" };
 			do {
 				result = kaiJiangRepository.findAll(request);
@@ -978,9 +921,9 @@ public class YZService {
 				Method sm = null;
 				if (result != null && result.hasContent()) {
 					for (KaiJiang data : result.getContent()) {
-						DsYz yz = dsyzRepository.findByDate(data.getDate());
+						SxDsYz yz = sxdsyzRepository.findByDate(data.getDate());
 						if (yz == null) {
-							yz = new DsYz();
+							yz = new SxDsYz();
 							yz.setYear(data.getYear());
 							yz.setPhase(data.getPhase());
 							yz.setDate(data.getDate());
@@ -1040,19 +983,19 @@ public class YZService {
 						if (lastYz != null) {
 							for (int j = 0; j < arr.length; j++) {
 								String suffix = arr[j];
-								gm = DsYz.class.getDeclaredMethod("get" + suffix);
+								gm = SxDsYz.class.getDeclaredMethod("get" + suffix);
 								Integer lastValue = (Integer) gm.invoke(lastYz);
 								if (lastValue != null) {
 									Integer value = (Integer) gm.invoke(yz);
 									if (value == null || value > 0) {
-										sm = DsYz.class.getDeclaredMethod("set" + suffix, Integer.class);
+										sm = SxDsYz.class.getDeclaredMethod("set" + suffix, Integer.class);
 										sm.invoke(yz, lastValue + 1);
 									}
 								}
 							}
 						}
 
-						dsyzRepository.save(yz);
+						sxdsyzRepository.save(yz);
 						lastYz = yz;
 
 					}
@@ -1257,25 +1200,184 @@ public class YZService {
 		}
 	}
 
-	@SuppressWarnings("unchecked")
 	@Async
 	public Future<Exception> calZSYZ() {
+		return calFDYZ(ZsYz.class, ZsNums.class, new String[] { "Fd1", "Fd2", "Fd3", "Fd4", "Fd5", "Fd6", "Fd7", "Fd8" },
+				zsyzRepository, new ZFHandler() {
+
+					@Override
+					public void process() {
+					}
+
+				});
+	}
+
+	@Async
+	public Future<Exception> calDSYZ() {
+		String[] fds = new String[] { "Ds0Odd", "Ds0Even", "Ds1Odd", "Ds1Even", "Ds2Odd", "Ds2Even", "Ds3Odd", "Ds3Even",
+				"Ds4Odd", "Ds4Even" };
+		return calFDYZ(DsYz.class, DsNums.class, fds, dsyzRepository, new ZFHandler() {
+
+			@Override
+			public void process() {
+				calZF(fds.length, DsYz.class, DsZfYz.class, dsyzRepository, dszfyzRepository, new GetSuffixHandler() {
+
+					@Override
+					public String process(int index) {
+						return fds[index];
+					}
+
+				});
+			}
+
+		});
+	}
+
+	private interface GetSuffixHandler {
+
+		String process(int index);
+	}
+
+	private <T extends Avg> void calZF(int zfLength, Class<? extends Avg> yzClazz, Class<T> yzzfClazz,
+			BaseYzRepository<? extends Avg> yzRepository, BaseYzRepository<T> zfRepository, GetSuffixHandler handler) {
+		try {
+			Pageable request = new PageRequest(0, 200, new Sort(Direction.ASC, "date"));
+			Page<? extends Avg> result = null;
+			Avg lastYZ = null;
+			T lastZFYZ = null;
+			do {
+				result = yzRepository.findAll(request);
+				if (result != null && result.hasContent()) {
+					for (Avg data : result.getContent()) {
+						T zfYz = zfRepository.findByDate(data.getDate());
+						if (zfYz == null) {
+							zfYz = yzzfClazz.newInstance();
+							zfYz.setYear(data.getYear());
+							zfYz.setPhase(data.getPhase());
+							zfYz.setDate(data.getDate());
+						}
+
+						Integer pos = null;
+						if (lastZFYZ != null) {
+							int lastPos = 0;
+							for (int i = 0; i < zfLength; i++) {
+								Method gm = yzClazz.getDeclaredMethod("get" + handler.process(i));
+								Integer value = (Integer) gm.invoke(lastYZ);
+								if (value != null && value == 0) {
+									lastPos = i + 1;
+									break;
+								}
+							}
+							int currentPos = 0;
+							for (int i = 0; i < zfLength; i++) {
+								Method gm = yzClazz.getDeclaredMethod("get" + handler.process(i));
+								Integer value = (Integer) gm.invoke(data);
+								if (value != null && value == 0) {
+									currentPos = i + 1;
+									break;
+								}
+							}
+							pos = zfLength - lastPos + currentPos;
+							if (pos >= zfLength) {
+								pos -= zfLength;
+							}
+							Method m = yzzfClazz.getDeclaredMethod("setZf" + pos, Integer.class);
+							m.invoke(zfYz, 0);
+						}
+						yzzfClazz.getDeclaredMethod("setCurrentPos", Integer.class).invoke(zfYz, pos);
+
+						if (lastZFYZ != null) {
+							if (pos != null) {
+								Method m = yzzfClazz.getDeclaredMethod("getZf" + pos);
+								Integer lastValue = (Integer) m.invoke(lastZFYZ);
+								zfYz.setLastYz(lastValue);
+								Integer maxValue = 0;
+								for (int i = 0; i < zfLength; i++) {
+									lastValue = null;
+									if (i != pos) {
+										m = yzzfClazz.getDeclaredMethod("getZf" + i);
+										lastValue = (Integer) m.invoke(lastZFYZ);
+										if (lastValue != null) {
+											lastValue++;
+											m = yzzfClazz.getDeclaredMethod("setZf" + i, Integer.class);
+											m.invoke(zfYz, lastValue);
+										}
+									}
+									if (lastValue != null && maxValue < lastValue) {
+										maxValue = lastValue;
+									}
+								}
+								if (maxValue > 0) {
+									zfYz.setMax(maxValue);
+								}
+							}
+						}
+
+						if (zfYz.getLastYz() != null) {
+							for (int k = 0; k < 7; k++) {
+								Method sm = zfYz.getClass().getSuperclass().getDeclaredMethod("setMin" + k, Integer.class);
+								if (zfYz.getLastYz() == k) {
+									sm.invoke(zfYz, 0);
+								} else {
+									Method gm = zfYz.getClass().getSuperclass().getDeclaredMethod("getMin" + k);
+									Integer minValue = (Integer) gm.invoke(lastZFYZ);
+									if (minValue != null) {
+										sm.invoke(zfYz, minValue + 1);
+									}
+								}
+							}
+						}
+
+						Integer total = 0;
+						for (int i = 0; i < zfLength; i++) {
+							Method m = yzzfClazz.getDeclaredMethod("getZf" + i);
+							Integer value = (Integer) m.invoke(zfYz);
+							if (value != null) {
+								total += value;
+							}
+						}
+						zfYz.setTotal(total);
+
+						if (lastZFYZ != null) {
+							zfYz.setDelta(total - lastZFYZ.getTotal());
+						} else {
+							zfYz.setDelta(total);
+						}
+
+						zfRepository.save(zfYz);
+						lastYZ = data;
+						lastZFYZ = zfYz;
+					}
+				}
+				request = result.nextPageable();
+			} while (result != null && result.hasNext());
+
+		} catch (Exception e) {
+			throw new RuntimeException(e.getMessage(), e);
+		}
+
+	}
+
+	private interface ZFHandler {
+		void process();
+	}
+
+	private <T extends Avg> Future<Exception> calFDYZ(Class<T> clazz, Class<?> numsClass, String[] fds,
+			BaseYzRepository<T> repository, ZFHandler handler) {
 		Exception t = null;
 		try {
 			Pageable request = new PageRequest(0, 200, new Sort(Direction.ASC, "date"));
 			Page<KaiJiang> result = null;
-			ZsYz lastYz = null;
-			Class<ZsYz> clazz = ZsYz.class;
-			String[] fds = { "Fd1", "Fd2", "Fd3", "Fd4", "Fd5", "Fd6", "Fd7", "Fd8" };
+			T lastYz = null;
 			do {
 				result = kaiJiangRepository.findAll(request);
 				Method gm = null;
 				Method sm = null;
 				if (result != null && result.hasContent()) {
 					for (KaiJiang data : result.getContent()) {
-						ZsYz yz = zsyzRepository.findByDate(data.getDate());
+						T yz = repository.findByDate(data.getDate());
 						if (yz == null) {
-							yz = new ZsYz();
+							yz = clazz.newInstance();
 							yz.setYear(data.getYear());
 							yz.setPhase(data.getPhase());
 							yz.setDate(data.getDate());
@@ -1284,7 +1386,7 @@ public class YZService {
 						Integer num = data.getSpecialNum();
 						String zeroFd = null;
 						for (String fd : fds) {
-							Field f = ZsNums.class.getDeclaredField(fd.toUpperCase());
+							Field f = numsClass.getDeclaredField(fd.toUpperCase());
 							List<Integer> nums = (List<Integer>) f.get(null);
 							if (nums.contains(num)) {
 								sm = clazz.getDeclaredMethod("set" + fd, Integer.class);
@@ -1297,16 +1399,18 @@ public class YZService {
 						if (lastYz != null) {
 							Integer maxValue = 0;
 							for (String fd : fds) {
-								gm = clazz.getDeclaredMethod("get" + fd);
-								Integer lastValue = (Integer) gm.invoke(lastYz);
-								if (lastValue != null) {
-									lastValue++;
-									Integer value = (Integer) gm.invoke(yz);
-									if (value == null || value > 0) {
-										sm = clazz.getDeclaredMethod("set" + fd, Integer.class);
-										sm.invoke(yz, lastValue);
-										if (maxValue < lastValue) {
-											maxValue = lastValue;
+								if (!fd.equals(zeroFd)) {
+									gm = clazz.getDeclaredMethod("get" + fd);
+									Integer lastValue = (Integer) gm.invoke(lastYz);
+									if (lastValue != null) {
+										lastValue++;
+										Integer value = (Integer) gm.invoke(yz);
+										if (value == null || value > 0) {
+											sm = clazz.getDeclaredMethod("set" + fd, Integer.class);
+											sm.invoke(yz, lastValue);
+											if (maxValue < lastValue) {
+												maxValue = lastValue;
+											}
 										}
 									}
 								}
@@ -1347,7 +1451,7 @@ public class YZService {
 							yz.setDelta(total - lastYz.getTotal());
 						}
 
-						zsyzRepository.save(yz);
+						repository.save(yz);
 						lastYz = yz;
 
 					}
@@ -1355,7 +1459,7 @@ public class YZService {
 				request = result.nextPageable();
 			} while (result != null && result.hasNext());
 
-//			parallelYzService.calAvg(zsyzRepository);
+			handler.process();
 		} catch (Exception e) {
 			t = e;
 		}
