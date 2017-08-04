@@ -19,7 +19,7 @@ public class AutocalScheduler {
 	private KaiJiangController controller;
 
 	@Transactional
-	@Scheduled(cron = "0 0 */12 * * ?")
+	@Scheduled(cron = "0 0 0 * * ?")
 	public void run() {
 		try {
 			controller.sync(Calendar.getInstance().get(Calendar.YEAR));
