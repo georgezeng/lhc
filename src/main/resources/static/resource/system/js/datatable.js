@@ -179,3 +179,30 @@ function createDeleteEvent(tableId, datatable, url) {
 		}
 	};
 }
+
+function createColumns(list) {
+	var cols = ["year", "phase"];
+	for(var i in list) {
+		cols.push(list[i]);
+	}
+	cols.push("delta");
+	cols.push("lastYz");
+	cols.push("total");
+	cols.push("totalAvg");
+	cols.push("top0");
+	cols.push("top0Avg");
+	for(var i = 0; i < 7; i++) {
+		cols.push("min" + i);
+		cols.push("min" + i + "Avg");
+	}
+	var columns = [];
+	for(var i in cols) {
+		var col = cols[i];
+		columns.push({
+			name : col,
+			data : col,
+			sortable: false
+		});
+	}
+	return columns;
+}

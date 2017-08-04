@@ -97,83 +97,51 @@ $(document).ready(function() {
 				var series = [
 					{name: '上期遗值', data: []},
 					{name: '遗值和', data: []}, 
-					{name: '和平均值', data: []}, 
-					{name: '最大值', data: []},
-					{name: '最大平均值', data: []},
-					{name: '间0', data: []},
-					{name: '间0平均值', data: []},
-					{name: '间1', data: []},
-					{name: '间1平均值', data: []},
-					{name: '间2', data: []},
-					{name: '间2平均值', data: []},
-					{name: '间3', data: []},
-					{name: '间3平均值', data: []},
-					{name: '间4', data: []},
-					{name: '间4平均值', data: []},
-					{name: '间5', data: []},
-					{name: '间5平均值', data: []},
-					{name: '间6', data: []},
-					{name: '间6平均值', data: []},
+					{name: '和平均值', data: []}
 				];
+				for(var i = 1; i < 6; i++) {
+					series.push({name: '倒' + i, data: []});
+					series.push({name: '倒' + i + '平均值', data: []});
+				}
+				for(var i = 0; i < 20; i++) {
+					series.push({name: '间' + i, data: []});
+					series.push({name: '间' + i + '平均值', data: []});
+				}
 				for(var i in result.list) {
 					var item = result.list[i];
-					series[0].data.push(
+					var count = 0;
+					series[count].data.push(
 							[item.year + "-" + item.phase, item.lastYz]
 					);
-					series[1].data.push(
+					series[count++].visible = false;
+					series[count].data.push(
 							[item.year + "-" + item.phase, item.total]
 					);
-					series[2].data.push(
+					series[count++].visible = false;
+					series[count].data.push(
 							[item.year + "-" + item.phase, item.totalAvg]
 					);
-					series[3].data.push(
-							[item.year + "-" + item.phase, item.max]
-					);
-					series[4].data.push(
-							[item.year + "-" + item.phase, item.maxAvg]
-					);
-					series[5].data.push(
-							[item.year + "-" + item.phase, item.min0]
-					);
-					series[6].data.push(
-							[item.year + "-" + item.phase, item.min0Avg]
-					);
-					series[7].data.push(
-							[item.year + "-" + item.phase, item.min1]
-					);
-					series[8].data.push(
-							[item.year + "-" + item.phase, item.min1Avg]
-					);
-					series[9].data.push(
-							[item.year + "-" + item.phase, item.min2]
-					);
-					series[10].data.push(
-							[item.year + "-" + item.phase, item.min2Avg]
-					);
-					series[11].data.push(
-							[item.year + "-" + item.phase, item.min3]
-					);
-					series[12].data.push(
-							[item.year + "-" + item.phase, item.min3Avg]
-					);
-					series[13].data.push(
-							[item.year + "-" + item.phase, item.min4]
-					);
-					series[14].data.push(
-							[item.year + "-" + item.phase, item.min4Avg]
-					);
-					series[15].data.push(
-							[item.year + "-" + item.phase, item.min5]
-					);
-					series[16].data.push(
-							[item.year + "-" + item.phase, item.min5Avg]
-					);
-					series[17].data.push(
-							[item.year + "-" + item.phase, item.min6]
-					);
-					series[18].data.push(
-							[item.year + "-" + item.phase, item.min6Avg]
-					);
+					series[count++].visible = false;
+					for(var j = 0; j < 5; j++) {
+						series[count].data.push(
+								[item.year + "-" + item.phase, item["top" + j]]
+						);
+						series[count++].visible = false;
+						series[count].data.push(
+								[item.year + "-" + item.phase, item["top" + j + "Avg"]]
+						);
+						series[count++].visible = false;
+					}
+					for(var j = 0; j < 20; j++) {
+						series[count].data.push(
+								[item.year + "-" + item.phase, item["min" + j]]
+						);
+						series[count++].visible = false;
+						series[count].data.push(
+								[item.year + "-" + item.phase, item["min" + j + "Avg"]]
+						);
+						series[count++].visible = false;
+					}
 				}
 				
 				Highcharts.chart('charts', {

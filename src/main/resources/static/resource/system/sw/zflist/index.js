@@ -3,39 +3,7 @@ $(document).ready(function() {
 	var lastRed = false;
 	var count = 0;
 	var sxlist = ["zf0", "zf1", "zf2", "zf3", "zf4"];
-	var cols = ["year", "phase"];
-	for(var i in sxlist) {
-		cols.push(sxlist[i]);
-	}
-	cols.push("delta");
-	cols.push("lastYz");
-	cols.push("total");
-	cols.push("totalAvg");
-	cols.push("max");
-	cols.push("maxAvg");
-	cols.push("min0");
-	cols.push("min0Avg");
-	cols.push("min1");
-	cols.push("min1Avg");
-	cols.push("min2");
-	cols.push("min2Avg");
-	cols.push("min3");
-	cols.push("min3Avg");
-	cols.push("min4");
-	cols.push("min4Avg");
-	cols.push("min5");
-	cols.push("min5Avg");
-	cols.push("min6");
-	cols.push("min6Avg");
-	var columns = [];
-	for(var i in cols) {
-		var col = cols[i];
-		columns.push({
-			name : col,
-			data : col,
-			sortable: false
-		});
-	}
+	var columns = createColumns(sxlist);
 	var columnDefs = [];
 	for(var i = 0; i < 2; i++) {
 		(function(index) {
