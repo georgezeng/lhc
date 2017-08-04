@@ -26,6 +26,7 @@ import lhc.domain.DsZfYz;
 import lhc.domain.KaiJiang;
 import lhc.domain.LhYz;
 import lhc.domain.MwYz;
+import lhc.domain.MwZfYz;
 import lhc.domain.QqYz;
 import lhc.domain.QwYz;
 import lhc.domain.SqYz;
@@ -52,6 +53,8 @@ import lhc.repository.jpa.api.BsYzRepository;
 import lhc.repository.jpa.api.DsYzRepository;
 import lhc.repository.jpa.api.DsZfYzRepository;
 import lhc.repository.jpa.api.KaiJiangRepository;
+import lhc.repository.jpa.api.MwYzRepository;
+import lhc.repository.jpa.api.MwZfYzRepository;
 import lhc.repository.jpa.api.SwYzRepository;
 import lhc.repository.jpa.api.SwZfYzRepository;
 import lhc.repository.jpa.api.SxYzRepository;
@@ -64,6 +67,7 @@ import lhc.repository.jpa.dao.DsZfYzDao;
 import lhc.repository.jpa.dao.KaiJiangDao;
 import lhc.repository.jpa.dao.LhYzDao;
 import lhc.repository.jpa.dao.MwYzDao;
+import lhc.repository.jpa.dao.MwZfYzDao;
 import lhc.repository.jpa.dao.QqYzDao;
 import lhc.repository.jpa.dao.QwYzDao;
 import lhc.repository.jpa.dao.SqYzDao;
@@ -100,6 +104,9 @@ public class YZController {
 
 	@Autowired
 	private SwZfYzDao swZfYzDao;
+	
+	@Autowired
+	private MwZfYzDao mwZfYzDao;
 
 	@Autowired
 	private KaiJiangDao kaiJiangDao;
@@ -171,6 +178,12 @@ public class YZController {
 	private DsZfYzRepository dszfYzRepository;
 
 	@Autowired
+	private MwYzRepository mwYzRepository;
+
+	@Autowired
+	private MwZfYzRepository mwzfYzRepository;
+
+	@Autowired
 	private ParallelYzServiceWrapper parallelYzService;
 
 	@RequestMapping("/years")
@@ -236,6 +249,8 @@ public class YZController {
 		futures.add(parallelYzService.calAvg(zsYzRepository));
 		futures.add(parallelYzService.calAvg(dsYzRepository));
 		futures.add(parallelYzService.calAvg(dszfYzRepository));
+		futures.add(parallelYzService.calAvg(mwYzRepository));
+		futures.add(parallelYzService.calAvg(mwzfYzRepository));
 		while (true) {
 			int count = 0;
 			for (Future<Exception> f : futures) {
@@ -287,13 +302,22 @@ public class YZController {
 	}
 
 	@RequestMapping("/listMWYZ")
-	public BaseResult listMWYZ(@RequestBody QueryInfo<MwYz> queryInfo) throws Exception {
+	public BaseResult listMWYZ(@RequestBody QueryInfo<MwYz> queryInfo, @RequestParam String mode) throws Exception {
 		PageResult<MwYz> result = mwYzDao.query(queryInfo);
-		if (result != null && result.getTotal() > 0) {
-			MwYz last = new MwYz();
-			last.setTotal(result.getList().size());
-			result.getList().add(last);
+		if ("1".equals(mode)) {
+			if (result != null && result.getTotal() > 0) {
+				MwYz last = new MwYz();
+				last.setTotal(result.getList().size());
+				result.getList().add(last);
+			}
 		}
+		return new BaseResult(result);
+	}
+	
+
+	@RequestMapping("/listMWZF")
+	public BaseResult listMWZF(@RequestBody QueryInfo<MwZfYz> queryInfo) throws Exception {
+		PageResult<MwZfYz> result = mwZfYzDao.query(queryInfo);
 		return new BaseResult(result);
 	}
 
@@ -1248,12 +1272,26 @@ public class YZController {
 		PageResult<TmYz> result = tmYzDao.query(queryInfo);
 		if (result != null && result.getList() != null && !result.getList().isEmpty()) {
 			Writer writer = response.getWriter();
-			writer.append("日期, 年份, 期数, 遗值（上期）").append("\n");
+			writer.append("日期, 年份, 期数, 遗值（上期）, ");
+			for (int i = 1; i < 50; i++) {
+				writer.append("号码" + i).append(", ");
+			}
+			writer.append("\n");
 			for (TmYz data : result.getList()) {
 				writer.append(data.getDate()).append(", ");
 				writer.append(data.getYear() + "").append(", ");
 				writer.append(data.getPhase() + "").append(", ");
 				writer.append(data.getLastYz() + "").append(", ");
+				for (int i = 1; i < 50; i++) {
+					Method m = TmYz.class.getDeclaredMethod("getHm" + i);
+					Integer value = (Integer) m.invoke(data);
+					if (value != null) {
+						writer.append(value.toString()).append(", ");
+					} else {
+						writer.append("").append(", ");
+					}
+				}
+				writer.append("\n");
 			}
 		}
 		return null;

@@ -33,6 +33,7 @@ $(document).ready(function() {
 						}
 						phases.combobox();
 						phases.unbind().change(function() {
+							init = true;
 							$("#searchBtn").click();
 						}).change();
 					}
