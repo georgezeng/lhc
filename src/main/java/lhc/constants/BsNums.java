@@ -4,6 +4,8 @@ import java.util.ArrayList;
 import java.util.List;
 
 public class BsNums {
+	public static final String[] FDS = {"RedOdd", "RedEven", "BlueOdd", "BlueEven", "GreenOdd", "GreenEven"};
+	
 	public static final List<Integer> REDODD = new ArrayList<Integer>();
 	public static final List<Integer> REDEVEN = new ArrayList<Integer>();
 	public static final List<Integer> GREENODD = new ArrayList<Integer>();

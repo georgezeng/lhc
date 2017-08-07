@@ -1,5 +1,6 @@
 $(document).ready(function() {
 	var query;
+	init = true;
 	var datatable = createDataTable({
 		id : "dataTable",
 		url : "/mvc/kj/list",
@@ -62,7 +63,7 @@ $(document).ready(function() {
 		]
 	});
 	
-	$("#fetchBtn").click(function() {
+	$("#fetchBtn").unbind().click(function() {
 		var year = checkYear();
 		if(!year) {
 			return;
@@ -82,12 +83,12 @@ $(document).ready(function() {
 		});
 	});
 	
-	$("#downloadBtn").click(function() {
+	$("#downloadBtn").unbind().click(function() {
 		$("#searchKey").val(query.object);
 		$("#download").submit();
 	});
 	
-	$("#clearBtn").click(function() {
+	$("#clearBtn").unbind().click(function() {
 		var year = checkYear();
 		if(!year) {
 			return;
@@ -158,7 +159,7 @@ $(document).ready(function() {
 		}
 	});
 	
-	$("#editBtn").click(function() {
+	$("#editBtn").unbind().click(function() {
 		var dialog = $("#editPanel").dialog("open");
 		$(".ui-dialog-titlebar-close").show();
 	});

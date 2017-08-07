@@ -24,6 +24,7 @@ import org.springframework.transaction.annotation.Transactional;
 
 import lhc.constants.BsNums;
 import lhc.constants.DsNums;
+import lhc.constants.LhNums;
 import lhc.constants.MwNums;
 import lhc.constants.SwNums;
 import lhc.constants.ZsNums;
@@ -34,6 +35,7 @@ import lhc.domain.DsYz;
 import lhc.domain.DsZfYz;
 import lhc.domain.KaiJiang;
 import lhc.domain.LhYz;
+import lhc.domain.LhZfYz;
 import lhc.domain.MwYz;
 import lhc.domain.MwZfYz;
 import lhc.domain.QqYz;
@@ -48,6 +50,7 @@ import lhc.domain.SxZfYz2;
 import lhc.domain.TmFdYz;
 import lhc.domain.TmYz;
 import lhc.domain.ZsYz;
+import lhc.domain.ZsZfYz;
 import lhc.dto.TmYzInfo;
 import lhc.enums.SX;
 import lhc.repository.jpa.BaseYzRepository;
@@ -56,6 +59,7 @@ import lhc.repository.jpa.api.DsYzRepository;
 import lhc.repository.jpa.api.DsZfYzRepository;
 import lhc.repository.jpa.api.KaiJiangRepository;
 import lhc.repository.jpa.api.LhYzRepository;
+import lhc.repository.jpa.api.LhZfYzRepository;
 import lhc.repository.jpa.api.MwYzRepository;
 import lhc.repository.jpa.api.MwZfYzRepository;
 import lhc.repository.jpa.api.QqYzRepository;
@@ -70,6 +74,7 @@ import lhc.repository.jpa.api.SxZfYzRepository;
 import lhc.repository.jpa.api.TmFdYzRepository;
 import lhc.repository.jpa.api.TmYzRepository;
 import lhc.repository.jpa.api.ZsYzRepository;
+import lhc.repository.jpa.api.ZsZfYzRepository;
 
 @Service
 @Transactional
@@ -123,6 +128,9 @@ public class YZService {
 	private DsYzRepository dsyzRepository;
 
 	@Autowired
+	private LhZfYzRepository lhzfyzRepository;
+
+	@Autowired
 	private SqYzRepository sqyzRepository;
 
 	@Autowired
@@ -133,6 +141,9 @@ public class YZService {
 
 	@Autowired
 	private TmFdYzRepository tmfdyzRepository;
+
+	@Autowired
+	private ZsZfYzRepository zszfyzRepository;
 
 	@Async
 	public Future<Exception> calSX() {
@@ -159,9 +170,7 @@ public class YZService {
 								lastValue++;
 								method = clazz.getDeclaredMethod("set" + sx.name(), Integer.class);
 								method.invoke(yz, lastValue);
-								if (lastValue > 20) {
-									topValues.add(lastValue);
-								}
+								topValues.add(lastValue);
 							}
 						}
 					}
@@ -378,12 +387,11 @@ public class YZService {
 
 	@Async
 	public Future<Exception> calSWYZ() {
-		String[] fds = new String[] { "W0", "W1", "W2", "W3", "W4" };
-		return calFDYZ(SwYz.class, SwNums.class, fds, swyzRepository, new ZFHandler() {
+		return calFDYZ(SwYz.class, SwNums.class, swyzRepository, new ZFHandler() {
 
 			@Override
 			public void process() {
-				calZF(fds.length, SwYz.class, SwZfYz.class, swyzRepository, swzfyzRepository,
+				calZF(SwNums.FDS.length, SwYz.class, SwZfYz.class, swyzRepository, swzfyzRepository,
 						new GetSuffixHandler<SwZfYz, SwYz>() {
 
 							@Override
@@ -400,17 +408,16 @@ public class YZService {
 
 	@Async
 	public Future<Exception> calMWYZ() {
-		String[] fds = new String[] { "W0", "W1", "W2", "W3", "W4", "W5", "W6", "W7", "W8", "W9" };
-		return calFDYZ(MwYz.class, MwNums.class, fds, mwyzRepository, new ZFHandler() {
+		return calFDYZ(MwYz.class, MwNums.class, mwyzRepository, new ZFHandler() {
 
 			@Override
 			public void process() {
-				calZF(fds.length, MwYz.class, MwZfYz.class, mwyzRepository, mwzfyzRepository,
+				calZF(MwNums.FDS.length, MwYz.class, MwZfYz.class, mwyzRepository, mwzfyzRepository,
 						new GetSuffixHandler<MwZfYz, MwYz>() {
 
 							@Override
 							public String process(int index) {
-								return "W" + index;
+								return MwNums.FDS[index];
 							}
 
 						});
@@ -422,84 +429,24 @@ public class YZService {
 
 	@Async
 	public Future<Exception> calLHYZ() {
-		Exception t = null;
-		try {
-			Pageable request = new PageRequest(0, 200, new Sort(Direction.ASC, "date"));
-			Page<KaiJiang> result = null;
-			LhYz lastYz = null;
-			do {
-				result = kaiJiangRepository.findAll(request);
-				Method gm = null;
-				Method sm = null;
-				if (result != null && result.hasContent()) {
-					for (KaiJiang data : result.getContent()) {
-						LhYz yz = lhyzRepository.findByDate(data.getDate());
-						if (yz == null) {
-							yz = new LhYz();
-							yz.setYear(data.getYear());
-							yz.setPhase(data.getPhase());
-							yz.setDate(data.getDate());
-						}
+		return calFDYZ(LhYz.class, LhNums.class, lhyzRepository, new ZFHandler() {
 
-						Integer num = data.getSpecialNum();
-						String numStr = num.toString();
-						if (numStr.length() > 1) {
-							String num1 = numStr.substring(0, 1);
-							String num2 = numStr.substring(1);
-							num = Integer.valueOf(num1) + Integer.valueOf(num2);
-							numStr = num.toString();
-							if (numStr.length() > 1) {
-								numStr = numStr.substring(1);
-								num = Integer.valueOf(numStr);
+			@Override
+			public void process() {
+				calZF(LhNums.FDS.length, LhYz.class, LhZfYz.class, lhyzRepository, lhzfyzRepository,
+						new GetSuffixHandler<LhZfYz, LhYz>() {
+
+							@Override
+							public String process(int index) {
+								return LhNums.FDS[index];
 							}
-						}
-						sm = LhYz.class.getDeclaredMethod("setW" + num, Integer.class);
-						sm.invoke(yz, 0);
 
-						if (lastYz != null) {
-							for (int j = 0; j < 10; j++) {
-								gm = LhYz.class.getDeclaredMethod("getW" + j);
-								Integer lastValue = (Integer) gm.invoke(lastYz);
-								if (lastValue != null) {
-									Integer value = (Integer) gm.invoke(yz);
-									if (value == null || value > 0) {
-										sm = LhYz.class.getDeclaredMethod("setW" + j, Integer.class);
-										sm.invoke(yz, lastValue + 1);
-									}
-								}
-							}
-							gm = LhYz.class.getDeclaredMethod("getW" + num);
-							yz.setLastYz((Integer) gm.invoke(lastYz));
-						}
+						});
+				logger.info("End of calLHYZ...");
+			}
 
-						int total = 0;
-						for (int j = 0; j < 10; j++) {
-							gm = LhYz.class.getDeclaredMethod("getW" + j);
-							Integer value = (Integer) gm.invoke(yz);
-							if (value != null) {
-								total += value;
-							}
-						}
-						yz.setTotal(total);
+		});
 
-						if (lastYz != null) {
-							yz.setDelta(total - lastYz.getTotal());
-						}
-
-						lhyzRepository.save(yz);
-						lastYz = yz;
-
-					}
-				}
-				request = result.nextPageable();
-			} while (result != null && result.hasNext());
-
-			logger.info("End of calLHYZ...");
-		} catch (Exception e) {
-			t = e;
-		}
-
-		return new AsyncResult<Exception>(t);
 	}
 
 	@Async
@@ -589,16 +536,14 @@ public class YZService {
 
 	@Async
 	public Future<Exception> calBSYZ() {
-		return calFDYZ(BsYz.class, BsNums.class,
-				new String[] { "RedOdd", "RedEven", "BlueOdd", "BlueEven", "GreenOdd", "GreenEven" }, bsyzRepository,
-				new ZFHandler() {
+		return calFDYZ(BsYz.class, BsNums.class, bsyzRepository, new ZFHandler() {
 
-					@Override
-					public void process() {
-						logger.info("End of calBSYZ...");
-					}
+			@Override
+			public void process() {
+				logger.info("End of calBSYZ...");
+			}
 
-				});
+		});
 	}
 
 	@Async
@@ -970,31 +915,37 @@ public class YZService {
 
 	@Async
 	public Future<Exception> calZSYZ() {
-		return calFDYZ(ZsYz.class, ZsNums.class, new String[] { "Fd1", "Fd2", "Fd3", "Fd4", "Fd5", "Fd6", "Fd7", "Fd8" },
-				zsyzRepository, new ZFHandler() {
+		return calFDYZ(ZsYz.class, ZsNums.class, zsyzRepository, new ZFHandler() {
 
-					@Override
-					public void process() {
-						logger.info("End of calZSYZ...");
-					}
+			@Override
+			public void process() {
+				calZF(ZsNums.FDS.length, ZsYz.class, ZsZfYz.class, zsyzRepository, zszfyzRepository,
+						new GetSuffixHandler<ZsZfYz, ZsYz>() {
 
-				});
+							@Override
+							public String process(int index) {
+								return ZsNums.FDS[index];
+							}
+
+						});
+				logger.info("End of calZSYZ...");
+			}
+
+		});
 	}
 
 	@Async
 	public Future<Exception> calDSYZ() {
-		String[] fds = new String[] { "Ds0Odd", "Ds0Even", "Ds1Odd", "Ds1Even", "Ds2Odd", "Ds2Even", "Ds3Odd", "Ds3Even",
-				"Ds4Odd", "Ds4Even" };
-		return calFDYZ(DsYz.class, DsNums.class, fds, dsyzRepository, new ZFHandler() {
+		return calFDYZ(DsYz.class, DsNums.class, dsyzRepository, new ZFHandler() {
 
 			@Override
 			public void process() {
-				calZF(fds.length, DsYz.class, DsZfYz.class, dsyzRepository, dszfyzRepository,
+				calZF(DsNums.FDS.length, DsYz.class, DsZfYz.class, dsyzRepository, dszfyzRepository,
 						new GetSuffixHandler<DsZfYz, DsYz>() {
 
 							@Override
 							public String process(int index) {
-								return fds[index];
+								return DsNums.FDS[index];
 							}
 
 						});
@@ -1158,8 +1109,14 @@ public class YZService {
 		void process();
 	}
 
-	private <T extends Avg> Future<Exception> calFDYZ(final Class<T> clazz, final Class<?> numsClass, final String[] fds,
+	private <T extends Avg> Future<Exception> calFDYZ(final Class<T> clazz, final Class<?> numsClass,
 			final BaseYzRepository<T> repository, final ZFHandler handler) {
+		final String[] fds;
+		try {
+			fds = (String[]) numsClass.getDeclaredField("FDS").get(null);
+		} catch (Exception e) {
+			throw new RuntimeException(e.getMessage(), e);
+		}
 		return calYZ(clazz, repository, kaiJiangRepository, new YzHandler<T, KaiJiang>() {
 
 			@Override

@@ -4,6 +4,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 public class ZsNums {
+	public static final String[] FDS = { "Fd1", "Fd2", "Fd3", "Fd4", "Fd5", "Fd6", "Fd7", "Fd8" };
 	public static final List<Integer> FD1 = new ArrayList<Integer>();
 	public static final List<Integer> FD2 = new ArrayList<Integer>();
 	public static final List<Integer> FD3 = new ArrayList<Integer>();
@@ -20,7 +21,7 @@ public class ZsNums {
 		FD1.add(11);
 		FD1.add(13);
 		FD1.add(17);
-		
+
 		FD2.add(19);
 		FD2.add(23);
 		FD2.add(29);
@@ -42,28 +43,28 @@ public class ZsNums {
 		FD4.add(39);
 		FD4.add(45);
 		FD4.add(49);
-		
+
 		FD5.add(4);
 		FD5.add(6);
 		FD5.add(8);
 		FD5.add(10);
 		FD5.add(12);
 		FD5.add(14);
-		
+
 		FD6.add(16);
 		FD6.add(18);
 		FD6.add(20);
 		FD6.add(22);
 		FD6.add(24);
 		FD6.add(26);
-		
+
 		FD7.add(28);
 		FD7.add(30);
 		FD7.add(32);
 		FD7.add(34);
 		FD7.add(36);
 		FD7.add(38);
-		
+
 		FD8.add(40);
 		FD8.add(42);
 		FD8.add(44);
