@@ -22,6 +22,7 @@ import org.springframework.web.bind.annotation.RestController;
 
 import lhc.domain.Avg;
 import lhc.domain.BsYz;
+import lhc.domain.BsZfYz;
 import lhc.domain.DsYz;
 import lhc.domain.DsZfYz;
 import lhc.domain.KaiJiang;
@@ -40,6 +41,8 @@ import lhc.domain.SxZfYz;
 import lhc.domain.SxZfYz2;
 import lhc.domain.TmFdYz;
 import lhc.domain.TmYz;
+import lhc.domain.WxYz;
+import lhc.domain.WxZfYz;
 import lhc.domain.ZsYz;
 import lhc.domain.ZsZfYz;
 import lhc.dto.BaseResult;
@@ -54,6 +57,7 @@ import lhc.dto.query.QueryInfo;
 import lhc.enums.SX;
 import lhc.repository.jpa.BaseYzDao;
 import lhc.repository.jpa.api.BsYzRepository;
+import lhc.repository.jpa.api.BsZfYzRepository;
 import lhc.repository.jpa.api.DsYzRepository;
 import lhc.repository.jpa.api.DsZfYzRepository;
 import lhc.repository.jpa.api.KaiJiangRepository;
@@ -66,9 +70,12 @@ import lhc.repository.jpa.api.SwZfYzRepository;
 import lhc.repository.jpa.api.SxYzRepository;
 import lhc.repository.jpa.api.SxZfYz2Repository;
 import lhc.repository.jpa.api.TmYzRepository;
+import lhc.repository.jpa.api.WxYzRepository;
+import lhc.repository.jpa.api.WxZfYzRepository;
 import lhc.repository.jpa.api.ZsYzRepository;
 import lhc.repository.jpa.api.ZsZfYzRepository;
 import lhc.repository.jpa.dao.BsYzDao;
+import lhc.repository.jpa.dao.BsZfYzDao;
 import lhc.repository.jpa.dao.DsYzDao;
 import lhc.repository.jpa.dao.DsZfYzDao;
 import lhc.repository.jpa.dao.KaiJiangDao;
@@ -87,6 +94,8 @@ import lhc.repository.jpa.dao.SxZfYz2Dao;
 import lhc.repository.jpa.dao.SxZfYzDao;
 import lhc.repository.jpa.dao.TmFdYzDao;
 import lhc.repository.jpa.dao.TmYzDao;
+import lhc.repository.jpa.dao.WxYzDao;
+import lhc.repository.jpa.dao.WxZfYzDao;
 import lhc.repository.jpa.dao.ZsYzDao;
 import lhc.repository.jpa.dao.ZsZfYzDao;
 import lhc.service.ParallelYzServiceWrapper;
@@ -142,6 +151,15 @@ public class YZController {
 	private BsYzDao bsYzDao;
 
 	@Autowired
+	private BsZfYzDao bszfYzDao;
+
+	@Autowired
+	private WxYzDao wxYzDao;
+
+	@Autowired
+	private WxZfYzDao wxzfYzDao;
+
+	@Autowired
 	private ZsYzDao zsYzDao;
 
 	@Autowired
@@ -175,6 +193,9 @@ public class YZController {
 	private SxZfYz2Repository sxzfYz2Repository;
 
 	@Autowired
+	private BsZfYzRepository bszfYzRepository;
+
+	@Autowired
 	private BsYzRepository bsYzRepository;
 
 	@Autowired
@@ -206,6 +227,12 @@ public class YZController {
 
 	@Autowired
 	private LhZfYzRepository lhzfYzRepository;
+
+	@Autowired
+	private WxYzRepository wxYzRepository;
+
+	@Autowired
+	private WxZfYzRepository wxzfYzRepository;
 
 	@Autowired
 	private ParallelYzServiceWrapper parallelYzService;
@@ -249,6 +276,7 @@ public class YZController {
 		futures.add(yzService.calSXDSYZ());
 		futures.add(yzService.calTMYZ());
 		futures.add(yzService.calZSYZ());
+		futures.add(yzService.calWXYZ());
 		while (true) {
 			int count = 0;
 			for (Future<Exception> f : futures) {
@@ -268,6 +296,7 @@ public class YZController {
 		futures.add(parallelYzService.calAvg(sxYzRepository));
 		futures.add(parallelYzService.calAvg(sxzfYz2Repository));
 		futures.add(parallelYzService.calAvg(bsYzRepository));
+		futures.add(parallelYzService.calAvg(bszfYzRepository));
 		futures.add(parallelYzService.calAvg(swYzRepository));
 		futures.add(parallelYzService.calAvg(swzfYzRepository));
 		futures.add(parallelYzService.calAvg(zsYzRepository));
@@ -278,6 +307,8 @@ public class YZController {
 		futures.add(parallelYzService.calAvg(mwzfYzRepository));
 		futures.add(parallelYzService.calAvg(lhYzRepository));
 		futures.add(parallelYzService.calAvg(lhzfYzRepository));
+		futures.add(parallelYzService.calAvg(wxYzRepository));
+		futures.add(parallelYzService.calAvg(wxzfYzRepository));
 		while (true) {
 			int count = 0;
 			for (Future<Exception> f : futures) {
@@ -391,6 +422,23 @@ public class YZController {
 	@RequestMapping("/listBSYZ")
 	public BaseResult listBSYZ(@RequestBody QueryInfo<BsYz> queryInfo) throws Exception {
 		return new BaseResult(bsYzDao.query(queryInfo));
+	}
+
+	@RequestMapping("/listBSZF")
+	public BaseResult listBSZF(@RequestBody QueryInfo<BsZfYz> queryInfo) throws Exception {
+		PageResult<BsZfYz> result = bszfYzDao.query(queryInfo);
+		return new BaseResult(result);
+	}
+
+	@RequestMapping("/listWXYZ")
+	public BaseResult listWXYZ(@RequestBody QueryInfo<WxYz> queryInfo) throws Exception {
+		return new BaseResult(wxYzDao.query(queryInfo));
+	}
+
+	@RequestMapping("/listWXZF")
+	public BaseResult listWXZF(@RequestBody QueryInfo<WxZfYz> queryInfo) throws Exception {
+		PageResult<WxZfYz> result = wxzfYzDao.query(queryInfo);
+		return new BaseResult(result);
 	}
 
 	@RequestMapping("/listZSYZ")
@@ -1038,6 +1086,11 @@ public class YZController {
 	@RequestMapping("/downloadLHYZ")
 	public String downloadLHYZ(DownloadDTO dto, HttpServletResponse response) throws Exception {
 		return downloadYZ("lhyz", LhYz.class, dto, response, lhYzDao);
+	}
+
+	@RequestMapping("/downloadWXYZ")
+	public String downloadWXYZ(DownloadDTO dto, HttpServletResponse response) throws Exception {
+		return downloadYZ("wxyz", WxYz.class, dto, response, wxYzDao);
 	}
 
 	@RequestMapping("/downloadSXZF")

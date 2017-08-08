@@ -27,10 +27,12 @@ import lhc.constants.DsNums;
 import lhc.constants.LhNums;
 import lhc.constants.MwNums;
 import lhc.constants.SwNums;
+import lhc.constants.WxNums;
 import lhc.constants.ZsNums;
 import lhc.domain.Avg;
 import lhc.domain.BaseYz;
 import lhc.domain.BsYz;
+import lhc.domain.BsZfYz;
 import lhc.domain.DsYz;
 import lhc.domain.DsZfYz;
 import lhc.domain.KaiJiang;
@@ -49,12 +51,15 @@ import lhc.domain.SxZfYz;
 import lhc.domain.SxZfYz2;
 import lhc.domain.TmFdYz;
 import lhc.domain.TmYz;
+import lhc.domain.WxYz;
+import lhc.domain.WxZfYz;
 import lhc.domain.ZsYz;
 import lhc.domain.ZsZfYz;
 import lhc.dto.TmYzInfo;
 import lhc.enums.SX;
 import lhc.repository.jpa.BaseYzRepository;
 import lhc.repository.jpa.api.BsYzRepository;
+import lhc.repository.jpa.api.BsZfYzRepository;
 import lhc.repository.jpa.api.DsYzRepository;
 import lhc.repository.jpa.api.DsZfYzRepository;
 import lhc.repository.jpa.api.KaiJiangRepository;
@@ -73,6 +78,8 @@ import lhc.repository.jpa.api.SxZfYz2Repository;
 import lhc.repository.jpa.api.SxZfYzRepository;
 import lhc.repository.jpa.api.TmFdYzRepository;
 import lhc.repository.jpa.api.TmYzRepository;
+import lhc.repository.jpa.api.WxYzRepository;
+import lhc.repository.jpa.api.WxZfYzRepository;
 import lhc.repository.jpa.api.ZsYzRepository;
 import lhc.repository.jpa.api.ZsZfYzRepository;
 
@@ -144,6 +151,15 @@ public class YZService {
 
 	@Autowired
 	private ZsZfYzRepository zszfyzRepository;
+
+	@Autowired
+	private BsZfYzRepository bszfyzRepository;
+
+	@Autowired
+	private WxYzRepository wxyzRepository;
+
+	@Autowired
+	private WxZfYzRepository wxzfyzRepository;
 
 	@Async
 	public Future<Exception> calSX() {
@@ -396,7 +412,7 @@ public class YZService {
 
 							@Override
 							public String process(int index) {
-								return "W" + index;
+								return SwNums.FDS[index];
 							}
 
 						});
@@ -540,7 +556,37 @@ public class YZService {
 
 			@Override
 			public void process() {
+				calZF(BsNums.FDS.length, BsYz.class, BsZfYz.class, bsyzRepository, bszfyzRepository,
+						new GetSuffixHandler<BsZfYz, BsYz>() {
+
+							@Override
+							public String process(int index) {
+								return BsNums.FDS[index];
+							}
+
+						});
 				logger.info("End of calBSYZ...");
+			}
+
+		});
+	}
+
+	@Async
+	public Future<Exception> calWXYZ() {
+		return calFDYZ(WxYz.class, WxNums.class, wxyzRepository, new ZFHandler() {
+
+			@Override
+			public void process() {
+				calZF(WxNums.FDS.length, WxYz.class, WxZfYz.class, wxyzRepository, wxzfyzRepository,
+						new GetSuffixHandler<WxZfYz, WxYz>() {
+
+							@Override
+							public String process(int index) {
+								return WxNums.FDS[index];
+							}
+
+						});
+				logger.info("End of calWXYZ...");
 			}
 
 		});

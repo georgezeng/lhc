@@ -2,7 +2,7 @@ $(document).ready(function() {
 	var lastGreen = false;
 	var lastRed = false;
 	var count = 0;
-	var sxlist = ["zf0", "zf1", "zf2", "zf3", "zf4", "zf5", "zf6", "zf7", "zf8", "zf9"];
+	var sxlist = ["zf0", "zf1", "zf2", "zf3", "zf4"];
 	var columns = createColumns(sxlist);
 	var columnDefs = [];
 	for(var i = 0; i < 2; i++) {
@@ -28,7 +28,7 @@ $(document).ready(function() {
 			});
 		})(i);
 	}
-	for(var i = 2; i < 12; i++) {
+	for(var i = 2; i < 7; i++) {
 		(function(index) {
 			columnDefs.push({
 				aTargets: [index],
@@ -47,7 +47,7 @@ $(document).ready(function() {
 		})(i);
 	}
 	columnDefs.push({
-		aTargets: [13],
+		aTargets: [8],
 		fnCreatedCell: function(nTd, sData, item, iRow, iCol) {
 			var value = null;
 			if(item.id) {
@@ -74,7 +74,7 @@ $(document).ready(function() {
 		}
 	});
 	columnDefs.push({
-		aTargets: [14],
+		aTargets: [9],
 		fnCreatedCell: function(nTd, sData, item, iRow, iCol) {
 			var value = null;
 			if(item.id) {
@@ -87,7 +87,7 @@ $(document).ready(function() {
 	});
 	datatables.push(createDataTable({
 		id : "dataTable",
-		url : "/mvc/yz/listLHZF",
+		url : "/mvc/yz/listWXZF",
 		bFilter: false,
 		data : function(queryInfo, infoSettings) {
 			count = 0;

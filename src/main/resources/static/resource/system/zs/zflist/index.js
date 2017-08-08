@@ -87,7 +87,7 @@ $(document).ready(function() {
 	});
 	datatables.push(createDataTable({
 		id : "dataTable",
-		url : "/mvc/yz/listMWZF",
+		url : "/mvc/yz/listZSZF",
 		bFilter: false,
 		data : function(queryInfo, infoSettings) {
 			count = 0;
