@@ -13,6 +13,15 @@ public class QqYz extends Avg {
 	private Integer w5;
 	private Integer w6;
 	private Integer w7;
+	private Integer pos;
+
+	public Integer getPos() {
+		return pos;
+	}
+
+	public void setPos(Integer pos) {
+		this.pos = pos;
+	}
 
 	public Integer getW1() {
 		return w1;

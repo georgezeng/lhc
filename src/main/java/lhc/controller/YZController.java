@@ -1139,7 +1139,7 @@ public class YZController {
 
 	@RequestMapping("/downloadQQYZ")
 	public String downloadQQYZ(DownloadDTO dto, HttpServletResponse response) throws Exception {
-		return downloadYZ("qqyz", QqYz.class, dto, response, qqYzDao);
+		return downloadYZ("qqyz", QqYz.class, dto, response, qqYzDao, "位置", "Pos");
 	}
 
 	@RequestMapping("/downloadSXZF")

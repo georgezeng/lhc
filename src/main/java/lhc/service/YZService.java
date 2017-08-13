@@ -551,23 +551,41 @@ public class YZService {
 
 	@Async
 	public Future<Exception> calQQYZ() {
-		return calFDYZ(QqYz.class, QqNums.class, qqyzRepository, new ZFHandler() {
+		try {
+			return calYZ(QqYz.class, qqyzRepository, kaiJiangRepository,
+					new FDYZHandler<QqYz>(QqYz.class, QqNums.class, new ZFHandler() {
 
-			@Override
-			public void process() {
-				calZF(QqNums.FDS.length, QqYz.class, QqZfYz.class, qqyzRepository, qqzfyzRepository,
-						new GetSuffixHandler<QqZfYz, QqYz>() {
+						@Override
+						public void process() {
+							calZF(QqNums.FDS.length, QqYz.class, QqZfYz.class, qqyzRepository, qqzfyzRepository,
+									new GetSuffixHandler<QqZfYz, QqYz>() {
 
-							@Override
-							public String process(int index) {
-								return QqNums.FDS[index];
+										@Override
+										public String process(int index) {
+											return QqNums.FDS[index];
+										}
+
+									});
+							logger.info("End of calQQYZ...");
+						}
+					}) {
+						@Override
+						public List<Integer> process(QqYz yz, QqYz lastYZ, KaiJiang data, KaiJiang lastData) throws Exception {
+							List<Integer> result = super.process(yz, lastYZ, data, lastData);
+							for (int pos = 1; pos <= QqNums.FDS.length; pos++) {
+								Method m = QqYz.class.getDeclaredMethod("getW" + pos);
+								Integer value = (Integer) m.invoke(yz);
+								if (value != null && value == 0) {
+									yz.setPos(pos);
+									break;
+								}
 							}
-
-						});
-				logger.info("End of calQQYZ...");
-			}
-
-		});
+							return result;
+						}
+					});
+		} catch (Exception e) {
+			throw new RuntimeException(e.getMessage(), e);
+		}
 
 	}
 

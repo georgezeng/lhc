@@ -3,7 +3,7 @@ $(document).ready(function() {
 	var lastRed = false;
 	var count = 0;
 	var sxlist = ["w1", "w2", "w3", "w4", "w5", "w6", "w7"];
-	var columns = createColumns(sxlist);
+	var columns = createColumns(sxlist, ["pos"]);
 	var columnDefs = [];
 	for(var i = 0; i < 2; i++) {
 		(function(index) {
@@ -47,7 +47,7 @@ $(document).ready(function() {
 		})(i);
 	}
 	columnDefs.push({
-		aTargets: [10],
+		aTargets: [11],
 		fnCreatedCell: function(nTd, sData, item, iRow, iCol) {
 			var value = null;
 			if(item.id) {
@@ -74,7 +74,7 @@ $(document).ready(function() {
 		}
 	});
 	columnDefs.push({
-		aTargets: [11],
+		aTargets: [12],
 		fnCreatedCell: function(nTd, sData, item, iRow, iCol) {
 			var value = null;
 			if(item.id) {
