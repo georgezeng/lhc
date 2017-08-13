@@ -2,7 +2,7 @@ $(document).ready(function() {
 	var lastGreen = false;
 	var lastRed = false;
 	var count = 0;
-	var sxlist = ["w1", "w2", "w3", "w4", "w5", "w6", "w7"];
+	var sxlist = ["zf0", "zf1", "zf2", "zf3", "zf4", "zf5", "zf6"];
 	var columns = createColumns(sxlist);
 	var columnDefs = [];
 	for(var i = 0; i < 2; i++) {
@@ -87,7 +87,7 @@ $(document).ready(function() {
 	});
 	datatables.push(createDataTable({
 		id : "dataTable",
-		url : "/mvc/yz/listQQYZ?mode=1",
+		url : "/mvc/yz/listQQZF",
 		bFilter: false,
 		data : function(queryInfo, infoSettings) {
 			count = 0;

@@ -43,4 +43,14 @@
 	<include file="/db/v37.sql" />
 	<include file="/db/v38.sql" />
 	<include file="/db/v39.sql" />
+	<include file="/db/v40.sql" />
+	<include file="/db/v41.sql" />
+	<include file="/db/v42.sql" />
+	<include file="/db/v43.sql" />
+	<include file="/db/v44.sql" />
+	<include file="/db/v45.sql" />
+	<include file="/db/v46.sql" />
+	<include file="/db/v47.sql" />
+	<include file="/db/v48.sql" />
+	<include file="/db/v49.sql" />
 </databaseChangeLog>

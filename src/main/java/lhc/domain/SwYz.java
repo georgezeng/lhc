@@ -11,6 +11,15 @@ public class SwYz extends Avg {
 	private Integer w3;
 	private Integer w4;
 	private Integer w0;
+	private Integer pos;
+
+	public Integer getPos() {
+		return pos;
+	}
+
+	public void setPos(Integer pos) {
+		this.pos = pos;
+	}
 
 	public Integer getW0() {
 		return w0;

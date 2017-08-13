@@ -3,7 +3,7 @@ $(document).ready(function() {
 	var lastRed = false;
 	var count = 0;
 	var sxlist = ["w0", "w1", "w2", "w3", "w4"];
-	var columns = createColumns(sxlist);
+	var columns = createColumns(sxlist, ["pos"]);
 	var columnDefs = [];
 	for(var i = 0; i < 2; i++) {
 		(function(index) {
@@ -51,18 +51,6 @@ $(document).ready(function() {
 		fnCreatedCell: function(nTd, sData, item, iRow, iCol) {
 			var value = null;
 			if(item.id) {
-				value = item.total;
-			} else {
-				value = "";
-			}
-			$(nTd).text(value);
-		}
-	});
-	columnDefs.push({
-		aTargets: [8],
-		fnCreatedCell: function(nTd, sData, item, iRow, iCol) {
-			var value = null;
-			if(item.id) {
 				value = item.lastYz;
 				if(value > 7) {
 					if(lastGreen) {
@@ -81,6 +69,18 @@ $(document).ready(function() {
 				}
 			} else {
 				value = Math.round(count / item.total * 10000) / 100 + "%";
+			}
+			$(nTd).text(value);
+		}
+	});
+	columnDefs.push({
+		aTargets: [10],
+		fnCreatedCell: function(nTd, sData, item, iRow, iCol) {
+			var value = null;
+			if(item.id) {
+				value = item.total;
+			} else {
+				value = "";
 			}
 			$(nTd).text(value);
 		}

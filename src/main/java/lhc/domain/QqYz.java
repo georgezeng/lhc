@@ -5,7 +5,7 @@ import javax.persistence.Table;
 
 @Entity
 @Table(name = "qq_yz")
-public class QqYz extends BaseYz {
+public class QqYz extends Avg {
 	private Integer w1;
 	private Integer w2;
 	private Integer w3;
@@ -13,17 +13,6 @@ public class QqYz extends BaseYz {
 	private Integer w5;
 	private Integer w6;
 	private Integer w7;
-	private Integer total;
-	private Integer lastYz;
-	private Integer delta;
-
-	public Integer getDelta() {
-		return delta;
-	}
-
-	public void setDelta(Integer delta) {
-		this.delta = delta;
-	}
 
 	public Integer getW1() {
 		return w1;
@@ -79,22 +68,6 @@ public class QqYz extends BaseYz {
 
 	public void setW7(Integer w7) {
 		this.w7 = w7;
-	}
-
-	public Integer getTotal() {
-		return total;
-	}
-
-	public void setTotal(Integer total) {
-		this.total = total;
-	}
-
-	public Integer getLastYz() {
-		return lastYz;
-	}
-
-	public void setLastYz(Integer lastYz) {
-		this.lastYz = lastYz;
 	}
 
 }

@@ -4,17 +4,13 @@ import java.math.BigDecimal;
 
 import javax.persistence.Column;
 import javax.persistence.Entity;
-import javax.persistence.EnumType;
-import javax.persistence.Enumerated;
 import javax.persistence.Table;
-import javax.persistence.Transient;
 
-import lhc.enums.Color;
 import lhc.enums.SX;
 
 @Entity
-@Table(name = "sx_yz")
-public class SxYz extends Avg {
+@Table(name = "sx_cs_yz")
+public class SxCsYz extends BaseYz {
 	private Integer Shu;
 	private Integer Niu;
 	private Integer Hu;
@@ -28,68 +24,43 @@ public class SxYz extends Avg {
 	private Integer Ji;
 	private Integer Gou;
 	private Integer Zhu;
-	@Enumerated(EnumType.STRING)
-	private SX currentSx;
-	@Enumerated(EnumType.STRING)
-	private Color lastYzColor;
-
-	@Transient
-	private SX topSx;
-	@Transient
-	private SX lastSx;
-	@Transient
-	private int[] lastYzList = new int[25];
-	@Transient
 	private BigDecimal avg;
-	@Transient
-	private Integer lastCountYz;
+	private SX currentSx;
+	private Integer pairs;
+	private Integer large;
+	private Integer small;
+	private Integer total;
 
-	public Color getLastYzColor() {
-		return lastYzColor;
+	public Integer getTotal() {
+		return total;
 	}
 
-	public void setLastYzColor(Color lastYzColor) {
-		this.lastYzColor = lastYzColor;
+	public void setTotal(Integer total) {
+		this.total = total;
 	}
 
-	public Integer getLastCountYz() {
-		return lastCountYz;
+	public Integer getLarge() {
+		return large;
 	}
 
-	public void setLastCountYz(Integer lastCountYz) {
-		this.lastCountYz = lastCountYz;
+	public void setLarge(Integer large) {
+		this.large = large;
 	}
 
-	public BigDecimal getAvg() {
-		return avg;
+	public Integer getSmall() {
+		return small;
 	}
 
-	public void setAvg(BigDecimal avg) {
-		this.avg = avg;
+	public void setSmall(Integer small) {
+		this.small = small;
 	}
 
-	public int[] getLastYzList() {
-		return lastYzList;
+	public Integer getPairs() {
+		return pairs;
 	}
 
-	public void setLastYzList(int[] lastYzList) {
-		this.lastYzList = lastYzList;
-	}
-
-	public SX getTopSx() {
-		return topSx;
-	}
-
-	public void setTopSx(SX topSx) {
-		this.topSx = topSx;
-	}
-
-	public SX getLastSx() {
-		return lastSx;
-	}
-
-	public void setLastSx(SX lastSx) {
-		this.lastSx = lastSx;
+	public void setPairs(Integer pairs) {
+		this.pairs = pairs;
 	}
 
 	public SX getCurrentSx() {
@@ -98,6 +69,14 @@ public class SxYz extends Avg {
 
 	public void setCurrentSx(SX currentSx) {
 		this.currentSx = currentSx;
+	}
+
+	public BigDecimal getAvg() {
+		return avg;
+	}
+
+	public void setAvg(BigDecimal avg) {
+		this.avg = avg;
 	}
 
 	public Integer getShu() {

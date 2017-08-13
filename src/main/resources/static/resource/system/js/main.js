@@ -1,4 +1,6 @@
 var datatables = [];
+var customSeries;
+var seriesCallback;
 $(document).ready(function() {
 	$("#menuBtn").click(function() {
 		if($(this).text() == "隐藏菜单") {
@@ -95,53 +97,60 @@ $(document).ready(function() {
 				}
 			},
 			success: function(result) {
-				var series = [
-					{name: '上期遗值', data: []},
-					{name: '遗值和', data: []}, 
-					{name: '和平均值', data: []}
-				];
-				for(var i = 1; i < 6; i++) {
-					series.push({name: '倒' + i, data: []});
-					series.push({name: '倒' + i + '平均值', data: []});
-				}
-				for(var i = 0; i < 20; i++) {
-					series.push({name: '间' + i, data: []});
-					series.push({name: '间' + i + '平均值', data: []});
-				}
-				for(var i in result.list) {
-					var item = result.list[i];
-					var count = 0;
-					series[count].data.push(
-							[item.year + "-" + item.phase, item.lastYz]
-					);
-					series[count++].visible = false;
-					series[count].data.push(
-							[item.year + "-" + item.phase, item.total]
-					);
-					series[count++].visible = false;
-					series[count].data.push(
-							[item.year + "-" + item.phase, item.totalAvg]
-					);
-					series[count++].visible = false;
-					for(var j = 0; j < 5; j++) {
-						series[count].data.push(
-								[item.year + "-" + item.phase, item["top" + j]]
-						);
-						series[count++].visible = false;
-						series[count].data.push(
-								[item.year + "-" + item.phase, item["top" + j + "Avg"]]
-						);
-						series[count++].visible = false;
+				var series;
+				if(!customSeries) {
+					series = [
+						{name: '上期遗值', data: []},
+						{name: '遗值和', data: []}, 
+						{name: '和平均值', data: []}
+						];
+					for(var i = 1; i < 6; i++) {
+						series.push({name: '倒' + i, data: []});
+						series.push({name: '倒' + i + '平均值', data: []});
 					}
-					for(var j = 0; j < 20; j++) {
+					for(var i = 0; i < 20; i++) {
+						series.push({name: '间' + i, data: []});
+						series.push({name: '间' + i + '平均值', data: []});
+					}
+					for(var i in result.list) {
+						var item = result.list[i];
+						var count = 0;
 						series[count].data.push(
-								[item.year + "-" + item.phase, item["min" + j]]
+								[item.year + "-" + item.phase, item.lastYz]
 						);
 						series[count++].visible = false;
 						series[count].data.push(
-								[item.year + "-" + item.phase, item["min" + j + "Avg"]]
+								[item.year + "-" + item.phase, item.total]
 						);
 						series[count++].visible = false;
+						series[count].data.push(
+								[item.year + "-" + item.phase, item.totalAvg]
+						);
+						series[count++].visible = false;
+						for(var j = 0; j < 5; j++) {
+							series[count].data.push(
+									[item.year + "-" + item.phase, item["top" + j]]
+							);
+							series[count++].visible = false;
+							series[count].data.push(
+									[item.year + "-" + item.phase, item["top" + j + "Avg"]]
+							);
+							series[count++].visible = false;
+						}
+						for(var j = 0; j < 20; j++) {
+							series[count].data.push(
+									[item.year + "-" + item.phase, item["min" + j]]
+							);
+							series[count++].visible = false;
+							series[count].data.push(
+									[item.year + "-" + item.phase, item["min" + j + "Avg"]]
+							);
+							series[count++].visible = false;
+						}
+					}
+				} else {
+					if(typeof seriesCallback === 'function') {
+						series = seriesCallback(result, []);
 					}
 				}
 				
@@ -189,3 +198,35 @@ $(document).ready(function() {
 		});
 	}
 });
+
+function createColumns(list, extraList) {
+	var cols = ["year", "phase"];
+	for(var i in list) {
+		cols.push(list[i]);
+	}
+	if(extraList) {
+		for(var i in extraList) {
+			cols.push(extraList[i]);
+		}
+	}
+	cols.push("delta");
+	cols.push("lastYz");
+	cols.push("total");
+	cols.push("totalAvg");
+	cols.push("top0");
+	cols.push("top0Avg");
+	for(var i = 0; i < 7; i++) {
+		cols.push("min" + i);
+		cols.push("min" + i + "Avg");
+	}
+	var columns = [];
+	for(var i in cols) {
+		var col = cols[i];
+		columns.push({
+			name : col,
+			data : col,
+			sortable: false
+		});
+	}
+	return columns;
+}
