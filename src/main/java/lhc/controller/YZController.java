@@ -30,6 +30,7 @@ import lhc.domain.DsZfYz;
 import lhc.domain.KaiJiang;
 import lhc.domain.LhYz;
 import lhc.domain.LhZfYz;
+import lhc.domain.MwLrYz;
 import lhc.domain.MwYz;
 import lhc.domain.MwZfYz;
 import lhc.domain.PtYz;
@@ -68,6 +69,7 @@ import lhc.repository.jpa.api.DsZfYzRepository;
 import lhc.repository.jpa.api.KaiJiangRepository;
 import lhc.repository.jpa.api.LhYzRepository;
 import lhc.repository.jpa.api.LhZfYzRepository;
+import lhc.repository.jpa.api.MwLrYzRepository;
 import lhc.repository.jpa.api.MwYzRepository;
 import lhc.repository.jpa.api.MwZfYzRepository;
 import lhc.repository.jpa.api.QqYzRepository;
@@ -89,6 +91,7 @@ import lhc.repository.jpa.dao.DsZfYzDao;
 import lhc.repository.jpa.dao.KaiJiangDao;
 import lhc.repository.jpa.dao.LhYzDao;
 import lhc.repository.jpa.dao.LhZfYzDao;
+import lhc.repository.jpa.dao.MwLrYzDao;
 import lhc.repository.jpa.dao.MwYzDao;
 import lhc.repository.jpa.dao.MwZfYzDao;
 import lhc.repository.jpa.dao.PtYzDao;
@@ -130,6 +133,9 @@ public class YZController {
 
 	@Autowired
 	private SxLrYzDao sxlrYzDao;
+	
+	@Autowired
+	private MwLrYzDao mwlrYzDao;
 
 	@Autowired
 	private SxZfYzDao sxZfYzDao;
@@ -217,6 +223,9 @@ public class YZController {
 
 	@Autowired
 	private SxLrYzRepository sxlrYzRepository;
+
+	@Autowired
+	private MwLrYzRepository mwlrYzRepository;
 
 	@Autowired
 	private SxZfYz2Repository sxzfYz2Repository;
@@ -327,28 +336,13 @@ public class YZController {
 			}
 			Thread.sleep(1000);
 		}
+
 		futures.clear();
 		futures.add(yzService.calSXDSYZ());
 		futures.add(yzService.calSXCSYZ());
 		futures.add(yzService.calSXLRYZ());
-		while (true) {
-			int count = 0;
-			for (Future<Exception> f : futures) {
-				if (f.isDone()) {
-					if (f.get() != null) {
-						throw f.get();
-					}
-					count++;
-				}
-			}
-			if (count == futures.size()) {
-				break;
-			}
-			Thread.sleep(500);
-		}
-		futures.clear();
+		futures.add(yzService.calMWLRYZ());
 		futures.add(parallelYzService.calAvg(sxYzRepository));
-		futures.add(parallelYzService.calAvg(sxlrYzRepository));
 		futures.add(parallelYzService.calAvg(sxzfYz2Repository));
 		futures.add(parallelYzService.calAvg(bsYzRepository));
 		futures.add(parallelYzService.calAvg(bszfYzRepository));
@@ -381,6 +375,25 @@ public class YZController {
 			}
 			Thread.sleep(1000);
 		}
+
+		futures.clear();
+		futures.add(parallelYzService.calAvg(sxlrYzRepository));
+		futures.add(parallelYzService.calAvg(mwlrYzRepository));
+		while (true) {
+			int count = 0;
+			for (Future<Exception> f : futures) {
+				if (f.isDone()) {
+					if (f.get() != null) {
+						throw f.get();
+					}
+					count++;
+				}
+			}
+			if (count == futures.size()) {
+				break;
+			}
+			Thread.sleep(500);
+		}
 		logger.info("Done calYZ...");
 		return BaseResult.EMPTY;
 	}
@@ -401,6 +414,12 @@ public class YZController {
 	@RequestMapping("/listSXLRYZ")
 	public BaseResult listSXLRYZ(@RequestBody QueryInfo<SxLrYz> queryInfo) throws Exception {
 		PageResult<SxLrYz> result = sxlrYzDao.query(queryInfo);
+		return new BaseResult(result);
+	}
+	
+	@RequestMapping("/listMWLRYZ")
+	public BaseResult listMWLRYZ(@RequestBody QueryInfo<MwLrYz> queryInfo) throws Exception {
+		PageResult<MwLrYz> result = mwlrYzDao.query(queryInfo);
 		return new BaseResult(result);
 	}
 

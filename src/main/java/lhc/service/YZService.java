@@ -41,6 +41,8 @@ import lhc.domain.DsZfYz;
 import lhc.domain.KaiJiang;
 import lhc.domain.LhYz;
 import lhc.domain.LhZfYz;
+import lhc.domain.Lr;
+import lhc.domain.MwLrYz;
 import lhc.domain.MwYz;
 import lhc.domain.MwZfYz;
 import lhc.domain.PtYz;
@@ -73,6 +75,7 @@ import lhc.repository.jpa.api.DsZfYzRepository;
 import lhc.repository.jpa.api.KaiJiangRepository;
 import lhc.repository.jpa.api.LhYzRepository;
 import lhc.repository.jpa.api.LhZfYzRepository;
+import lhc.repository.jpa.api.MwLrYzRepository;
 import lhc.repository.jpa.api.MwYzRepository;
 import lhc.repository.jpa.api.MwZfYzRepository;
 import lhc.repository.jpa.api.PtYzRepository;
@@ -109,6 +112,9 @@ public class YZService {
 
 	@Autowired
 	private SxLrYzRepository sxlryzRepository;
+
+	@Autowired
+	private MwLrYzRepository mwlryzRepository;
 
 	@Autowired
 	private SxZfYzRepository sxzfyzRepository;
@@ -470,7 +476,7 @@ public class YZService {
 	public Future<Exception> calSWYZ() {
 		try {
 			return calYZ(SwYz.class, swyzRepository, kaiJiangRepository,
-					new FDYZHandler<SwYz>(SwYz.class, SwNums.class, new ZFHandler() {
+					new FDYZHandler<SwYz>(SwYz.class, SwNums.class, new CommonHandler() {
 
 						@Override
 						public void process() {
@@ -508,7 +514,7 @@ public class YZService {
 
 	@Async
 	public Future<Exception> calMWYZ() {
-		return calFDYZ(MwYz.class, MwNums.class, mwyzRepository, new ZFHandler() {
+		return calFDYZ(MwYz.class, MwNums.class, mwyzRepository, new CommonHandler() {
 
 			@Override
 			public void process() {
@@ -529,7 +535,7 @@ public class YZService {
 
 	@Async
 	public Future<Exception> calLHYZ() {
-		return calFDYZ(LhYz.class, LhNums.class, lhyzRepository, new ZFHandler() {
+		return calFDYZ(LhYz.class, LhNums.class, lhyzRepository, new CommonHandler() {
 
 			@Override
 			public void process() {
@@ -553,7 +559,7 @@ public class YZService {
 	public Future<Exception> calQQYZ() {
 		try {
 			return calYZ(QqYz.class, qqyzRepository, kaiJiangRepository,
-					new FDYZHandler<QqYz>(QqYz.class, QqNums.class, new ZFHandler() {
+					new FDYZHandler<QqYz>(QqYz.class, QqNums.class, new CommonHandler() {
 
 						@Override
 						public void process() {
@@ -591,7 +597,7 @@ public class YZService {
 
 	@Async
 	public Future<Exception> calBSYZ() {
-		return calFDYZ(BsYz.class, BsNums.class, bsyzRepository, new ZFHandler() {
+		return calFDYZ(BsYz.class, BsNums.class, bsyzRepository, new CommonHandler() {
 
 			@Override
 			public void process() {
@@ -612,7 +618,7 @@ public class YZService {
 
 	@Async
 	public Future<Exception> calWXYZ() {
-		return calFDYZ(WxYz.class, WxNums.class, wxyzRepository, new ZFHandler() {
+		return calFDYZ(WxYz.class, WxNums.class, wxyzRepository, new CommonHandler() {
 
 			@Override
 			public void process() {
@@ -1122,7 +1128,7 @@ public class YZService {
 
 	@Async
 	public Future<Exception> calZSYZ() {
-		return calFDYZ(ZsYz.class, ZsNums.class, zsyzRepository, new ZFHandler() {
+		return calFDYZ(ZsYz.class, ZsNums.class, zsyzRepository, new CommonHandler() {
 
 			@Override
 			public void process() {
@@ -1143,7 +1149,7 @@ public class YZService {
 
 	@Async
 	public Future<Exception> calDSYZ() {
-		return calFDYZ(DsYz.class, DsNums.class, dsyzRepository, new ZFHandler() {
+		return calFDYZ(DsYz.class, DsNums.class, dsyzRepository, new CommonHandler() {
 
 			@Override
 			public void process() {
@@ -1312,17 +1318,17 @@ public class YZService {
 
 	}
 
-	private static interface ZFHandler {
+	private static interface CommonHandler {
 		void process();
 	}
 
 	private static class FDYZHandler<T extends Avg> implements YzHandler<T, KaiJiang> {
-		final ZFHandler handler;
+		final CommonHandler handler;
 		final String[] fds;
 		final Class<?> numsClass;
 		final Class<T> clazz;
 
-		FDYZHandler(Class<T> clazz, Class<?> numsClass, ZFHandler handler) throws Exception {
+		FDYZHandler(Class<T> clazz, Class<?> numsClass, CommonHandler handler) throws Exception {
 			this.handler = handler;
 			this.numsClass = numsClass;
 			this.clazz = clazz;
@@ -1346,12 +1352,17 @@ public class YZService {
 			if (lastYZ != null) {
 				Method gm = null;
 				Method sm = null;
+				List<SxLrInfo> lastInfos = new ArrayList<SxLrInfo>();
 				List<Integer> topValues = new ArrayList<Integer>();
 				for (String fd : fds) {
 					if (!fd.equals(zeroFd)) {
 						gm = clazz.getDeclaredMethod("get" + fd);
 						Integer lastValue = (Integer) gm.invoke(lastYZ);
 						if (lastValue != null) {
+							SxLrInfo info = new SxLrInfo();
+							info.value = lastValue;
+							info.special = false;
+							lastInfos.add(info);
 							lastValue++;
 							Integer value = (Integer) gm.invoke(yz);
 							if (value == null || value > 0) {
@@ -1360,10 +1371,52 @@ public class YZService {
 								topValues.add(lastValue);
 							}
 						}
+					} else {
+						SxLrInfo info = new SxLrInfo();
+						info.value = yz.getLastYz();
+						info.special = true;
+						lastInfos.add(info);
 					}
 				}
 				gm = clazz.getDeclaredMethod("get" + zeroFd);
 				yz.setLastYz((Integer) gm.invoke(lastYZ));
+
+				try {
+					sm = clazz.getDeclaredMethod("setLastYzColor", Color.class);
+					Collections.sort(lastInfos, new Comparator<SxLrInfo>() {
+
+						@Override
+						public int compare(SxLrInfo o1, SxLrInfo o2) {
+							if (o1.value == null && o2.value == null) {
+								return 0;
+							} else if (o1.value == null && o2.value != null) {
+								return -1;
+							} else if (o1.value != null && o2.value == null) {
+								return 1;
+							} else {
+								return o1.value.compareTo(o2.value);
+							}
+						}
+
+					});
+					int pos = 0;
+					for (SxLrInfo info : lastInfos) {
+						if (info.special) {
+							break;
+						}
+						pos++;
+					}
+					if (pos < 4) {
+						sm.invoke(yz, Color.Red);
+					} else if (pos > 7) {
+						sm.invoke(yz, Color.Green);
+					} else {
+						sm.invoke(yz, Color.Yellow);
+					}
+				} catch (Exception e) {
+
+				}
+
 				return topValues;
 			}
 			return null;
@@ -1392,7 +1445,7 @@ public class YZService {
 	}
 
 	private <T extends Avg> Future<Exception> calFDYZ(final Class<T> clazz, final Class<?> numsClass,
-			final BaseYzRepository<T> repository, final ZFHandler handler) {
+			final BaseYzRepository<T> repository, final CommonHandler handler) {
 		try {
 			return calYZ(clazz, repository, kaiJiangRepository, new FDYZHandler<T>(clazz, numsClass, handler));
 		} catch (Exception e) {
@@ -1593,20 +1646,21 @@ public class YZService {
 		return new AsyncResult<Exception>(t);
 	}
 
-	@Async
-	public Future<Exception> calSXLRYZ() {
-		return calYZ(SxLrYz.class, sxlryzRepository, sxyzRepository, new YzHandler<SxLrYz, SxYz>() {
+	private <T extends Lr, R extends BaseYz> Future<Exception> calLRYZ(final Class<T> lrClazz,
+			BaseYzRepository<T> lrRepository, BaseYzRepository<R> yzRepository, CommonHandler handler) {
+		return calYZ(lrClazz, lrRepository, yzRepository, new YzHandler<T, R>() {
 
 			@Override
-			public List<Integer> process(SxLrYz yz, SxLrYz lastYZ, SxYz data, SxYz lastData) throws Exception {
-				Class<SxLrYz> clazz = SxLrYz.class;
+			public List<Integer> process(T yz, T lastYZ, R data, R lastData) throws Exception {
+				Class<?> clazz = lrClazz.getSuperclass();
 				String colorSet = null;
 				if (lastData != null) {
-					Color lastColor = lastData.getLastYzColor();
-					Color currentColor = data.getLastYzColor();
+					Method m = data.getClass().getDeclaredMethod("getLastYzColor");
+					Color lastColor = (Color) m.invoke(lastData);
+					Color currentColor = (Color) m.invoke(data);
 					if (lastColor != null && currentColor != null) {
 						colorSet = lastColor.name() + currentColor.name();
-						Method m = clazz.getDeclaredMethod("set" + colorSet, Integer.class);
+						m = clazz.getDeclaredMethod("set" + colorSet, Integer.class);
 						m.invoke(yz, 0);
 						yz.setPos(lastColor.getPos());
 					}
@@ -1639,12 +1693,12 @@ public class YZService {
 			}
 
 			@Override
-			public int calTotal(SxLrYz yz) throws Exception {
+			public int calTotal(T yz) throws Exception {
 				int total = 0;
 				for (Color lastColor : Color.values()) {
 					for (Color currentColor : Color.values()) {
 						String set = lastColor.name() + currentColor.name();
-						Method gm = SxLrYz.class.getDeclaredMethod("get" + set);
+						Method gm = lrClazz.getSuperclass().getDeclaredMethod("get" + set);
 						Integer value = (Integer) gm.invoke(yz);
 						if (value != null) {
 							total += value;
@@ -1657,7 +1711,31 @@ public class YZService {
 
 			@Override
 			public void afterProcess() throws Exception {
+				handler.process();
+			}
+		});
+
+	}
+
+	@Async
+	public Future<Exception> calSXLRYZ() {
+		return calLRYZ(SxLrYz.class, sxlryzRepository, sxyzRepository, new CommonHandler() {
+
+			@Override
+			public void process() {
 				logger.info("End of calSXLRYZ...");
+			}
+		});
+
+	}
+
+	@Async
+	public Future<Exception> calMWLRYZ() {
+		return calLRYZ(MwLrYz.class, mwlryzRepository, mwyzRepository, new CommonHandler() {
+
+			@Override
+			public void process() {
+				logger.info("End of calMWLRYZ...");
 			}
 		});
 

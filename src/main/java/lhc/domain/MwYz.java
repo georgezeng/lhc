@@ -1,7 +1,11 @@
 package lhc.domain;
 
 import javax.persistence.Entity;
+import javax.persistence.EnumType;
+import javax.persistence.Enumerated;
 import javax.persistence.Table;
+
+import lhc.enums.Color;
 
 @Entity
 @Table(name = "mw_yz")
@@ -16,6 +20,16 @@ public class MwYz extends Avg {
 	private Integer w8;
 	private Integer w9;
 	private Integer w0;
+	@Enumerated(EnumType.STRING)
+	private Color lastYzColor;
+
+	public Color getLastYzColor() {
+		return lastYzColor;
+	}
+
+	public void setLastYzColor(Color lastYzColor) {
+		this.lastYzColor = lastYzColor;
+	}
 
 	public Integer getW0() {
 		return w0;

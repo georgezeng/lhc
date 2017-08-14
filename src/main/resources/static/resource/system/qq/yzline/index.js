@@ -1,1 +1,1 @@
-var chartUrl = "/mvc/yz/listSWYZ?mode=0";
+var chartUrl = "/mvc/yz/listQQYZ?mode=0";

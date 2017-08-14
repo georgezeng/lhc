@@ -4,7 +4,7 @@ import javax.persistence.Entity;
 import javax.persistence.Table;
 
 @Entity
-@Table(name = "sx_lr_yz")
-public class SxLrYz extends Lr {
+@Table(name = "mw_lr_yz")
+public class MwLrYz extends Lr {
 
 }
