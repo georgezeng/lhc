@@ -133,7 +133,7 @@ public class YZController {
 
 	@Autowired
 	private SxLrYzDao sxlrYzDao;
-	
+
 	@Autowired
 	private MwLrYzDao mwlrYzDao;
 
@@ -336,6 +336,7 @@ public class YZController {
 			}
 			Thread.sleep(1000);
 		}
+		logger.info("End of calYZ stage1...");
 
 		futures.clear();
 		futures.add(yzService.calSXDSYZ());
@@ -375,6 +376,7 @@ public class YZController {
 			}
 			Thread.sleep(1000);
 		}
+		logger.info("End of calYZ stage2...");
 
 		futures.clear();
 		futures.add(parallelYzService.calAvg(sxlrYzRepository));
@@ -416,7 +418,7 @@ public class YZController {
 		PageResult<SxLrYz> result = sxlrYzDao.query(queryInfo);
 		return new BaseResult(result);
 	}
-	
+
 	@RequestMapping("/listMWLRYZ")
 	public BaseResult listMWLRYZ(@RequestBody QueryInfo<MwLrYz> queryInfo) throws Exception {
 		PageResult<MwLrYz> result = mwlrYzDao.query(queryInfo);

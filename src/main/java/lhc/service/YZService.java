@@ -207,14 +207,14 @@ public class YZService {
 					Integer lastValue = (Integer) method.invoke(lastYZ);
 					yz.setLastYz(lastValue);
 					List<Integer> topValues = new ArrayList<Integer>();
-					List<SxLrInfo> lastInfos = new ArrayList<SxLrInfo>();
+					List<LrInfo> lastInfos = new ArrayList<LrInfo>();
 					for (SX sx : SX.seq()) {
 						method = SX.class.getDeclaredMethod("is" + sx.name());
 						Boolean isCurrentSX = (Boolean) method.invoke(data.getSpecialSx());
 						if (!isCurrentSX) {
 							method = clazz.getDeclaredMethod("get" + sx.name());
 							lastValue = (Integer) method.invoke(lastYZ);
-							SxLrInfo info = new SxLrInfo();
+							LrInfo info = new LrInfo();
 							info.value = lastValue;
 							info.special = false;
 							lastInfos.add(info);
@@ -225,16 +225,16 @@ public class YZService {
 								topValues.add(lastValue);
 							}
 						} else {
-							SxLrInfo info = new SxLrInfo();
+							LrInfo info = new LrInfo();
 							info.value = yz.getLastYz();
 							info.special = true;
 							lastInfos.add(info);
 						}
 					}
-					Collections.sort(lastInfos, new Comparator<SxLrInfo>() {
+					Collections.sort(lastInfos, new Comparator<LrInfo>() {
 
 						@Override
-						public int compare(SxLrInfo o1, SxLrInfo o2) {
+						public int compare(LrInfo o1, LrInfo o2) {
 							if (o1.value == null && o2.value == null) {
 								return 0;
 							} else if (o1.value == null && o2.value != null) {
@@ -248,7 +248,7 @@ public class YZService {
 
 					});
 					int pos = 0;
-					for (SxLrInfo info : lastInfos) {
+					for (LrInfo info : lastInfos) {
 						if (info.special) {
 							break;
 						}
@@ -528,6 +528,17 @@ public class YZService {
 
 						});
 				logger.info("End of calMWYZ...");
+			}
+		}, new LrHandler() {
+			
+			@Override
+			public int getSmall() {
+				return 3;
+			}
+			
+			@Override
+			public int getLarge() {
+				return 5;
 			}
 		});
 
@@ -1322,13 +1333,25 @@ public class YZService {
 		void process();
 	}
 
+	private static interface LrHandler {
+		int getSmall();
+
+		int getLarge();
+	}
+
 	private static class FDYZHandler<T extends Avg> implements YzHandler<T, KaiJiang> {
 		final CommonHandler handler;
+		final LrHandler lrHandler;
 		final String[] fds;
 		final Class<?> numsClass;
 		final Class<T> clazz;
 
 		FDYZHandler(Class<T> clazz, Class<?> numsClass, CommonHandler handler) throws Exception {
+			this(clazz, numsClass, handler, null);
+		}
+
+		FDYZHandler(Class<T> clazz, Class<?> numsClass, CommonHandler handler, LrHandler lrHandler) throws Exception {
+			this.lrHandler = lrHandler;
 			this.handler = handler;
 			this.numsClass = numsClass;
 			this.clazz = clazz;
@@ -1352,14 +1375,14 @@ public class YZService {
 			if (lastYZ != null) {
 				Method gm = null;
 				Method sm = null;
-				List<SxLrInfo> lastInfos = new ArrayList<SxLrInfo>();
+				List<LrInfo> lastInfos = new ArrayList<LrInfo>();
 				List<Integer> topValues = new ArrayList<Integer>();
 				for (String fd : fds) {
 					if (!fd.equals(zeroFd)) {
 						gm = clazz.getDeclaredMethod("get" + fd);
 						Integer lastValue = (Integer) gm.invoke(lastYZ);
 						if (lastValue != null) {
-							SxLrInfo info = new SxLrInfo();
+							LrInfo info = new LrInfo();
 							info.value = lastValue;
 							info.special = false;
 							lastInfos.add(info);
@@ -1372,7 +1395,7 @@ public class YZService {
 							}
 						}
 					} else {
-						SxLrInfo info = new SxLrInfo();
+						LrInfo info = new LrInfo();
 						info.value = yz.getLastYz();
 						info.special = true;
 						lastInfos.add(info);
@@ -1383,10 +1406,10 @@ public class YZService {
 
 				try {
 					sm = clazz.getDeclaredMethod("setLastYzColor", Color.class);
-					Collections.sort(lastInfos, new Comparator<SxLrInfo>() {
+					Collections.sort(lastInfos, new Comparator<LrInfo>() {
 
 						@Override
-						public int compare(SxLrInfo o1, SxLrInfo o2) {
+						public int compare(LrInfo o1, LrInfo o2) {
 							if (o1.value == null && o2.value == null) {
 								return 0;
 							} else if (o1.value == null && o2.value != null) {
@@ -1400,15 +1423,15 @@ public class YZService {
 
 					});
 					int pos = 0;
-					for (SxLrInfo info : lastInfos) {
+					for (LrInfo info : lastInfos) {
 						if (info.special) {
 							break;
 						}
 						pos++;
 					}
-					if (pos < 4) {
+					if (pos < lrHandler.getSmall()) {
 						sm.invoke(yz, Color.Red);
-					} else if (pos > 7) {
+					} else if (pos > lrHandler.getLarge()) {
 						sm.invoke(yz, Color.Green);
 					} else {
 						sm.invoke(yz, Color.Yellow);
@@ -1443,11 +1466,20 @@ public class YZService {
 		}
 
 	}
-
+	
 	private <T extends Avg> Future<Exception> calFDYZ(final Class<T> clazz, final Class<?> numsClass,
 			final BaseYzRepository<T> repository, final CommonHandler handler) {
 		try {
 			return calYZ(clazz, repository, kaiJiangRepository, new FDYZHandler<T>(clazz, numsClass, handler));
+		} catch (Exception e) {
+			throw new RuntimeException(e.getMessage(), e);
+		}
+	}
+
+	private <T extends Avg> Future<Exception> calFDYZ(final Class<T> clazz, final Class<?> numsClass,
+			final BaseYzRepository<T> repository, final CommonHandler handler, LrHandler lrHandler) {
+		try {
+			return calYZ(clazz, repository, kaiJiangRepository, new FDYZHandler<T>(clazz, numsClass, handler, lrHandler));
 		} catch (Exception e) {
 			throw new RuntimeException(e.getMessage(), e);
 		}
@@ -1742,7 +1774,7 @@ public class YZService {
 	}
 }
 
-class SxLrInfo {
+class LrInfo {
 	Integer value;
 	boolean special;
 }
