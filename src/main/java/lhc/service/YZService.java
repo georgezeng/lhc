@@ -41,7 +41,7 @@ import lhc.domain.DsZfYz;
 import lhc.domain.KaiJiang;
 import lhc.domain.LhYz;
 import lhc.domain.LhZfYz;
-import lhc.domain.Lr;
+import lhc.domain.LrSet;
 import lhc.domain.MwLrYz;
 import lhc.domain.MwYz;
 import lhc.domain.MwZfYz;
@@ -530,12 +530,12 @@ public class YZService {
 				logger.info("End of calMWYZ...");
 			}
 		}, new LrHandler() {
-			
+
 			@Override
 			public int getSmall() {
 				return 3;
 			}
-			
+
 			@Override
 			public int getLarge() {
 				return 5;
@@ -1466,7 +1466,7 @@ public class YZService {
 		}
 
 	}
-	
+
 	private <T extends Avg> Future<Exception> calFDYZ(final Class<T> clazz, final Class<?> numsClass,
 			final BaseYzRepository<T> repository, final CommonHandler handler) {
 		try {
@@ -1678,31 +1678,76 @@ public class YZService {
 		return new AsyncResult<Exception>(t);
 	}
 
-	private <T extends Lr, R extends BaseYz> Future<Exception> calLRYZ(final Class<T> lrClazz,
+	private <T extends LrSet, R extends BaseYz> Future<Exception> calLRYZ(final Class<T> lrClazz,
 			BaseYzRepository<T> lrRepository, BaseYzRepository<R> yzRepository, CommonHandler handler) {
 		return calYZ(lrClazz, lrRepository, yzRepository, new YzHandler<T, R>() {
 
 			@Override
 			public List<Integer> process(T yz, T lastYZ, R data, R lastData) throws Exception {
 				Class<?> clazz = lrClazz.getSuperclass();
+				Class<?> yzClazz = data.getClass().getSuperclass();
+
+				Method m = yzClazz.getDeclaredMethod("getLastYzColor");
+				Color currentColor = (Color) m.invoke(data);
+				if (currentColor != null) {
+					m = yzClazz.getDeclaredMethod("set" + currentColor.name(), Integer.class);
+					m.invoke(data, 0);
+				}
+
 				String colorSet = null;
 				if (lastData != null) {
-					Method m = data.getClass().getDeclaredMethod("getLastYzColor");
-					Color lastColor = (Color) m.invoke(lastData);
-					Color currentColor = (Color) m.invoke(data);
-					if (lastColor != null && currentColor != null) {
-						colorSet = lastColor.name() + currentColor.name();
-						m = clazz.getDeclaredMethod("set" + colorSet, Integer.class);
-						m.invoke(yz, 0);
-						yz.setPos(lastColor.getPos());
+					if (currentColor != null) {
+						Integer max = 0;
+						Integer total = 0;
+						String[] fds = { "Red", "Yellow", "Green" };
+						for (String fd : fds) {
+							m = yzClazz.getDeclaredMethod("get" + fd);
+							Integer value = (Integer) m.invoke(data);
+							if (value == null || value > 0) {
+								Integer lastValue = (Integer) m.invoke(lastData);
+								if (lastValue != null) {
+									lastValue++;
+									m = yzClazz.getDeclaredMethod("set" + fd, Integer.class);
+									m.invoke(data, lastValue);
+									if (max < lastValue) {
+										max = lastValue;
+										total += lastValue;
+									}
+								}
+							}
+						}
+						if (max > 0) {
+							m = yzClazz.getDeclaredMethod("setColorMax", Integer.class);
+							m.invoke(data, max);
+						}
+						if (total > 0) {
+							m = yzClazz.getDeclaredMethod("setColorTotal", Integer.class);
+							m.invoke(data, total);
+						}
+						m = yzClazz.getDeclaredMethod("getLastYzColor");
+						Color lastColor = (Color) m.invoke(lastData);
+						if (lastColor != null) {
+							colorSet = lastColor.name() + currentColor.name();
+							m = clazz.getDeclaredMethod("set" + colorSet, Integer.class);
+							m.invoke(yz, 0);
+							if (lastColor.equals(currentColor)) {
+								Method gm = yzClazz.getDeclaredMethod("getColorCount");
+								Integer count = (Integer) gm.invoke(lastData);
+								m = yzClazz.getDeclaredMethod("setColorCount", int.class);
+								m.invoke(data, count + 1);
+							}
+							yz.setPos(lastColor.getPos());
+						}
 					}
 				}
+
+				yzRepository.save(data);
 
 				if (lastYZ != null && colorSet != null) {
 					List<Integer> topValues = new ArrayList<Integer>();
 					for (Color lastColor : Color.values()) {
-						for (Color currentColor : Color.values()) {
-							String set = lastColor.name() + currentColor.name();
+						for (Color color : Color.values()) {
+							String set = lastColor.name() + color.name();
 							Method gm = clazz.getDeclaredMethod("get" + set);
 							Integer lastValue = (Integer) gm.invoke(lastYZ);
 							if (!set.equals(colorSet)) {

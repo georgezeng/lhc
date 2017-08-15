@@ -1,1 +1,1 @@
-var chartUrl = "/mvc/yz/listSWZF";
+var chartUrl = "/mvc/yz/listQQZF";

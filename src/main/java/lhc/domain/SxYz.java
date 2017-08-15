@@ -9,12 +9,11 @@ import javax.persistence.Enumerated;
 import javax.persistence.Table;
 import javax.persistence.Transient;
 
-import lhc.enums.Color;
 import lhc.enums.SX;
 
 @Entity
 @Table(name = "sx_yz")
-public class SxYz extends Avg {
+public class SxYz extends Lr {
 	private Integer Shu;
 	private Integer Niu;
 	private Integer Hu;
@@ -30,8 +29,6 @@ public class SxYz extends Avg {
 	private Integer Zhu;
 	@Enumerated(EnumType.STRING)
 	private SX currentSx;
-	@Enumerated(EnumType.STRING)
-	private Color lastYzColor;
 
 	@Transient
 	private SX topSx;
@@ -43,14 +40,6 @@ public class SxYz extends Avg {
 	private BigDecimal avg;
 	@Transient
 	private Integer lastCountYz;
-
-	public Color getLastYzColor() {
-		return lastYzColor;
-	}
-
-	public void setLastYzColor(Color lastYzColor) {
-		this.lastYzColor = lastYzColor;
-	}
 
 	public Integer getLastCountYz() {
 		return lastCountYz;

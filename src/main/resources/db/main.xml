@@ -55,4 +55,6 @@
 	<include file="/db/v49.sql" />
 	<include file="/db/v50.sql" />
 	<include file="/db/v51.sql" />
+	<include file="/db/v52.sql" />
+	<include file="/db/v53.sql" />
 </databaseChangeLog>

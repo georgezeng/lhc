@@ -5,6 +5,6 @@ import javax.persistence.Table;
 
 @Entity
 @Table(name = "mw_lr_yz")
-public class MwLrYz extends Lr {
+public class MwLrYz extends LrSet {
 
 }

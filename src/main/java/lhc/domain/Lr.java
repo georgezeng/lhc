@@ -1,98 +1,75 @@
 package lhc.domain;
 
+import javax.persistence.EnumType;
+import javax.persistence.Enumerated;
 import javax.persistence.MappedSuperclass;
 
+import lhc.enums.Color;
+
 @MappedSuperclass
-public abstract class Lr extends Avg {
-	private Integer redRed;
-	private Integer redYellow;
-	private Integer redGreen;
-	private Integer yellowRed;
-	private Integer yellowYellow;
-	private Integer yellowGreen;
-	private Integer greenRed;
-	private Integer greenYellow;
-	private Integer greenGreen;
-	private Integer pos;
+public class Lr extends Avg {
+	@Enumerated(EnumType.STRING)
+	private Color lastYzColor;
+	private Integer red;
+	private Integer yellow;
+	private Integer green;
+	private int colorCount = 1;
+	private Integer colorMax;
+	private Integer colorTotal;
 
-	public Integer getRedRed() {
-		return redRed;
+	public Color getLastYzColor() {
+		return lastYzColor;
 	}
 
-	public void setRedRed(Integer redRed) {
-		this.redRed = redRed;
+	public void setLastYzColor(Color lastYzColor) {
+		this.lastYzColor = lastYzColor;
 	}
 
-	public Integer getRedYellow() {
-		return redYellow;
+	public Integer getRed() {
+		return red;
 	}
 
-	public void setRedYellow(Integer redYellow) {
-		this.redYellow = redYellow;
+	public void setRed(Integer red) {
+		this.red = red;
 	}
 
-	public Integer getRedGreen() {
-		return redGreen;
+	public Integer getYellow() {
+		return yellow;
 	}
 
-	public void setRedGreen(Integer redGreen) {
-		this.redGreen = redGreen;
+	public void setYellow(Integer yellow) {
+		this.yellow = yellow;
 	}
 
-	public Integer getYellowRed() {
-		return yellowRed;
+	public Integer getGreen() {
+		return green;
 	}
 
-	public void setYellowRed(Integer yellowRed) {
-		this.yellowRed = yellowRed;
+	public void setGreen(Integer green) {
+		this.green = green;
 	}
 
-	public Integer getYellowYellow() {
-		return yellowYellow;
+	public int getColorCount() {
+		return colorCount;
 	}
 
-	public void setYellowYellow(Integer yellowYellow) {
-		this.yellowYellow = yellowYellow;
+	public void setColorCount(int colorCount) {
+		this.colorCount = colorCount;
 	}
 
-	public Integer getYellowGreen() {
-		return yellowGreen;
+	public Integer getColorMax() {
+		return colorMax;
 	}
 
-	public void setYellowGreen(Integer yellowGreen) {
-		this.yellowGreen = yellowGreen;
+	public void setColorMax(Integer colorMax) {
+		this.colorMax = colorMax;
 	}
 
-	public Integer getGreenRed() {
-		return greenRed;
+	public Integer getColorTotal() {
+		return colorTotal;
 	}
 
-	public void setGreenRed(Integer greenRed) {
-		this.greenRed = greenRed;
+	public void setColorTotal(Integer colorTotal) {
+		this.colorTotal = colorTotal;
 	}
-
-	public Integer getGreenYellow() {
-		return greenYellow;
-	}
-
-	public void setGreenYellow(Integer greenYellow) {
-		this.greenYellow = greenYellow;
-	}
-
-	public Integer getGreenGreen() {
-		return greenGreen;
-	}
-
-	public void setGreenGreen(Integer greenGreen) {
-		this.greenGreen = greenGreen;
-	}
-
-	public Integer getPos() {
-		return pos;
-	}
-
-	public void setPos(Integer pos) {
-		this.pos = pos;
-	}
-
 }

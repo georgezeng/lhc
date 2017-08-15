@@ -7,8 +7,15 @@ $(document).ready(function() {
 	for(var i in sxlist) {
 		cols.push(sxlist[i]);
 	}
-	cols.push("year");
 	cols.push("phase");
+	cols.push("lastYzColor");
+	cols.push("phase");
+	cols.push("red");
+	cols.push("yellow");
+	cols.push("green");
+	cols.push("colorMax");
+	cols.push("colorTotal");
+	cols.push("colorCount");
 	var columns = [];
 	for(var i in cols) {
 		var col = cols[i];
@@ -89,22 +96,55 @@ $(document).ready(function() {
 		aTargets: [15],
 		fnCreatedCell: function(nTd, sData, item, iRow, iCol) {
 			if(item.id) {
-				if(lastItem) {
-					var color = lastItem.colors[item.colorIndex][1];
-					$(nTd).text("").css("backgroundColor", color);
-					if(lastColor) {
-						if(lastColor == color) {
-							count++;
-						}
-					}
-					lastColor = color;
-				} else {
-					$(nTd).text("");
+				$(nTd).text("").css("backgroundColor", item.lastYzColor);
+				if(lastColor == item.lastYzColor) {
+					count++;
 				}
-				lastItem = item;
+				lastColor = item.lastYzColor;
 			} else {
 				value = Math.round(count / item.total * 10000) / 100 + "%";
 				$(nTd).text(value);
+			}
+		}
+	});
+	columnDefs.push({
+		aTargets: [16],
+		fnCreatedCell: function(nTd, sData, item, iRow, iCol) {
+			$(nTd).text("");
+		}
+	});
+	columnDefs.push({
+		aTargets: [17],
+		fnCreatedCell: function(nTd, sData, item, iRow, iCol) {
+			if(item.red == 0) {
+				$(nTd).css("backgroundColor", "red");
+			}
+			$(nTd).text(item.red);
+		}
+	});
+	columnDefs.push({
+		aTargets: [18],
+		fnCreatedCell: function(nTd, sData, item, iRow, iCol) {
+			if(item.yellow == 0) {
+				$(nTd).css("backgroundColor", "yellow");
+			}
+			$(nTd).text(item.yellow);
+		}
+	});
+	columnDefs.push({
+		aTargets: [19],
+		fnCreatedCell: function(nTd, sData, item, iRow, iCol) {
+			if(item.green == 0) {
+				$(nTd).css("backgroundColor", "green");
+			}
+			$(nTd).text(item.green);
+		}
+	});
+	columnDefs.push({
+		aTargets: [22],
+		fnCreatedCell: function(nTd, sData, item, iRow, iCol) {
+			if(!item.id) {
+				$(nTd).text("");
 			}
 		}
 	});
