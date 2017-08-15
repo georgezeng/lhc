@@ -308,19 +308,19 @@ public class YZController {
 	@RequestMapping("/calYZ")
 	public BaseResult calYZ() throws Exception {
 		List<Future<Exception>> futures = new ArrayList<Future<Exception>>();
-//		futures.add(yzService.calSX());
-//		futures.add(yzService.calHMQWYZ());
-//		futures.add(yzService.calSWYZ());
-//		futures.add(yzService.calMWYZ());
-//		futures.add(yzService.calLHYZ());
-//		futures.add(yzService.calQQYZ());
-//		futures.add(yzService.calBSYZ());
-//		futures.add(yzService.calSQYZ());
-//		futures.add(yzService.calDSYZ());
-//		futures.add(yzService.calTMYZ());
-//		futures.add(yzService.calZSYZ());
-//		futures.add(yzService.calWXYZ());
-//		futures.add(yzService.calPTYZ());
+		futures.add(yzService.calSX());
+		futures.add(yzService.calHMQWYZ());
+		futures.add(yzService.calSWYZ());
+		futures.add(yzService.calMWYZ());
+		futures.add(yzService.calLHYZ());
+		futures.add(yzService.calQQYZ());
+		futures.add(yzService.calBSYZ());
+		futures.add(yzService.calSQYZ());
+		futures.add(yzService.calDSYZ());
+		futures.add(yzService.calTMYZ());
+		futures.add(yzService.calZSYZ());
+		futures.add(yzService.calWXYZ());
+		futures.add(yzService.calPTYZ());
 		while (true) {
 			int count = 0;
 			for (Future<Exception> f : futures) {
@@ -339,28 +339,28 @@ public class YZController {
 		logger.info("End of calYZ stage1...");
 
 		futures.clear();
-//		futures.add(yzService.calSXDSYZ());
-//		futures.add(yzService.calSXCSYZ());
-//		futures.add(yzService.calSXLRYZ());
+		futures.add(yzService.calSXDSYZ());
+		futures.add(yzService.calSXCSYZ());
+		futures.add(yzService.calSXLRYZ());
 		futures.add(yzService.calMWLRYZ());
-//		futures.add(parallelYzService.calAvg(sxYzRepository));
-//		futures.add(parallelYzService.calAvg(sxzfYz2Repository));
-//		futures.add(parallelYzService.calAvg(bsYzRepository));
-//		futures.add(parallelYzService.calAvg(bszfYzRepository));
-//		futures.add(parallelYzService.calAvg(swYzRepository));
-//		futures.add(parallelYzService.calAvg(swzfYzRepository));
-//		futures.add(parallelYzService.calAvg(zsYzRepository));
-//		futures.add(parallelYzService.calAvg(zszfYzRepository));
-//		futures.add(parallelYzService.calAvg(dsYzRepository));
-//		futures.add(parallelYzService.calAvg(dszfYzRepository));
-//		futures.add(parallelYzService.calAvg(mwYzRepository));
-//		futures.add(parallelYzService.calAvg(mwzfYzRepository));
-//		futures.add(parallelYzService.calAvg(lhYzRepository));
-//		futures.add(parallelYzService.calAvg(lhzfYzRepository));
-//		futures.add(parallelYzService.calAvg(wxYzRepository));
-//		futures.add(parallelYzService.calAvg(wxzfYzRepository));
-//		futures.add(parallelYzService.calAvg(qqYzRepository));
-//		futures.add(parallelYzService.calAvg(qqzfYzRepository));
+		futures.add(parallelYzService.calAvg(sxYzRepository));
+		futures.add(parallelYzService.calAvg(sxzfYz2Repository));
+		futures.add(parallelYzService.calAvg(bsYzRepository));
+		futures.add(parallelYzService.calAvg(bszfYzRepository));
+		futures.add(parallelYzService.calAvg(swYzRepository));
+		futures.add(parallelYzService.calAvg(swzfYzRepository));
+		futures.add(parallelYzService.calAvg(zsYzRepository));
+		futures.add(parallelYzService.calAvg(zszfYzRepository));
+		futures.add(parallelYzService.calAvg(dsYzRepository));
+		futures.add(parallelYzService.calAvg(dszfYzRepository));
+		futures.add(parallelYzService.calAvg(mwYzRepository));
+		futures.add(parallelYzService.calAvg(mwzfYzRepository));
+		futures.add(parallelYzService.calAvg(lhYzRepository));
+		futures.add(parallelYzService.calAvg(lhzfYzRepository));
+		futures.add(parallelYzService.calAvg(wxYzRepository));
+		futures.add(parallelYzService.calAvg(wxzfYzRepository));
+		futures.add(parallelYzService.calAvg(qqYzRepository));
+		futures.add(parallelYzService.calAvg(qqzfYzRepository));
 		while (true) {
 			int count = 0;
 			for (Future<Exception> f : futures) {
@@ -379,8 +379,8 @@ public class YZController {
 		logger.info("End of calYZ stage2...");
 
 		futures.clear();
-//		futures.add(parallelYzService.calAvg(sxlrYzRepository));
-//		futures.add(parallelYzService.calAvg(mwlrYzRepository));
+		futures.add(parallelYzService.calAvg(sxlrYzRepository));
+		futures.add(parallelYzService.calAvg(mwlrYzRepository));
 		while (true) {
 			int count = 0;
 			for (Future<Exception> f : futures) {
