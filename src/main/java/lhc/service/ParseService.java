@@ -10,6 +10,7 @@ import org.jsoup.nodes.Element;
 import org.jsoup.nodes.TextNode;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import org.springframework.util.ReflectionUtils;
 
 import lhc.domain.KaiJiang;
 import lhc.enums.SX;
@@ -47,8 +48,8 @@ public class ParseService {
 				data.setSpecialSx(SX.textOf(specialSxEl.text().trim()));
 				data.setSpecialNum(Integer.valueOf(specialNumEl.text().trim()));
 				for (int j = 0; j < 6; j++) {
-					Method setNum = KaiJiang.class.getDeclaredMethod("setNum" + (j + 1), Integer.class);
-					Method setSx = KaiJiang.class.getDeclaredMethod("setNum" + (j + 1) + "Sx", SX.class);
+					Method setNum = ReflectionUtils.findMethod(KaiJiang.class, "setNum" + (j + 1), Integer.class);
+					Method setSx = ReflectionUtils.findMethod(KaiJiang.class, "setNum" + (j + 1) + "Sx", SX.class);
 					setNum.invoke(data, Integer.valueOf(numEls.get(j).text()));
 					setSx.invoke(data, SX.textOf(sxEls.get(j).text()));
 				}

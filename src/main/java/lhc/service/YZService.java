@@ -23,6 +23,7 @@ import org.springframework.scheduling.annotation.Async;
 import org.springframework.scheduling.annotation.AsyncResult;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+import org.springframework.util.ReflectionUtils;
 
 import lhc.constants.BsNums;
 import lhc.constants.DsNums;
@@ -30,6 +31,7 @@ import lhc.constants.LhNums;
 import lhc.constants.MwNums;
 import lhc.constants.QqNums;
 import lhc.constants.SwNums;
+import lhc.constants.TwelveNums;
 import lhc.constants.WxNums;
 import lhc.constants.ZsNums;
 import lhc.domain.Avg;
@@ -45,6 +47,7 @@ import lhc.domain.LrSet;
 import lhc.domain.MwLrYz;
 import lhc.domain.MwYz;
 import lhc.domain.MwZfYz;
+import lhc.domain.PosAvg;
 import lhc.domain.PtYz;
 import lhc.domain.QqYz;
 import lhc.domain.QqZfYz;
@@ -60,6 +63,8 @@ import lhc.domain.SxZfYz;
 import lhc.domain.SxZfYz2;
 import lhc.domain.TmFdYz;
 import lhc.domain.TmYz;
+import lhc.domain.TwelveYz;
+import lhc.domain.TwelveZfYz;
 import lhc.domain.WxYz;
 import lhc.domain.WxZfYz;
 import lhc.domain.ZsYz;
@@ -93,6 +98,8 @@ import lhc.repository.jpa.api.SxZfYz2Repository;
 import lhc.repository.jpa.api.SxZfYzRepository;
 import lhc.repository.jpa.api.TmFdYzRepository;
 import lhc.repository.jpa.api.TmYzRepository;
+import lhc.repository.jpa.api.TwelveYzRepository;
+import lhc.repository.jpa.api.TwelveZfYzRepository;
 import lhc.repository.jpa.api.WxYzRepository;
 import lhc.repository.jpa.api.WxZfYzRepository;
 import lhc.repository.jpa.api.ZsYzRepository;
@@ -159,6 +166,12 @@ public class YZService {
 	private DsYzRepository dsyzRepository;
 
 	@Autowired
+	private TwelveYzRepository twelveyzRepository;
+
+	@Autowired
+	private TwelveZfYzRepository twelvezfyzRepository;
+
+	@Autowired
 	private LhZfYzRepository lhzfyzRepository;
 
 	@Autowired
@@ -197,22 +210,22 @@ public class YZService {
 
 			@Override
 			public List<Integer> process(SxYz yz, SxYz lastYZ, KaiJiang data, KaiJiang lastData) throws Exception {
-				Method method = SxYz.class.getDeclaredMethod("set" + data.getSpecialSx().name(), Integer.class);
+				Method method = ReflectionUtils.findMethod(SxYz.class, "set" + data.getSpecialSx().name(), Integer.class);
 				method.invoke(yz, 0);
 				yz.setCurrentSx(data.getSpecialSx());
 				if (lastYZ != null) {
 
 					Class<SxYz> clazz = SxYz.class;
-					method = clazz.getDeclaredMethod("get" + data.getSpecialSx().name());
+					method = ReflectionUtils.findMethod(clazz, "get" + data.getSpecialSx().name());
 					Integer lastValue = (Integer) method.invoke(lastYZ);
 					yz.setLastYz(lastValue);
 					List<Integer> topValues = new ArrayList<Integer>();
 					List<LrInfo> lastInfos = new ArrayList<LrInfo>();
 					for (SX sx : SX.seq()) {
-						method = SX.class.getDeclaredMethod("is" + sx.name());
+						method = ReflectionUtils.findMethod(SX.class, "is" + sx.name());
 						Boolean isCurrentSX = (Boolean) method.invoke(data.getSpecialSx());
 						if (!isCurrentSX) {
-							method = clazz.getDeclaredMethod("get" + sx.name());
+							method = ReflectionUtils.findMethod(clazz, "get" + sx.name());
 							lastValue = (Integer) method.invoke(lastYZ);
 							LrInfo info = new LrInfo();
 							info.value = lastValue;
@@ -220,7 +233,7 @@ public class YZService {
 							lastInfos.add(info);
 							if (lastValue != null) {
 								lastValue++;
-								method = clazz.getDeclaredMethod("set" + sx.name(), Integer.class);
+								method = ReflectionUtils.findMethod(clazz, "set" + sx.name(), Integer.class);
 								method.invoke(yz, lastValue);
 								topValues.add(lastValue);
 							}
@@ -270,7 +283,7 @@ public class YZService {
 			public int calTotal(SxYz yz) throws Exception {
 				Integer total = 0;
 				for (SX sx : SX.seq()) {
-					Method method = SxYz.class.getDeclaredMethod("get" + sx.name());
+					Method method = ReflectionUtils.findMethod(SxYz.class, "get" + sx.name());
 					Integer value = (Integer) method.invoke(yz);
 					if (value != null) {
 						total += value;
@@ -295,7 +308,7 @@ public class YZService {
 									if (pos >= zfLength) {
 										pos -= zfLength;
 									}
-									Method m = SxZfYz2.class.getDeclaredMethod("setZf" + pos, Integer.class);
+									Method m = ReflectionUtils.findMethod(SxZfYz2.class, "setZf" + pos, Integer.class);
 									m.invoke(zfYz, 0);
 								}
 								zfYz.setCurrentPos(pos);
@@ -330,21 +343,21 @@ public class YZService {
 						Integer pos = null;
 						if (lastYZ != null) {
 							pos = new BigDecimal(data.getCurrentSx().getPos() - lastYZ.getCurrentSx().getPos()).abs().intValue();
-							Method m = SxZfYz.class.getDeclaredMethod("setZf" + pos, Integer.class);
+							Method m = ReflectionUtils.findMethod(SxZfYz.class, "setZf" + pos, Integer.class);
 							m.invoke(zfYz, 0);
 						}
 						zfYz.setCurrentPos(pos);
 
 						if (lastZFYZ != null && pos != null) {
-							Method m = SxZfYz.class.getDeclaredMethod("getZf" + pos);
+							Method m = ReflectionUtils.findMethod(SxZfYz.class, "getZf" + pos);
 							Integer lastValue = (Integer) m.invoke(lastZFYZ);
 							zfYz.setLastYz(lastValue);
 							for (int i = 0; i < 12; i++) {
 								if (i != pos) {
-									m = SxZfYz.class.getDeclaredMethod("getZf" + i);
+									m = ReflectionUtils.findMethod(SxZfYz.class, "getZf" + i);
 									lastValue = (Integer) m.invoke(lastZFYZ);
 									if (lastValue != null) {
-										m = SxZfYz.class.getDeclaredMethod("setZf" + i, Integer.class);
+										m = ReflectionUtils.findMethod(SxZfYz.class, "setZf" + i, Integer.class);
 										m.invoke(zfYz, lastValue + 1);
 									}
 								}
@@ -353,7 +366,7 @@ public class YZService {
 
 						Integer total = 0;
 						for (int i = 0; i < 12; i++) {
-							Method m = SxZfYz.class.getDeclaredMethod("getZf" + i);
+							Method m = ReflectionUtils.findMethod(SxZfYz.class, "getZf" + i);
 							Integer value = (Integer) m.invoke(zfYz);
 							if (value != null) {
 								total += value;
@@ -403,19 +416,19 @@ public class YZService {
 						}
 
 						for (int i = 1; i < 7; i++) {
-							gm = KaiJiang.class.getDeclaredMethod("getNum" + i);
+							gm = ReflectionUtils.findMethod(KaiJiang.class, "getNum" + i);
 							Integer num = (Integer) gm.invoke(data);
 							String numStr = num.toString();
 							if (numStr.length() > 1) {
 								numStr = numStr.substring(numStr.length() - 1);
 								num = Integer.valueOf(numStr);
 							}
-							gm = QwYz.class.getDeclaredMethod("getW" + num);
+							gm = ReflectionUtils.findMethod(QwYz.class, "getW" + num);
 							Integer value = (Integer) gm.invoke(yz);
 							if (value == null) {
 								value = 0;
 							}
-							sm = QwYz.class.getDeclaredMethod("setW" + num, Integer.class);
+							sm = ReflectionUtils.findMethod(QwYz.class, "setW" + num, Integer.class);
 							sm.invoke(yz, 0);
 						}
 						Integer num = data.getSpecialNum();
@@ -424,17 +437,17 @@ public class YZService {
 							numStr = numStr.substring(numStr.length() - 1);
 							num = Integer.valueOf(numStr);
 						}
-						sm = QwYz.class.getDeclaredMethod("setW" + num, Integer.class);
+						sm = ReflectionUtils.findMethod(QwYz.class, "setW" + num, Integer.class);
 						sm.invoke(yz, 0);
 
 						if (lastYz != null) {
 							for (int j = 0; j < 10; j++) {
-								gm = QwYz.class.getDeclaredMethod("getW" + j);
+								gm = ReflectionUtils.findMethod(QwYz.class, "getW" + j);
 								Integer lastValue = (Integer) gm.invoke(lastYz);
 								if (lastValue != null) {
 									Integer value = (Integer) gm.invoke(yz);
 									if (value == null || value > 0) {
-										sm = QwYz.class.getDeclaredMethod("setW" + j, Integer.class);
+										sm = ReflectionUtils.findMethod(QwYz.class, "setW" + j, Integer.class);
 										sm.invoke(yz, lastValue + 1);
 									}
 								}
@@ -444,7 +457,7 @@ public class YZService {
 						int total = 0;
 						int currentYz = 0;
 						for (int j = 0; j < 10; j++) {
-							gm = QwYz.class.getDeclaredMethod("getW" + j);
+							gm = ReflectionUtils.findMethod(QwYz.class, "getW" + j);
 							Integer value = (Integer) gm.invoke(yz);
 							if (value != null) {
 								if (currentYz < value) {
@@ -474,41 +487,22 @@ public class YZService {
 
 	@Async
 	public Future<Exception> calSWYZ() {
-		try {
-			return calYZ(SwYz.class, swyzRepository, kaiJiangRepository,
-					new FDYZHandler<SwYz>(SwYz.class, SwNums.class, new CommonHandler() {
+		return calPosFDYZ(SwYz.class, SwNums.class, swyzRepository, new CommonHandler() {
 
-						@Override
-						public void process() {
-							calZF(SwNums.FDS.length, SwYz.class, SwZfYz.class, swyzRepository, swzfyzRepository,
-									new GetSuffixHandler<SwZfYz, SwYz>() {
+			@Override
+			public void process() {
+				calZF(SwNums.FDS.length, SwYz.class, SwZfYz.class, swyzRepository, swzfyzRepository,
+						new GetSuffixHandler<SwZfYz, SwYz>() {
 
-										@Override
-										public String process(int index) {
-											return SwNums.FDS[index];
-										}
-
-									});
-							logger.info("End of calSWYZ...");
-						}
-					}) {
-						@Override
-						public List<Integer> process(SwYz yz, SwYz lastYZ, KaiJiang data, KaiJiang lastData) throws Exception {
-							List<Integer> result = super.process(yz, lastYZ, data, lastData);
-							for (int pos = 0; pos < SwNums.FDS.length; pos++) {
-								Method m = SwYz.class.getDeclaredMethod("getW" + pos);
-								Integer value = (Integer) m.invoke(yz);
-								if (value != null && value == 0) {
-									yz.setPos(pos + 1);
-									break;
-								}
+							@Override
+							public String process(int index) {
+								return SwNums.FDS[index];
 							}
-							return result;
-						}
-					});
-		} catch (Exception e) {
-			throw new RuntimeException(e.getMessage(), e);
-		}
+
+						});
+				logger.info("End of calSWYZ...");
+			}
+		}, 0, 5);
 
 	}
 
@@ -568,42 +562,22 @@ public class YZService {
 
 	@Async
 	public Future<Exception> calQQYZ() {
-		try {
-			return calYZ(QqYz.class, qqyzRepository, kaiJiangRepository,
-					new FDYZHandler<QqYz>(QqYz.class, QqNums.class, new CommonHandler() {
+		return calPosFDYZ(QqYz.class, QqNums.class, qqyzRepository, new CommonHandler() {
 
-						@Override
-						public void process() {
-							calZF(QqNums.FDS.length, QqYz.class, QqZfYz.class, qqyzRepository, qqzfyzRepository,
-									new GetSuffixHandler<QqZfYz, QqYz>() {
+			@Override
+			public void process() {
+				calZF(QqNums.FDS.length, QqYz.class, QqZfYz.class, qqyzRepository, qqzfyzRepository,
+						new GetSuffixHandler<QqZfYz, QqYz>() {
 
-										@Override
-										public String process(int index) {
-											return QqNums.FDS[index];
-										}
-
-									});
-							logger.info("End of calQQYZ...");
-						}
-					}) {
-						@Override
-						public List<Integer> process(QqYz yz, QqYz lastYZ, KaiJiang data, KaiJiang lastData) throws Exception {
-							List<Integer> result = super.process(yz, lastYZ, data, lastData);
-							for (int pos = 1; pos <= QqNums.FDS.length; pos++) {
-								Method m = QqYz.class.getDeclaredMethod("getW" + pos);
-								Integer value = (Integer) m.invoke(yz);
-								if (value != null && value == 0) {
-									yz.setPos(pos);
-									break;
-								}
+							@Override
+							public String process(int index) {
+								return QqNums.FDS[index];
 							}
-							return result;
-						}
-					});
-		} catch (Exception e) {
-			throw new RuntimeException(e.getMessage(), e);
-		}
 
+						});
+				logger.info("End of calQQYZ...");
+			}
+		}, 1, 8);
 	}
 
 	@Async
@@ -670,28 +644,28 @@ public class YZService {
 						}
 
 						SX sx = data.getSpecialSx();
-						sm = SqYz.class.getDeclaredMethod("setW" + sx.getSector(), Integer.class);
+						sm = ReflectionUtils.findMethod(SqYz.class, "setW" + sx.getSector(), Integer.class);
 						sm.invoke(yz, 0);
 
 						if (lastYz != null) {
 							for (int j = 2; j < 8; j++) {
-								gm = SqYz.class.getDeclaredMethod("getW" + j);
+								gm = ReflectionUtils.findMethod(SqYz.class, "getW" + j);
 								Integer lastValue = (Integer) gm.invoke(lastYz);
 								if (lastValue != null) {
 									Integer value = (Integer) gm.invoke(yz);
 									if (value == null || value > 0) {
-										sm = SqYz.class.getDeclaredMethod("setW" + j, Integer.class);
+										sm = ReflectionUtils.findMethod(SqYz.class, "setW" + j, Integer.class);
 										sm.invoke(yz, lastValue + 1);
 									}
 								}
 							}
-							gm = SqYz.class.getDeclaredMethod("getW" + sx.getSector());
+							gm = ReflectionUtils.findMethod(SqYz.class, "getW" + sx.getSector());
 							yz.setLastYz((Integer) gm.invoke(lastYz));
 						}
 
 						int total = 0;
 						for (int j = 2; j < 8; j++) {
-							gm = SqYz.class.getDeclaredMethod("getW" + j);
+							gm = ReflectionUtils.findMethod(SqYz.class, "getW" + j);
 							Integer value = (Integer) gm.invoke(yz);
 							if (value != null) {
 								total += value;
@@ -794,12 +768,12 @@ public class YZService {
 						if (lastYz != null) {
 							for (int j = 0; j < arr.length; j++) {
 								String suffix = arr[j];
-								gm = SxDsYz.class.getDeclaredMethod("get" + suffix);
+								gm = ReflectionUtils.findMethod(SxDsYz.class, "get" + suffix);
 								Integer lastValue = (Integer) gm.invoke(lastYz);
 								if (lastValue != null) {
 									Integer value = (Integer) gm.invoke(yz);
 									if (value == null || value > 0) {
-										sm = SxDsYz.class.getDeclaredMethod("set" + suffix, Integer.class);
+										sm = ReflectionUtils.findMethod(SxDsYz.class, "set" + suffix, Integer.class);
 										sm.invoke(yz, lastValue + 1);
 									}
 								}
@@ -843,29 +817,29 @@ public class YZService {
 						}
 
 						Integer num = data.getSpecialNum();
-						sm = TmYz.class.getDeclaredMethod("setHm" + num, Integer.class);
+						sm = ReflectionUtils.findMethod(TmYz.class, "setHm" + num, Integer.class);
 						sm.invoke(yz, 0);
 
 						if (lastYz != null) {
 							for (int j = 1; j < 50; j++) {
-								gm = TmYz.class.getDeclaredMethod("getHm" + j);
+								gm = ReflectionUtils.findMethod(TmYz.class, "getHm" + j);
 								Integer lastValue = (Integer) gm.invoke(lastYz);
 								if (lastValue != null) {
 									Integer value = (Integer) gm.invoke(yz);
 									if (value == null || value > 0) {
-										sm = TmYz.class.getDeclaredMethod("setHm" + j, Integer.class);
+										sm = ReflectionUtils.findMethod(TmYz.class, "setHm" + j, Integer.class);
 										sm.invoke(yz, lastValue + 1);
 									}
 								}
 							}
-							gm = TmYz.class.getDeclaredMethod("getHm" + num);
+							gm = ReflectionUtils.findMethod(TmYz.class, "getHm" + num);
 							yz.setLastYz((Integer) gm.invoke(lastYz));
 						}
 
 						int total = 0;
 						int max = 0;
 						for (int j = 1; j < 50; j++) {
-							gm = TmYz.class.getDeclaredMethod("getHm" + j);
+							gm = ReflectionUtils.findMethod(TmYz.class, "getHm" + j);
 							Integer value = (Integer) gm.invoke(yz);
 							if (value != null) {
 								if (value > max) {
@@ -922,12 +896,12 @@ public class YZService {
 						}
 
 						Integer num = data.getSpecialNum();
-						sm = clazz.getDeclaredMethod("setHm" + num, Integer.class);
+						sm = ReflectionUtils.findMethod(clazz, "setHm" + num, Integer.class);
 						sm.invoke(yz, 0);
 						yz.setSpecialNum(num);
 						for (int i = 1; i <= 6; i++) {
-							num = (Integer) KaiJiang.class.getDeclaredMethod("getNum" + i).invoke(data);
-							sm = clazz.getDeclaredMethod("setHm" + num, Integer.class);
+							num = (Integer) ReflectionUtils.findMethod(KaiJiang.class, "getNum" + i).invoke(data);
+							sm = ReflectionUtils.findMethod(clazz, "setHm" + num, Integer.class);
 							sm.invoke(yz, 0);
 						}
 
@@ -935,12 +909,12 @@ public class YZService {
 							int add1 = 0;
 							int min1 = 0;
 							for (int j = 1; j < 50; j++) {
-								gm = clazz.getDeclaredMethod("getHm" + j);
+								gm = ReflectionUtils.findMethod(clazz, "getHm" + j);
 								Integer lastValue = (Integer) gm.invoke(lastYz);
 								if (lastValue != null) {
 									Integer value = (Integer) gm.invoke(yz);
 									if (value == null || value > 0) {
-										sm = clazz.getDeclaredMethod("setHm" + j, Integer.class);
+										sm = ReflectionUtils.findMethod(clazz, "setHm" + j, Integer.class);
 										sm.invoke(yz, lastValue + 1);
 									}
 
@@ -948,14 +922,14 @@ public class YZService {
 										int prevNum = j - 1;
 										int nextNum = j + 1;
 										if (prevNum > 0) {
-											gm = clazz.getDeclaredMethod("getHm" + prevNum);
+											gm = ReflectionUtils.findMethod(clazz, "getHm" + prevNum);
 											value = (Integer) gm.invoke(yz);
 											if (value != null && value == 0) {
 												min1++;
 											}
 										}
 										if (nextNum < 50) {
-											gm = clazz.getDeclaredMethod("getHm" + nextNum);
+											gm = ReflectionUtils.findMethod(clazz, "getHm" + nextNum);
 											value = (Integer) gm.invoke(yz);
 											if (value != null && value == 0) {
 												add1++;
@@ -968,19 +942,19 @@ public class YZService {
 							yz.setMin1(min1);
 
 							for (int i = 0; i < 7; i++) {
-								sm = clazz.getDeclaredMethod("setJg" + i, Integer.class);
+								sm = ReflectionUtils.findMethod(clazz, "setJg" + i, Integer.class);
 								sm.invoke(yz, 0);
 							}
 							yz.setJg6Plus(0);
 
 							num = data.getSpecialNum();
-							gm = clazz.getDeclaredMethod("getHm" + num);
+							gm = ReflectionUtils.findMethod(clazz, "getHm" + num);
 							Integer lastValue = (Integer) gm.invoke(lastYz);
 							if (lastValue != null) {
 								if (lastValue < 7) {
-									gm = clazz.getDeclaredMethod("getJg" + lastValue);
+									gm = ReflectionUtils.findMethod(clazz, "getJg" + lastValue);
 									Integer value = (Integer) gm.invoke(yz);
-									sm = clazz.getDeclaredMethod("setJg" + lastValue, Integer.class);
+									sm = ReflectionUtils.findMethod(clazz, "setJg" + lastValue, Integer.class);
 									sm.invoke(yz, value + 1);
 								} else {
 									Integer value = yz.getJg6Plus();
@@ -988,14 +962,14 @@ public class YZService {
 								}
 							}
 							for (int i = 1; i <= 6; i++) {
-								num = (Integer) KaiJiang.class.getDeclaredMethod("getNum" + i).invoke(data);
-								gm = clazz.getDeclaredMethod("getHm" + num);
+								num = (Integer) ReflectionUtils.findMethod(KaiJiang.class, "getNum" + i).invoke(data);
+								gm = ReflectionUtils.findMethod(clazz, "getHm" + num);
 								lastValue = (Integer) gm.invoke(lastYz);
 								if (lastValue != null) {
 									if (lastValue < 7) {
-										gm = clazz.getDeclaredMethod("getJg" + lastValue);
+										gm = ReflectionUtils.findMethod(clazz, "getJg" + lastValue);
 										Integer value = (Integer) gm.invoke(yz);
-										sm = clazz.getDeclaredMethod("setJg" + lastValue, Integer.class);
+										sm = ReflectionUtils.findMethod(clazz, "setJg" + lastValue, Integer.class);
 										sm.invoke(yz, value + 1);
 									} else {
 										Integer value = yz.getJg6Plus();
@@ -1053,29 +1027,29 @@ public class YZService {
 					} else {
 						num = 7;
 					}
-					sm = TmFdYz.class.getDeclaredMethod("setFd" + num, Integer.class);
+					sm = ReflectionUtils.findMethod(TmFdYz.class, "setFd" + num, Integer.class);
 					sm.invoke(yz, 0);
 
 					if (lastYz != null) {
 						for (int j = 1; j < 8; j++) {
-							gm = TmFdYz.class.getDeclaredMethod("getFd" + j);
+							gm = ReflectionUtils.findMethod(TmFdYz.class, "getFd" + j);
 							Integer lastValue = (Integer) gm.invoke(lastYz);
 							if (lastValue != null) {
 								Integer value = (Integer) gm.invoke(yz);
 								if (value == null || value > 0) {
-									sm = TmFdYz.class.getDeclaredMethod("setFd" + j, Integer.class);
+									sm = ReflectionUtils.findMethod(TmFdYz.class, "setFd" + j, Integer.class);
 									sm.invoke(yz, lastValue + 1);
 								}
 							}
 						}
-						gm = TmFdYz.class.getDeclaredMethod("getFd" + num);
+						gm = ReflectionUtils.findMethod(TmFdYz.class, "getFd" + num);
 						yz.setLastYz((Integer) gm.invoke(lastYz));
 					}
 
 					int total = 0;
 					int max = 0;
 					for (int j = 1; j < 8; j++) {
-						gm = TmFdYz.class.getDeclaredMethod("getFd" + j);
+						gm = ReflectionUtils.findMethod(TmFdYz.class, "getFd" + j);
 						Integer value = (Integer) gm.invoke(yz);
 						if (value != null) {
 							if (value > max) {
@@ -1104,7 +1078,7 @@ public class YZService {
 		try {
 			List<TmYzInfo> infos = new ArrayList<TmYzInfo>();
 			for (int i = 1; i < 50; i++) {
-				Method gm = TmYz.class.getDeclaredMethod("getHm" + i);
+				Method gm = ReflectionUtils.findMethod(TmYz.class, "getHm" + i);
 				Integer value = (Integer) gm.invoke(data);
 				infos.add(new TmYzInfo(i, value));
 			}
@@ -1179,6 +1153,28 @@ public class YZService {
 		});
 	}
 
+	@Async
+	public Future<Exception> calTwelveYZ() {
+
+		return calPosFDYZ(TwelveYz.class, TwelveNums.class, twelveyzRepository, new CommonHandler() {
+
+			@Override
+			public void process() {
+				calZF(TwelveNums.FDS.length, TwelveYz.class, TwelveZfYz.class, twelveyzRepository, twelvezfyzRepository,
+						new GetSuffixHandler<TwelveZfYz, TwelveYz>() {
+
+							@Override
+							public String process(int index) {
+								return TwelveNums.FDS[index];
+							}
+
+						});
+				logger.info("End of calTwelveYZ...");
+			}
+		}, 1, 13);
+
+	}
+
 	private static abstract class GetSuffixHandler<T extends Avg, R extends Avg> extends ZFPosHandler<T, R> {
 
 		abstract String process(int index) throws Exception;
@@ -1189,7 +1185,7 @@ public class YZService {
 			if (lastZFYZ != null) {
 				int lastPos = 0;
 				for (int i = 0; i < zfLength; i++) {
-					Method gm = yzClazz.getDeclaredMethod("get" + process(i));
+					Method gm = ReflectionUtils.findMethod(yzClazz, "get" + process(i));
 					Integer value = (Integer) gm.invoke(lastYZ);
 					if (value != null && value == 0) {
 						lastPos = i + 1;
@@ -1198,7 +1194,7 @@ public class YZService {
 				}
 				int currentPos = 0;
 				for (int i = 0; i < zfLength; i++) {
-					Method gm = yzClazz.getDeclaredMethod("get" + process(i));
+					Method gm = ReflectionUtils.findMethod(yzClazz, "get" + process(i));
 					Integer value = (Integer) gm.invoke(data);
 					if (value != null && value == 0) {
 						currentPos = i + 1;
@@ -1209,10 +1205,10 @@ public class YZService {
 				if (pos >= zfLength) {
 					pos -= zfLength;
 				}
-				Method m = yzzfClazz.getDeclaredMethod("setZf" + pos, Integer.class);
+				Method m = ReflectionUtils.findMethod(yzzfClazz, "setZf" + pos, Integer.class);
 				m.invoke(zfYz, 0);
 			}
-			yzzfClazz.getDeclaredMethod("setCurrentPos", Integer.class).invoke(zfYz, pos);
+			ReflectionUtils.findMethod(yzzfClazz, "setCurrentPos", Integer.class).invoke(zfYz, pos);
 			return pos;
 		}
 	}
@@ -1247,17 +1243,17 @@ public class YZService {
 						if (lastZFYZ != null) {
 							if (pos != null) {
 								List<Integer> topValues = new ArrayList<Integer>();
-								Method m = yzzfClazz.getDeclaredMethod("getZf" + pos);
+								Method m = ReflectionUtils.findMethod(yzzfClazz, "getZf" + pos);
 								Integer lastValue = (Integer) m.invoke(lastZFYZ);
 								zfYz.setLastYz(lastValue);
 								for (int i = 0; i < zfLength; i++) {
 									lastValue = null;
 									if (i != pos) {
-										m = yzzfClazz.getDeclaredMethod("getZf" + i);
+										m = ReflectionUtils.findMethod(yzzfClazz, "getZf" + i);
 										lastValue = (Integer) m.invoke(lastZFYZ);
 										if (lastValue != null) {
 											lastValue++;
-											m = yzzfClazz.getDeclaredMethod("setZf" + i, Integer.class);
+											m = ReflectionUtils.findMethod(yzzfClazz, "setZf" + i, Integer.class);
 											m.invoke(zfYz, lastValue);
 											topValues.add(lastValue);
 										}
@@ -1277,7 +1273,7 @@ public class YZService {
 										topValues = topValues.subList(0, 5);
 									}
 									for (int i = 0; i < topValues.size(); i++) {
-										m = Avg.class.getDeclaredMethod("setTop" + i, Integer.class);
+										m = ReflectionUtils.findMethod(Avg.class, "setTop" + i, Integer.class);
 										m.invoke(zfYz, topValues.get(i));
 									}
 								}
@@ -1286,11 +1282,11 @@ public class YZService {
 
 						if (zfYz.getLastYz() != null) {
 							for (int k = 0; k < 20; k++) {
-								Method sm = zfYz.getClass().getSuperclass().getDeclaredMethod("setMin" + k, Integer.class);
+								Method sm = ReflectionUtils.findMethod(zfYz.getClass(), "setMin" + k, Integer.class);
 								if (zfYz.getLastYz() == k) {
 									sm.invoke(zfYz, 0);
 								} else {
-									Method gm = zfYz.getClass().getSuperclass().getDeclaredMethod("getMin" + k);
+									Method gm = ReflectionUtils.findMethod(zfYz.getClass(), "getMin" + k);
 									Integer minValue = (Integer) gm.invoke(lastZFYZ);
 									if (minValue != null) {
 										sm.invoke(zfYz, minValue + 1);
@@ -1301,7 +1297,7 @@ public class YZService {
 
 						Integer total = 0;
 						for (int i = 0; i < zfLength; i++) {
-							Method m = yzzfClazz.getDeclaredMethod("getZf" + i);
+							Method m = ReflectionUtils.findMethod(yzzfClazz, "getZf" + i);
 							Integer value = (Integer) m.invoke(zfYz);
 							if (value != null) {
 								total += value;
@@ -1339,6 +1335,56 @@ public class YZService {
 		int getLarge();
 	}
 
+	private <T extends PosAvg> Future<Exception> calPosFDYZ(final Class<T> clazz, final Class<?> numsClass,
+			final BaseYzRepository<T> repository, final CommonHandler handler, int startPos, int endPos) {
+		try {
+			return calYZ(clazz, repository, kaiJiangRepository,
+					new PosFDYZHandler<T>(clazz, numsClass, startPos, endPos, handler));
+		} catch (Exception e) {
+			throw new RuntimeException(e.getMessage(), e);
+		}
+
+	}
+
+	private static class PosFDYZHandler<T extends PosAvg> extends FDYZHandler<T> {
+
+		final int startPos;
+		final int endPos;
+
+		PosFDYZHandler(Class<T> clazz, Class<?> numsClass, int startPos, int endPos, CommonHandler handler)
+				throws Exception {
+			super(clazz, numsClass, handler);
+			this.startPos = startPos;
+			this.endPos = endPos;
+		}
+
+		PosFDYZHandler(Class<T> clazz, Class<?> numsClass, int startPos, int endPos, CommonHandler handler,
+				LrHandler lrHandler) throws Exception {
+			super(clazz, numsClass, handler, lrHandler);
+			this.startPos = startPos;
+			this.endPos = endPos;
+		}
+
+		protected String getPrefix() {
+			return "W";
+		}
+
+		@Override
+		public List<Integer> process(T yz, T lastYZ, KaiJiang data, KaiJiang lastData) throws Exception {
+			List<Integer> result = super.process(yz, lastYZ, data, lastData);
+			for (int pos = startPos; pos < endPos; pos++) {
+				Method m = ReflectionUtils.findMethod(clazz, "get" + getPrefix() + pos);
+				Integer value = (Integer) m.invoke(yz);
+				if (value != null && value == 0) {
+					yz.setPos(pos);
+					break;
+				}
+			}
+			return result;
+		}
+
+	}
+
 	private static class FDYZHandler<T extends Avg> implements YzHandler<T, KaiJiang> {
 		final CommonHandler handler;
 		final LrHandler lrHandler;
@@ -1355,7 +1401,7 @@ public class YZService {
 			this.handler = handler;
 			this.numsClass = numsClass;
 			this.clazz = clazz;
-			this.fds = (String[]) numsClass.getDeclaredField("FDS").get(null);
+			this.fds = (String[]) ReflectionUtils.findField(numsClass, "FDS").get(null);
 		}
 
 		@Override
@@ -1363,10 +1409,10 @@ public class YZService {
 			Integer num = data.getSpecialNum();
 			String zeroFd = null;
 			for (String fd : fds) {
-				Field f = numsClass.getDeclaredField(fd.toUpperCase());
+				Field f = ReflectionUtils.findField(numsClass, fd.toUpperCase());
 				List<Integer> nums = (List<Integer>) f.get(null);
 				if (nums.contains(num)) {
-					Method sm = clazz.getDeclaredMethod("set" + fd, Integer.class);
+					Method sm = ReflectionUtils.findMethod(clazz, "set" + fd, Integer.class);
 					sm.invoke(yz, 0);
 					zeroFd = fd;
 					break;
@@ -1378,7 +1424,7 @@ public class YZService {
 				List<LrInfo> lastInfos = new ArrayList<LrInfo>();
 				List<Integer> topValues = new ArrayList<Integer>();
 				for (String fd : fds) {
-					gm = clazz.getDeclaredMethod("get" + fd);
+					gm = ReflectionUtils.findMethod(clazz, "get" + fd);
 					Integer lastValue = (Integer) gm.invoke(lastYZ);
 					if (!fd.equals(zeroFd)) {
 						LrInfo info = new LrInfo();
@@ -1389,7 +1435,7 @@ public class YZService {
 							lastValue++;
 							Integer value = (Integer) gm.invoke(yz);
 							if (value == null || value > 0) {
-								sm = clazz.getDeclaredMethod("set" + fd, Integer.class);
+								sm = ReflectionUtils.findMethod(clazz, "set" + fd, Integer.class);
 								sm.invoke(yz, lastValue);
 								topValues.add(lastValue);
 							}
@@ -1401,11 +1447,11 @@ public class YZService {
 						lastInfos.add(info);
 					}
 				}
-				gm = clazz.getDeclaredMethod("get" + zeroFd);
+				gm = ReflectionUtils.findMethod(clazz, "get" + zeroFd);
 				yz.setLastYz((Integer) gm.invoke(lastYZ));
 
 				if (lrHandler != null) {
-					sm = clazz.getSuperclass().getDeclaredMethod("setLastYzColor", Color.class);
+					sm = ReflectionUtils.findMethod(clazz, "setLastYzColor", Color.class);
 					Collections.sort(lastInfos, new Comparator<LrInfo>() {
 
 						@Override
@@ -1448,7 +1494,7 @@ public class YZService {
 			int total = 0;
 			Method gm = null;
 			for (String fd : fds) {
-				gm = clazz.getDeclaredMethod("get" + fd);
+				gm = ReflectionUtils.findMethod(clazz, "get" + fd);
 				Integer value = (Integer) gm.invoke(yz);
 				if (value != null) {
 					total += value;
@@ -1527,18 +1573,18 @@ public class YZService {
 								topValues = topValues.subList(0, 5);
 							}
 							for (int i = 0; i < topValues.size(); i++) {
-								Method m = avgClass.getDeclaredMethod("setTop" + i, Integer.class);
+								Method m = ReflectionUtils.findMethod(avgClass, "setTop" + i, Integer.class);
 								m.invoke(yz, topValues.get(i));
 							}
 						}
 
 						if (yz.getLastYz() != null) {
 							for (int k = 0; k < 20; k++) {
-								Method sm = avgClass.getDeclaredMethod("setMin" + k, Integer.class);
+								Method sm = ReflectionUtils.findMethod(avgClass, "setMin" + k, Integer.class);
 								if (yz.getLastYz() == k) {
 									sm.invoke(yz, 0);
 								} else {
-									Method gm = avgClass.getDeclaredMethod("getMin" + k);
+									Method gm = ReflectionUtils.findMethod(avgClass, "getMin" + k);
 									Integer minValue = (Integer) gm.invoke(lastYZ);
 									if (minValue != null) {
 										sm.invoke(yz, minValue + 1);
@@ -1583,7 +1629,7 @@ public class YZService {
 			Class<SxYz> yzClazz = SxYz.class;
 			SxCsYz lastYZ = new SxCsYz();
 			for (SX sx : SX.seq()) {
-				Method m = clazz.getDeclaredMethod("set" + sx.name(), Integer.class);
+				Method m = ReflectionUtils.findMethod(clazz, "set" + sx.name(), Integer.class);
 				m.invoke(lastYZ, 0);
 			}
 			do {
@@ -1599,18 +1645,18 @@ public class YZService {
 						}
 
 						for (SX sx : SX.seq()) {
-							Method sm = clazz.getDeclaredMethod("set" + sx.name(), Integer.class);
-							Method gm = clazz.getDeclaredMethod("get" + sx.name());
+							Method sm = ReflectionUtils.findMethod(clazz, "set" + sx.name(), Integer.class);
+							Method gm = ReflectionUtils.findMethod(clazz, "get" + sx.name());
 							sm.invoke(yz, (Integer) gm.invoke(lastYZ));
 						}
 
 						Map<Integer, Integer> counts = new HashMap<Integer, Integer>();
 						int currentValue = 0;
 						for (SX sx : SX.seq()) {
-							Method gm = yzClazz.getDeclaredMethod("get" + sx.name());
+							Method gm = ReflectionUtils.findMethod(yzClazz, "get" + sx.name());
 							Integer value = (Integer) gm.invoke(data);
-							gm = clazz.getDeclaredMethod("get" + sx.name());
-							Method sm = clazz.getDeclaredMethod("set" + sx.name(), Integer.class);
+							gm = ReflectionUtils.findMethod(clazz, "get" + sx.name());
+							Method sm = ReflectionUtils.findMethod(clazz, "set" + sx.name(), Integer.class);
 							if (value != null && value == 0) {
 								currentValue = 1 + (Integer) gm.invoke(yz);
 								sm.invoke(yz, currentValue);
@@ -1636,7 +1682,7 @@ public class YZService {
 
 						int total = 0;
 						for (SX sx : SX.seq()) {
-							Method gm = clazz.getDeclaredMethod("get" + sx.name());
+							Method gm = ReflectionUtils.findMethod(clazz, "get" + sx.name());
 							Integer value = (Integer) gm.invoke(yz);
 							if (value != null) {
 								total += value;
@@ -1648,7 +1694,7 @@ public class YZService {
 						int large = 0;
 						int small = 0;
 						for (SX sx : SX.seq()) {
-							Method gm = clazz.getDeclaredMethod("get" + sx.name());
+							Method gm = ReflectionUtils.findMethod(clazz, "get" + sx.name());
 							Integer value = (Integer) gm.invoke(yz);
 							if (value != null) {
 								if (new BigDecimal(value).compareTo(yz.getAvg()) >= 0) {
@@ -1685,10 +1731,10 @@ public class YZService {
 				Class<?> clazz = lrClazz.getSuperclass();
 				Class<?> yzClazz = data.getClass().getSuperclass();
 
-				Method m = yzClazz.getDeclaredMethod("getLastYzColor");
+				Method m = ReflectionUtils.findMethod(yzClazz, "getLastYzColor");
 				Color currentColor = (Color) m.invoke(data);
 				if (currentColor != null) {
-					m = yzClazz.getDeclaredMethod("set" + currentColor.name(), Integer.class);
+					m = ReflectionUtils.findMethod(yzClazz, "set" + currentColor.name(), Integer.class);
 					m.invoke(data, 0);
 				}
 
@@ -1699,13 +1745,13 @@ public class YZService {
 						Integer total = 0;
 						String[] fds = { "Red", "Yellow", "Green" };
 						for (String fd : fds) {
-							m = yzClazz.getDeclaredMethod("get" + fd);
+							m = ReflectionUtils.findMethod(yzClazz, "get" + fd);
 							Integer value = (Integer) m.invoke(data);
 							if (value == null || value > 0) {
 								Integer lastValue = (Integer) m.invoke(lastData);
 								if (lastValue != null) {
 									lastValue++;
-									m = yzClazz.getDeclaredMethod("set" + fd, Integer.class);
+									m = ReflectionUtils.findMethod(yzClazz, "set" + fd, Integer.class);
 									m.invoke(data, lastValue);
 									if (max < lastValue) {
 										max = lastValue;
@@ -1715,23 +1761,23 @@ public class YZService {
 							}
 						}
 						if (max > 0) {
-							m = yzClazz.getDeclaredMethod("setColorMax", Integer.class);
+							m = ReflectionUtils.findMethod(yzClazz, "setColorMax", Integer.class);
 							m.invoke(data, max);
 						}
 						if (total > 0) {
-							m = yzClazz.getDeclaredMethod("setColorTotal", Integer.class);
+							m = ReflectionUtils.findMethod(yzClazz, "setColorTotal", Integer.class);
 							m.invoke(data, total);
 						}
-						m = yzClazz.getDeclaredMethod("getLastYzColor");
+						m = ReflectionUtils.findMethod(yzClazz, "getLastYzColor");
 						Color lastColor = (Color) m.invoke(lastData);
 						if (lastColor != null) {
 							colorSet = lastColor.name() + currentColor.name();
-							m = clazz.getDeclaredMethod("set" + colorSet, Integer.class);
+							m = ReflectionUtils.findMethod(clazz, "set" + colorSet, Integer.class);
 							m.invoke(yz, 0);
 							if (lastColor.equals(currentColor)) {
-								Method gm = yzClazz.getDeclaredMethod("getColorCount");
+								Method gm = ReflectionUtils.findMethod(yzClazz, "getColorCount");
 								Integer count = (Integer) gm.invoke(lastData);
-								m = yzClazz.getDeclaredMethod("setColorCount", int.class);
+								m = ReflectionUtils.findMethod(yzClazz, "setColorCount", int.class);
 								m.invoke(data, count + 1);
 							}
 							yz.setPos(lastColor.getPos());
@@ -1746,12 +1792,12 @@ public class YZService {
 					for (Color lastColor : Color.values()) {
 						for (Color color : Color.values()) {
 							String set = lastColor.name() + color.name();
-							Method gm = clazz.getDeclaredMethod("get" + set);
+							Method gm = ReflectionUtils.findMethod(clazz, "get" + set);
 							Integer lastValue = (Integer) gm.invoke(lastYZ);
 							if (!set.equals(colorSet)) {
 								if (lastValue != null) {
 									lastValue++;
-									Method sm = clazz.getDeclaredMethod("set" + set, Integer.class);
+									Method sm = ReflectionUtils.findMethod(clazz, "set" + set, Integer.class);
 									sm.invoke(yz, lastValue);
 									topValues.add(lastValue);
 								}
@@ -1773,7 +1819,7 @@ public class YZService {
 				for (Color lastColor : Color.values()) {
 					for (Color currentColor : Color.values()) {
 						String set = lastColor.name() + currentColor.name();
-						Method gm = lrClazz.getSuperclass().getDeclaredMethod("get" + set);
+						Method gm = ReflectionUtils.findMethod(lrClazz, "get" + set);
 						Integer value = (Integer) gm.invoke(yz);
 						if (value != null) {
 							total += value;

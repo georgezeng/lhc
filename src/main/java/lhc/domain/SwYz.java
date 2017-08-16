@@ -5,21 +5,12 @@ import javax.persistence.Table;
 
 @Entity
 @Table(name = "sw_yz")
-public class SwYz extends Avg {
+public class SwYz extends PosAvg {
 	private Integer w1;
 	private Integer w2;
 	private Integer w3;
 	private Integer w4;
 	private Integer w0;
-	private Integer pos;
-
-	public Integer getPos() {
-		return pos;
-	}
-
-	public void setPos(Integer pos) {
-		this.pos = pos;
-	}
 
 	public Integer getW0() {
 		return w0;

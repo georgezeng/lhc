@@ -11,6 +11,7 @@ import org.springframework.scheduling.annotation.Async;
 import org.springframework.scheduling.annotation.AsyncResult;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+import org.springframework.util.ReflectionUtils;
 
 import lhc.domain.Avg;
 
@@ -41,7 +42,7 @@ public class ParallelYzService {
 						if (topTotals[j] == null) {
 							topTotals[j] = 0;
 						}
-						Method m = Avg.class.getDeclaredMethod("getTop" + j);
+						Method m = ReflectionUtils.findMethod(Avg.class, "getTop" + j);
 						Integer value = (Integer) m.invoke(data);
 						if (value != null) {
 							topTotals[j] += value;
@@ -52,7 +53,7 @@ public class ParallelYzService {
 						if (minTotals[j] == null) {
 							minTotals[j] = 0;
 						}
-						Method m = Avg.class.getDeclaredMethod("getMin" + j);
+						Method m = ReflectionUtils.findMethod(Avg.class, "getMin" + j);
 						Integer value = (Integer) m.invoke(data);
 						if (value != null) {
 							minTotals[j] += value;
@@ -65,13 +66,13 @@ public class ParallelYzService {
 			yz.setTotalAvg(new BigDecimal(totalAll).divide(new BigDecimal(arg1), 2, RoundingMode.HALF_UP));
 			for (int i = 0; i < topLen; i++) {
 				if (topTotals[i] != null) {
-					Method m = Avg.class.getDeclaredMethod("setTop" + i + "Avg", BigDecimal.class);
+					Method m = ReflectionUtils.findMethod(Avg.class, "setTop" + i + "Avg", BigDecimal.class);
 					m.invoke(yz, new BigDecimal(topTotals[i]).divide(new BigDecimal(arg2), 2, RoundingMode.HALF_UP));
 				}
 			}
 			for (int i = 0; i < minLen; i++) {
 				if (minTotals[i] != null) {
-					Method m = Avg.class.getDeclaredMethod("setMin" + i + "Avg", BigDecimal.class);
+					Method m = ReflectionUtils.findMethod(Avg.class, "setMin" + i + "Avg", BigDecimal.class);
 					m.invoke(yz, new BigDecimal(minTotals[i]).divide(new BigDecimal(arg2), 2, RoundingMode.HALF_UP));
 				}
 			}

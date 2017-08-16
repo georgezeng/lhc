@@ -4,8 +4,8 @@ import javax.persistence.Entity;
 import javax.persistence.Table;
 
 @Entity
-@Table(name = "lh_zf_yz")
-public class LhZfYz extends ZfAvg {
+@Table(name = "twelve_zf_yz")
+public class TwelveZfYz extends ZfAvg {
 	private Integer zf0;
 	private Integer zf1;
 	private Integer zf2;
@@ -16,6 +16,40 @@ public class LhZfYz extends ZfAvg {
 	private Integer zf7;
 	private Integer zf8;
 	private Integer zf9;
+	private Integer zf10;
+	private Integer zf11;
+
+	public Integer getZf8() {
+		return zf8;
+	}
+
+	public void setZf8(Integer zf8) {
+		this.zf8 = zf8;
+	}
+
+	public Integer getZf9() {
+		return zf9;
+	}
+
+	public void setZf9(Integer zf9) {
+		this.zf9 = zf9;
+	}
+
+	public Integer getZf10() {
+		return zf10;
+	}
+
+	public void setZf10(Integer zf10) {
+		this.zf10 = zf10;
+	}
+
+	public Integer getZf11() {
+		return zf11;
+	}
+
+	public void setZf11(Integer zf11) {
+		this.zf11 = zf11;
+	}
 
 	public Integer getZf5() {
 		return zf5;
@@ -39,22 +73,6 @@ public class LhZfYz extends ZfAvg {
 
 	public void setZf7(Integer zf7) {
 		this.zf7 = zf7;
-	}
-
-	public Integer getZf8() {
-		return zf8;
-	}
-
-	public void setZf8(Integer zf8) {
-		this.zf8 = zf8;
-	}
-
-	public Integer getZf9() {
-		return zf9;
-	}
-
-	public void setZf9(Integer zf9) {
-		this.zf9 = zf9;
 	}
 
 	public Integer getZf0() {

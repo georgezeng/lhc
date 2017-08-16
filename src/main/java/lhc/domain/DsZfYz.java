@@ -1,14 +1,11 @@
 package lhc.domain;
 
-import java.math.BigDecimal;
-
 import javax.persistence.Entity;
 import javax.persistence.Table;
-import javax.persistence.Transient;
 
 @Entity
 @Table(name = "ds_zf_yz")
-public class DsZfYz extends Avg {
+public class DsZfYz extends ZfAvg {
 	private Integer zf0;
 	private Integer zf1;
 	private Integer zf2;
@@ -19,19 +16,6 @@ public class DsZfYz extends Avg {
 	private Integer zf7;
 	private Integer zf8;
 	private Integer zf9;
-	private Integer currentPos;
-
-	@Transient
-	private Integer[] posList = new Integer[12];
-
-	@Transient
-	private int[] lastYzList = new int[25];
-
-	@Transient
-	private BigDecimal avg;
-
-	@Transient
-	private Integer lastCountYz;
 
 	public Integer getZf5() {
 		return zf5;
@@ -71,46 +55,6 @@ public class DsZfYz extends Avg {
 
 	public void setZf9(Integer zf9) {
 		this.zf9 = zf9;
-	}
-
-	public Integer getLastCountYz() {
-		return lastCountYz;
-	}
-
-	public void setLastCountYz(Integer lastCountYz) {
-		this.lastCountYz = lastCountYz;
-	}
-
-	public BigDecimal getAvg() {
-		return avg;
-	}
-
-	public void setAvg(BigDecimal avg) {
-		this.avg = avg;
-	}
-
-	public int[] getLastYzList() {
-		return lastYzList;
-	}
-
-	public void setLastYzList(int[] lastYzList) {
-		this.lastYzList = lastYzList;
-	}
-
-	public Integer[] getPosList() {
-		return posList;
-	}
-
-	public void setPosList(Integer[] posList) {
-		this.posList = posList;
-	}
-
-	public Integer getCurrentPos() {
-		return currentPos;
-	}
-
-	public void setCurrentPos(Integer currentPos) {
-		this.currentPos = currentPos;
 	}
 
 	public Integer getZf0() {

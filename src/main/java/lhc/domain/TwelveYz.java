@@ -4,8 +4,9 @@ import javax.persistence.Entity;
 import javax.persistence.Table;
 
 @Entity
-@Table(name = "qq_yz")
-public class QqYz extends PosAvg {
+@Table(name = "twelve_yz")
+public class TwelveYz extends PosAvg {
+
 	private Integer w1;
 	private Integer w2;
 	private Integer w3;
@@ -13,6 +14,11 @@ public class QqYz extends PosAvg {
 	private Integer w5;
 	private Integer w6;
 	private Integer w7;
+	private Integer w8;
+	private Integer w9;
+	private Integer w10;
+	private Integer w11;
+	private Integer w12;
 
 	public Integer getW1() {
 		return w1;
@@ -68,6 +74,46 @@ public class QqYz extends PosAvg {
 
 	public void setW7(Integer w7) {
 		this.w7 = w7;
+	}
+
+	public Integer getW8() {
+		return w8;
+	}
+
+	public void setW8(Integer w8) {
+		this.w8 = w8;
+	}
+
+	public Integer getW9() {
+		return w9;
+	}
+
+	public void setW9(Integer w9) {
+		this.w9 = w9;
+	}
+
+	public Integer getW10() {
+		return w10;
+	}
+
+	public void setW10(Integer w10) {
+		this.w10 = w10;
+	}
+
+	public Integer getW11() {
+		return w11;
+	}
+
+	public void setW11(Integer w11) {
+		this.w11 = w11;
+	}
+
+	public Integer getW12() {
+		return w12;
+	}
+
+	public void setW12(Integer w12) {
+		this.w12 = w12;
 	}
 
 }

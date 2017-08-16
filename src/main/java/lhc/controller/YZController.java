@@ -16,6 +16,7 @@ import javax.servlet.http.HttpServletResponse;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.util.ReflectionUtils;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -48,6 +49,8 @@ import lhc.domain.SxZfYz;
 import lhc.domain.SxZfYz2;
 import lhc.domain.TmFdYz;
 import lhc.domain.TmYz;
+import lhc.domain.TwelveYz;
+import lhc.domain.TwelveZfYz;
 import lhc.domain.WxYz;
 import lhc.domain.WxZfYz;
 import lhc.domain.ZsYz;
@@ -80,6 +83,8 @@ import lhc.repository.jpa.api.SxLrYzRepository;
 import lhc.repository.jpa.api.SxYzRepository;
 import lhc.repository.jpa.api.SxZfYz2Repository;
 import lhc.repository.jpa.api.TmYzRepository;
+import lhc.repository.jpa.api.TwelveYzRepository;
+import lhc.repository.jpa.api.TwelveZfYzRepository;
 import lhc.repository.jpa.api.WxYzRepository;
 import lhc.repository.jpa.api.WxZfYzRepository;
 import lhc.repository.jpa.api.ZsYzRepository;
@@ -109,6 +114,8 @@ import lhc.repository.jpa.dao.SxZfYz2Dao;
 import lhc.repository.jpa.dao.SxZfYzDao;
 import lhc.repository.jpa.dao.TmFdYzDao;
 import lhc.repository.jpa.dao.TmYzDao;
+import lhc.repository.jpa.dao.TwelveYzDao;
+import lhc.repository.jpa.dao.TwelveZfYzDao;
 import lhc.repository.jpa.dao.WxYzDao;
 import lhc.repository.jpa.dao.WxZfYzDao;
 import lhc.repository.jpa.dao.ZsYzDao;
@@ -216,6 +223,12 @@ public class YZController {
 	private DsZfYzDao dszfYzDao;
 
 	@Autowired
+	private TwelveYzDao twelveYzDao;
+
+	@Autowired
+	private TwelveZfYzDao twelvezfYzDao;
+
+	@Autowired
 	private TmYzRepository tmYzRepository;
 
 	@Autowired
@@ -279,6 +292,12 @@ public class YZController {
 	private QqZfYzRepository qqzfYzRepository;
 
 	@Autowired
+	private TwelveYzRepository twelveYzRepository;
+
+	@Autowired
+	private TwelveZfYzRepository twelvezfYzRepository;
+
+	@Autowired
 	private ParallelYzServiceWrapper parallelYzService;
 
 	@RequestMapping("/years")
@@ -321,6 +340,7 @@ public class YZController {
 		futures.add(yzService.calZSYZ());
 		futures.add(yzService.calWXYZ());
 		futures.add(yzService.calPTYZ());
+		futures.add(yzService.calTwelveYZ());
 		sleep(futures, 1000);
 		logger.info("End of calYZ stage1...");
 
@@ -345,6 +365,8 @@ public class YZController {
 		futures.add(parallelYzService.calAvg(wxzfYzRepository));
 		futures.add(parallelYzService.calAvg(qqYzRepository));
 		futures.add(parallelYzService.calAvg(qqzfYzRepository));
+		futures.add(parallelYzService.calAvg(twelveYzRepository));
+		futures.add(parallelYzService.calAvg(twelvezfYzRepository));
 		sleep(futures, 1000);
 		logger.info("End of calYZ stage2...");
 
@@ -536,6 +558,17 @@ public class YZController {
 		return new BaseResult(result);
 	}
 
+	@RequestMapping("/listTwelveYZ")
+	public BaseResult listTwelveYZ(@RequestBody QueryInfo<TwelveYz> queryInfo) throws Exception {
+		return new BaseResult(twelveYzDao.query(queryInfo));
+	}
+
+	@RequestMapping("/listTwelveZF")
+	public BaseResult listTwelveZF(@RequestBody QueryInfo<TwelveZfYz> queryInfo) throws Exception {
+		PageResult<TwelveZfYz> result = twelvezfYzDao.query(queryInfo);
+		return new BaseResult(result);
+	}
+
 	@RequestMapping("/listSXDSYZ")
 	public BaseResult listSXDSYZ(@RequestBody QueryInfo<SxDsYz> queryInfo) throws Exception {
 		PageResult<SxDsYz> result = sxdsYzDao.query(queryInfo);
@@ -562,8 +595,8 @@ public class YZController {
 					if (i > 0) {
 						next = result.getList().get(i - 1);
 						next.setLastSx(data.getCurrentSx());
-						Method sm = SxYz.class.getDeclaredMethod("set" + next.getCurrentSx().name(), Integer.class);
-						Method gm = SxYz.class.getDeclaredMethod("get" + next.getCurrentSx().name());
+						Method sm = ReflectionUtils.findMethod(SxYz.class, "set" + next.getCurrentSx().name(), Integer.class);
+						Method gm = ReflectionUtils.findMethod(SxYz.class, "get" + next.getCurrentSx().name());
 						Integer count = (Integer) gm.invoke(totalLine);
 						if (count == null) {
 							count = 0;
@@ -622,24 +655,24 @@ public class YZController {
 				int currentValue = 0;
 				if (last != null) {
 					for (int i = 0; i < 12; i++) {
-						Method gm = SxZfYz.class.getDeclaredMethod("getZf" + i);
+						Method gm = ReflectionUtils.findMethod(SxZfYz.class, "getZf" + i);
 						Integer value = (Integer) gm.invoke(lastData);
 						if (value == null) {
 							value = 0;
 						}
-						Method sm = SxZfYz.class.getDeclaredMethod("setZf" + i, Integer.class);
+						Method sm = ReflectionUtils.findMethod(SxZfYz.class, "setZf" + i, Integer.class);
 						sm.invoke(data, value);
 					}
 					if (current.getCurrentPos() != null && last.getCurrentPos() != null) {
 						BigDecimal pos = new BigDecimal(current.getCurrentPos()).subtract(new BigDecimal(last.getCurrentPos()))
 								.abs();
-						Method gm = SxZfYz.class.getDeclaredMethod("getZf" + pos.intValue());
+						Method gm = ReflectionUtils.findMethod(SxZfYz.class, "getZf" + pos.intValue());
 						Integer value = (Integer) gm.invoke(data);
 						if (value == null) {
 							value = 0;
 						}
 						currentValue = value + 1;
-						Method sm = SxZfYz.class.getDeclaredMethod("setZf" + pos.intValue(), Integer.class);
+						Method sm = ReflectionUtils.findMethod(SxZfYz.class, "setZf" + pos.intValue(), Integer.class);
 						sm.invoke(data, currentValue);
 						data.setCurrentPos(pos.intValue());
 					}
@@ -649,7 +682,7 @@ public class YZController {
 				if (lastData != null) {
 					int total = 0;
 					for (int i = 0; i < 12; i++) {
-						Method gm = SxZfYz.class.getDeclaredMethod("getZf" + i);
+						Method gm = ReflectionUtils.findMethod(SxZfYz.class, "getZf" + i);
 						Integer value = (Integer) gm.invoke(lastData);
 						if (value != null) {
 							total += value;
@@ -682,14 +715,14 @@ public class YZController {
 		if (result != null && result.getTotal() > 0) {
 			SxZfYz lastZF = new SxZfYz();
 			for (int i = 0; i < 12; i++) {
-				Method m = SxZfYz.class.getDeclaredMethod("setZf" + i, Integer.class);
+				Method m = ReflectionUtils.findMethod(SxZfYz.class, "setZf" + i, Integer.class);
 				m.invoke(lastZF, 0);
 			}
 			for (SxZfYz data : result.getList()) {
 				SxZfYz dto = new SxZfYz();
 				for (int i = 0; i < 12; i++) {
-					Method sm = SxZfYz.class.getDeclaredMethod("setZf" + i, Integer.class);
-					Method gm = SxZfYz.class.getDeclaredMethod("getZf" + i);
+					Method sm = ReflectionUtils.findMethod(SxZfYz.class, "setZf" + i, Integer.class);
+					Method gm = ReflectionUtils.findMethod(SxZfYz.class, "getZf" + i);
 					sm.invoke(dto, (Integer) gm.invoke(lastZF));
 				}
 				dto.setDate(data.getDate());
@@ -698,10 +731,10 @@ public class YZController {
 				dto.setId(data.getId());
 				int currentValue = 0;
 				for (int i = 0; i < 12; i++) {
-					Method gm = SxZfYz.class.getDeclaredMethod("getZf" + i);
+					Method gm = ReflectionUtils.findMethod(SxZfYz.class, "getZf" + i);
 					Integer zf = (Integer) gm.invoke(data);
 					if (zf != null && zf == 0) {
-						Method sm = SxZfYz.class.getDeclaredMethod("setZf" + i, Integer.class);
+						Method sm = ReflectionUtils.findMethod(SxZfYz.class, "setZf" + i, Integer.class);
 						currentValue = 1 + (Integer) gm.invoke(dto);
 						sm.invoke(dto, currentValue);
 						break;
@@ -711,7 +744,7 @@ public class YZController {
 
 				int total = 0;
 				for (int i = 0; i < 12; i++) {
-					Method gm = SxZfYz.class.getDeclaredMethod("getZf" + i);
+					Method gm = ReflectionUtils.findMethod(SxZfYz.class, "getZf" + i);
 					Integer value = (Integer) gm.invoke(lastZF);
 					if (value != null) {
 						total += value;
@@ -868,8 +901,8 @@ public class YZController {
 					boolean in = false;
 					boolean in2 = false;
 					for (int k = 1; k < 7; k++) {
-						Method dtoSm = PmDTO.class.getDeclaredMethod("setNum" + k, PmNum.class);
-						Method gm = KaiJiang.class.getDeclaredMethod("getNum" + k);
+						Method dtoSm = ReflectionUtils.findMethod(PmDTO.class, "setNum" + k, PmNum.class);
+						Method gm = ReflectionUtils.findMethod(KaiJiang.class, "getNum" + k);
 						Integer num = (Integer) gm.invoke(pmData);
 						if (!in) {
 							in = num == specialData.getSpecialNum();
@@ -877,15 +910,15 @@ public class YZController {
 								in2 = in;
 							}
 						}
-						Method dtoGm = PmDTO.class.getDeclaredMethod("getNum" + k);
+						Method dtoGm = ReflectionUtils.findMethod(PmDTO.class, "getNum" + k);
 						PmNum pmNum = (PmNum) dtoGm.invoke(dto);
 						if (pmNum == null) {
 							pmNum = new PmNum(num, in);
 						}
 						if (in) {
 							pmNum.setMatchedForSpecialNum(true);
-							Method tpGm = PmDTO.class.getDeclaredMethod("getTp" + k);
-							Method tpSm = PmDTO.class.getDeclaredMethod("setTp" + k, BigDecimal.class);
+							Method tpGm = ReflectionUtils.findMethod(PmDTO.class, "getTp" + k);
+							Method tpSm = ReflectionUtils.findMethod(PmDTO.class, "setTp" + k, BigDecimal.class);
 							BigDecimal total = (BigDecimal) tpGm.invoke(totalDTO);
 							tpSm.invoke(totalDTO, total.add(new BigDecimal(1)));
 							in = false;
@@ -902,8 +935,8 @@ public class YZController {
 			}
 			Collections.reverse(list);
 			for (int k = 1; k < 7; k++) {
-				Method tpGm = PmDTO.class.getDeclaredMethod("getTp" + k);
-				Method tpSm = PmDTO.class.getDeclaredMethod("setTp" + k, BigDecimal.class);
+				Method tpGm = ReflectionUtils.findMethod(PmDTO.class, "getTp" + k);
+				Method tpSm = ReflectionUtils.findMethod(PmDTO.class, "setTp" + k, BigDecimal.class);
 				BigDecimal total = (BigDecimal) tpGm.invoke(totalDTO);
 				tpSm.invoke(totalDTO, total.divide(new BigDecimal(result.getPage().getPageSize()), 4, RoundingMode.HALF_UP)
 						.multiply(new BigDecimal(100)).setScale(2, RoundingMode.HALF_UP));
@@ -922,10 +955,10 @@ public class YZController {
 			for (int i = result.getList().size() - 1; i >= 0; i--) {
 				QwYz data = result.getList().get(i);
 				for (int j = 0; j < 10; j++) {
-					Method gm = QwYz.class.getDeclaredMethod("getW" + j);
+					Method gm = ReflectionUtils.findMethod(QwYz.class, "getW" + j);
 					Integer value = (Integer) gm.invoke(data);
 					if (value != null && value == 0) {
-						Method sm = QwYz.class.getDeclaredMethod("setW" + j, Integer.class);
+						Method sm = ReflectionUtils.findMethod(QwYz.class, "setW" + j, Integer.class);
 						Integer count = (Integer) gm.invoke(totalLine);
 						if (count == null) {
 							count = 0;
@@ -973,11 +1006,11 @@ public class YZController {
 					for (int i = pResult.getList().size() - 1; i > 0; i--) {
 						QwYz current = pResult.getList().get(i);
 						QwYz last = pResult.getList().get(i - 1);
-						Method gm = QwYz.class.getDeclaredMethod("getW" + j);
+						Method gm = ReflectionUtils.findMethod(QwYz.class, "getW" + j);
 						Integer[] currentPair = { (Integer) gm.invoke(last), (Integer) gm.invoke(current) };
 						if (currentPair[0] != null && currentPair[1] != null && currentPair[0] == pair[0]
 								&& currentPair[1] == pair[1]) {
-							Method sm = QwYz.class.getDeclaredMethod("setW" + j, Integer.class);
+							Method sm = ReflectionUtils.findMethod(QwYz.class, "setW" + j, Integer.class);
 							Integer value = (Integer) gm.invoke(data);
 							if (value == null) {
 								value = 0;
@@ -1062,10 +1095,10 @@ public class YZController {
 				writer.append(data.getLastYz() + "").append(",");
 				writer.append(data.getTotal() + "").append(", ");
 				if (extraField != null) {
-					writer.append(clazz.getDeclaredMethod("get" + extraField).invoke(data).toString()).append(", ");
+					writer.append(ReflectionUtils.findMethod(clazz, "get" + extraField).invoke(data).toString()).append(", ");
 				}
 				for (int i = 0; i < 5; i++) {
-					Method m = Avg.class.getDeclaredMethod("getTop" + i);
+					Method m = ReflectionUtils.findMethod(Avg.class, "getTop" + i);
 					Integer value = (Integer) m.invoke(data);
 					if (value != null) {
 						writer.append(value.toString()).append(", ");
@@ -1074,7 +1107,7 @@ public class YZController {
 					}
 				}
 				for (int i = 0; i < 20; i++) {
-					Method m = Avg.class.getDeclaredMethod("getMin" + i);
+					Method m = ReflectionUtils.findMethod(Avg.class, "getMin" + i);
 					Integer value = (Integer) m.invoke(data);
 					if (value != null) {
 						writer.append(value.toString());
@@ -1141,6 +1174,11 @@ public class YZController {
 	@RequestMapping("/downloadQQYZ")
 	public String downloadQQYZ(DownloadDTO dto, HttpServletResponse response) throws Exception {
 		return downloadYZ("qqyz", QqYz.class, dto, response, qqYzDao, "位置", "Pos");
+	}
+
+	@RequestMapping("/downloadTwelveYZ")
+	public String downloadTwelveYZ(DownloadDTO dto, HttpServletResponse response) throws Exception {
+		return downloadYZ("twelveyz", TwelveYz.class, dto, response, twelveYzDao, "位置", "Pos");
 	}
 
 	@RequestMapping("/downloadSXZF")
@@ -1344,7 +1382,7 @@ public class YZController {
 				writer.append(data.getPhase() + "").append(", ");
 				writer.append(data.getLastYz() + "").append(", ");
 				for (int i = 1; i < 50; i++) {
-					Method m = TmYz.class.getDeclaredMethod("getHm" + i);
+					Method m = ReflectionUtils.findMethod(TmYz.class, "getHm" + i);
 					Integer value = (Integer) m.invoke(data);
 					if (value != null) {
 						writer.append(value.toString()).append(", ");
@@ -1384,7 +1422,7 @@ public class YZController {
 				writer.append(data.getYear() + "").append(", ");
 				writer.append(data.getPhase() + "").append(", ");
 				for (int i = 1; i < 50; i++) {
-					Method m = PtYz.class.getDeclaredMethod("getHm" + i);
+					Method m = ReflectionUtils.findMethod(PtYz.class, "getHm" + i);
 					Integer value = (Integer) m.invoke(data);
 					if (value != null) {
 						writer.append(value.toString()).append(", ");
