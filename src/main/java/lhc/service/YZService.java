@@ -1709,8 +1709,8 @@ public class YZService {
 									m.invoke(data, lastValue);
 									if (max < lastValue) {
 										max = lastValue;
-										total += lastValue;
 									}
+									total += lastValue;
 								}
 							}
 						}
