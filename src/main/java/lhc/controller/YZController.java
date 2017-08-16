@@ -321,28 +321,12 @@ public class YZController {
 		futures.add(yzService.calZSYZ());
 		futures.add(yzService.calWXYZ());
 		futures.add(yzService.calPTYZ());
-		while (true) {
-			int count = 0;
-			for (Future<Exception> f : futures) {
-				if (f.isDone()) {
-					if (f.get() != null) {
-						throw f.get();
-					}
-					count++;
-				}
-			}
-			if (count == futures.size()) {
-				break;
-			}
-			Thread.sleep(1000);
-		}
+		sleep(futures, 1000);
 		logger.info("End of calYZ stage1...");
 
 		futures.clear();
 		futures.add(yzService.calSXDSYZ());
 		futures.add(yzService.calSXCSYZ());
-		futures.add(yzService.calSXLRYZ());
-		futures.add(yzService.calMWLRYZ());
 		futures.add(parallelYzService.calAvg(sxYzRepository));
 		futures.add(parallelYzService.calAvg(sxzfYz2Repository));
 		futures.add(parallelYzService.calAvg(bsYzRepository));
@@ -361,26 +345,24 @@ public class YZController {
 		futures.add(parallelYzService.calAvg(wxzfYzRepository));
 		futures.add(parallelYzService.calAvg(qqYzRepository));
 		futures.add(parallelYzService.calAvg(qqzfYzRepository));
-		while (true) {
-			int count = 0;
-			for (Future<Exception> f : futures) {
-				if (f.isDone()) {
-					if (f.get() != null) {
-						throw f.get();
-					}
-					count++;
-				}
-			}
-			if (count == futures.size()) {
-				break;
-			}
-			Thread.sleep(1000);
-		}
+		sleep(futures, 1000);
 		logger.info("End of calYZ stage2...");
+
+		futures.clear();
+		futures.add(yzService.calSXLRYZ());
+		futures.add(yzService.calMWLRYZ());
+		sleep(futures, 500);
+		logger.info("End of calYZ stage3...");
 
 		futures.clear();
 		futures.add(parallelYzService.calAvg(sxlrYzRepository));
 		futures.add(parallelYzService.calAvg(mwlrYzRepository));
+		sleep(futures, 500);
+		logger.info("Done calYZ...");
+		return BaseResult.EMPTY;
+	}
+
+	private void sleep(List<Future<Exception>> futures, long time) throws Exception {
 		while (true) {
 			int count = 0;
 			for (Future<Exception> f : futures) {
@@ -394,10 +376,8 @@ public class YZController {
 			if (count == futures.size()) {
 				break;
 			}
-			Thread.sleep(500);
+			Thread.sleep(time);
 		}
-		logger.info("Done calYZ...");
-		return BaseResult.EMPTY;
 	}
 
 	@RequestMapping("/listSX")

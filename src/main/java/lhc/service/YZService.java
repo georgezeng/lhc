@@ -1378,14 +1378,14 @@ public class YZService {
 				List<LrInfo> lastInfos = new ArrayList<LrInfo>();
 				List<Integer> topValues = new ArrayList<Integer>();
 				for (String fd : fds) {
+					gm = clazz.getDeclaredMethod("get" + fd);
+					Integer lastValue = (Integer) gm.invoke(lastYZ);
 					if (!fd.equals(zeroFd)) {
-						gm = clazz.getDeclaredMethod("get" + fd);
-						Integer lastValue = (Integer) gm.invoke(lastYZ);
+						LrInfo info = new LrInfo();
+						info.value = lastValue;
+						info.special = false;
+						lastInfos.add(info);
 						if (lastValue != null) {
-							LrInfo info = new LrInfo();
-							info.value = lastValue;
-							info.special = false;
-							lastInfos.add(info);
 							lastValue++;
 							Integer value = (Integer) gm.invoke(yz);
 							if (value == null || value > 0) {
@@ -1396,7 +1396,7 @@ public class YZService {
 						}
 					} else {
 						LrInfo info = new LrInfo();
-						info.value = yz.getLastYz();
+						info.value = lastValue;
 						info.special = true;
 						lastInfos.add(info);
 					}
@@ -1404,8 +1404,8 @@ public class YZService {
 				gm = clazz.getDeclaredMethod("get" + zeroFd);
 				yz.setLastYz((Integer) gm.invoke(lastYZ));
 
-				try {
-					sm = clazz.getDeclaredMethod("setLastYzColor", Color.class);
+				if (lrHandler != null) {
+					sm = clazz.getSuperclass().getDeclaredMethod("setLastYzColor", Color.class);
 					Collections.sort(lastInfos, new Comparator<LrInfo>() {
 
 						@Override
@@ -1436,8 +1436,6 @@ public class YZService {
 					} else {
 						sm.invoke(yz, Color.Yellow);
 					}
-				} catch (Exception e) {
-
 				}
 
 				return topValues;
