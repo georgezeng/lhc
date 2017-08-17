@@ -63,6 +63,7 @@ import lhc.domain.SxZfYz;
 import lhc.domain.SxZfYz2;
 import lhc.domain.TmFdYz;
 import lhc.domain.TmYz;
+import lhc.domain.TwelveLrYz;
 import lhc.domain.TwelveYz;
 import lhc.domain.TwelveZfYz;
 import lhc.domain.WxYz;
@@ -98,6 +99,7 @@ import lhc.repository.jpa.api.SxZfYz2Repository;
 import lhc.repository.jpa.api.SxZfYzRepository;
 import lhc.repository.jpa.api.TmFdYzRepository;
 import lhc.repository.jpa.api.TmYzRepository;
+import lhc.repository.jpa.api.TwelveLrYzRepository;
 import lhc.repository.jpa.api.TwelveYzRepository;
 import lhc.repository.jpa.api.TwelveZfYzRepository;
 import lhc.repository.jpa.api.WxYzRepository;
@@ -167,6 +169,9 @@ public class YZService {
 
 	@Autowired
 	private TwelveYzRepository twelveyzRepository;
+
+	@Autowired
+	private TwelveLrYzRepository twelvelryzRepository;
 
 	@Autowired
 	private TwelveZfYzRepository twelvezfyzRepository;
@@ -1171,7 +1176,18 @@ public class YZService {
 						});
 				logger.info("End of calTwelveYZ...");
 			}
-		}, 1, 13);
+		}, 1, 13, new LrHandler() {
+
+			@Override
+			public int getSmall() {
+				return 4;
+			}
+
+			@Override
+			public int getLarge() {
+				return 7;
+			}
+		});
 
 	}
 
@@ -1337,9 +1353,15 @@ public class YZService {
 
 	private <T extends PosAvg> Future<Exception> calPosFDYZ(final Class<T> clazz, final Class<?> numsClass,
 			final BaseYzRepository<T> repository, final CommonHandler handler, int startPos, int endPos) {
+		return calPosFDYZ(clazz, numsClass, repository, handler, startPos, endPos, null);
+	}
+
+	private <T extends PosAvg> Future<Exception> calPosFDYZ(final Class<T> clazz, final Class<?> numsClass,
+			final BaseYzRepository<T> repository, final CommonHandler handler, int startPos, int endPos,
+			final LrHandler lrHandler) {
 		try {
 			return calYZ(clazz, repository, kaiJiangRepository,
-					new PosFDYZHandler<T>(clazz, numsClass, startPos, endPos, handler));
+					new PosFDYZHandler<T>(clazz, numsClass, startPos, endPos, handler, lrHandler));
 		} catch (Exception e) {
 			throw new RuntimeException(e.getMessage(), e);
 		}
@@ -1845,6 +1867,18 @@ public class YZService {
 			@Override
 			public void process() {
 				logger.info("End of calSXLRYZ...");
+			}
+		});
+
+	}
+
+	@Async
+	public Future<Exception> calTwelveLRYZ() {
+		return calLRYZ(TwelveLrYz.class, twelvelryzRepository, twelveyzRepository, new CommonHandler() {
+
+			@Override
+			public void process() {
+				logger.info("End of calTwelveLRYZ...");
 			}
 		});
 

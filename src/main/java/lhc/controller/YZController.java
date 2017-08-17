@@ -49,6 +49,7 @@ import lhc.domain.SxZfYz;
 import lhc.domain.SxZfYz2;
 import lhc.domain.TmFdYz;
 import lhc.domain.TmYz;
+import lhc.domain.TwelveLrYz;
 import lhc.domain.TwelveYz;
 import lhc.domain.TwelveZfYz;
 import lhc.domain.WxYz;
@@ -83,6 +84,7 @@ import lhc.repository.jpa.api.SxLrYzRepository;
 import lhc.repository.jpa.api.SxYzRepository;
 import lhc.repository.jpa.api.SxZfYz2Repository;
 import lhc.repository.jpa.api.TmYzRepository;
+import lhc.repository.jpa.api.TwelveLrYzRepository;
 import lhc.repository.jpa.api.TwelveYzRepository;
 import lhc.repository.jpa.api.TwelveZfYzRepository;
 import lhc.repository.jpa.api.WxYzRepository;
@@ -114,6 +116,7 @@ import lhc.repository.jpa.dao.SxZfYz2Dao;
 import lhc.repository.jpa.dao.SxZfYzDao;
 import lhc.repository.jpa.dao.TmFdYzDao;
 import lhc.repository.jpa.dao.TmYzDao;
+import lhc.repository.jpa.dao.TwelveLrYzDao;
 import lhc.repository.jpa.dao.TwelveYzDao;
 import lhc.repository.jpa.dao.TwelveZfYzDao;
 import lhc.repository.jpa.dao.WxYzDao;
@@ -140,6 +143,9 @@ public class YZController {
 
 	@Autowired
 	private SxLrYzDao sxlrYzDao;
+	
+	@Autowired
+	private TwelveLrYzDao twelvelrYzDao;
 
 	@Autowired
 	private MwLrYzDao mwlrYzDao;
@@ -296,6 +302,9 @@ public class YZController {
 
 	@Autowired
 	private TwelveZfYzRepository twelvezfYzRepository;
+	
+	@Autowired
+	private TwelveLrYzRepository twelvelrYzRepository;
 
 	@Autowired
 	private ParallelYzServiceWrapper parallelYzService;
@@ -373,12 +382,14 @@ public class YZController {
 		futures.clear();
 		futures.add(yzService.calSXLRYZ());
 		futures.add(yzService.calMWLRYZ());
+		futures.add(yzService.calTwelveLRYZ());
 		sleep(futures, 500);
 		logger.info("End of calYZ stage3...");
 
 		futures.clear();
 		futures.add(parallelYzService.calAvg(sxlrYzRepository));
 		futures.add(parallelYzService.calAvg(mwlrYzRepository));
+		futures.add(parallelYzService.calAvg(twelvelrYzRepository));
 		sleep(futures, 500);
 		logger.info("Done calYZ...");
 		return BaseResult.EMPTY;
@@ -418,6 +429,12 @@ public class YZController {
 	@RequestMapping("/listSXLRYZ")
 	public BaseResult listSXLRYZ(@RequestBody QueryInfo<SxLrYz> queryInfo) throws Exception {
 		PageResult<SxLrYz> result = sxlrYzDao.query(queryInfo);
+		return new BaseResult(result);
+	}
+	
+	@RequestMapping("/listTwelveLRYZ")
+	public BaseResult listTwelveLRYZ(@RequestBody QueryInfo<TwelveLrYz> queryInfo) throws Exception {
+		PageResult<TwelveLrYz> result = twelvelrYzDao.query(queryInfo);
 		return new BaseResult(result);
 	}
 
