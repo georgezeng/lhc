@@ -35,8 +35,6 @@ public class SxYz extends Lr {
 	@Transient
 	private SX lastSx;
 	@Transient
-	private int[] lastYzList = new int[25];
-	@Transient
 	private BigDecimal avg;
 	@Transient
 	private Integer lastCountYz;
@@ -55,14 +53,6 @@ public class SxYz extends Lr {
 
 	public void setAvg(BigDecimal avg) {
 		this.avg = avg;
-	}
-
-	public int[] getLastYzList() {
-		return lastYzList;
-	}
-
-	public void setLastYzList(int[] lastYzList) {
-		this.lastYzList = lastYzList;
 	}
 
 	public SX getTopSx() {

@@ -30,7 +30,7 @@ public class SxZfYz extends BaseYz {
 	private Integer[] posList = new Integer[12];
 
 	@Transient
-	private int[] lastYzList = new int[25];
+	private int[] lastYzList = new int[34];
 
 	@Transient
 	private BigDecimal avg;

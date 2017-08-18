@@ -3,6 +3,7 @@ package lhc.domain;
 import java.math.BigDecimal;
 
 import javax.persistence.MappedSuperclass;
+import javax.persistence.Transient;
 
 @MappedSuperclass
 public abstract class Avg extends BaseYz {
@@ -60,6 +61,17 @@ public abstract class Avg extends BaseYz {
 	private BigDecimal min18Avg;
 	private Integer min19;
 	private BigDecimal min19Avg;
+
+	@Transient
+	private int[] lastYzList = new int[34];
+
+	public int[] getLastYzList() {
+		return lastYzList;
+	}
+
+	public void setLastYzList(int[] lastYzList) {
+		this.lastYzList = lastYzList;
+	}
 
 	public Integer getTop0() {
 		return top0;

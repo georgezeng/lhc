@@ -2,6 +2,7 @@ package lhc.domain;
 
 import javax.persistence.Entity;
 import javax.persistence.Table;
+import javax.persistence.Transient;
 
 @Entity
 @Table(name = "sq_yz")
@@ -15,6 +16,16 @@ public class SqYz extends BaseYz {
 	private Integer total;
 	private Integer lastYz;
 	private Integer delta;
+	@Transient
+	private int[] lastYzList = new int[34];
+
+	public int[] getLastYzList() {
+		return lastYzList;
+	}
+
+	public void setLastYzList(int[] lastYzList) {
+		this.lastYzList = lastYzList;
+	}
 
 	public Integer getDelta() {
 		return delta;

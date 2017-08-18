@@ -24,6 +24,7 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
 import lhc.domain.Avg;
+import lhc.domain.BaseYz;
 import lhc.domain.BsYz;
 import lhc.domain.BsZfYz;
 import lhc.domain.DsYz;
@@ -820,48 +821,138 @@ public class YZController {
 
 	@RequestMapping("/countSXJZ")
 	public BaseResult countSXJZ(@RequestBody QueryInfo<SxYz> queryInfo) throws Exception {
-		PageResult<SxYz> result = sxYzDao.query(queryInfo);
-		if (result != null && result.getTotal() > 0) {
-			SxYz totalLine = new SxYz();
-			for (SxYz data : result.getList()) {
-				Integer lastYz = data.getLastYz();
-				if (lastYz != null) {
-					if (lastYz < 21) {
-						totalLine.getLastYzList()[lastYz]++;
-					} else if (lastYz > 20 && lastYz < 31) {
-						totalLine.getLastYzList()[21]++;
-					} else if (lastYz > 30 && lastYz < 41) {
-						totalLine.getLastYzList()[22]++;
-					} else if (lastYz > 40 && lastYz < 51) {
-						totalLine.getLastYzList()[23]++;
-					} else {
-						totalLine.getLastYzList()[24]++;
-					}
-				}
-			}
-			result.getList().add(totalLine);
-		}
-		return new BaseResult(result);
+		return countJZ(queryInfo, sxYzDao, SxYz.class);
+	}
+
+	@RequestMapping("/countDSJZ")
+	public BaseResult countDSJZ(@RequestBody QueryInfo<DsYz> queryInfo) throws Exception {
+		return countJZ(queryInfo, dsYzDao, DsYz.class);
+	}
+
+	@RequestMapping("/countSWJZ")
+	public BaseResult countSWJZ(@RequestBody QueryInfo<SwYz> queryInfo) throws Exception {
+		return countJZ(queryInfo, swYzDao, SwYz.class);
+	}
+
+	@RequestMapping("/countMWJZ")
+	public BaseResult countMWJZ(@RequestBody QueryInfo<MwYz> queryInfo) throws Exception {
+		return countJZ(queryInfo, mwYzDao, MwYz.class);
+	}
+
+	@RequestMapping("/countLHJZ")
+	public BaseResult countLHJZ(@RequestBody QueryInfo<LhYz> queryInfo) throws Exception {
+		return countJZ(queryInfo, lhYzDao, LhYz.class);
+	}
+
+	@RequestMapping("/countBSJZ")
+	public BaseResult countBSJZ(@RequestBody QueryInfo<BsYz> queryInfo) throws Exception {
+		return countJZ(queryInfo, bsYzDao, BsYz.class);
+	}
+
+	@RequestMapping("/countZSJZ")
+	public BaseResult countZSJZ(@RequestBody QueryInfo<ZsYz> queryInfo) throws Exception {
+		return countJZ(queryInfo, zsYzDao, ZsYz.class);
+	}
+
+	@RequestMapping("/countWXJZ")
+	public BaseResult countWXJZ(@RequestBody QueryInfo<WxYz> queryInfo) throws Exception {
+		return countJZ(queryInfo, wxYzDao, WxYz.class);
+	}
+
+	@RequestMapping("/countQQJZ")
+	public BaseResult countQQJZ(@RequestBody QueryInfo<QqYz> queryInfo) throws Exception {
+		return countJZ(queryInfo, qqYzDao, QqYz.class);
+	}
+
+	@RequestMapping("/countTwelveJZ")
+	public BaseResult countTwelveJZ(@RequestBody QueryInfo<TwelveYz> queryInfo) throws Exception {
+		return countJZ(queryInfo, twelveYzDao, TwelveYz.class);
+	}
+
+	@RequestMapping("/countSQJZ")
+	public BaseResult countSQJZ(@RequestBody QueryInfo<SqYz> queryInfo) throws Exception {
+		return countJZ(queryInfo, sqYzDao, SqYz.class);
+	}
+
+	@RequestMapping("/countTMJZ")
+	public BaseResult countTMJZ(@RequestBody QueryInfo<TmYz> queryInfo) throws Exception {
+		return countJZ(queryInfo, tmYzDao, TmYz.class);
 	}
 
 	@RequestMapping("/countSXZFJZ")
 	public BaseResult countSXZFJZ(@RequestBody QueryInfo<SxZfYz> queryInfo) throws Exception {
-		PageResult<SxZfYz> result = sxZfYzDao.query(queryInfo);
+		return countJZ(queryInfo, sxZfYzDao, SxZfYz.class);
+	}
+
+	@RequestMapping("/countSXZF2JZ")
+	public BaseResult countSXZF2JZ(@RequestBody QueryInfo<SxZfYz2> queryInfo) throws Exception {
+		return countJZ(queryInfo, sxZfYz2Dao, SxZfYz2.class);
+	}
+
+	@RequestMapping("/countDSZFJZ")
+	public BaseResult countDSZFJZ(@RequestBody QueryInfo<DsZfYz> queryInfo) throws Exception {
+		return countJZ(queryInfo, dszfYzDao, DsZfYz.class);
+	}
+
+	@RequestMapping("/countSWZFJZ")
+	public BaseResult countSWZFJZ(@RequestBody QueryInfo<SwZfYz> queryInfo) throws Exception {
+		return countJZ(queryInfo, swZfYzDao, SwZfYz.class);
+	}
+
+	@RequestMapping("/countMWZFJZ")
+	public BaseResult countMWZFJZ(@RequestBody QueryInfo<MwZfYz> queryInfo) throws Exception {
+		return countJZ(queryInfo, mwZfYzDao, MwZfYz.class);
+	}
+
+	@RequestMapping("/countLHZFJZ")
+	public BaseResult countLHZFJZ(@RequestBody QueryInfo<LhZfYz> queryInfo) throws Exception {
+		return countJZ(queryInfo, lhZfYzDao, LhZfYz.class);
+	}
+
+	@RequestMapping("/countBSZFJZ")
+	public BaseResult countBSZFJZ(@RequestBody QueryInfo<BsZfYz> queryInfo) throws Exception {
+		return countJZ(queryInfo, bszfYzDao, BsZfYz.class);
+	}
+
+	@RequestMapping("/countZSZFJZ")
+	public BaseResult countZSZFJZ(@RequestBody QueryInfo<ZsZfYz> queryInfo) throws Exception {
+		return countJZ(queryInfo, zszfYzDao, ZsZfYz.class);
+	}
+
+	@RequestMapping("/countWXZFJZ")
+	public BaseResult countWXZFJZ(@RequestBody QueryInfo<WxZfYz> queryInfo) throws Exception {
+		return countJZ(queryInfo, wxzfYzDao, WxZfYz.class);
+	}
+
+	@RequestMapping("/countQQZFJZ")
+	public BaseResult countQQZFJZ(@RequestBody QueryInfo<QqZfYz> queryInfo) throws Exception {
+		return countJZ(queryInfo, qqZfYzDao, QqZfYz.class);
+	}
+
+	@RequestMapping("/countTwelveZFJZ")
+	public BaseResult countTwelveZFJZ(@RequestBody QueryInfo<TwelveZfYz> queryInfo) throws Exception {
+		return countJZ(queryInfo, twelvezfYzDao, TwelveZfYz.class);
+	}
+
+	private <T extends BaseYz> BaseResult countJZ(QueryInfo<T> queryInfo, BaseYzDao<T> dao, Class<T> clazz)
+			throws Exception {
+		PageResult<T> result = dao.query(queryInfo);
 		if (result != null && result.getTotal() > 0) {
-			SxZfYz totalLine = new SxZfYz();
-			for (SxZfYz data : result.getList()) {
-				Integer lastYz = data.getLastYz();
+			T totalLine = clazz.newInstance();
+			Method m1 = ReflectionUtils.findMethod(clazz, "getLastYz");
+			Method m2 = ReflectionUtils.findMethod(clazz, "getLastYzList");
+			for (T data : result.getList()) {
+				Integer lastYz = (Integer) m1.invoke(data);
 				if (lastYz != null) {
-					if (lastYz < 21) {
-						totalLine.getLastYzList()[lastYz]++;
-					} else if (lastYz > 20 && lastYz < 31) {
-						totalLine.getLastYzList()[21]++;
+					int[] lastYzList = (int[]) m2.invoke(totalLine);
+					if (lastYz < 31) {
+						lastYzList[lastYz]++;
 					} else if (lastYz > 30 && lastYz < 41) {
-						totalLine.getLastYzList()[22]++;
+						lastYzList[31]++;
 					} else if (lastYz > 40 && lastYz < 51) {
-						totalLine.getLastYzList()[23]++;
+						lastYzList[32]++;
 					} else {
-						totalLine.getLastYzList()[24]++;
+						lastYzList[33]++;
 					}
 				}
 			}
