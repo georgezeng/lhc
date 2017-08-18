@@ -143,7 +143,7 @@ public class YZController {
 
 	@Autowired
 	private SxLrYzDao sxlrYzDao;
-	
+
 	@Autowired
 	private TwelveLrYzDao twelvelrYzDao;
 
@@ -302,7 +302,7 @@ public class YZController {
 
 	@Autowired
 	private TwelveZfYzRepository twelvezfYzRepository;
-	
+
 	@Autowired
 	private TwelveLrYzRepository twelvelrYzRepository;
 
@@ -335,6 +335,11 @@ public class YZController {
 
 	@RequestMapping("/calYZ")
 	public BaseResult calYZ() throws Exception {
+		calYZ(true);
+		return BaseResult.EMPTY;
+	}
+
+	public void calYZ(boolean sleep) throws Exception {
 		List<Future<Exception>> futures = new ArrayList<Future<Exception>>();
 		futures.add(yzService.calSX());
 		futures.add(yzService.calHMQWYZ());
@@ -350,7 +355,11 @@ public class YZController {
 		futures.add(yzService.calWXYZ());
 		futures.add(yzService.calPTYZ());
 		futures.add(yzService.calTwelveYZ());
-		sleep(futures, 1000);
+		if (sleep) {
+			sleep(futures, 1000);
+		} else {
+			sleep(futures, 0);
+		}
 		logger.info("End of calYZ stage1...");
 
 		futures.clear();
@@ -376,23 +385,34 @@ public class YZController {
 		futures.add(parallelYzService.calAvg(qqzfYzRepository));
 		futures.add(parallelYzService.calAvg(twelveYzRepository));
 		futures.add(parallelYzService.calAvg(twelvezfYzRepository));
-		sleep(futures, 1000);
+		if (sleep) {
+			sleep(futures, 1000);
+		} else {
+			sleep(futures, 0);
+		}
 		logger.info("End of calYZ stage2...");
 
 		futures.clear();
 		futures.add(yzService.calSXLRYZ());
 		futures.add(yzService.calMWLRYZ());
 		futures.add(yzService.calTwelveLRYZ());
-		sleep(futures, 500);
+		if (sleep) {
+			sleep(futures, 1000);
+		} else {
+			sleep(futures, 0);
+		}
 		logger.info("End of calYZ stage3...");
 
 		futures.clear();
 		futures.add(parallelYzService.calAvg(sxlrYzRepository));
 		futures.add(parallelYzService.calAvg(mwlrYzRepository));
 		futures.add(parallelYzService.calAvg(twelvelrYzRepository));
-		sleep(futures, 500);
+		if (sleep) {
+			sleep(futures, 1000);
+		} else {
+			sleep(futures, 0);
+		}
 		logger.info("Done calYZ...");
-		return BaseResult.EMPTY;
 	}
 
 	private void sleep(List<Future<Exception>> futures, long time) throws Exception {
@@ -409,7 +429,9 @@ public class YZController {
 			if (count == futures.size()) {
 				break;
 			}
-			Thread.sleep(time);
+			if (time > 0) {
+				Thread.sleep(time);
+			}
 		}
 	}
 
@@ -431,7 +453,7 @@ public class YZController {
 		PageResult<SxLrYz> result = sxlrYzDao.query(queryInfo);
 		return new BaseResult(result);
 	}
-	
+
 	@RequestMapping("/listTwelveLRYZ")
 	public BaseResult listTwelveLRYZ(@RequestBody QueryInfo<TwelveLrYz> queryInfo) throws Exception {
 		PageResult<TwelveLrYz> result = twelvelrYzDao.query(queryInfo);
@@ -1066,7 +1088,7 @@ public class YZController {
 		TmFdYz queryObj = queryInfo.getObject();
 		TmYz tmResult = tmYzRepository.findByYearAndPhase(queryObj.getYear(), queryObj.getPhase());
 		if (tmResult != null) {
-			List<TmYzInfo> fdList = yzService.getTMFDList(tmResult);
+			List<TmYzInfo> fdList = yzService.getTMFDList(tmResult, false);
 			if (result != null && result.getTotal() > 0) {
 				TmFdYz data = new TmFdYz();
 				data.setList(fdList);

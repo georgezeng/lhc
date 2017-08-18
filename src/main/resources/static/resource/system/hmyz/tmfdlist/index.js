@@ -14,6 +14,8 @@ $(document).ready(function() {
 	cols.push("delta");
 	cols.push("lastYz");
 	cols.push("maxYz");
+	cols.push("prevDelta");
+	cols.push("tm");
 	var columns = [];
 	for(var i in cols) {
 		var col = cols[i];
@@ -42,6 +44,7 @@ $(document).ready(function() {
 			});
 		})(i);
 	}
+	var lastNum = null;
 	for(var i = 2; i < 9; i++) {
 		(function(index) {
 			columnDefs.push({
@@ -65,6 +68,7 @@ $(document).ready(function() {
 								text.push(item.list[j].num);
 							}
 						}
+						
 						$(nTd).text(text.join(", "));
 					}
 				}

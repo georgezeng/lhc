@@ -18,9 +18,6 @@ import lhc.dto.BaseResult;
 import lhc.dto.query.PageResult;
 import lhc.dto.query.QueryInfo;
 import lhc.repository.jpa.api.KaiJiangRepository;
-import lhc.repository.jpa.api.QwYzRepository;
-import lhc.repository.jpa.api.SxYzRepository;
-import lhc.repository.jpa.api.SxZfYzRepository;
 import lhc.repository.jpa.dao.KaiJiangDao;
 import lhc.service.ParseService;
 
@@ -35,15 +32,6 @@ public class KaiJiangController {
 
 	@Autowired
 	private KaiJiangRepository kaiJiangRepository;
-
-	@Autowired
-	private QwYzRepository qwYzRepository;
-
-	@Autowired
-	private SxYzRepository sxYzRepository;
-
-	@Autowired
-	private SxZfYzRepository sxZfYzRepository;
 
 	@Autowired
 	private YZController yZController;
@@ -62,18 +50,19 @@ public class KaiJiangController {
 
 	@RequestMapping("/sync/{year}")
 	public BaseResult sync(@PathVariable int year) throws Exception {
+		return sync(year, true);
+	}
+
+	public BaseResult sync(int year, boolean sleep) throws Exception {
 		delete(year);
 		parseService.syncKaiJiang(year);
-		yZController.calYZ();
+		yZController.calYZ(sleep);
 		return BaseResult.EMPTY;
 	}
 
 	@RequestMapping("/delete/{year}")
 	public BaseResult delete(@PathVariable int year) {
 		kaiJiangRepository.deleteByYear(year);
-		qwYzRepository.deleteAll();
-		sxYzRepository.deleteAll();
-		sxZfYzRepository.deleteAll();
 		return BaseResult.EMPTY;
 	}
 

@@ -117,7 +117,7 @@ $(document).ready(function() {
 		aTargets: [15],
 		fnCreatedCell: function(nTd, sData, item, iRow, iCol) {
 			if(item.red == 0) {
-				$(nTd).css("backgroundColor", "red");
+				$(nTd).css("backgroundColor", "red").css("color", "white");
 			}
 			$(nTd).text(item.red);
 		}
@@ -126,7 +126,7 @@ $(document).ready(function() {
 		aTargets: [16],
 		fnCreatedCell: function(nTd, sData, item, iRow, iCol) {
 			if(item.yellow == 0) {
-				$(nTd).css("backgroundColor", "yellow");
+				$(nTd).css("backgroundColor", "yellow").css("color", "white");
 			}
 			$(nTd).text(item.yellow);
 		}
@@ -135,7 +135,7 @@ $(document).ready(function() {
 		aTargets: [17],
 		fnCreatedCell: function(nTd, sData, item, iRow, iCol) {
 			if(item.green == 0) {
-				$(nTd).css("backgroundColor", "green");
+				$(nTd).css("backgroundColor", "green").css("color", "white");
 			}
 			$(nTd).text(item.green);
 		}

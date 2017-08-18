@@ -22,6 +22,25 @@ public class TmFdYz extends BaseYz {
 	private Integer lastYz;
 	private Integer delta;
 	private Integer maxYz;
+	private Integer tm;
+	private Integer prevDelta;
+
+	public Integer getTm() {
+		return tm;
+	}
+
+	public void setTm(Integer tm) {
+		this.tm = tm;
+	}
+
+	public Integer getPrevDelta() {
+		return prevDelta;
+	}
+
+	public void setPrevDelta(Integer prevDelta) {
+		this.prevDelta = prevDelta;
+	}
+
 	@Transient
 	private List<TmYzInfo> list;
 

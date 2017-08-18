@@ -1018,11 +1018,12 @@ public class YZService {
 						yz.setDate(data.getDate());
 					}
 
-					List<TmYzInfo> infos = getTMFDList(data);
+					List<TmYzInfo> infos = getTMFDList(data, true);
 
 					int num = 1;
 					for (TmYzInfo info : infos) {
 						if (info.isTm()) {
+							yz.setTm(info.getNum());
 							break;
 						}
 						num++;
@@ -1049,6 +1050,7 @@ public class YZService {
 						}
 						gm = ReflectionUtils.findMethod(TmFdYz.class, "getFd" + num);
 						yz.setLastYz((Integer) gm.invoke(lastYz));
+						yz.setPrevDelta(yz.getTm() - lastYz.getTm());
 					}
 
 					int total = 0;
@@ -1079,7 +1081,7 @@ public class YZService {
 		} while (result != null && result.hasNext());
 	}
 
-	public List<TmYzInfo> getTMFDList(TmYz data) {
+	public List<TmYzInfo> getTMFDList(TmYz data, boolean treatAsLastYz) {
 		try {
 			List<TmYzInfo> infos = new ArrayList<TmYzInfo>();
 			for (int i = 1; i < 50; i++) {
@@ -1092,7 +1094,7 @@ public class YZService {
 				@Override
 				public int compare(TmYzInfo o1, TmYzInfo o2) {
 					if (o1.getYz() != null && o2.getYz() != null) {
-						if (data.getLastYz() != null) {
+						if (treatAsLastYz && data.getLastYz() != null) {
 							if (o1.getYz() == 0) {
 								o1.setYz(data.getLastYz());
 							}

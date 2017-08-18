@@ -1,6 +1,7 @@
 var datatables = [];
 var customSeries;
 var seriesCallback;
+var seriesValueCallback;
 $(document).ready(function() {
 	$("#menuBtn").click(function() {
 		if($(this).text() == "隐藏菜单") {
@@ -97,13 +98,14 @@ $(document).ready(function() {
 				}
 			},
 			success: function(result) {
-				var series;
+				var series = [];
+				if(typeof seriesCallback === 'function') {
+					series = seriesCallback(result, series);
+				}
 				if(!customSeries) {
-					series = [
-						{name: '上期遗值', data: []},
-						{name: '遗值和', data: []}, 
-						{name: '和平均值', data: []}
-						];
+					series.push({name: '上期遗值', data: []});
+					series.push({name: '遗值和', data: []});
+					series.push({name: '和平均值', data: []});
 					for(var i = 1; i < 6; i++) {
 						series.push({name: '倒' + i, data: []});
 						series.push({name: '倒' + i + '平均值', data: []});
@@ -115,6 +117,9 @@ $(document).ready(function() {
 					for(var i in result.list) {
 						var item = result.list[i];
 						var count = 0;
+						if(typeof seriesValueCallback === 'function') {
+							count = seriesValueCallback(series, item);
+						}
 						series[count].data.push(
 								[item.year + "-" + item.phase, item.lastYz]
 						);
@@ -148,11 +153,7 @@ $(document).ready(function() {
 							series[count++].visible = false;
 						}
 					}
-				} else {
-					if(typeof seriesCallback === 'function') {
-						series = seriesCallback(result, []);
-					}
-				}
+				} 
 				
 				Highcharts.chart('charts', {
 					
