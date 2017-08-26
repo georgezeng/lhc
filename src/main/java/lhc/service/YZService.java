@@ -14,6 +14,7 @@ import java.util.concurrent.Future;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.dao.DataAccessException;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
@@ -29,7 +30,9 @@ import lhc.constants.BsNums;
 import lhc.constants.DsNums;
 import lhc.constants.LhNums;
 import lhc.constants.MwNums;
+import lhc.constants.PdNums;
 import lhc.constants.QqNums;
+import lhc.constants.SlqNums;
 import lhc.constants.SwNums;
 import lhc.constants.TwelveNums;
 import lhc.constants.WxNums;
@@ -47,11 +50,17 @@ import lhc.domain.LrSet;
 import lhc.domain.MwLrYz;
 import lhc.domain.MwYz;
 import lhc.domain.MwZfYz;
+import lhc.domain.PdLrYz;
+import lhc.domain.PdYz;
+import lhc.domain.PdZfYz;
 import lhc.domain.PosAvg;
 import lhc.domain.PtYz;
 import lhc.domain.QqYz;
 import lhc.domain.QqZfYz;
 import lhc.domain.QwYz;
+import lhc.domain.SlqLrYz;
+import lhc.domain.SlqYz;
+import lhc.domain.SlqZfYz;
 import lhc.domain.SqYz;
 import lhc.domain.SwYz;
 import lhc.domain.SwZfYz;
@@ -61,6 +70,9 @@ import lhc.domain.SxLrYz;
 import lhc.domain.SxYz;
 import lhc.domain.SxZfYz;
 import lhc.domain.SxZfYz2;
+import lhc.domain.Tm12FdLrYz;
+import lhc.domain.Tm12FdYz;
+import lhc.domain.Tm12FdZfYz;
 import lhc.domain.TmFdYz;
 import lhc.domain.TmYz;
 import lhc.domain.TwelveLrYz;
@@ -74,38 +86,7 @@ import lhc.dto.TmYzInfo;
 import lhc.enums.Color;
 import lhc.enums.SX;
 import lhc.repository.jpa.BaseYzRepository;
-import lhc.repository.jpa.api.BsYzRepository;
-import lhc.repository.jpa.api.BsZfYzRepository;
-import lhc.repository.jpa.api.DsYzRepository;
-import lhc.repository.jpa.api.DsZfYzRepository;
-import lhc.repository.jpa.api.KaiJiangRepository;
-import lhc.repository.jpa.api.LhYzRepository;
-import lhc.repository.jpa.api.LhZfYzRepository;
-import lhc.repository.jpa.api.MwLrYzRepository;
-import lhc.repository.jpa.api.MwYzRepository;
-import lhc.repository.jpa.api.MwZfYzRepository;
-import lhc.repository.jpa.api.PtYzRepository;
-import lhc.repository.jpa.api.QqYzRepository;
-import lhc.repository.jpa.api.QqZfYzRepository;
-import lhc.repository.jpa.api.QwYzRepository;
-import lhc.repository.jpa.api.SqYzRepository;
-import lhc.repository.jpa.api.SwYzRepository;
-import lhc.repository.jpa.api.SwZfYzRepository;
-import lhc.repository.jpa.api.SxCsYzRepository;
-import lhc.repository.jpa.api.SxDsYzRepository;
-import lhc.repository.jpa.api.SxLrYzRepository;
-import lhc.repository.jpa.api.SxYzRepository;
-import lhc.repository.jpa.api.SxZfYz2Repository;
-import lhc.repository.jpa.api.SxZfYzRepository;
-import lhc.repository.jpa.api.TmFdYzRepository;
-import lhc.repository.jpa.api.TmYzRepository;
-import lhc.repository.jpa.api.TwelveLrYzRepository;
-import lhc.repository.jpa.api.TwelveYzRepository;
-import lhc.repository.jpa.api.TwelveZfYzRepository;
-import lhc.repository.jpa.api.WxYzRepository;
-import lhc.repository.jpa.api.WxZfYzRepository;
-import lhc.repository.jpa.api.ZsYzRepository;
-import lhc.repository.jpa.api.ZsZfYzRepository;
+import lhc.repository.jpa.Repositories;
 
 @Service
 @Transactional
@@ -114,216 +95,124 @@ public class YZService {
 	private Logger logger = LoggerFactory.getLogger(getClass());
 
 	@Autowired
-	private KaiJiangRepository kaiJiangRepository;
-
-	@Autowired
-	private SxYzRepository sxyzRepository;
-
-	@Autowired
-	private SxLrYzRepository sxlryzRepository;
-
-	@Autowired
-	private MwLrYzRepository mwlryzRepository;
-
-	@Autowired
-	private SxZfYzRepository sxzfyzRepository;
-
-	@Autowired
-	private SxZfYz2Repository sxzfyz2Repository;
-
-	@Autowired
-	private QwYzRepository qwyzRepository;
-
-	@Autowired
-	private SwYzRepository swyzRepository;
-
-	@Autowired
-	private SwZfYzRepository swzfyzRepository;
-
-	@Autowired
-	private MwZfYzRepository mwzfyzRepository;
-
-	@Autowired
-	private DsZfYzRepository dszfyzRepository;
-
-	@Autowired
-	private MwYzRepository mwyzRepository;
-
-	@Autowired
-	private LhYzRepository lhyzRepository;
-
-	@Autowired
-	private QqYzRepository qqyzRepository;
-
-	@Autowired
-	private QqZfYzRepository qqzfyzRepository;
-
-	@Autowired
-	private BsYzRepository bsyzRepository;
-
-	@Autowired
-	private ZsYzRepository zsyzRepository;
-
-	@Autowired
-	private DsYzRepository dsyzRepository;
-
-	@Autowired
-	private TwelveYzRepository twelveyzRepository;
-
-	@Autowired
-	private TwelveLrYzRepository twelvelryzRepository;
-
-	@Autowired
-	private TwelveZfYzRepository twelvezfyzRepository;
-
-	@Autowired
-	private LhZfYzRepository lhzfyzRepository;
-
-	@Autowired
-	private SqYzRepository sqyzRepository;
-
-	@Autowired
-	private SxDsYzRepository sxdsyzRepository;
-
-	@Autowired
-	private TmYzRepository tmyzRepository;
-
-	@Autowired
-	private PtYzRepository ptyzRepository;
-
-	@Autowired
-	private TmFdYzRepository tmfdyzRepository;
-
-	@Autowired
-	private ZsZfYzRepository zszfyzRepository;
-
-	@Autowired
-	private BsZfYzRepository bszfyzRepository;
-
-	@Autowired
-	private WxYzRepository wxyzRepository;
-
-	@Autowired
-	private WxZfYzRepository wxzfyzRepository;
-
-	@Autowired
-	private SxCsYzRepository sxcsyzRepository;
+	private Repositories repositories;
 
 	@Async
 	public Future<Exception> calSX() {
-		return calYZ(SxYz.class, sxyzRepository, kaiJiangRepository, new YzHandler<SxYz, KaiJiang>() {
+		return calYZ(SxYz.class, repositories.sxyzRepository, repositories.kaiJiangRepository,
+				new YzHandler<SxYz, KaiJiang>() {
 
-			@Override
-			public List<Integer> process(SxYz yz, SxYz lastYZ, KaiJiang data, KaiJiang lastData) throws Exception {
-				Method method = ReflectionUtils.findMethod(SxYz.class, "set" + data.getSpecialSx().name(), Integer.class);
-				method.invoke(yz, 0);
-				yz.setCurrentSx(data.getSpecialSx());
-				if (lastYZ != null) {
+					@Override
+					public List<Integer> process(SxYz yz, SxYz lastYZ, KaiJiang data, KaiJiang lastData) throws Exception {
+						Method method = ReflectionUtils.findMethod(SxYz.class, "set" + data.getSpecialSx().name(), Integer.class);
+						method.invoke(yz, 0);
+						yz.setCurrentSx(data.getSpecialSx());
+						if (lastYZ != null) {
 
-					Class<SxYz> clazz = SxYz.class;
-					method = ReflectionUtils.findMethod(clazz, "get" + data.getSpecialSx().name());
-					Integer lastValue = (Integer) method.invoke(lastYZ);
-					yz.setLastYz(lastValue);
-					List<Integer> topValues = new ArrayList<Integer>();
-					List<LrInfo> lastInfos = new ArrayList<LrInfo>();
-					for (SX sx : SX.seq()) {
-						method = ReflectionUtils.findMethod(SX.class, "is" + sx.name());
-						Boolean isCurrentSX = (Boolean) method.invoke(data.getSpecialSx());
-						if (!isCurrentSX) {
-							method = ReflectionUtils.findMethod(clazz, "get" + sx.name());
-							lastValue = (Integer) method.invoke(lastYZ);
-							LrInfo info = new LrInfo();
-							info.value = lastValue;
-							info.special = false;
-							lastInfos.add(info);
-							if (lastValue != null) {
-								lastValue++;
-								method = ReflectionUtils.findMethod(clazz, "set" + sx.name(), Integer.class);
-								method.invoke(yz, lastValue);
-								topValues.add(lastValue);
-							}
-						} else {
-							LrInfo info = new LrInfo();
-							info.value = yz.getLastYz();
-							info.special = true;
-							lastInfos.add(info);
-						}
-					}
-					Collections.sort(lastInfos, new Comparator<LrInfo>() {
-
-						@Override
-						public int compare(LrInfo o1, LrInfo o2) {
-							if (o1.value == null && o2.value == null) {
-								return 0;
-							} else if (o1.value == null && o2.value != null) {
-								return -1;
-							} else if (o1.value != null && o2.value == null) {
-								return 1;
-							} else {
-								return o1.value.compareTo(o2.value);
-							}
-						}
-
-					});
-					int pos = 0;
-					for (LrInfo info : lastInfos) {
-						if (info.special) {
-							break;
-						}
-						pos++;
-					}
-					if (pos < 4) {
-						yz.setLastYzColor(Color.Red);
-					} else if (pos > 7) {
-						yz.setLastYzColor(Color.Green);
-					} else {
-						yz.setLastYzColor(Color.Yellow);
-					}
-					return topValues;
-				}
-				return null;
-			}
-
-			@Override
-			public int calTotal(SxYz yz) throws Exception {
-				Integer total = 0;
-				for (SX sx : SX.seq()) {
-					Method method = ReflectionUtils.findMethod(SxYz.class, "get" + sx.name());
-					Integer value = (Integer) method.invoke(yz);
-					if (value != null) {
-						total += value;
-					}
-				}
-				yz.setTotal(total);
-				return total;
-			}
-
-			@Override
-			public void afterProcess() throws Exception {
-				calSXZF();
-				calZF(SX.values().length, SxYz.class, SxZfYz2.class, sxyzRepository, sxzfyz2Repository,
-						new ZFPosHandler<SxZfYz2, SxYz>() {
-
-							@Override
-							Integer process(SxZfYz2 zfYz, SxZfYz2 lastZFYZ, SxYz data, SxYz lastYZ, Class<SxYz> yzClazz,
-									Class<SxZfYz2> yzzfClazz, int zfLength) throws Exception {
-								Integer pos = null;
-								if (lastYZ != null) {
-									pos = zfLength - lastYZ.getCurrentSx().getPos() + data.getCurrentSx().getPos();
-									if (pos >= zfLength) {
-										pos -= zfLength;
+							Class<SxYz> clazz = SxYz.class;
+							method = ReflectionUtils.findMethod(clazz, "get" + data.getSpecialSx().name());
+							Integer lastValue = (Integer) method.invoke(lastYZ);
+							yz.setLastYz(lastValue);
+							List<Integer> topValues = new ArrayList<Integer>();
+							List<LrInfo> lastInfos = new ArrayList<LrInfo>();
+							for (SX sx : SX.seq()) {
+								method = ReflectionUtils.findMethod(SX.class, "is" + sx.name());
+								Boolean isCurrentSX = (Boolean) method.invoke(data.getSpecialSx());
+								if (!isCurrentSX) {
+									method = ReflectionUtils.findMethod(clazz, "get" + sx.name());
+									lastValue = (Integer) method.invoke(lastYZ);
+									LrInfo info = new LrInfo();
+									info.value = lastValue;
+									info.special = false;
+									lastInfos.add(info);
+									if (lastValue != null) {
+										lastValue++;
+										method = ReflectionUtils.findMethod(clazz, "set" + sx.name(), Integer.class);
+										method.invoke(yz, lastValue);
+										topValues.add(lastValue);
 									}
-									Method m = ReflectionUtils.findMethod(SxZfYz2.class, "setZf" + pos, Integer.class);
-									m.invoke(zfYz, 0);
+								} else {
+									LrInfo info = new LrInfo();
+									info.value = yz.getLastYz();
+									info.special = true;
+									lastInfos.add(info);
 								}
-								zfYz.setCurrentPos(pos);
-								return pos;
 							}
+							Collections.sort(lastInfos, new Comparator<LrInfo>() {
 
-						});
-				logger.info("End of calSXYZ...");
-			}
-		});
+								@Override
+								public int compare(LrInfo o1, LrInfo o2) {
+									if (o1.value == null && o2.value == null) {
+										return 0;
+									} else if (o1.value == null && o2.value != null) {
+										return -1;
+									} else if (o1.value != null && o2.value == null) {
+										return 1;
+									} else {
+										return o1.value.compareTo(o2.value);
+									}
+								}
+
+							});
+							int pos = 0;
+							for (LrInfo info : lastInfos) {
+								if (info.special) {
+									break;
+								}
+								pos++;
+							}
+							if (pos < 4) {
+								yz.setLastYzColor(Color.Red);
+							} else if (pos > 7) {
+								yz.setLastYzColor(Color.Green);
+							} else {
+								yz.setLastYzColor(Color.Yellow);
+							}
+							return topValues;
+						}
+						return null;
+					}
+
+					@Override
+					public int calTotal(SxYz yz) throws Exception {
+						Integer total = 0;
+						for (SX sx : SX.seq()) {
+							Method method = ReflectionUtils.findMethod(SxYz.class, "get" + sx.name());
+							Integer value = (Integer) method.invoke(yz);
+							if (value != null) {
+								total += value;
+							}
+						}
+						yz.setTotal(total);
+						return total;
+					}
+
+					@Override
+					public void afterProcess() throws Exception {
+						calSXZF();
+						calZF(SX.values().length, SxYz.class, SxZfYz2.class, repositories.sxyzRepository,
+								repositories.sxzfyz2Repository, new ZFPosHandler<SxZfYz2, SxYz>() {
+
+									@Override
+									Integer process(SxZfYz2 zfYz, SxZfYz2 lastZFYZ, SxYz data, SxYz lastYZ, Class<SxYz> yzClazz,
+											Class<SxZfYz2> yzzfClazz, int zfLength) throws Exception {
+										Integer pos = null;
+										if (lastYZ != null) {
+											pos = zfLength - lastYZ.getCurrentSx().getPos() + data.getCurrentSx().getPos();
+											if (pos >= zfLength) {
+												pos -= zfLength;
+											}
+											Method m = ReflectionUtils.findMethod(SxZfYz2.class, "setZf" + pos, Integer.class);
+											m.invoke(zfYz, 0);
+										}
+										zfYz.setCurrentPos(pos);
+										return pos;
+									}
+
+								});
+						logger.info("End of calSXYZ...");
+					}
+				});
 
 	}
 
@@ -334,10 +223,10 @@ public class YZService {
 			SxYz lastYZ = null;
 			SxZfYz lastZFYZ = null;
 			do {
-				result = sxyzRepository.findAll(request);
+				result = repositories.sxyzRepository.findAll(request);
 				if (result != null && result.hasContent()) {
 					for (SxYz data : result.getContent()) {
-						SxZfYz zfYz = sxzfyzRepository.findByDate(data.getDate());
+						SxZfYz zfYz = repositories.sxzfyzRepository.findByDate(data.getDate());
 						if (zfYz == null) {
 							zfYz = new SxZfYz();
 							zfYz.setYear(data.getYear());
@@ -385,7 +274,7 @@ public class YZService {
 							zfYz.setDelta(total);
 						}
 
-						sxzfyzRepository.save(zfYz);
+						repositories.sxzfyzRepository.save(zfYz);
 						lastYZ = data;
 						lastZFYZ = zfYz;
 					}
@@ -407,12 +296,12 @@ public class YZService {
 			Page<KaiJiang> result = null;
 			QwYz lastYz = null;
 			do {
-				result = kaiJiangRepository.findAll(request);
+				result = repositories.kaiJiangRepository.findAll(request);
 				Method gm = null;
 				Method sm = null;
 				if (result != null && result.hasContent()) {
 					for (KaiJiang data : result.getContent()) {
-						QwYz yz = qwyzRepository.findByDate(data.getDate());
+						QwYz yz = repositories.qwyzRepository.findByDate(data.getDate());
 						if (yz == null) {
 							yz = new QwYz();
 							yz.setYear(data.getYear());
@@ -474,7 +363,7 @@ public class YZService {
 						yz.setCurrentYz(currentYz);
 						yz.setTotal(total);
 
-						qwyzRepository.save(yz);
+						repositories.qwyzRepository.save(yz);
 						lastYz = yz;
 
 					}
@@ -484,6 +373,9 @@ public class YZService {
 
 			logger.info("End of calHMQWYZ...");
 		} catch (Exception e) {
+			if (DataAccessException.class.isAssignableFrom(e.getClass())) {
+				logger.error(e.getMessage(), e);
+			}
 			t = e;
 		}
 
@@ -492,11 +384,11 @@ public class YZService {
 
 	@Async
 	public Future<Exception> calSWYZ() {
-		return calPosFDYZ(SwYz.class, SwNums.class, swyzRepository, new CommonHandler() {
+		return calPosFDYZ(SwYz.class, SwNums.class, repositories.swyzRepository, new CommonHandler() {
 
 			@Override
 			public void process() {
-				calZF(SwNums.FDS.length, SwYz.class, SwZfYz.class, swyzRepository, swzfyzRepository,
+				calZF(SwNums.FDS.length, SwYz.class, SwZfYz.class, repositories.swyzRepository, repositories.swzfyzRepository,
 						new GetSuffixHandler<SwZfYz, SwYz>() {
 
 							@Override
@@ -513,11 +405,11 @@ public class YZService {
 
 	@Async
 	public Future<Exception> calMWYZ() {
-		return calFDYZ(MwYz.class, MwNums.class, mwyzRepository, new CommonHandler() {
+		return calFDYZ(MwYz.class, MwNums.class, repositories.mwyzRepository, new CommonHandler() {
 
 			@Override
 			public void process() {
-				calZF(MwNums.FDS.length, MwYz.class, MwZfYz.class, mwyzRepository, mwzfyzRepository,
+				calZF(MwNums.FDS.length, MwYz.class, MwZfYz.class, repositories.mwyzRepository, repositories.mwzfyzRepository,
 						new GetSuffixHandler<MwZfYz, MwYz>() {
 
 							@Override
@@ -545,11 +437,11 @@ public class YZService {
 
 	@Async
 	public Future<Exception> calLHYZ() {
-		return calFDYZ(LhYz.class, LhNums.class, lhyzRepository, new CommonHandler() {
+		return calFDYZ(LhYz.class, LhNums.class, repositories.lhyzRepository, new CommonHandler() {
 
 			@Override
 			public void process() {
-				calZF(LhNums.FDS.length, LhYz.class, LhZfYz.class, lhyzRepository, lhzfyzRepository,
+				calZF(LhNums.FDS.length, LhYz.class, LhZfYz.class, repositories.lhyzRepository, repositories.lhzfyzRepository,
 						new GetSuffixHandler<LhZfYz, LhYz>() {
 
 							@Override
@@ -567,11 +459,11 @@ public class YZService {
 
 	@Async
 	public Future<Exception> calQQYZ() {
-		return calPosFDYZ(QqYz.class, QqNums.class, qqyzRepository, new CommonHandler() {
+		return calPosFDYZ(QqYz.class, QqNums.class, repositories.qqyzRepository, new CommonHandler() {
 
 			@Override
 			public void process() {
-				calZF(QqNums.FDS.length, QqYz.class, QqZfYz.class, qqyzRepository, qqzfyzRepository,
+				calZF(QqNums.FDS.length, QqYz.class, QqZfYz.class, repositories.qqyzRepository, repositories.qqzfyzRepository,
 						new GetSuffixHandler<QqZfYz, QqYz>() {
 
 							@Override
@@ -587,11 +479,11 @@ public class YZService {
 
 	@Async
 	public Future<Exception> calBSYZ() {
-		return calFDYZ(BsYz.class, BsNums.class, bsyzRepository, new CommonHandler() {
+		return calFDYZ(BsYz.class, BsNums.class, repositories.bsyzRepository, new CommonHandler() {
 
 			@Override
 			public void process() {
-				calZF(BsNums.FDS.length, BsYz.class, BsZfYz.class, bsyzRepository, bszfyzRepository,
+				calZF(BsNums.FDS.length, BsYz.class, BsZfYz.class, repositories.bsyzRepository, repositories.bszfyzRepository,
 						new GetSuffixHandler<BsZfYz, BsYz>() {
 
 							@Override
@@ -607,12 +499,76 @@ public class YZService {
 	}
 
 	@Async
-	public Future<Exception> calWXYZ() {
-		return calFDYZ(WxYz.class, WxNums.class, wxyzRepository, new CommonHandler() {
+	public Future<Exception> calSLQYZ() {
+		return calFDYZ(SlqYz.class, SlqNums.class, repositories.slqyzRepository, new CommonHandler() {
 
 			@Override
 			public void process() {
-				calZF(WxNums.FDS.length, WxYz.class, WxZfYz.class, wxyzRepository, wxzfyzRepository,
+				calZF(SlqNums.FDS.length, SlqYz.class, SlqZfYz.class, repositories.slqyzRepository,
+						repositories.slqzfyzRepository, new GetSuffixHandler<SlqZfYz, SlqYz>() {
+
+							@Override
+							public String process(int index) {
+								return SlqNums.FDS[index];
+							}
+
+						});
+				logger.info("End of calSLQYZ...");
+			}
+
+		}, new LrHandler() {
+
+			@Override
+			public int getSmall() {
+				return 5;
+			}
+
+			@Override
+			public int getLarge() {
+				return 9;
+			}
+		});
+	}
+
+	@Async
+	public Future<Exception> calPDYZ() {
+		return calFDYZ(PdYz.class, PdNums.class, repositories.pdyzRepository, new CommonHandler() {
+
+			@Override
+			public void process() {
+				calZF(PdNums.FDS.length, PdYz.class, PdZfYz.class, repositories.pdyzRepository, repositories.pdzfyzRepository,
+						new GetSuffixHandler<PdZfYz, PdYz>() {
+
+							@Override
+							public String process(int index) {
+								return PdNums.FDS[index];
+							}
+
+						});
+				logger.info("End of calPDYZ...");
+			}
+
+		}, new LrHandler() {
+
+			@Override
+			public int getSmall() {
+				return 3;
+			}
+
+			@Override
+			public int getLarge() {
+				return 7;
+			}
+		});
+	}
+
+	@Async
+	public Future<Exception> calWXYZ() {
+		return calFDYZ(WxYz.class, WxNums.class, repositories.wxyzRepository, new CommonHandler() {
+
+			@Override
+			public void process() {
+				calZF(WxNums.FDS.length, WxYz.class, WxZfYz.class, repositories.wxyzRepository, repositories.wxzfyzRepository,
 						new GetSuffixHandler<WxZfYz, WxYz>() {
 
 							@Override
@@ -635,12 +591,12 @@ public class YZService {
 			Page<KaiJiang> result = null;
 			SqYz lastYz = null;
 			do {
-				result = kaiJiangRepository.findAll(request);
+				result = repositories.kaiJiangRepository.findAll(request);
 				Method gm = null;
 				Method sm = null;
 				if (result != null && result.hasContent()) {
 					for (KaiJiang data : result.getContent()) {
-						SqYz yz = sqyzRepository.findByDate(data.getDate());
+						SqYz yz = repositories.sqyzRepository.findByDate(data.getDate());
 						if (yz == null) {
 							yz = new SqYz();
 							yz.setYear(data.getYear());
@@ -682,7 +638,7 @@ public class YZService {
 							yz.setDelta(total - lastYz.getTotal());
 						}
 
-						sqyzRepository.save(yz);
+						repositories.sqyzRepository.save(yz);
 						lastYz = yz;
 
 					}
@@ -692,6 +648,9 @@ public class YZService {
 
 			logger.info("End of calSQYZ...");
 		} catch (Exception e) {
+			if (DataAccessException.class.isAssignableFrom(e.getClass())) {
+				logger.error(e.getMessage(), e);
+			}
 			t = e;
 		}
 		return new AsyncResult<Exception>(t);
@@ -706,12 +665,12 @@ public class YZService {
 			SxDsYz lastYz = null;
 			String[] arr = { "SxSmall", "SxLarge", "SxSingle", "SxEven", "HmSmall", "HmLarge", "HmSingle", "HmEven" };
 			do {
-				result = kaiJiangRepository.findAll(request);
+				result = repositories.kaiJiangRepository.findAll(request);
 				Method gm = null;
 				Method sm = null;
 				if (result != null && result.hasContent()) {
 					for (KaiJiang data : result.getContent()) {
-						SxDsYz yz = sxdsyzRepository.findByDate(data.getDate());
+						SxDsYz yz = repositories.sxdsyzRepository.findByDate(data.getDate());
 						if (yz == null) {
 							yz = new SxDsYz();
 							yz.setYear(data.getYear());
@@ -785,7 +744,7 @@ public class YZService {
 							}
 						}
 
-						sxdsyzRepository.save(yz);
+						repositories.sxdsyzRepository.save(yz);
 						lastYz = yz;
 
 					}
@@ -795,6 +754,9 @@ public class YZService {
 
 			logger.info("End of calSXDSYZ...");
 		} catch (Exception e) {
+			if (DataAccessException.class.isAssignableFrom(e.getClass())) {
+				logger.error(e.getMessage(), e);
+			}
 			t = e;
 		}
 		return new AsyncResult<Exception>(t);
@@ -808,12 +770,12 @@ public class YZService {
 			Page<KaiJiang> result = null;
 			TmYz lastYz = null;
 			do {
-				result = kaiJiangRepository.findAll(request);
+				result = repositories.kaiJiangRepository.findAll(request);
 				Method gm = null;
 				Method sm = null;
 				if (result != null && result.hasContent()) {
 					for (KaiJiang data : result.getContent()) {
-						TmYz yz = tmyzRepository.findByDate(data.getDate());
+						TmYz yz = repositories.tmyzRepository.findByDate(data.getDate());
 						if (yz == null) {
 							yz = new TmYz();
 							yz.setYear(data.getYear());
@@ -860,7 +822,7 @@ public class YZService {
 							yz.setDelta(total - lastYz.getTotal());
 						}
 
-						tmyzRepository.save(yz);
+						repositories.tmyzRepository.save(yz);
 						lastYz = yz;
 
 					}
@@ -868,10 +830,13 @@ public class YZService {
 				request = result.nextPageable();
 			} while (result != null && result.hasNext());
 
-			calTMFDYZ();
+			calTMFDYZ(7, 7, "Fd", repositories.tmfdyzRepository, TmFdYz.class, false);
 
 			logger.info("End of calTMYZ...");
 		} catch (Exception e) {
+			if (DataAccessException.class.isAssignableFrom(e.getClass())) {
+				logger.error(e.getMessage(), e);
+			}
 			t = e;
 		}
 
@@ -887,12 +852,12 @@ public class YZService {
 			PtYz lastYz = null;
 			Class<PtYz> clazz = PtYz.class;
 			do {
-				result = kaiJiangRepository.findAll(request);
+				result = repositories.kaiJiangRepository.findAll(request);
 				Method gm = null;
 				Method sm = null;
 				if (result != null && result.hasContent()) {
 					for (KaiJiang data : result.getContent()) {
-						PtYz yz = ptyzRepository.findByDate(data.getDate());
+						PtYz yz = repositories.ptyzRepository.findByDate(data.getDate());
 						if (yz == null) {
 							yz = new PtYz();
 							yz.setYear(data.getYear());
@@ -984,7 +949,7 @@ public class YZService {
 							}
 						}
 
-						ptyzRepository.save(yz);
+						repositories.ptyzRepository.save(yz);
 						lastYz = yz;
 
 					}
@@ -994,69 +959,156 @@ public class YZService {
 
 			logger.info("End of calPTYZ...");
 		} catch (Exception e) {
+			if (DataAccessException.class.isAssignableFrom(e.getClass())) {
+				logger.error(e.getMessage(), e);
+			}
 			t = e;
 		}
 
 		return new AsyncResult<Exception>(t);
 	}
 
-	private void calTMFDYZ() throws Exception {
+	private <T extends BaseYz> void calTMFDYZ(int range, int length, String prefix, BaseYzRepository<T> repository,
+			Class<T> clazz, boolean calTopAndMin) throws Exception {
 		Pageable request = new PageRequest(0, 200, new Sort(Direction.ASC, "date"));
 		Page<TmYz> result = null;
-		TmFdYz lastYz = null;
+		T lastYz = null;
 		do {
-			result = tmyzRepository.findAll(request);
+			result = repositories.tmyzRepository.findAll(request);
 			Method gm = null;
 			Method sm = null;
 			if (result != null && result.hasContent()) {
 				for (TmYz data : result.getContent()) {
-					TmFdYz yz = tmfdyzRepository.findByDate(data.getDate());
+					T yz = repository.findByDate(data.getDate());
 					if (yz == null) {
-						yz = new TmFdYz();
+						yz = clazz.newInstance();
 						yz.setYear(data.getYear());
 						yz.setPhase(data.getPhase());
 						yz.setDate(data.getDate());
 					}
 
 					List<TmYzInfo> infos = getTMFDList(data, true);
-
+					Method m = ReflectionUtils.findMethod(clazz, "setTm", Integer.class);
 					int num = 1;
 					for (TmYzInfo info : infos) {
 						if (info.isTm()) {
-							yz.setTm(info.getNum());
+							if (m != null) {
+								m.invoke(yz, info.getNum());
+							}
 							break;
 						}
 						num++;
 					}
-					if (num < 49) {
-						num = num / 7 + 1;
+					if (num % range == 0) {
+						num = num / range;
 					} else {
-						num = 7;
+						num = num / range + 1;
 					}
-					sm = ReflectionUtils.findMethod(TmFdYz.class, "setFd" + num, Integer.class);
+					if (num > length) {
+						num = length;
+					}
+					sm = ReflectionUtils.findMethod(clazz, "set" + prefix + num, Integer.class);
 					sm.invoke(yz, 0);
 
 					if (lastYz != null) {
-						for (int j = 1; j < 8; j++) {
-							gm = ReflectionUtils.findMethod(TmFdYz.class, "getFd" + j);
-							Integer lastValue = (Integer) gm.invoke(lastYz);
-							if (lastValue != null) {
-								Integer value = (Integer) gm.invoke(yz);
-								if (value == null || value > 0) {
-									sm = ReflectionUtils.findMethod(TmFdYz.class, "setFd" + j, Integer.class);
-									sm.invoke(yz, lastValue + 1);
+						if (calTopAndMin) {
+							List<Integer> topValues = new ArrayList<Integer>();
+							List<LrInfo> lastInfos = new ArrayList<LrInfo>();
+							for (int j = 1; j <= length; j++) {
+								gm = ReflectionUtils.findMethod(clazz, "get" + prefix + j);
+								Integer lastValue = (Integer) gm.invoke(lastYz);
+								if (j != num) {
+									LrInfo info = new LrInfo();
+									info.value = lastValue;
+									info.special = false;
+									lastInfos.add(info);
+									if (lastValue != null) {
+										lastValue++;
+										Integer value = (Integer) gm.invoke(yz);
+										if (value == null || value > 0) {
+											sm = ReflectionUtils.findMethod(clazz, "set" + prefix + j, Integer.class);
+											sm.invoke(yz, lastValue);
+											topValues.add(lastValue);
+										}
+									}
+								} else {
+									LrInfo info = new LrInfo();
+									info.value = lastValue;
+									info.special = true;
+									lastInfos.add(info);
 								}
 							}
+							gm = ReflectionUtils.findMethod(clazz, "get" + prefix + num);
+							m = ReflectionUtils.findMethod(clazz, "setLastYz", Integer.class);
+							m.invoke(yz, gm.invoke(lastYz));
+							m = ReflectionUtils.findMethod(clazz, "getTm");
+							if (m != null) {
+								sm = ReflectionUtils.findMethod(clazz, "setPrevDelta", Integer.class);
+								Integer value = (Integer) m.invoke(yz) - (Integer) m.invoke(lastYz);
+								sm.invoke(yz, value);
+							}
+
+							if (topValues != null) {
+								Collections.sort(topValues, new Comparator<Integer>() {
+
+									@Override
+									public int compare(Integer o1, Integer o2) {
+										return o2.compareTo(o1);
+									}
+
+								});
+								if (topValues.size() > 5) {
+									topValues = topValues.subList(0, 5);
+								}
+								for (int i = 0; i < topValues.size(); i++) {
+									m = ReflectionUtils.findMethod(clazz, "setTop" + i, Integer.class);
+									m.invoke(yz, topValues.get(i));
+								}
+							}
+							m = ReflectionUtils.findMethod(clazz, "getLastYz");
+							Integer lastYzValue = (Integer) m.invoke(yz);
+							if (lastYzValue != null) {
+								for (int k = 0; k < 20; k++) {
+									sm = ReflectionUtils.findMethod(clazz, "setMin" + k, Integer.class);
+									if (lastYzValue == k) {
+										sm.invoke(yz, 0);
+									} else {
+										gm = ReflectionUtils.findMethod(clazz, "getMin" + k);
+										Integer minValue = (Integer) gm.invoke(lastYz);
+										if (minValue != null) {
+											sm.invoke(yz, minValue + 1);
+										}
+									}
+								}
+							}
+						} else {
+							for (int j = 1; j <= length; j++) {
+								gm = ReflectionUtils.findMethod(clazz, "get" + prefix + j);
+								Integer lastValue = (Integer) gm.invoke(lastYz);
+								if (lastValue != null) {
+									Integer value = (Integer) gm.invoke(yz);
+									if (value == null || value > 0) {
+										sm = ReflectionUtils.findMethod(clazz, "set" + prefix + j, Integer.class);
+										sm.invoke(yz, lastValue + 1);
+									}
+								}
+							}
+							gm = ReflectionUtils.findMethod(clazz, "get" + prefix + num);
+							m = ReflectionUtils.findMethod(clazz, "setLastYz", Integer.class);
+							m.invoke(yz, gm.invoke(lastYz));
+							m = ReflectionUtils.findMethod(clazz, "getTm");
+							if (m != null) {
+								sm = ReflectionUtils.findMethod(clazz, "setPrevDelta", Integer.class);
+								Integer value = (Integer) m.invoke(yz) - (Integer) m.invoke(lastYz);
+								sm.invoke(yz, value);
+							}
 						}
-						gm = ReflectionUtils.findMethod(TmFdYz.class, "getFd" + num);
-						yz.setLastYz((Integer) gm.invoke(lastYz));
-						yz.setPrevDelta(yz.getTm() - lastYz.getTm());
 					}
 
 					int total = 0;
 					int max = 0;
-					for (int j = 1; j < 8; j++) {
-						gm = ReflectionUtils.findMethod(TmFdYz.class, "getFd" + j);
+					for (int j = 1; j <= length; j++) {
+						gm = ReflectionUtils.findMethod(clazz, "get" + prefix + j);
 						Integer value = (Integer) gm.invoke(yz);
 						if (value != null) {
 							if (value > max) {
@@ -1065,14 +1117,23 @@ public class YZService {
 							total += value;
 						}
 					}
-					yz.setMaxYz(max);
-					yz.setTotal(total);
+					if (!calTopAndMin) {
+						m = ReflectionUtils.findMethod(clazz, "setMaxYz", Integer.class);
+						if (m != null) {
+							m.invoke(yz, max);
+						}
+					}
+					m = ReflectionUtils.findMethod(clazz, "setTotal", Integer.class);
+					m.invoke(yz, total);
 
 					if (lastYz != null) {
-						yz.setDelta(total - lastYz.getTotal());
+						m = ReflectionUtils.findMethod(clazz, "getTotal");
+						Integer delta = total - (Integer) m.invoke(lastYz);
+						m = ReflectionUtils.findMethod(clazz, "setDelta", Integer.class);
+						m.invoke(yz, delta);
 					}
 
-					tmfdyzRepository.save(yz);
+					repository.save(yz);
 					lastYz = yz;
 
 				}
@@ -1081,7 +1142,7 @@ public class YZService {
 		} while (result != null && result.hasNext());
 	}
 
-	public List<TmYzInfo> getTMFDList(TmYz data, boolean treatAsLastYz) {
+	public List<TmYzInfo> getTMFDList(BaseYz data, boolean treatAsLastYz) {
 		try {
 			List<TmYzInfo> infos = new ArrayList<TmYzInfo>();
 			for (int i = 1; i < 50; i++) {
@@ -1094,12 +1155,19 @@ public class YZService {
 				@Override
 				public int compare(TmYzInfo o1, TmYzInfo o2) {
 					if (o1.getYz() != null && o2.getYz() != null) {
-						if (treatAsLastYz && data.getLastYz() != null) {
+						Method m = ReflectionUtils.findMethod(data.getClass(), "getLastYz");
+						Integer value = null;
+						try {
+							value = (Integer) m.invoke(data);
+						} catch (Exception e) {
+							logger.error(e.getMessage(), e);
+						}
+						if (treatAsLastYz && value != null) {
 							if (o1.getYz() == 0) {
-								o1.setYz(data.getLastYz());
+								o1.setYz(value);
 							}
 							if (o2.getYz() == 0) {
-								o2.setYz(data.getLastYz());
+								o2.setYz(value);
 							}
 						}
 						return o1.getYz() < o2.getYz() ? -1 : (o1.getYz() == o2.getYz() ? 0 : 1);
@@ -1119,12 +1187,33 @@ public class YZService {
 	}
 
 	@Async
+	public Future<Exception> calTM12FDYZ() {
+		Exception t = null;
+		try {
+			calTMFDYZ(4, 12, "W", repositories.tm12fdyzRepository, Tm12FdYz.class, true);
+			calZF(12, Tm12FdYz.class, Tm12FdZfYz.class, repositories.tm12fdyzRepository, repositories.tm12fdzfyzRepository,
+					new GetSuffixHandler<Tm12FdZfYz, Tm12FdYz>() {
+
+						@Override
+						public String process(int index) {
+							return "W" + (index + 1);
+						}
+
+					});
+			logger.info("End of calTM12FDYZ...");
+		} catch (Exception e) {
+			t = e;
+		}
+		return new AsyncResult<Exception>(t);
+	}
+
+	@Async
 	public Future<Exception> calZSYZ() {
-		return calFDYZ(ZsYz.class, ZsNums.class, zsyzRepository, new CommonHandler() {
+		return calFDYZ(ZsYz.class, ZsNums.class, repositories.zsyzRepository, new CommonHandler() {
 
 			@Override
 			public void process() {
-				calZF(ZsNums.FDS.length, ZsYz.class, ZsZfYz.class, zsyzRepository, zszfyzRepository,
+				calZF(ZsNums.FDS.length, ZsYz.class, ZsZfYz.class, repositories.zsyzRepository, repositories.zszfyzRepository,
 						new GetSuffixHandler<ZsZfYz, ZsYz>() {
 
 							@Override
@@ -1141,11 +1230,11 @@ public class YZService {
 
 	@Async
 	public Future<Exception> calDSYZ() {
-		return calFDYZ(DsYz.class, DsNums.class, dsyzRepository, new CommonHandler() {
+		return calFDYZ(DsYz.class, DsNums.class, repositories.dsyzRepository, new CommonHandler() {
 
 			@Override
 			public void process() {
-				calZF(DsNums.FDS.length, DsYz.class, DsZfYz.class, dsyzRepository, dszfyzRepository,
+				calZF(DsNums.FDS.length, DsYz.class, DsZfYz.class, repositories.dsyzRepository, repositories.dszfyzRepository,
 						new GetSuffixHandler<DsZfYz, DsYz>() {
 
 							@Override
@@ -1163,12 +1252,12 @@ public class YZService {
 	@Async
 	public Future<Exception> calTwelveYZ() {
 
-		return calPosFDYZ(TwelveYz.class, TwelveNums.class, twelveyzRepository, new CommonHandler() {
+		return calPosFDYZ(TwelveYz.class, TwelveNums.class, repositories.twelveyzRepository, new CommonHandler() {
 
 			@Override
 			public void process() {
-				calZF(TwelveNums.FDS.length, TwelveYz.class, TwelveZfYz.class, twelveyzRepository, twelvezfyzRepository,
-						new GetSuffixHandler<TwelveZfYz, TwelveYz>() {
+				calZF(TwelveNums.FDS.length, TwelveYz.class, TwelveZfYz.class, repositories.twelveyzRepository,
+						repositories.twelvezfyzRepository, new GetSuffixHandler<TwelveZfYz, TwelveYz>() {
 
 							@Override
 							public String process(int index) {
@@ -1362,7 +1451,7 @@ public class YZService {
 			final BaseYzRepository<T> repository, final CommonHandler handler, int startPos, int endPos,
 			final LrHandler lrHandler) {
 		try {
-			return calYZ(clazz, repository, kaiJiangRepository,
+			return calYZ(clazz, repository, repositories.kaiJiangRepository,
 					new PosFDYZHandler<T>(clazz, numsClass, startPos, endPos, handler, lrHandler));
 		} catch (Exception e) {
 			throw new RuntimeException(e.getMessage(), e);
@@ -1538,7 +1627,7 @@ public class YZService {
 	private <T extends Avg> Future<Exception> calFDYZ(final Class<T> clazz, final Class<?> numsClass,
 			final BaseYzRepository<T> repository, final CommonHandler handler) {
 		try {
-			return calYZ(clazz, repository, kaiJiangRepository, new FDYZHandler<T>(clazz, numsClass, handler));
+			return calYZ(clazz, repository, repositories.kaiJiangRepository, new FDYZHandler<T>(clazz, numsClass, handler));
 		} catch (Exception e) {
 			throw new RuntimeException(e.getMessage(), e);
 		}
@@ -1547,7 +1636,8 @@ public class YZService {
 	private <T extends Avg> Future<Exception> calFDYZ(final Class<T> clazz, final Class<?> numsClass,
 			final BaseYzRepository<T> repository, final CommonHandler handler, LrHandler lrHandler) {
 		try {
-			return calYZ(clazz, repository, kaiJiangRepository, new FDYZHandler<T>(clazz, numsClass, handler, lrHandler));
+			return calYZ(clazz, repository, repositories.kaiJiangRepository,
+					new FDYZHandler<T>(clazz, numsClass, handler, lrHandler));
 		} catch (Exception e) {
 			throw new RuntimeException(e.getMessage(), e);
 		}
@@ -1636,6 +1726,9 @@ public class YZService {
 			yzHandler.afterProcess();
 
 		} catch (Exception e) {
+			if (DataAccessException.class.isAssignableFrom(e.getClass())) {
+				logger.error(e.getMessage(), e);
+			}
 			t = e;
 		}
 
@@ -1657,10 +1750,10 @@ public class YZService {
 				m.invoke(lastYZ, 0);
 			}
 			do {
-				result = sxyzRepository.findAll(request);
+				result = repositories.sxyzRepository.findAll(request);
 				if (result != null && result.hasContent()) {
 					for (SxYz data : result.getContent()) {
-						SxCsYz yz = sxcsyzRepository.findByDate(data.getDate());
+						SxCsYz yz = repositories.sxcsyzRepository.findByDate(data.getDate());
 						if (yz == null) {
 							yz = new SxCsYz();
 							yz.setYear(data.getYear());
@@ -1731,7 +1824,7 @@ public class YZService {
 						yz.setLarge(large);
 						yz.setSmall(small);
 
-						sxcsyzRepository.save(yz);
+						repositories.sxcsyzRepository.save(yz);
 						lastYZ = yz;
 					}
 
@@ -1741,6 +1834,9 @@ public class YZService {
 
 			logger.info("End of calSXCSYZ...");
 		} catch (Exception e) {
+			if (DataAccessException.class.isAssignableFrom(e.getClass())) {
+				logger.error(e.getMessage(), e);
+			}
 			t = e;
 		}
 		return new AsyncResult<Exception>(t);
@@ -1864,7 +1960,7 @@ public class YZService {
 
 	@Async
 	public Future<Exception> calSXLRYZ() {
-		return calLRYZ(SxLrYz.class, sxlryzRepository, sxyzRepository, new CommonHandler() {
+		return calLRYZ(SxLrYz.class, repositories.sxlryzRepository, repositories.sxyzRepository, new CommonHandler() {
 
 			@Override
 			public void process() {
@@ -1876,19 +1972,57 @@ public class YZService {
 
 	@Async
 	public Future<Exception> calTwelveLRYZ() {
-		return calLRYZ(TwelveLrYz.class, twelvelryzRepository, twelveyzRepository, new CommonHandler() {
+		return calLRYZ(TwelveLrYz.class, repositories.twelvelryzRepository, repositories.twelveyzRepository,
+				new CommonHandler() {
+
+					@Override
+					public void process() {
+						logger.info("End of calTwelveLRYZ...");
+					}
+				});
+
+	}
+
+	@Async
+	public Future<Exception> calSLQLRYZ() {
+		return calLRYZ(SlqLrYz.class, repositories.slqlryzRepository, repositories.slqyzRepository, new CommonHandler() {
 
 			@Override
 			public void process() {
-				logger.info("End of calTwelveLRYZ...");
+				logger.info("End of calSLQLRYZ...");
 			}
 		});
 
 	}
 
 	@Async
+	public Future<Exception> calPDLRYZ() {
+		return calLRYZ(PdLrYz.class, repositories.pdlryzRepository, repositories.pdyzRepository, new CommonHandler() {
+
+			@Override
+			public void process() {
+				logger.info("End of calPDLRYZ...");
+			}
+		});
+
+	}
+
+	@Async
+	public Future<Exception> calTM12FDLRYZ() {
+		return calLRYZ(Tm12FdLrYz.class, repositories.tm12fdlryzRepository, repositories.tm12fdyzRepository,
+				new CommonHandler() {
+
+					@Override
+					public void process() {
+						logger.info("End of calTM12FDLRYZ...");
+					}
+				});
+
+	}
+
+	@Async
 	public Future<Exception> calMWLRYZ() {
-		return calLRYZ(MwLrYz.class, mwlryzRepository, mwyzRepository, new CommonHandler() {
+		return calLRYZ(MwLrYz.class, repositories.mwlryzRepository, repositories.mwyzRepository, new CommonHandler() {
 
 			@Override
 			public void process() {

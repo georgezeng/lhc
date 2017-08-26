@@ -17,7 +17,34 @@ public class PmDTO {
 	private BigDecimal tp4 = BigDecimal.ZERO;
 	private BigDecimal tp5 = BigDecimal.ZERO;
 	private BigDecimal tp6 = BigDecimal.ZERO;
+	private BigDecimal tpS = BigDecimal.ZERO;
 	private SpecialNum specialNum;
+	private Integer lastYz;
+	private int[] lastYzList = new int[34];
+
+	public Integer getLastYz() {
+		return lastYz;
+	}
+
+	public void setLastYz(Integer lastYz) {
+		this.lastYz = lastYz;
+	}
+
+	public int[] getLastYzList() {
+		return lastYzList;
+	}
+
+	public void setLastYzList(int[] lastYzList) {
+		this.lastYzList = lastYzList;
+	}
+
+	public BigDecimal getTpS() {
+		return tpS;
+	}
+
+	public void setTpS(BigDecimal tpS) {
+		this.tpS = tpS;
+	}
 
 	public BigDecimal getTp1() {
 		return tp1;

@@ -39,8 +39,17 @@ $(document).ready(function() {
 	columnDefs.push({
 		aTargets: [2],
 		fnCreatedCell: function(nTd, sData, item, iRow, iCol) {
-			if(item.specialNum) {
-				$(nTd).css("fontWeight", "bold").css("color", "blue").text(item.specialNum.num);
+			if(item.year > 0) {
+				var num = item.specialNum;
+				if(num.matchedForSpecialNum) {
+					$(nTd).css("color", "red");
+				} else {
+					$(nTd).css("color", "blue");
+				}
+				$(nTd).css("fontWeight", "bold").text(num.num);
+			} else {
+				var num = item.tpS;
+				$(nTd).css("fontWeight", "bold").text(num + "%");
 			}
 		}
 	});
@@ -73,7 +82,7 @@ $(document).ready(function() {
 	});
 	datatables.push(createDataTable({
 		id : "dataTable",
-		url : "/mvc/yz/pmList",
+		url : "/mvc/yz/listPM",
 		bFilter: false,
 		data : function(queryInfo, infoSettings) {
 			queryInfo.object = {};

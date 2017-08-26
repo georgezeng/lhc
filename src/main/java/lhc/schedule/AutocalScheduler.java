@@ -17,7 +17,7 @@ public class AutocalScheduler {
 	@Autowired
 	private KaiJiangController controller;
 
-	@Scheduled(cron = "0 0 0/6 * * ?")
+	@Scheduled(cron = "0 0 0-6/2 * * ?")
 	public void run() {
 		try {
 			logger.info("Start doing auto sync and calculation schedule...");

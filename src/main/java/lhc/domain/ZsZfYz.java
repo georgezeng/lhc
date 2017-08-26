@@ -14,6 +14,15 @@ public class ZsZfYz extends ZfAvg {
 	private Integer zf5;
 	private Integer zf6;
 	private Integer zf7;
+	private Integer zf8;
+
+	public Integer getZf8() {
+		return zf8;
+	}
+
+	public void setZf8(Integer zf8) {
+		this.zf8 = zf8;
+	}
 
 	public Integer getZf5() {
 		return zf5;

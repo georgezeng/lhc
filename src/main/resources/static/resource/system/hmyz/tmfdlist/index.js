@@ -63,7 +63,18 @@ $(document).ready(function() {
 					} else {
 						var text = [];
 						for(j in item.list) {
-							var fd = parseInt(j / 7 + 2);
+							var num;
+							var range = 7;
+							var length = 7;
+							if(j % range == 0) {
+								num = j / range;
+							} else {
+								num = j / range + 1;
+							}
+							if(num > length) {
+								num = length;
+							}
+							var fd = parseInt(num);
 							if(fd == index) {
 								text.push(item.list[j].num);
 							}

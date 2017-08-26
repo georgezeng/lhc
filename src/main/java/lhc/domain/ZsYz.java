@@ -14,6 +14,7 @@ public class ZsYz extends Avg {
 	private Integer fd6;
 	private Integer fd7;
 	private Integer fd8;
+	private Integer fd9;
 
 	public Integer getFd1() {
 		return fd1;
@@ -77,6 +78,14 @@ public class ZsYz extends Avg {
 
 	public void setFd8(Integer fd8) {
 		this.fd8 = fd8;
+	}
+
+	public Integer getFd9() {
+		return fd9;
+	}
+
+	public void setFd9(Integer fd9) {
+		this.fd9 = fd9;
 	}
 
 }
