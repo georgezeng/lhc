@@ -378,7 +378,7 @@ function createLRList(url, list, smallPos, largePos) {
 		aTargets: [list.length + 6],
 		fnCreatedCell: function(nTd, sData, item, iRow, iCol) {
 			if(item.yellow == 0) {
-				$(nTd).css("backgroundColor", "yellow").css("color", "white");
+				$(nTd).css("backgroundColor", "yellow");
 			}
 			$(nTd).text(item.yellow);
 		}

@@ -1129,7 +1129,11 @@ public class YZController {
 
 	@RequestMapping("/listTMYZ")
 	public BaseResult listTMYZ(@RequestBody QueryInfo<TmYz> queryInfo) throws Exception {
-		return new BaseResult(repositories.tmYzDao.query(queryInfo));
+		PageResult<TmYz> result = repositories.tmYzDao.query(queryInfo);
+		if (result != null && result.getTotal() > 0) {
+			result.getList().add(new TmYz());
+		}
+		return new BaseResult(result);
 	}
 
 	@RequestMapping("/listPTYZ")
