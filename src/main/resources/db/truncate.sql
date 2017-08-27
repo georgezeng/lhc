@@ -2,6 +2,7 @@ TRUNCATE table `bs_yz`;
 TRUNCATE table `bs_zf_yz`;
 TRUNCATE table `ds_yz`;
 TRUNCATE table `ds_zf_yz`;
+TRUNCATE table `lh_lr_yz`;
 TRUNCATE table `lh_yz`;
 TRUNCATE table `lh_zf_yz`;
 TRUNCATE table `mw_lr_yz`;
