@@ -14,7 +14,7 @@ $(document).ready(function() {
 					if(index == 0) {
 						value = item.year;
 						if(!item.id) {
-							value = "顺概率";
+							value = "号码";
 							$(nTd).css("color", "blue");
 						} 
 					} else {
@@ -33,13 +33,16 @@ $(document).ready(function() {
 			columnDefs.push({
 				aTargets: [index],
 				fnCreatedCell: function(nTd, sData, item, iRow, iCol) {
-					var value = item[sxlist[index-2]];
+					var value;
 					if(item.id) {
+						value = item[sxlist[index-2]];
 						if(value == 0) {
 							$(nTd).css("color", "white").css("backgroundColor", "red");
 						} else {
 							$(nTd).css("backgroundColor", "#ffc");
 						}
+					} else {
+						value = item.list[index-2].join(", ");
 					}
 					$(nTd).text(value);
 				}
@@ -75,7 +78,7 @@ $(document).ready(function() {
 	});
 	datatables.push(createDataTable({
 		id : "dataTable",
-		url : "/mvc/yz/listPDYZ",
+		url : "/mvc/yz/listPDYZ?mode=1",
 		bFilter: false,
 		data : function(queryInfo, infoSettings) {
 			count = 0;

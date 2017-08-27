@@ -232,7 +232,192 @@ function createColumns(list, extraList) {
 	return columns;
 }
 
-function createLR(url) {
+function createLRList(url, list, smallPos, largePos) {
+	if(url.indexOf("?mode") == -1) {
+		url = url + "?mode=1";
+	}
+	var lastColor;
+	var count = 0;
+	var lastItem;
+	var cols = ["year", "phase"];
+	for(var i in list) {
+		cols.push(list[i]);
+	}
+	cols.push("phase");
+	cols.push("lastYzColor");
+	cols.push("phase");
+	cols.push("red");
+	cols.push("yellow");
+	cols.push("green");
+	cols.push("colorMax");
+	cols.push("colorTotal");
+	cols.push("colorCount");
+	var columns = [];
+	for(var i in cols) {
+		var col = cols[i];
+		columns.push({
+			name : col,
+			data : col,
+			sortable: false
+		});
+	}
+	var columnDefs = [];
+	var extraLine = function(nTd, sData, item, iRow, iCol) {
+		var value = null;
+		if(index == 0) {
+			value = item.year;
+			if(!item.id) {
+				value = "顺概率";
+				$(nTd).css("color", "blue");
+			} 
+		} else {
+			value = item.phase;
+			if(!item.id) {
+				value = "";
+			}
+		}
+		$(nTd).text(value);
+	}
+	for(var i = 0; i < 2; i++) {
+		(function(index) {
+			columnDefs.push({
+				aTargets: [index],
+				fnCreatedCell: function(nTd, sData, item, iRow, iCol) {
+					var value = null;
+					if(index == 0) {
+						value = item.year;
+						if(!item.id) {
+							value = "顺概率";
+							$(nTd).css("color", "blue");
+						} 
+					} else {
+						value = item.phase;
+						if(!item.id) {
+							value = "";
+						}
+					}
+					$(nTd).text(value);
+				}
+			});
+		})(i);
+	}
+	for(var i = 2; i < list.length + 2; i++) {
+		(function(index) {
+			columnDefs.push({
+				aTargets: [index],
+				fnCreatedCell: function(nTd, sData, item, iRow, iCol) {
+					var value = item[list[index-2]];
+					if(item.id) {
+						var uniqueArr = [];
+						for(var j in list) {
+							uniqueArr.push(item[list[j]]);
+						}
+						uniqueArr.sort(function(a, b){return a-b});
+						var small = uniqueArr[smallPos];
+						var large = uniqueArr[largePos];
+						
+						var color = null;
+						if(value < small + 1) {
+							color = ["white", "red"];
+						} else if(value > small && value < large) {
+							color = ["black", "yellow"];
+						} else {
+							color = ["white", "green"];
+						}
+						if(!item.colors) {
+							item.colors = [];
+						}
+						item.colors.push(color);
+						if(value == 0) {
+							item.colorIndex = index - 2;
+						}
+						$(nTd).css("color", color[0]).css("backgroundColor", color[1]);
+					}
+					$(nTd).text(value);
+				}
+			});
+		})(i);
+	}
+	columnDefs.push({
+		aTargets: [list.length + 2],
+		fnCreatedCell: function(nTd, sData, item, iRow, iCol) {
+			$(nTd).text("");
+		}
+	});
+	columnDefs.push({
+		aTargets: [list.length + 3],
+		fnCreatedCell: function(nTd, sData, item, iRow, iCol) {
+			if(item.id) {
+				$(nTd).text("").css("backgroundColor", item.lastYzColor);
+				if(lastColor == item.lastYzColor) {
+					count++;
+				}
+				lastColor = item.lastYzColor;
+			} else {
+				value = Math.round(count / item.total * 10000) / 100 + "%";
+				$(nTd).text(value);
+			}
+		}
+	});
+	columnDefs.push({
+		aTargets: [list.length + 4],
+		fnCreatedCell: function(nTd, sData, item, iRow, iCol) {
+			$(nTd).text("");
+		}
+	});
+	columnDefs.push({
+		aTargets: [list.length + 5],
+		fnCreatedCell: function(nTd, sData, item, iRow, iCol) {
+			if(item.red == 0) {
+				$(nTd).css("backgroundColor", "red").css("color", "white");
+			}
+			$(nTd).text(item.red);
+		}
+	});
+	columnDefs.push({
+		aTargets: [list.length + 6],
+		fnCreatedCell: function(nTd, sData, item, iRow, iCol) {
+			if(item.yellow == 0) {
+				$(nTd).css("backgroundColor", "yellow").css("color", "white");
+			}
+			$(nTd).text(item.yellow);
+		}
+	});
+	columnDefs.push({
+		aTargets: [list.length + 7],
+		fnCreatedCell: function(nTd, sData, item, iRow, iCol) {
+			if(item.green == 0) {
+				$(nTd).css("backgroundColor", "green").css("color", "white");
+			}
+			$(nTd).text(item.green);
+		}
+	});
+	columnDefs.push({
+		aTargets: [list.length + 10],
+		fnCreatedCell: function(nTd, sData, item, iRow, iCol) {
+			if(!item.id) {
+				$(nTd).text("");
+			}
+		}
+	});
+	datatables.push(createDataTable({
+		id : "dataTable",
+		url : url,
+		bFilter: false,
+		data : function(queryInfo, infoSettings) {
+			lastItem = null;
+			count = 0;
+			lastColor = null;
+			queryInfo.object = {};
+			queryInfo.object.year = parseInt($("#years").val());
+			queryInfo.object.phase = parseInt($("#phases").val());
+		},
+		columns : columns,
+		aoColumnDefs: columnDefs
+	}));
+}
+
+function createLRZH(url) {
 	var sxlist = ["redRed", "redYellow", "redGreen", "yellowRed", "yellowYellow", "yellowGreen", "greenRed", "greenYellow", "greenGreen"];
 	var columns = createColumns(sxlist, ["pos"]);
 	var columnDefs = [];

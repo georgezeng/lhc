@@ -2,7 +2,7 @@ $(document).ready(function() {
 	var lastGreen = false;
 	var lastRed = false;
 	var count = 0;
-	var sxlist = ["fd1", "fd2", "fd3", "fd4", "fd5", "fd6", "fd7", "fd8"];
+	var sxlist = ["fd1", "fd2", "fd3", "fd4", "fd5", "fd6", "fd7", "fd8", "fd9"];
 	var columns = createColumns(sxlist);
 	var columnDefs = [];
 	for(var i = 0; i < 2; i++) {
@@ -28,7 +28,7 @@ $(document).ready(function() {
 			});
 		})(i);
 	}
-	for(var i = 2; i < 10; i++) {
+	for(var i = 2; i < 11; i++) {
 		(function(index) {
 			columnDefs.push({
 				aTargets: [index],
@@ -47,7 +47,7 @@ $(document).ready(function() {
 		})(i);
 	}
 	columnDefs.push({
-		aTargets: [11],
+		aTargets: [12],
 		fnCreatedCell: function(nTd, sData, item, iRow, iCol) {
 			var value = null;
 			if(item.id) {

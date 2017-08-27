@@ -30,6 +30,7 @@ import lhc.domain.BsZfYz;
 import lhc.domain.DsYz;
 import lhc.domain.DsZfYz;
 import lhc.domain.KaiJiang;
+import lhc.domain.LhLrYz;
 import lhc.domain.LhYz;
 import lhc.domain.LhZfYz;
 import lhc.domain.MwLrYz;
@@ -127,23 +128,22 @@ public class YZController {
 
 	public void calYZ(boolean sleep) throws Exception {
 		List<Future<Exception>> futures = new ArrayList<Future<Exception>>();
-		 futures.add(yzService.calSX());
-		 futures.add(yzService.calHMQWYZ());
-		 futures.add(yzService.calSWYZ());
-		 futures.add(yzService.calMWYZ());
-		 futures.add(yzService.calLHYZ());
-		 futures.add(yzService.calQQYZ());
-		 futures.add(yzService.calBSYZ());
-		 futures.add(yzService.calSQYZ());
-		 futures.add(yzService.calDSYZ());
-		 futures.add(yzService.calTMYZ());
-		 futures.add(yzService.calZSYZ());
-		 futures.add(yzService.calWXYZ());
-		 futures.add(yzService.calPTYZ());
-		 futures.add(yzService.calTwelveYZ());
-		 futures.add(yzService.calSLQYZ());
-		 futures.add(yzService.calPDYZ());
-		futures.add(yzService.calTM12FDYZ());
+		futures.add(yzService.calSX());
+		futures.add(yzService.calHMQWYZ());
+		futures.add(yzService.calSWYZ());
+		futures.add(yzService.calMWYZ());
+		futures.add(yzService.calLHYZ());
+		futures.add(yzService.calQQYZ());
+		futures.add(yzService.calBSYZ());
+		futures.add(yzService.calSQYZ());
+		futures.add(yzService.calDSYZ());
+		futures.add(yzService.calTMYZ());
+		futures.add(yzService.calZSYZ());
+		futures.add(yzService.calWXYZ());
+		futures.add(yzService.calPTYZ());
+		futures.add(yzService.calTwelveYZ());
+		futures.add(yzService.calSLQYZ());
+		futures.add(yzService.calPDYZ());
 		if (sleep) {
 			sleep(futures, 1000);
 		} else {
@@ -152,34 +152,33 @@ public class YZController {
 		logger.info("End of calYZ stage1...");
 
 		futures.clear();
-		 futures.add(yzService.calSXDSYZ());
-		 futures.add(yzService.calSXCSYZ());
-		 futures.add(parallelYzService.calAvg(repositories.sxyzRepository));
-		 futures.add(parallelYzService.calAvg(repositories.sxzfyz2Repository));
-		 futures.add(parallelYzService.calAvg(repositories.bsyzRepository));
-		 futures.add(parallelYzService.calAvg(repositories.bszfyzRepository));
-		 futures.add(parallelYzService.calAvg(repositories.swyzRepository));
-		 futures.add(parallelYzService.calAvg(repositories.swzfyzRepository));
-		 futures.add(parallelYzService.calAvg(repositories.zsyzRepository));
-		 futures.add(parallelYzService.calAvg(repositories.zszfyzRepository));
-		 futures.add(parallelYzService.calAvg(repositories.dsyzRepository));
-		 futures.add(parallelYzService.calAvg(repositories.dszfyzRepository));
-		 futures.add(parallelYzService.calAvg(repositories.mwyzRepository));
-		 futures.add(parallelYzService.calAvg(repositories.mwzfyzRepository));
-		 futures.add(parallelYzService.calAvg(repositories.lhyzRepository));
-		 futures.add(parallelYzService.calAvg(repositories.lhzfyzRepository));
-		 futures.add(parallelYzService.calAvg(repositories.wxyzRepository));
-		 futures.add(parallelYzService.calAvg(repositories.wxzfyzRepository));
-		 futures.add(parallelYzService.calAvg(repositories.qqyzRepository));
-		 futures.add(parallelYzService.calAvg(repositories.qqzfyzRepository));
-		 futures.add(parallelYzService.calAvg(repositories.twelveyzRepository));
-		 futures.add(parallelYzService.calAvg(repositories.twelvezfyzRepository));
-		 futures.add(parallelYzService.calAvg(repositories.slqyzRepository));
-		 futures.add(parallelYzService.calAvg(repositories.slqzfyzRepository));
-		 futures.add(parallelYzService.calAvg(repositories.pdyzRepository));
-		 futures.add(parallelYzService.calAvg(repositories.pdzfyzRepository));
-		futures.add(parallelYzService.calAvg(repositories.tm12fdyzRepository));
-		futures.add(parallelYzService.calAvg(repositories.tm12fdzfyzRepository));
+		futures.add(yzService.calSXDSYZ());
+		futures.add(yzService.calSXCSYZ());
+		futures.add(yzService.calTM12FDYZ());
+		futures.add(parallelYzService.calAvg(repositories.sxyzRepository));
+		futures.add(parallelYzService.calAvg(repositories.sxzfyz2Repository));
+		futures.add(parallelYzService.calAvg(repositories.bsyzRepository));
+		futures.add(parallelYzService.calAvg(repositories.bszfyzRepository));
+		futures.add(parallelYzService.calAvg(repositories.swyzRepository));
+		futures.add(parallelYzService.calAvg(repositories.swzfyzRepository));
+		futures.add(parallelYzService.calAvg(repositories.zsyzRepository));
+		futures.add(parallelYzService.calAvg(repositories.zszfyzRepository));
+		futures.add(parallelYzService.calAvg(repositories.dsyzRepository));
+		futures.add(parallelYzService.calAvg(repositories.dszfyzRepository));
+		futures.add(parallelYzService.calAvg(repositories.mwyzRepository));
+		futures.add(parallelYzService.calAvg(repositories.mwzfyzRepository));
+		futures.add(parallelYzService.calAvg(repositories.lhyzRepository));
+		futures.add(parallelYzService.calAvg(repositories.lhzfyzRepository));
+		futures.add(parallelYzService.calAvg(repositories.wxyzRepository));
+		futures.add(parallelYzService.calAvg(repositories.wxzfyzRepository));
+		futures.add(parallelYzService.calAvg(repositories.qqyzRepository));
+		futures.add(parallelYzService.calAvg(repositories.qqzfyzRepository));
+		futures.add(parallelYzService.calAvg(repositories.twelveyzRepository));
+		futures.add(parallelYzService.calAvg(repositories.twelvezfyzRepository));
+		futures.add(parallelYzService.calAvg(repositories.slqyzRepository));
+		futures.add(parallelYzService.calAvg(repositories.slqzfyzRepository));
+		futures.add(parallelYzService.calAvg(repositories.pdyzRepository));
+		futures.add(parallelYzService.calAvg(repositories.pdzfyzRepository));
 		if (sleep) {
 			sleep(futures, 1000);
 		} else {
@@ -190,10 +189,12 @@ public class YZController {
 		futures.clear();
 		futures.add(yzService.calSXLRYZ());
 		futures.add(yzService.calMWLRYZ());
+		futures.add(yzService.calLHLRYZ());
 		futures.add(yzService.calTwelveLRYZ());
 		futures.add(yzService.calSLQLRYZ());
 		futures.add(yzService.calPDLRYZ());
-		futures.add(yzService.calTM12FDLRYZ());
+		futures.add(parallelYzService.calAvg(repositories.tm12fdyzRepository));
+		futures.add(parallelYzService.calAvg(repositories.tm12fdzfyzRepository));
 		if (sleep) {
 			sleep(futures, 1000);
 		} else {
@@ -202,17 +203,22 @@ public class YZController {
 		logger.info("End of calYZ stage3...");
 
 		futures.clear();
+		futures.add(yzService.calTM12FDLRYZ());
 		futures.add(parallelYzService.calAvg(repositories.sxlryzRepository));
 		futures.add(parallelYzService.calAvg(repositories.mwlryzRepository));
 		futures.add(parallelYzService.calAvg(repositories.twelvelryzRepository));
 		futures.add(parallelYzService.calAvg(repositories.slqlryzRepository));
 		futures.add(parallelYzService.calAvg(repositories.pdlryzRepository));
-		futures.add(parallelYzService.calAvg(repositories.tm12fdlryzRepository));
+		futures.add(parallelYzService.calAvg(repositories.lhlryzRepository));
 		if (sleep) {
 			sleep(futures, 1000);
 		} else {
 			sleep(futures, 0);
 		}
+		logger.info("End of calYZ stage4...");
+
+		futures.clear();
+		futures.add(parallelYzService.calAvg(repositories.tm12fdlryzRepository));
 		logger.info("Done calYZ...");
 	}
 
@@ -282,6 +288,12 @@ public class YZController {
 	@RequestMapping("/listMWLRYZ")
 	public BaseResult listMWLRYZ(@RequestBody QueryInfo<MwLrYz> queryInfo) throws Exception {
 		PageResult<MwLrYz> result = repositories.mwlrYzDao.query(queryInfo);
+		return new BaseResult(result);
+	}
+
+	@RequestMapping("/listLHLRYZ")
+	public BaseResult listLHLRYZ(@RequestBody QueryInfo<LhLrYz> queryInfo) throws Exception {
+		PageResult<LhLrYz> result = repositories.lhlrYzDao.query(queryInfo);
 		return new BaseResult(result);
 	}
 
@@ -417,8 +429,16 @@ public class YZController {
 	}
 
 	@RequestMapping("/listTwelveYZ")
-	public BaseResult listTwelveYZ(@RequestBody QueryInfo<TwelveYz> queryInfo) throws Exception {
-		return new BaseResult(repositories.twelveYzDao.query(queryInfo));
+	public BaseResult listTwelveYZ(@RequestBody QueryInfo<TwelveYz> queryInfo, String mode) throws Exception {
+		PageResult<TwelveYz> result = repositories.twelveYzDao.query(queryInfo);
+		if ("1".equals(mode)) {
+			if (result != null && result.getTotal() > 0) {
+				TwelveYz last = new TwelveYz();
+				last.setTotal(result.getList().size());
+				result.getList().add(last);
+			}
+		}
+		return new BaseResult(result);
 	}
 
 	@RequestMapping("/listTwelveZF")
@@ -428,13 +448,29 @@ public class YZController {
 	}
 
 	@RequestMapping("/listSLQYZ")
-	public BaseResult listSLQYZ(@RequestBody QueryInfo<SlqYz> queryInfo) throws Exception {
-		return new BaseResult(repositories.slqYzDao.query(queryInfo));
+	public BaseResult listSLQYZ(@RequestBody QueryInfo<SlqYz> queryInfo, String mode) throws Exception {
+		PageResult<SlqYz> result = repositories.slqYzDao.query(queryInfo);
+		if ("1".equals(mode)) {
+			if (result != null && result.getTotal() > 0) {
+				SlqYz last = new SlqYz();
+				last.setTotal(result.getList().size());
+				result.getList().add(last);
+			}
+		}
+		return new BaseResult(result);
 	}
 
 	@RequestMapping("/listPDYZ")
-	public BaseResult listPDYZ(@RequestBody QueryInfo<PdYz> queryInfo) throws Exception {
-		return new BaseResult(repositories.pdYzDao.query(queryInfo));
+	public BaseResult listPDYZ(@RequestBody QueryInfo<PdYz> queryInfo, String mode) throws Exception {
+		PageResult<PdYz> result = repositories.pdYzDao.query(queryInfo);
+		if ("1".equals(mode)) {
+			if (result != null && result.getTotal() > 0) {
+				PdYz last = new PdYz();
+				last.setTotal(result.getList().size());
+				result.getList().add(last);
+			}
+		}
+		return new BaseResult(result);
 	}
 
 	@RequestMapping("/listTM12FDYZ")
@@ -450,6 +486,12 @@ public class YZController {
 					data.setList(fdList);
 					result.getList().add(data);
 				}
+			}
+		} else if ("2".equals(mode)) {
+			if (result != null && result.getTotal() > 0) {
+				Tm12FdYz last = new Tm12FdYz();
+				last.setTotal(result.getList().size());
+				result.getList().add(last);
 			}
 		}
 		return new BaseResult(result);
@@ -1241,6 +1283,11 @@ public class YZController {
 	@RequestMapping("/downloadMWLRYZ")
 	public String downloadMWLRYZ(DownloadDTO dto, HttpServletResponse response) throws Exception {
 		return downloadYZ("mwlryz", MwLrYz.class, dto, response, repositories.mwlrYzDao, "位置", "Pos");
+	}
+
+	@RequestMapping("/downloadLHLRYZ")
+	public String downloadLHLRYZ(DownloadDTO dto, HttpServletResponse response) throws Exception {
+		return downloadYZ("lhlryz", LhLrYz.class, dto, response, repositories.lhlrYzDao, "位置", "Pos");
 	}
 
 	@RequestMapping("/downloadTwelveLRYZ")

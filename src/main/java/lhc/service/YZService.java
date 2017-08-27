@@ -44,6 +44,7 @@ import lhc.domain.BsZfYz;
 import lhc.domain.DsYz;
 import lhc.domain.DsZfYz;
 import lhc.domain.KaiJiang;
+import lhc.domain.LhLrYz;
 import lhc.domain.LhYz;
 import lhc.domain.LhZfYz;
 import lhc.domain.LrSet;
@@ -453,6 +454,18 @@ public class YZService {
 				logger.info("End of calLHYZ...");
 			}
 
+		}, new LrHandler() {
+
+			@Override
+			public int getSmall() {
+				return 3;
+			}
+
+			@Override
+			public int getLarge() {
+				return 5;
+			}
+
 		});
 
 	}
@@ -830,7 +843,7 @@ public class YZService {
 				request = result.nextPageable();
 			} while (result != null && result.hasNext());
 
-			calTMFDYZ(7, 7, "Fd", repositories.tmfdyzRepository, TmFdYz.class, false);
+			calTMFDYZ(7, 7, "Fd", repositories.tmfdyzRepository, TmFdYz.class, false, null);
 
 			logger.info("End of calTMYZ...");
 		} catch (Exception e) {
@@ -969,7 +982,7 @@ public class YZService {
 	}
 
 	private <T extends BaseYz> void calTMFDYZ(int range, int length, String prefix, BaseYzRepository<T> repository,
-			Class<T> clazz, boolean calTopAndMin) throws Exception {
+			Class<T> clazz, boolean calTopAndMin, LrHandler lrHandler) throws Exception {
 		Pageable request = new PageRequest(0, 200, new Sort(Direction.ASC, "date"));
 		Page<TmYz> result = null;
 		T lastYz = null;
@@ -1036,6 +1049,40 @@ public class YZService {
 									info.value = lastValue;
 									info.special = true;
 									lastInfos.add(info);
+								}
+
+								if (lrHandler != null) {
+									sm = ReflectionUtils.findMethod(clazz, "setLastYzColor", Color.class);
+									Collections.sort(lastInfos, new Comparator<LrInfo>() {
+
+										@Override
+										public int compare(LrInfo o1, LrInfo o2) {
+											if (o1.value == null && o2.value == null) {
+												return 0;
+											} else if (o1.value == null && o2.value != null) {
+												return -1;
+											} else if (o1.value != null && o2.value == null) {
+												return 1;
+											} else {
+												return o1.value.compareTo(o2.value);
+											}
+										}
+
+									});
+									int pos = 0;
+									for (LrInfo info : lastInfos) {
+										if (info.special) {
+											break;
+										}
+										pos++;
+									}
+									if (pos < lrHandler.getSmall()) {
+										sm.invoke(yz, Color.Red);
+									} else if (pos > lrHandler.getLarge()) {
+										sm.invoke(yz, Color.Green);
+									} else {
+										sm.invoke(yz, Color.Yellow);
+									}
 								}
 							}
 							gm = ReflectionUtils.findMethod(clazz, "get" + prefix + num);
@@ -1190,7 +1237,19 @@ public class YZService {
 	public Future<Exception> calTM12FDYZ() {
 		Exception t = null;
 		try {
-			calTMFDYZ(4, 12, "W", repositories.tm12fdyzRepository, Tm12FdYz.class, true);
+			calTMFDYZ(4, 12, "W", repositories.tm12fdyzRepository, Tm12FdYz.class, true, new LrHandler() {
+
+				@Override
+				public int getSmall() {
+					return 4;
+				}
+
+				@Override
+				public int getLarge() {
+					return 7;
+				}
+
+			});
 			calZF(12, Tm12FdYz.class, Tm12FdZfYz.class, repositories.tm12fdyzRepository, repositories.tm12fdzfyzRepository,
 					new GetSuffixHandler<Tm12FdZfYz, Tm12FdYz>() {
 
@@ -2027,6 +2086,18 @@ public class YZService {
 			@Override
 			public void process() {
 				logger.info("End of calMWLRYZ...");
+			}
+		});
+
+	}
+
+	@Async
+	public Future<Exception> calLHLRYZ() {
+		return calLRYZ(LhLrYz.class, repositories.lhlryzRepository, repositories.lhyzRepository, new CommonHandler() {
+
+			@Override
+			public void process() {
+				logger.info("End of calLHLRYZ...");
 			}
 		});
 

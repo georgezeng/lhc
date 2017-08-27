@@ -5,7 +5,7 @@ import javax.persistence.Table;
 
 @Entity
 @Table(name = "lh_yz")
-public class LhYz extends Avg {
+public class LhYz extends Lr {
 	private Integer w1;
 	private Integer w2;
 	private Integer w3;

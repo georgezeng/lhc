@@ -1,5 +1,5 @@
 $(document).ready(function() {
-	createLR("/mvc/yz/listPDLRYZ");
+	createLRZH("/mvc/yz/listPDLRYZ");
 });
 
 

@@ -38,24 +38,23 @@ $(document).ready(function() {
 						$(nTd).text(value);
 					} else {
 						var text = [];
+						var num;
+						var range = 4;
+						var length = 12;
 						for(j in item.list) {
-							var num;
-							var range = 4;
-							var length = 12;
-							if(j % range == 0) {
-								num = j / range;
+							var pos = parseInt(j) + 1;
+							if(pos % range == 0) {
+								num = parseInt(pos / range);
 							} else {
-								num = j / range + 1;
+								num = parseInt(pos / range) + 1;
 							}
 							if(num > length) {
 								num = length;
 							}
-							var fd = parseInt(num);
-							if(fd == index) {
+							if(num == index - 1) {
 								text.push(item.list[j].num);
 							}
 						}
-						
 						$(nTd).text(text.join(", "));
 					}
 					
