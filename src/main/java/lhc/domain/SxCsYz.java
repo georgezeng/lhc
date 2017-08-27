@@ -1,7 +1,5 @@
 package lhc.domain;
 
-import java.math.BigDecimal;
-
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.Table;
@@ -10,7 +8,7 @@ import lhc.enums.SX;
 
 @Entity
 @Table(name = "sx_cs_yz")
-public class SxCsYz extends BaseYz {
+public class SxCsYz extends BaseCsYz {
 	private Integer Shu;
 	private Integer Niu;
 	private Integer Hu;
@@ -24,44 +22,7 @@ public class SxCsYz extends BaseYz {
 	private Integer Ji;
 	private Integer Gou;
 	private Integer Zhu;
-	private BigDecimal avg;
 	private SX currentSx;
-	private Integer pairs;
-	private Integer large;
-	private Integer small;
-	private Integer total;
-
-	public Integer getTotal() {
-		return total;
-	}
-
-	public void setTotal(Integer total) {
-		this.total = total;
-	}
-
-	public Integer getLarge() {
-		return large;
-	}
-
-	public void setLarge(Integer large) {
-		this.large = large;
-	}
-
-	public Integer getSmall() {
-		return small;
-	}
-
-	public void setSmall(Integer small) {
-		this.small = small;
-	}
-
-	public Integer getPairs() {
-		return pairs;
-	}
-
-	public void setPairs(Integer pairs) {
-		this.pairs = pairs;
-	}
 
 	public SX getCurrentSx() {
 		return currentSx;
@@ -69,14 +30,6 @@ public class SxCsYz extends BaseYz {
 
 	public void setCurrentSx(SX currentSx) {
 		this.currentSx = currentSx;
-	}
-
-	public BigDecimal getAvg() {
-		return avg;
-	}
-
-	public void setAvg(BigDecimal avg) {
-		this.avg = avg;
 	}
 
 	public Integer getShu() {

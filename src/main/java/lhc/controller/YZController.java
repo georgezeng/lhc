@@ -33,6 +33,7 @@ import lhc.domain.KaiJiang;
 import lhc.domain.LhLrYz;
 import lhc.domain.LhYz;
 import lhc.domain.LhZfYz;
+import lhc.domain.MwCsYz;
 import lhc.domain.MwLrYz;
 import lhc.domain.MwYz;
 import lhc.domain.MwZfYz;
@@ -715,12 +716,33 @@ public class YZController {
 		return new BaseResult(result);
 	}
 
-	@RequestMapping("/listSXCSYZ")
-	public BaseResult listSXCSYZ(@RequestBody QueryInfo<SxCsYz> queryInfo) throws Exception {
+	@RequestMapping("/listSXJTCSYZ")
+	public BaseResult listSXJTCSYZ(@RequestBody QueryInfo<SxCsYz> queryInfo) throws Exception {
 		PageResult<SxCsYz> result = repositories.sxcsYzDao.query(queryInfo);
 		if (result != null && result.getTotal() > 0) {
-			SxCsYz last = new SxCsYz();
-			result.getList().add(last);
+			result.getList().add(new SxCsYz());
+		}
+		return new BaseResult(result);
+	}
+
+	@RequestMapping("/listSXCSYZ")
+	public BaseResult listSXCSYZ(@RequestBody QueryInfo<SxYz> queryInfo) throws Exception {
+		PageResult<SxYz> sxResult = repositories.sxYzDao.query(queryInfo);
+		Map<String, Object> map = yzService.calSXCSYZ(queryInfo.getPageInfo(), sxResult, null, null);
+		PageResult<SxCsYz> result = (PageResult<SxCsYz>) map.get("result");
+		if (result != null && result.getTotal() > 0) {
+			result.getList().add(new SxCsYz());
+		}
+		return new BaseResult(result);
+	}
+
+	@RequestMapping("/listMWCSYZ")
+	public BaseResult listMWCSYZ(@RequestBody QueryInfo<MwYz> queryInfo) throws Exception {
+		PageResult<MwYz> sxResult = repositories.mwYzDao.query(queryInfo);
+		Map<String, Object> map = yzService.calMWCSYZ(queryInfo.getPageInfo(), sxResult, null, null);
+		PageResult<MwCsYz> result = (PageResult<MwCsYz>) map.get("result");
+		if (result != null && result.getTotal() > 0) {
+			result.getList().add(new MwCsYz());
 		}
 		return new BaseResult(result);
 	}

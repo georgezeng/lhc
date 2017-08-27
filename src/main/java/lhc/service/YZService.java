@@ -3,6 +3,7 @@ package lhc.service;
 import java.lang.reflect.Field;
 import java.lang.reflect.Method;
 import java.math.BigDecimal;
+import java.math.RoundingMode;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.Comparator;
@@ -38,6 +39,7 @@ import lhc.constants.TwelveNums;
 import lhc.constants.WxNums;
 import lhc.constants.ZsNums;
 import lhc.domain.Avg;
+import lhc.domain.BaseCsYz;
 import lhc.domain.BaseYz;
 import lhc.domain.BsYz;
 import lhc.domain.BsZfYz;
@@ -48,6 +50,7 @@ import lhc.domain.LhLrYz;
 import lhc.domain.LhYz;
 import lhc.domain.LhZfYz;
 import lhc.domain.LrSet;
+import lhc.domain.MwCsYz;
 import lhc.domain.MwLrYz;
 import lhc.domain.MwYz;
 import lhc.domain.MwZfYz;
@@ -84,6 +87,8 @@ import lhc.domain.WxZfYz;
 import lhc.domain.ZsYz;
 import lhc.domain.ZsZfYz;
 import lhc.dto.TmYzInfo;
+import lhc.dto.query.PageInfo;
+import lhc.dto.query.PageResult;
 import lhc.enums.Color;
 import lhc.enums.SX;
 import lhc.repository.jpa.BaseYzRepository;
@@ -1797,100 +1802,21 @@ public class YZService {
 	@Async
 	public Future<Exception> calSXCSYZ() {
 		Exception t = null;
-		int length = SX.values().length;
 		try {
 			Pageable request = new PageRequest(0, 200, new Sort(Direction.ASC, "date"));
 			Page<SxYz> result = null;
-			Class<SxCsYz> clazz = SxCsYz.class;
-			Class<SxYz> yzClazz = SxYz.class;
-			SxCsYz lastYZ = new SxCsYz();
-			for (SX sx : SX.seq()) {
-				Method m = ReflectionUtils.findMethod(clazz, "set" + sx.name(), Integer.class);
-				m.invoke(lastYZ, 0);
-			}
+			SxCsYz lastYz = null;
 			do {
 				result = repositories.sxyzRepository.findAll(request);
 				if (result != null && result.hasContent()) {
-					for (SxYz data : result.getContent()) {
-						SxCsYz yz = repositories.sxcsyzRepository.findByDate(data.getDate());
-						if (yz == null) {
-							yz = new SxCsYz();
-							yz.setYear(data.getYear());
-							yz.setPhase(data.getPhase());
-							yz.setDate(data.getDate());
-						}
-
-						for (SX sx : SX.seq()) {
-							Method sm = ReflectionUtils.findMethod(clazz, "set" + sx.name(), Integer.class);
-							Method gm = ReflectionUtils.findMethod(clazz, "get" + sx.name());
-							sm.invoke(yz, (Integer) gm.invoke(lastYZ));
-						}
-
-						Map<Integer, Integer> counts = new HashMap<Integer, Integer>();
-						int currentValue = 0;
-						for (SX sx : SX.seq()) {
-							Method gm = ReflectionUtils.findMethod(yzClazz, "get" + sx.name());
-							Integer value = (Integer) gm.invoke(data);
-							gm = ReflectionUtils.findMethod(clazz, "get" + sx.name());
-							Method sm = ReflectionUtils.findMethod(clazz, "set" + sx.name(), Integer.class);
-							if (value != null && value == 0) {
-								currentValue = 1 + (Integer) gm.invoke(yz);
-								sm.invoke(yz, currentValue);
-								yz.setCurrentSx(sx);
-							}
-
-							value = (Integer) gm.invoke(yz);
-							if (value > 0) {
-								Integer count = counts.get(value);
-								if (count == null) {
-									count = 0;
-								}
-								counts.put(value, count + 1);
-							}
-							sm.invoke(yz, value);
-						}
-
-						int pairs = 0;
-						for (Integer count : counts.values()) {
-							pairs += count - 1;
-						}
-						yz.setPairs(pairs);
-
-						int total = 0;
-						for (SX sx : SX.seq()) {
-							Method gm = ReflectionUtils.findMethod(clazz, "get" + sx.name());
-							Integer value = (Integer) gm.invoke(yz);
-							if (value != null) {
-								total += value;
-							}
-						}
-						yz.setTotal(total);
-						yz.setAvg(new BigDecimal(1d * total / length));
-
-						int large = 0;
-						int small = 0;
-						for (SX sx : SX.seq()) {
-							Method gm = ReflectionUtils.findMethod(clazz, "get" + sx.name());
-							Integer value = (Integer) gm.invoke(yz);
-							if (value != null) {
-								if (new BigDecimal(value).compareTo(yz.getAvg()) >= 0) {
-									large++;
-								} else if (new BigDecimal(value).compareTo(yz.getAvg()) < 0) {
-									small++;
-								}
-							}
-						}
-						yz.setLarge(large);
-						yz.setSmall(small);
-
-						repositories.sxcsyzRepository.save(yz);
-						lastYZ = yz;
-					}
-
-					request = result.nextPageable();
+					PageResult<SxYz> pResult = new PageResult<SxYz>();
+					pResult.setList(result.getContent());
+					pResult.setTotal(result.getTotalElements());
+					Map<String, Object> map = calSXCSYZ(null, pResult, repositories.sxcsyzRepository, lastYz);
+					lastYz = (SxCsYz) map.get("lastYz");
 				}
+				request = result.nextPageable();
 			} while (result != null && result.hasNext());
-
 			logger.info("End of calSXCSYZ...");
 		} catch (Exception e) {
 			if (DataAccessException.class.isAssignableFrom(e.getClass())) {
@@ -1899,6 +1825,145 @@ public class YZService {
 			t = e;
 		}
 		return new AsyncResult<Exception>(t);
+	}
+
+	public Map<String, Object> calSXCSYZ(PageInfo page, PageResult<SxYz> result, BaseYzRepository<SxCsYz> repository,
+			SxCsYz lastYZ) throws Exception {
+		return calCSYZ(page, result, repository, lastYZ, SX.names(), SxCsYz.class, SxYz.class, new CSHandler<SxCsYz>() {
+
+			@Override
+			public void doExtra(SxCsYz yz, String fd) {
+				yz.setCurrentSx(SX.valueOf(fd));
+			}
+
+		});
+	}
+
+	public Map<String, Object> calMWCSYZ(PageInfo page, PageResult<MwYz> result, BaseYzRepository<MwCsYz> repository,
+			MwCsYz lastYZ) throws Exception {
+		return calCSYZ(page, result, repository, lastYZ, MwNums.FDS, MwCsYz.class, MwYz.class, new CSHandler<MwCsYz>() {
+
+			@Override
+			public void doExtra(MwCsYz yz, String fd) {
+				yz.setCurrentPos(fd.toLowerCase());
+			}
+
+		});
+	}
+
+	private static interface CSHandler<C> {
+		void doExtra(C yz, String fd);
+	}
+
+	public <T extends BaseYz, C extends BaseCsYz> Map<String, Object> calCSYZ(PageInfo page, PageResult<T> result,
+			BaseYzRepository<C> repository, C lastYZ, String[] fds, Class<C> clazz, Class<T> yzClazz, CSHandler<C> handler)
+			throws Exception {
+		Map<String, Object> map = new HashMap<String, Object>();
+		PageResult<C> pResult = null;
+		if (result != null && result.getTotal() > 0) {
+			List<C> list = new ArrayList<C>();
+			int length = fds.length;
+			if (lastYZ == null) {
+				lastYZ = clazz.newInstance();
+				for (String fd : fds) {
+					Method m = ReflectionUtils.findMethod(clazz, "set" + fd, Integer.class);
+					m.invoke(lastYZ, 0);
+				}
+			}
+			for (T data : result.getList()) {
+				C yz = null;
+				if (repository != null) {
+					yz = repository.findByDate(data.getDate());
+				}
+				if (yz == null) {
+					yz = clazz.newInstance();
+					yz.setYear(data.getYear());
+					yz.setPhase(data.getPhase());
+					yz.setDate(data.getDate());
+				}
+
+				for (String fd : fds) {
+					Method sm = ReflectionUtils.findMethod(clazz, "set" + fd, Integer.class);
+					Method gm = ReflectionUtils.findMethod(clazz, "get" + fd);
+					sm.invoke(yz, (Integer) gm.invoke(lastYZ));
+				}
+
+				Map<Integer, Integer> counts = new HashMap<Integer, Integer>();
+				int currentValue = 0;
+				for (String fd : fds) {
+					Method gm = ReflectionUtils.findMethod(yzClazz, "get" + fd);
+					Integer value = (Integer) gm.invoke(data);
+					gm = ReflectionUtils.findMethod(clazz, "get" + fd);
+					Method sm = ReflectionUtils.findMethod(clazz, "set" + fd, Integer.class);
+					if (value != null && value == 0) {
+						currentValue = 1 + (Integer) gm.invoke(yz);
+						sm.invoke(yz, currentValue);
+						if (handler != null) {
+							handler.doExtra(yz, fd);
+						}
+					}
+
+					value = (Integer) gm.invoke(yz);
+					if (value > 0) {
+						Integer count = counts.get(value);
+						if (count == null) {
+							count = 0;
+						}
+						counts.put(value, count + 1);
+					}
+					sm.invoke(yz, value);
+				}
+
+				int pairs = 0;
+				for (Integer count : counts.values()) {
+					pairs += count - 1;
+				}
+				yz.setPairs(pairs);
+
+				int total = 0;
+				for (String fd : fds) {
+					Method gm = ReflectionUtils.findMethod(clazz, "get" + fd);
+					Integer value = (Integer) gm.invoke(yz);
+					if (value != null) {
+						total += value;
+					}
+				}
+				yz.setTotal(total);
+				yz.setAvg(new BigDecimal(1d * total / length).setScale(2, RoundingMode.HALF_UP));
+
+				int large = 0;
+				int small = 0;
+				for (String fd : fds) {
+					Method gm = ReflectionUtils.findMethod(clazz, "get" + fd);
+					Integer value = (Integer) gm.invoke(yz);
+					if (value != null) {
+						if (new BigDecimal(value).compareTo(yz.getAvg()) >= 0) {
+							large++;
+						} else if (new BigDecimal(value).compareTo(yz.getAvg()) < 0) {
+							small++;
+						}
+					}
+				}
+				yz.setLarge(large);
+				yz.setSmall(small);
+
+				if (repository != null) {
+					repository.save(yz);
+				} else {
+					yz.setId(1l);
+				}
+				list.add(yz);
+				lastYZ = yz;
+
+				if (page != null) {
+					pResult = new PageResult<C>(list, list.size(), page);
+					map.put("result", pResult);
+				}
+				map.put("lastYz", lastYZ);
+			}
+		}
+
+		return map;
 	}
 
 	private <T extends LrSet, R extends BaseYz> Future<Exception> calLRYZ(final Class<T> lrClazz,
