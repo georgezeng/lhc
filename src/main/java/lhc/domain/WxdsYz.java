@@ -2,6 +2,9 @@ package lhc.domain;
 
 import javax.persistence.Entity;
 import javax.persistence.Table;
+import javax.persistence.Transient;
+
+import lhc.constants.WxDsNums;
 
 @Entity
 @Table(name = "wxds_yz")
@@ -16,6 +19,27 @@ public class WxdsYz extends Lr {
 	private Integer huoEven;
 	private Integer tuOdd;
 	private Integer tuEven;
+	@Transient
+	private Integer[][] list = new Integer[][] {
+		WxDsNums.JINODD.toArray(new Integer[]{}),
+		WxDsNums.JINEVEN.toArray(new Integer[]{}),
+		WxDsNums.MUODD.toArray(new Integer[]{}),
+		WxDsNums.MUEVEN.toArray(new Integer[]{}),
+		WxDsNums.SHUIODD.toArray(new Integer[]{}),
+		WxDsNums.SHUIEVEN.toArray(new Integer[]{}),
+		WxDsNums.HUOODD.toArray(new Integer[]{}),
+		WxDsNums.HUOEVEN.toArray(new Integer[]{}),
+		WxDsNums.TUODD.toArray(new Integer[]{}),
+		WxDsNums.TUEVEN.toArray(new Integer[]{})
+	};
+
+	public Integer[][] getList() {
+		return list;
+	}
+
+	public void setList(Integer[][] list) {
+		this.list = list;
+	}
 
 	public Integer getJinOdd() {
 		return jinOdd;

@@ -2,6 +2,9 @@ package lhc.domain;
 
 import javax.persistence.Entity;
 import javax.persistence.Table;
+import javax.persistence.Transient;
+
+import lhc.constants.WxNums;
 
 @Entity
 @Table(name = "wx_yz")
@@ -11,6 +14,22 @@ public class WxYz extends Avg {
 	private Integer shui;
 	private Integer huo;
 	private Integer tu;
+	@Transient
+	private Integer[][] list = new Integer[][] {
+		WxNums.JIN.toArray(new Integer[]{}),
+		WxNums.MU.toArray(new Integer[]{}),
+		WxNums.SHUI.toArray(new Integer[]{}),
+		WxNums.HUO.toArray(new Integer[]{}),
+		WxNums.TU.toArray(new Integer[]{})
+	};
+
+	public Integer[][] getList() {
+		return list;
+	}
+
+	public void setList(Integer[][] list) {
+		this.list = list;
+	}
 
 	public Integer getJin() {
 		return jin;

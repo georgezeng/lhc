@@ -2,6 +2,9 @@ package lhc.domain;
 
 import javax.persistence.Entity;
 import javax.persistence.Table;
+import javax.persistence.Transient;
+
+import lhc.constants.BsNums;
 
 @Entity
 @Table(name = "bs_yz")
@@ -13,6 +16,23 @@ public class BsYz extends Avg {
 	private Integer greenEven;
 	private Integer blueOdd;
 	private Integer blueEven;
+	@Transient
+	private Integer[][] list = new Integer[][] {
+		BsNums.REDODD.toArray(new Integer[]{}),
+		BsNums.REDEVEN.toArray(new Integer[]{}),
+		BsNums.BLUEODD.toArray(new Integer[]{}),
+		BsNums.BLUEEVEN.toArray(new Integer[]{}),
+		BsNums.GREENODD.toArray(new Integer[]{}),
+		BsNums.GREENEVEN.toArray(new Integer[]{})
+	};
+
+	public Integer[][] getList() {
+		return list;
+	}
+
+	public void setList(Integer[][] list) {
+		this.list = list;
+	}
 
 	public Integer getRedOdd() {
 		return redOdd;

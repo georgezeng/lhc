@@ -724,3 +724,236 @@ function createCSList(url, sxlist, itemPropertyCallback) {
 		aoColumnDefs: columnDefs
 	}));
 }
+
+function createYZlist(url, sxlist, setZeroYzFunc, extraColumns, extraLineTitle, extraLineFunc) {
+	if(url.indexOf("?mode") == -1) {
+		url = url + "?mode=1";
+	}
+	if(!extraColumns) {
+		extraColumns = [];
+	}
+	if(!extraLineTitle) {
+		extraLineTitle = "顺概率";
+	}
+	if(!setZeroYzFunc) {
+		setZeroYzFunc = function(nTd, item, index) {
+			$(nTd).css("color", "white").css("backgroundColor", "red");
+		};
+	}
+	var lastGreen = false;
+	var lastRed = false;
+	var count = 0;
+	var columns = createColumns(sxlist, extraColumns);
+	var columnDefs = [];
+	for(var i = 0; i < 2; i++) {
+		(function(index) {
+			columnDefs.push({
+				aTargets: [index],
+				fnCreatedCell: function(nTd, sData, item, iRow, iCol) {
+					var value = null;
+					if(index == 0) {
+						value = item.year;
+						if(!item.id) {
+							value = extraLineTitle;
+							$(nTd).css("color", "blue");
+						} 
+					} else {
+						value = item.phase;
+						if(!item.id) {
+							value = "";
+						}
+					}
+					$(nTd).text(value);
+				}
+			});
+		})(i);
+	}
+	for(var i = 2; i < sxlist.length + 2; i++) {
+		(function(index) {
+			columnDefs.push({
+				aTargets: [index],
+				fnCreatedCell: function(nTd, sData, item, iRow, iCol) {
+					var value;
+					if(item.id) {
+						value = item[sxlist[index-2]];
+						if(value == 0) {
+							setZeroYzFunc(nTd, item, index);
+						} else {
+							$(nTd).css("backgroundColor", "#ffc");
+						}
+					} else {
+						if(extraLineFunc) {
+							value = extraLineFunc(nTd, item, index);
+						}
+					}
+					$(nTd).text(value);
+				}
+			});
+		})(i);
+	}
+	columnDefs.push({
+		aTargets: [sxlist.length + extraColumns.length + 3],
+		fnCreatedCell: function(nTd, sData, item, iRow, iCol) {
+			var value = null;
+			if(item.id) {
+				value = item.lastYz;
+				if(value > 7) {
+					if(lastGreen) {
+						count++;
+					}
+					$(nTd).css("color", "white").css("backgroundColor", "green");
+					lastRed = false;
+					lastGreen = true;
+				} else {
+					if(lastRed) {
+						count++;
+					}
+					$(nTd).css("color", "white").css("backgroundColor", "red");
+					lastRed = true;
+					lastGreen = false;
+				}
+			} else {
+				value = Math.round(count / item.total * 10000) / 100;
+				if(isNaN(value) || value == "Infinity") {
+					value = "";
+				} else {
+					value += "%";
+				}
+			}
+			$(nTd).text(value);
+		}
+	});
+	columnDefs.push({
+		aTargets: [sxlist.length + extraColumns.length + 4],
+		fnCreatedCell: function(nTd, sData, item, iRow, iCol) {
+			var value = null;
+			if(item.id) {
+				value = item.total;
+			} else {
+				value = "";
+			}
+			$(nTd).text(value);
+		}
+	});
+	datatables.push(createDataTable({
+		id : "dataTable",
+		url : url,
+		bFilter: false,
+		data : function(queryInfo, infoSettings) {
+			count = 0;
+			lastRed = false;
+			lastGreen = false;
+			queryInfo.object = {};
+			queryInfo.object.year = parseInt($("#years").val());
+			queryInfo.object.phase = parseInt($("#phases").val());
+		},
+		columns : columns,
+		aoColumnDefs: columnDefs
+	}));
+}
+
+function createZFlist(url, sxlist) {
+	if(url.indexOf("?mode") == -1) {
+		url = url + "?mode=1";
+	}
+	var lastGreen = false;
+	var lastRed = false;
+	var count = 0;
+	var columns = createColumns(sxlist);
+	var columnDefs = [];
+	for(var i = 0; i < 2; i++) {
+		(function(index) {
+			columnDefs.push({
+				aTargets: [index],
+				fnCreatedCell: function(nTd, sData, item, iRow, iCol) {
+					var value = null;
+					if(index == 0) {
+						value = item.year;
+						if(!item.id) {
+							value = "顺概率";
+							$(nTd).css("color", "blue");
+						} 
+					} else {
+						value = item.phase;
+						if(!item.id) {
+							value = "";
+						}
+					}
+					$(nTd).text(value);
+				}
+			});
+		})(i);
+	}
+	for(var i = 2; i < sxlist.length+2; i++) {
+		(function(index) {
+			columnDefs.push({
+				aTargets: [index],
+				fnCreatedCell: function(nTd, sData, item, iRow, iCol) {
+					var value = item[sxlist[index-2]];
+					if(item.id) {
+						if(value == 0) {
+							$(nTd).css("color", "white").css("backgroundColor", "red");
+						} else {
+							$(nTd).css("backgroundColor", "#ffc");
+						}
+					}
+					$(nTd).text(value);
+				}
+			});
+		})(i);
+	}
+	columnDefs.push({
+		aTargets: [sxlist.length+3],
+		fnCreatedCell: function(nTd, sData, item, iRow, iCol) {
+			var value = null;
+			if(item.id) {
+				value = item.lastYz;
+				if(value > 7) {
+					if(lastGreen) {
+						count++;
+					}
+					$(nTd).css("color", "white").css("backgroundColor", "green");
+					lastRed = false;
+					lastGreen = true;
+				} else {
+					if(lastRed) {
+						count++;
+					}
+					$(nTd).css("color", "white").css("backgroundColor", "red");
+					lastRed = true;
+					lastGreen = false;
+				}
+			} else {
+				value = Math.round(count / item.total * 10000) / 100 + "%";
+			}
+			$(nTd).text(value);
+		}
+	});
+	columnDefs.push({
+		aTargets: [sxlist.length+4],
+		fnCreatedCell: function(nTd, sData, item, iRow, iCol) {
+			var value = null;
+			if(item.id) {
+				value = item.total;
+			} else {
+				value = "";
+			}
+			$(nTd).text(value);
+		}
+	});
+	datatables.push(createDataTable({
+		id : "dataTable",
+		url : url,
+		bFilter: false,
+		data : function(queryInfo, infoSettings) {
+			count = 0;
+			lastRed = false;
+			lastGreen = false;
+			queryInfo.object = {};
+			queryInfo.object.year = parseInt($("#years").val());
+			queryInfo.object.phase = parseInt($("#phases").val());
+		},
+		columns : columns,
+		aoColumnDefs: columnDefs
+	}));
+}

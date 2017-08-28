@@ -20,7 +20,7 @@ public class PdYz extends Lr {
 	private Integer w11;
 	private Integer w12;
 	@Transient
-	private int[][] list = new int[][]{
+	private Integer[][] list = new Integer[][]{
 			{1, 38, 39, 42},
 			{2, 4, 8, 16, 32},
 			{3, 9, 27, 45},
@@ -36,11 +36,11 @@ public class PdYz extends Lr {
 	};
 
 
-	public int[][] getList() {
+	public Integer[][] getList() {
 		return list;
 	}
 
-	public void setList(int[][] list) {
+	public void setList(Integer[][] list) {
 		this.list = list;
 	}
 

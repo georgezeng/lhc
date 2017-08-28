@@ -466,8 +466,16 @@ public class YZController {
 	}
 
 	@RequestMapping("/listBSYZ")
-	public BaseResult listBSYZ(@RequestBody QueryInfo<BsYz> queryInfo) throws Exception {
-		return new BaseResult(repositories.bsYzDao.query(queryInfo));
+	public BaseResult listBSYZ(@RequestBody QueryInfo<BsYz> queryInfo, String mode) throws Exception {
+		PageResult<BsYz> result = repositories.bsYzDao.query(queryInfo);
+		if ("1".equals(mode)) {
+			if (result != null && result.getTotal() > 0) {
+				BsYz last = new BsYz();
+				last.setTotal(result.getList().size());
+				result.getList().add(last);
+			}
+		}
+		return new BaseResult(result);
 	}
 
 	@RequestMapping("/listBSZF")
@@ -477,8 +485,16 @@ public class YZController {
 	}
 
 	@RequestMapping("/listWXYZ")
-	public BaseResult listWXYZ(@RequestBody QueryInfo<WxYz> queryInfo) throws Exception {
-		return new BaseResult(repositories.wxYzDao.query(queryInfo));
+	public BaseResult listWXYZ(@RequestBody QueryInfo<WxYz> queryInfo, String mode) throws Exception {
+		PageResult<WxYz> result = repositories.wxYzDao.query(queryInfo);
+		if ("1".equals(mode)) {
+			if (result != null && result.getTotal() > 0) {
+				WxYz last = new WxYz();
+				last.setTotal(result.getList().size());
+				result.getList().add(last);
+			}
+		}
+		return new BaseResult(result);
 	}
 
 	@RequestMapping("/listWXZF")

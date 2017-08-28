@@ -2,6 +2,9 @@ package lhc.domain;
 
 import javax.persistence.Entity;
 import javax.persistence.Table;
+import javax.persistence.Transient;
+
+import lhc.constants.Bs9qNums;
 
 @Entity
 @Table(name = "bs9q_yz")
@@ -15,6 +18,26 @@ public class Bs9qYz extends Lr {
 	private Integer green1;
 	private Integer green2;
 	private Integer green3;
+	@Transient
+	private Integer[][] list = new Integer[][] {
+		Bs9qNums.RED1.toArray(new Integer[]{}),
+		Bs9qNums.RED2.toArray(new Integer[]{}),
+		Bs9qNums.RED3.toArray(new Integer[]{}),
+		Bs9qNums.BLUE1.toArray(new Integer[]{}),
+		Bs9qNums.BLUE2.toArray(new Integer[]{}),
+		Bs9qNums.BLUE3.toArray(new Integer[]{}),
+		Bs9qNums.GREEN1.toArray(new Integer[]{}),
+		Bs9qNums.GREEN2.toArray(new Integer[]{}),
+		Bs9qNums.GREEN3.toArray(new Integer[]{})
+	};
+
+	public Integer[][] getList() {
+		return list;
+	}
+
+	public void setList(Integer[][] list) {
+		this.list = list;
+	}
 
 	public Integer getRed1() {
 		return red1;
