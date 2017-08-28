@@ -25,6 +25,9 @@ import org.springframework.web.bind.annotation.RestController;
 
 import lhc.domain.Avg;
 import lhc.domain.BaseYz;
+import lhc.domain.Bs9qLrYz;
+import lhc.domain.Bs9qYz;
+import lhc.domain.Bs9qZfYz;
 import lhc.domain.BsYz;
 import lhc.domain.BsZfYz;
 import lhc.domain.DsYz;
@@ -66,6 +69,9 @@ import lhc.domain.TwelveYz;
 import lhc.domain.TwelveZfYz;
 import lhc.domain.WxYz;
 import lhc.domain.WxZfYz;
+import lhc.domain.WxdsLrYz;
+import lhc.domain.WxdsYz;
+import lhc.domain.WxdsZfYz;
 import lhc.domain.ZsLrYz;
 import lhc.domain.ZsYz;
 import lhc.domain.ZsZfYz;
@@ -146,6 +152,8 @@ public class YZController {
 		futures.add(yzService.calTwelveYZ());
 		futures.add(yzService.calSLQYZ());
 		futures.add(yzService.calPDYZ());
+		futures.add(yzService.calBS9QYZ());
+		futures.add(yzService.calWXDSYZ());
 		if (sleep) {
 			sleep(futures, 1000);
 		} else {
@@ -181,6 +189,10 @@ public class YZController {
 		futures.add(parallelYzService.calAvg(repositories.slqzfyzRepository));
 		futures.add(parallelYzService.calAvg(repositories.pdyzRepository));
 		futures.add(parallelYzService.calAvg(repositories.pdzfyzRepository));
+		futures.add(parallelYzService.calAvg(repositories.bs9qyzRepository));
+		futures.add(parallelYzService.calAvg(repositories.bs9qzfyzRepository));
+		futures.add(parallelYzService.calAvg(repositories.wxdsyzRepository));
+		futures.add(parallelYzService.calAvg(repositories.wxdszfyzRepository));
 		if (sleep) {
 			sleep(futures, 1000);
 		} else {
@@ -196,6 +208,8 @@ public class YZController {
 		futures.add(yzService.calSLQLRYZ());
 		futures.add(yzService.calPDLRYZ());
 		futures.add(yzService.calZSLRYZ());
+		futures.add(yzService.calBS9QLRYZ());
+		futures.add(yzService.calWXDSLRYZ());
 		futures.add(parallelYzService.calAvg(repositories.tm12fdyzRepository));
 		futures.add(parallelYzService.calAvg(repositories.tm12fdzfyzRepository));
 		if (sleep) {
@@ -214,6 +228,8 @@ public class YZController {
 		futures.add(parallelYzService.calAvg(repositories.pdlryzRepository));
 		futures.add(parallelYzService.calAvg(repositories.lhlryzRepository));
 		futures.add(parallelYzService.calAvg(repositories.zslryzRepository));
+		futures.add(parallelYzService.calAvg(repositories.bs9qlryzRepository));
+		futures.add(parallelYzService.calAvg(repositories.wxdslryzRepository));
 		if (sleep) {
 			sleep(futures, 1000);
 		} else {
@@ -223,6 +239,11 @@ public class YZController {
 
 		futures.clear();
 		futures.add(parallelYzService.calAvg(repositories.tm12fdlryzRepository));
+		if (sleep) {
+			sleep(futures, 1000);
+		} else {
+			sleep(futures, 0);
+		}
 		logger.info("Done calYZ...");
 	}
 
@@ -301,6 +322,18 @@ public class YZController {
 		return new BaseResult(result);
 	}
 
+	@RequestMapping("/listBS9QLRYZ")
+	public BaseResult listBS9QLRYZ(@RequestBody QueryInfo<Bs9qLrYz> queryInfo) throws Exception {
+		PageResult<Bs9qLrYz> result = repositories.bs9qlrYzDao.query(queryInfo);
+		return new BaseResult(result);
+	}
+
+	@RequestMapping("/listWXDSLRYZ")
+	public BaseResult listWXDSLRYZ(@RequestBody QueryInfo<WxdsLrYz> queryInfo) throws Exception {
+		PageResult<WxdsLrYz> result = repositories.wxdslrYzDao.query(queryInfo);
+		return new BaseResult(result);
+	}
+
 	@RequestMapping("/listZSLRYZ")
 	public BaseResult listZSLRYZ(@RequestBody QueryInfo<ZsLrYz> queryInfo) throws Exception {
 		PageResult<ZsLrYz> result = repositories.zslrYzDao.query(queryInfo);
@@ -358,9 +391,47 @@ public class YZController {
 		return new BaseResult(result);
 	}
 
+	@RequestMapping("/listBS9QYZ")
+	public BaseResult listBS9QYZ(@RequestBody QueryInfo<Bs9qYz> queryInfo, @RequestParam String mode) throws Exception {
+		PageResult<Bs9qYz> result = repositories.bs9qYzDao.query(queryInfo);
+		if ("1".equals(mode)) {
+			if (result != null && result.getTotal() > 0) {
+				Bs9qYz last = new Bs9qYz();
+				last.setTotal(result.getList().size());
+				result.getList().add(last);
+			}
+		}
+		return new BaseResult(result);
+	}
+
+	@RequestMapping("/listWXDSYZ")
+	public BaseResult listWXDSYZ(@RequestBody QueryInfo<WxdsYz> queryInfo, @RequestParam String mode) throws Exception {
+		PageResult<WxdsYz> result = repositories.wxdsYzDao.query(queryInfo);
+		if ("1".equals(mode)) {
+			if (result != null && result.getTotal() > 0) {
+				WxdsYz last = new WxdsYz();
+				last.setTotal(result.getList().size());
+				result.getList().add(last);
+			}
+		}
+		return new BaseResult(result);
+	}
+
 	@RequestMapping("/listLHZF")
 	public BaseResult listLHZF(@RequestBody QueryInfo<LhZfYz> queryInfo) throws Exception {
 		PageResult<LhZfYz> result = repositories.lhZfYzDao.query(queryInfo);
+		return new BaseResult(result);
+	}
+
+	@RequestMapping("/listBS9QZF")
+	public BaseResult listBS9QZF(@RequestBody QueryInfo<Bs9qZfYz> queryInfo) throws Exception {
+		PageResult<Bs9qZfYz> result = repositories.bs9qZfYzDao.query(queryInfo);
+		return new BaseResult(result);
+	}
+
+	@RequestMapping("/listWXDSZF")
+	public BaseResult listWXDSZF(@RequestBody QueryInfo<WxdsZfYz> queryInfo) throws Exception {
+		PageResult<WxdsZfYz> result = repositories.wxdsZfYzDao.query(queryInfo);
 		return new BaseResult(result);
 	}
 
@@ -789,6 +860,16 @@ public class YZController {
 		return countJZ(queryInfo, repositories.lhYzDao, LhYz.class);
 	}
 
+	@RequestMapping("/countBS9QJZ")
+	public BaseResult countBS9QJZ(@RequestBody QueryInfo<Bs9qYz> queryInfo) throws Exception {
+		return countJZ(queryInfo, repositories.bs9qYzDao, Bs9qYz.class);
+	}
+
+	@RequestMapping("/countWXDSJZ")
+	public BaseResult countWXDSJZ(@RequestBody QueryInfo<WxdsYz> queryInfo) throws Exception {
+		return countJZ(queryInfo, repositories.wxdsYzDao, WxdsYz.class);
+	}
+
 	@RequestMapping("/countBSJZ")
 	public BaseResult countBSJZ(@RequestBody QueryInfo<BsYz> queryInfo) throws Exception {
 		return countJZ(queryInfo, repositories.bsYzDao, BsYz.class);
@@ -867,6 +948,16 @@ public class YZController {
 	@RequestMapping("/countLHZFJZ")
 	public BaseResult countLHZFJZ(@RequestBody QueryInfo<LhZfYz> queryInfo) throws Exception {
 		return countJZ(queryInfo, repositories.lhZfYzDao, LhZfYz.class);
+	}
+
+	@RequestMapping("/countBS9QZFJZ")
+	public BaseResult countBS9QZFJZ(@RequestBody QueryInfo<Bs9qZfYz> queryInfo) throws Exception {
+		return countJZ(queryInfo, repositories.bs9qZfYzDao, Bs9qZfYz.class);
+	}
+
+	@RequestMapping("/countWXDSZFJZ")
+	public BaseResult countWXDSZFJZ(@RequestBody QueryInfo<WxdsZfYz> queryInfo) throws Exception {
+		return countJZ(queryInfo, repositories.wxdsZfYzDao, WxdsZfYz.class);
 	}
 
 	@RequestMapping("/countBSZFJZ")
@@ -1298,6 +1389,16 @@ public class YZController {
 		return downloadYZ("lhyz", LhYz.class, dto, response, repositories.lhYzDao);
 	}
 
+	@RequestMapping("/downloadBS9QYZ")
+	public String downloadBS9QYZ(DownloadDTO dto, HttpServletResponse response) throws Exception {
+		return downloadYZ("bs9qyz", Bs9qYz.class, dto, response, repositories.bs9qYzDao);
+	}
+
+	@RequestMapping("/downloadWXDSYZ")
+	public String downloadWXDSYZ(DownloadDTO dto, HttpServletResponse response) throws Exception {
+		return downloadYZ("wxdsyz", WxdsYz.class, dto, response, repositories.wxdsYzDao);
+	}
+
 	@RequestMapping("/downloadWXYZ")
 	public String downloadWXYZ(DownloadDTO dto, HttpServletResponse response) throws Exception {
 		return downloadYZ("wxyz", WxYz.class, dto, response, repositories.wxYzDao);
@@ -1331,6 +1432,16 @@ public class YZController {
 	@RequestMapping("/downloadLHLRYZ")
 	public String downloadLHLRYZ(DownloadDTO dto, HttpServletResponse response) throws Exception {
 		return downloadYZ("lhlryz", LhLrYz.class, dto, response, repositories.lhlrYzDao, "位置", "Pos");
+	}
+
+	@RequestMapping("/downloadBS9QLRYZ")
+	public String downloadBS9QLRYZ(DownloadDTO dto, HttpServletResponse response) throws Exception {
+		return downloadYZ("bs9qlryz", Bs9qLrYz.class, dto, response, repositories.bs9qlrYzDao, "位置", "Pos");
+	}
+
+	@RequestMapping("/downloadWXDSLRYZ")
+	public String downloadWXDSLRYZ(DownloadDTO dto, HttpServletResponse response) throws Exception {
+		return downloadYZ("wxdslryz", WxdsLrYz.class, dto, response, repositories.wxdslrYzDao, "位置", "Pos");
 	}
 
 	@RequestMapping("/downloadZSLRYZ")
@@ -1373,6 +1484,21 @@ public class YZController {
 		return downloadYZ("twelvezf", TwelveZfYz.class, dto, response, repositories.twelvezfYzDao);
 	}
 
+	@RequestMapping("/downloadBS9QZF")
+	public String downloadBS9QZF(DownloadDTO dto, HttpServletResponse response) throws Exception {
+		return downloadYZ("bs9qzf", Bs9qZfYz.class, dto, response, repositories.bs9qZfYzDao);
+	}
+
+	@RequestMapping("/downloadZSZF")
+	public String downloadZSZF(DownloadDTO dto, HttpServletResponse response) throws Exception {
+		return downloadYZ("zszf", ZsZfYz.class, dto, response, repositories.zszfYzDao);
+	}
+
+	@RequestMapping("/downloadLHZF")
+	public String downloadLHZF(DownloadDTO dto, HttpServletResponse response) throws Exception {
+		return downloadYZ("lhzf", LhZfYz.class, dto, response, repositories.lhZfYzDao);
+	}
+
 	@RequestMapping("/downloadSLQZF")
 	public String downloadSLQZF(DownloadDTO dto, HttpServletResponse response) throws Exception {
 		return downloadYZ("slqzf", SlqZfYz.class, dto, response, repositories.slqzfYzDao);
@@ -1386,6 +1512,36 @@ public class YZController {
 	@RequestMapping("/downloadTM12FDZF")
 	public String downloadTM12FDZF(DownloadDTO dto, HttpServletResponse response) throws Exception {
 		return downloadYZ("tm12fdzf", Tm12FdZfYz.class, dto, response, repositories.tm12fdzfYzDao);
+	}
+
+	@RequestMapping("/downloadDSZF")
+	public String downloadDSZF(DownloadDTO dto, HttpServletResponse response) throws Exception {
+		return downloadYZ("dszf", DsZfYz.class, dto, response, repositories.dszfYzDao);
+	}
+
+	@RequestMapping("/downloadMWZF")
+	public String downloadMWZF(DownloadDTO dto, HttpServletResponse response) throws Exception {
+		return downloadYZ("mwzf", MwZfYz.class, dto, response, repositories.mwZfYzDao);
+	}
+
+	@RequestMapping("/downloadQQZF")
+	public String downloadQQZF(DownloadDTO dto, HttpServletResponse response) throws Exception {
+		return downloadYZ("qqzf", QqZfYz.class, dto, response, repositories.qqZfYzDao);
+	}
+
+	@RequestMapping("/downloadSWZF")
+	public String downloadSWZF(DownloadDTO dto, HttpServletResponse response) throws Exception {
+		return downloadYZ("swzf", SwZfYz.class, dto, response, repositories.swZfYzDao);
+	}
+
+	@RequestMapping("/downloadWXZF")
+	public String downloadWXZF(DownloadDTO dto, HttpServletResponse response) throws Exception {
+		return downloadYZ("wxzf", WxZfYz.class, dto, response, repositories.wxzfYzDao);
+	}
+
+	@RequestMapping("/downloadWXDSZF")
+	public String downloadWXDSZF(DownloadDTO dto, HttpServletResponse response) throws Exception {
+		return downloadYZ("wxdszf", WxdsZfYz.class, dto, response, repositories.wxdsZfYzDao);
 	}
 
 	@RequestMapping("/downloadSXZF")

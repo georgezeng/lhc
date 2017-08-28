@@ -27,6 +27,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.util.ReflectionUtils;
 
+import lhc.constants.Bs9qNums;
 import lhc.constants.BsNums;
 import lhc.constants.DsNums;
 import lhc.constants.LhNums;
@@ -36,11 +37,15 @@ import lhc.constants.QqNums;
 import lhc.constants.SlqNums;
 import lhc.constants.SwNums;
 import lhc.constants.TwelveNums;
+import lhc.constants.WxDsNums;
 import lhc.constants.WxNums;
 import lhc.constants.ZsNums;
 import lhc.domain.Avg;
 import lhc.domain.BaseCsYz;
 import lhc.domain.BaseYz;
+import lhc.domain.Bs9qLrYz;
+import lhc.domain.Bs9qYz;
+import lhc.domain.Bs9qZfYz;
 import lhc.domain.BsYz;
 import lhc.domain.BsZfYz;
 import lhc.domain.DsYz;
@@ -84,6 +89,9 @@ import lhc.domain.TwelveYz;
 import lhc.domain.TwelveZfYz;
 import lhc.domain.WxYz;
 import lhc.domain.WxZfYz;
+import lhc.domain.WxdsLrYz;
+import lhc.domain.WxdsYz;
+import lhc.domain.WxdsZfYz;
 import lhc.domain.ZsLrYz;
 import lhc.domain.ZsYz;
 import lhc.domain.ZsZfYz;
@@ -443,6 +451,38 @@ public class YZService {
 	}
 
 	@Async
+	public Future<Exception> calBS9QYZ() {
+		return calFDYZ(Bs9qYz.class, Bs9qNums.class, repositories.bs9qyzRepository, new CommonHandler() {
+
+			@Override
+			public void process() {
+				calZF(Bs9qNums.FDS.length, Bs9qYz.class, Bs9qZfYz.class, repositories.bs9qyzRepository,
+						repositories.bs9qzfyzRepository, new GetSuffixHandler<Bs9qZfYz, Bs9qYz>() {
+
+							@Override
+							public String process(int index) {
+								return Bs9qNums.FDS[index];
+							}
+
+						});
+				logger.info("End of calBS9QYZ...");
+			}
+		}, new LrHandler() {
+
+			@Override
+			public int getSmall() {
+				return 3;
+			}
+
+			@Override
+			public int getLarge() {
+				return 5;
+			}
+		});
+
+	}
+
+	@Async
 	public Future<Exception> calLHYZ() {
 		return calFDYZ(LhYz.class, LhNums.class, repositories.lhyzRepository, new CommonHandler() {
 
@@ -597,6 +637,39 @@ public class YZService {
 
 						});
 				logger.info("End of calWXYZ...");
+			}
+
+		});
+	}
+
+	@Async
+	public Future<Exception> calWXDSYZ() {
+		return calFDYZ(WxdsYz.class, WxDsNums.class, repositories.wxdsyzRepository, new CommonHandler() {
+
+			@Override
+			public void process() {
+				calZF(WxDsNums.FDS.length, WxdsYz.class, WxdsZfYz.class, repositories.wxdsyzRepository,
+						repositories.wxdszfyzRepository, new GetSuffixHandler<WxdsZfYz, WxdsYz>() {
+
+							@Override
+							public String process(int index) {
+								return WxDsNums.FDS[index];
+							}
+
+						});
+				logger.info("End of calWXDSYZ...");
+			}
+
+		}, new LrHandler() {
+
+			@Override
+			public int getSmall() {
+				return 3;
+			}
+
+			@Override
+			public int getLarge() {
+				return 5;
 			}
 
 		});
@@ -2188,6 +2261,30 @@ public class YZService {
 			@Override
 			public void process() {
 				logger.info("End of calZSLRYZ...");
+			}
+		});
+
+	}
+
+	@Async
+	public Future<Exception> calBS9QLRYZ() {
+		return calLRYZ(Bs9qLrYz.class, repositories.bs9qlryzRepository, repositories.bs9qyzRepository, new CommonHandler() {
+
+			@Override
+			public void process() {
+				logger.info("End of calBS9QLRYZ...");
+			}
+		});
+
+	}
+
+	@Async
+	public Future<Exception> calWXDSLRYZ() {
+		return calLRYZ(WxdsLrYz.class, repositories.wxdslryzRepository, repositories.wxdsyzRepository, new CommonHandler() {
+
+			@Override
+			public void process() {
+				logger.info("End of calWXDSLRYZ...");
 			}
 		});
 

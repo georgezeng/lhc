@@ -73,9 +73,21 @@ $(document).ready(function() {
 			$(nTd).text(value);
 		}
 	});
+	columnDefs.push({
+		aTargets: [13],
+		fnCreatedCell: function(nTd, sData, item, iRow, iCol) {
+			var value = null;
+			if(item.id) {
+				value = item.total;
+			} else {
+				value = "";
+			}
+			$(nTd).text(value);
+		}
+	});
 	datatables.push(createDataTable({
 		id : "dataTable",
-		url : "/mvc/yz/listZSYZ",
+		url : "/mvc/yz/listZSYZ?mode=1",
 		bFilter: false,
 		data : function(queryInfo, infoSettings) {
 			count = 0;

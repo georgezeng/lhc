@@ -3,6 +3,9 @@ package lhc.repository.jpa;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import lhc.repository.jpa.api.Bs9qLrYzRepository;
+import lhc.repository.jpa.api.Bs9qYzRepository;
+import lhc.repository.jpa.api.Bs9qZfYzRepository;
 import lhc.repository.jpa.api.BsYzRepository;
 import lhc.repository.jpa.api.BsZfYzRepository;
 import lhc.repository.jpa.api.DsYzRepository;
@@ -43,9 +46,15 @@ import lhc.repository.jpa.api.TwelveYzRepository;
 import lhc.repository.jpa.api.TwelveZfYzRepository;
 import lhc.repository.jpa.api.WxYzRepository;
 import lhc.repository.jpa.api.WxZfYzRepository;
+import lhc.repository.jpa.api.WxdsLrYzRepository;
+import lhc.repository.jpa.api.WxdsYzRepository;
+import lhc.repository.jpa.api.WxdsZfYzRepository;
 import lhc.repository.jpa.api.ZsLrYzRepository;
 import lhc.repository.jpa.api.ZsYzRepository;
 import lhc.repository.jpa.api.ZsZfYzRepository;
+import lhc.repository.jpa.dao.Bs9qLrYzDao;
+import lhc.repository.jpa.dao.Bs9qYzDao;
+import lhc.repository.jpa.dao.Bs9qZfYzDao;
 import lhc.repository.jpa.dao.BsYzDao;
 import lhc.repository.jpa.dao.BsZfYzDao;
 import lhc.repository.jpa.dao.DsYzDao;
@@ -86,6 +95,9 @@ import lhc.repository.jpa.dao.TwelveYzDao;
 import lhc.repository.jpa.dao.TwelveZfYzDao;
 import lhc.repository.jpa.dao.WxYzDao;
 import lhc.repository.jpa.dao.WxZfYzDao;
+import lhc.repository.jpa.dao.WxdsLrYzDao;
+import lhc.repository.jpa.dao.WxdsYzDao;
+import lhc.repository.jpa.dao.WxdsZfYzDao;
 import lhc.repository.jpa.dao.ZsLrYzDao;
 import lhc.repository.jpa.dao.ZsYzDao;
 import lhc.repository.jpa.dao.ZsZfYzDao;
@@ -101,7 +113,25 @@ public class Repositories {
 
 	@Autowired
 	public LhLrYzDao lhlrYzDao;
-	
+
+	@Autowired
+	public Bs9qLrYzDao bs9qlrYzDao;
+
+	@Autowired
+	public Bs9qYzDao bs9qYzDao;
+
+	@Autowired
+	public Bs9qZfYzDao bs9qZfYzDao;
+
+	@Autowired
+	public WxdsLrYzDao wxdslrYzDao;
+
+	@Autowired
+	public WxdsYzDao wxdsYzDao;
+
+	@Autowired
+	public WxdsZfYzDao wxdsZfYzDao;
+
 	@Autowired
 	public ZsLrYzDao zslrYzDao;
 
@@ -233,7 +263,7 @@ public class Repositories {
 
 	@Autowired
 	public LhLrYzRepository lhlryzRepository;
-	
+
 	@Autowired
 	public ZsLrYzRepository zslryzRepository;
 
@@ -263,6 +293,24 @@ public class Repositories {
 
 	@Autowired
 	public MwYzRepository mwyzRepository;
+
+	@Autowired
+	public Bs9qYzRepository bs9qyzRepository;
+
+	@Autowired
+	public Bs9qZfYzRepository bs9qzfyzRepository;
+
+	@Autowired
+	public Bs9qLrYzRepository bs9qlryzRepository;
+
+	@Autowired
+	public WxdsYzRepository wxdsyzRepository;
+
+	@Autowired
+	public WxdsZfYzRepository wxdszfyzRepository;
+
+	@Autowired
+	public WxdsLrYzRepository wxdslryzRepository;
 
 	@Autowired
 	public LhYzRepository lhyzRepository;

@@ -1,4 +1,4 @@
-var chartUrl = "/mvc/yz/listZSYZ";
+var chartUrl = "/mvc/yz/listZSYZ?mode=0";
 seriesCallback = function(result, series) {
 	series.push({name: '段位1', data: []});
 	series.push({name: '段位2', data: []});
