@@ -6,86 +6,86 @@ import javax.persistence.Table;
 @Entity
 @Table(name = "bs9q_yz")
 public class Bs9qYz extends Lr {
-	private Integer w1;
-	private Integer w2;
-	private Integer w3;
-	private Integer w4;
-	private Integer w5;
-	private Integer w6;
-	private Integer w7;
-	private Integer w8;
-	private Integer w9;
+	private Integer red1;
+	private Integer red2;
+	private Integer red3;
+	private Integer blue1;
+	private Integer blue2;
+	private Integer blue3;
+	private Integer green1;
+	private Integer green2;
+	private Integer green3;
 
-	public Integer getW1() {
-		return w1;
+	public Integer getRed1() {
+		return red1;
 	}
 
-	public void setW1(Integer w1) {
-		this.w1 = w1;
+	public void setRed1(Integer red1) {
+		this.red1 = red1;
 	}
 
-	public Integer getW2() {
-		return w2;
+	public Integer getRed2() {
+		return red2;
 	}
 
-	public void setW2(Integer w2) {
-		this.w2 = w2;
+	public void setRed2(Integer red2) {
+		this.red2 = red2;
 	}
 
-	public Integer getW3() {
-		return w3;
+	public Integer getRed3() {
+		return red3;
 	}
 
-	public void setW3(Integer w3) {
-		this.w3 = w3;
+	public void setRed3(Integer red3) {
+		this.red3 = red3;
 	}
 
-	public Integer getW4() {
-		return w4;
+	public Integer getBlue1() {
+		return blue1;
 	}
 
-	public void setW4(Integer w4) {
-		this.w4 = w4;
+	public void setBlue1(Integer blue1) {
+		this.blue1 = blue1;
 	}
 
-	public Integer getW5() {
-		return w5;
+	public Integer getBlue2() {
+		return blue2;
 	}
 
-	public void setW5(Integer w5) {
-		this.w5 = w5;
+	public void setBlue2(Integer blue2) {
+		this.blue2 = blue2;
 	}
 
-	public Integer getW6() {
-		return w6;
+	public Integer getBlue3() {
+		return blue3;
 	}
 
-	public void setW6(Integer w6) {
-		this.w6 = w6;
+	public void setBlue3(Integer blue3) {
+		this.blue3 = blue3;
 	}
 
-	public Integer getW7() {
-		return w7;
+	public Integer getGreen1() {
+		return green1;
 	}
 
-	public void setW7(Integer w7) {
-		this.w7 = w7;
+	public void setGreen1(Integer green1) {
+		this.green1 = green1;
 	}
 
-	public Integer getW8() {
-		return w8;
+	public Integer getGreen2() {
+		return green2;
 	}
 
-	public void setW8(Integer w8) {
-		this.w8 = w8;
+	public void setGreen2(Integer green2) {
+		this.green2 = green2;
 	}
 
-	public Integer getW9() {
-		return w9;
+	public Integer getGreen3() {
+		return green3;
 	}
 
-	public void setW9(Integer w9) {
-		this.w9 = w9;
+	public void setGreen3(Integer green3) {
+		this.green3 = green3;
 	}
 
 }

@@ -2,7 +2,7 @@ $(document).ready(function() {
 	var lastGreen = false;
 	var lastRed = false;
 	var count = 0;
-	var sxlist = ["w1", "w2", "w3", "w4", "w5", "w6", "w7", "w8", "w9"];
+	var sxlist = ["red1", "red2", "red3", "blue1", "blue2", "blue3", "green1", "green2", "green3"];
 	var columns = createColumns(sxlist);
 	var columnDefs = [];
 	for(var i = 0; i < 2; i++) {

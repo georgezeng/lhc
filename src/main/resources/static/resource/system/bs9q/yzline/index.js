@@ -13,7 +13,7 @@ seriesCallback = function(result, series) {
 }
 seriesValueCallback = function(series, item) {
 	var count = 0;
-	var arr = ["w1", "w2", "w3", "w4", "w5", "w6", "w7", "w8", "w9"];
+	var arr = ["red1", "red2", "red3", "blue1", "blue2", "blue3", "green1", "green2", "green3"];
 	for(i in arr) {		
 		series[count].data.push(
 				[item.year + "-" + item.phase, item[arr[i]]]

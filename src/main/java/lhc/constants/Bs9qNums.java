@@ -4,74 +4,74 @@ import java.util.ArrayList;
 import java.util.List;
 
 public class Bs9qNums {
-	public static final String[] FDS = {"W1", "W2", "W3", "W4", "W5", "W6", "W7", "W8", "W9"};
+	public static final String[] FDS = {"Red1", "Red2", "Red3", "Blue1", "Blue2", "Blue3", "Green1", "Green2", "Green3"};
 	
-	public static final List<Integer> W1 = new ArrayList<Integer>();
-	public static final List<Integer> W2 = new ArrayList<Integer>();
-	public static final List<Integer> W3 = new ArrayList<Integer>();
-	public static final List<Integer> W4 = new ArrayList<Integer>();
-	public static final List<Integer> W5 = new ArrayList<Integer>();
-	public static final List<Integer> W6 = new ArrayList<Integer>();
-	public static final List<Integer> W7 = new ArrayList<Integer>();
-	public static final List<Integer> W8 = new ArrayList<Integer>();
-	public static final List<Integer> W9 = new ArrayList<Integer>();
+	public static final List<Integer> RED1 = new ArrayList<Integer>();
+	public static final List<Integer> RED2 = new ArrayList<Integer>();
+	public static final List<Integer> RED3 = new ArrayList<Integer>();
+	public static final List<Integer> BLUE1 = new ArrayList<Integer>();
+	public static final List<Integer> BLUE2 = new ArrayList<Integer>();
+	public static final List<Integer> BLUE3 = new ArrayList<Integer>();
+	public static final List<Integer> GREEN1 = new ArrayList<Integer>();
+	public static final List<Integer> GREEN2 = new ArrayList<Integer>();
+	public static final List<Integer> GREEN3 = new ArrayList<Integer>();
 	static {
-		W1.add(1);
-		W1.add(2);
-		W1.add(7);
-		W1.add(8);
-		W1.add(12);
-		W1.add(13);
+		RED1.add(1);
+		RED1.add(2);
+		RED1.add(7);
+		RED1.add(8);
+		RED1.add(12);
+		RED1.add(13);
 		
-		W2.add(18);
-		W2.add(19);
-		W2.add(23);
-		W2.add(24);
-		W2.add(29);
-		W2.add(30);
+		RED2.add(18);
+		RED2.add(19);
+		RED2.add(23);
+		RED2.add(24);
+		RED2.add(29);
+		RED2.add(30);
 		
-		W3.add(34);
-		W3.add(35);
-		W3.add(40);
-		W3.add(45);
-		W3.add(46);
+		RED3.add(34);
+		RED3.add(35);
+		RED3.add(40);
+		RED3.add(45);
+		RED3.add(46);
 		
-		W4.add(5);
-		W4.add(6);
-		W4.add(11);
-		W4.add(16);
-		W4.add(17);
+		BLUE1.add(5);
+		BLUE1.add(6);
+		BLUE1.add(11);
+		BLUE1.add(16);
+		BLUE1.add(17);
 		
-		W5.add(21);
-		W5.add(22);
-		W5.add(27);
-		W5.add(28);
-		W5.add(32);
+		BLUE2.add(21);
+		BLUE2.add(22);
+		BLUE2.add(27);
+		BLUE2.add(28);
+		BLUE2.add(32);
 		
-		W6.add(33);
-		W6.add(38);
-		W6.add(39);
-		W6.add(43);
-		W6.add(44);
-		W6.add(49);
+		BLUE3.add(33);
+		BLUE3.add(38);
+		BLUE3.add(39);
+		BLUE3.add(43);
+		BLUE3.add(44);
+		BLUE3.add(49);
 		
-		W7.add(3);
-		W7.add(4);
-		W7.add(9);
-		W7.add(10);
-		W7.add(14);
+		GREEN1.add(3);
+		GREEN1.add(4);
+		GREEN1.add(9);
+		GREEN1.add(10);
+		GREEN1.add(14);
 		
-		W8.add(15);
-		W8.add(20);
-		W8.add(25);
-		W8.add(26);
-		W8.add(31);
+		GREEN2.add(15);
+		GREEN2.add(20);
+		GREEN2.add(25);
+		GREEN2.add(26);
+		GREEN2.add(31);
 		
-		W9.add(36);
-		W9.add(37);
-		W9.add(41);
-		W9.add(42);
-		W9.add(47);
-		W9.add(48);
+		GREEN3.add(36);
+		GREEN3.add(37);
+		GREEN3.add(41);
+		GREEN3.add(42);
+		GREEN3.add(47);
+		GREEN3.add(48);
 	}
 }

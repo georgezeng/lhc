@@ -43,3 +43,6 @@ TRUNCATE table `twelve_zf_yz`;
 TRUNCATE table `bs9q_lr_yz`;
 TRUNCATE table `bs9q_yz`;
 TRUNCATE table `bs9q_zf_yz`;
+TRUNCATE table `wxds_lr_yz`;
+TRUNCATE table `wxds_yz`;
+TRUNCATE table `wxds_zf_yz`;
