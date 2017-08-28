@@ -84,6 +84,7 @@ import lhc.domain.TwelveYz;
 import lhc.domain.TwelveZfYz;
 import lhc.domain.WxYz;
 import lhc.domain.WxZfYz;
+import lhc.domain.ZsLrYz;
 import lhc.domain.ZsYz;
 import lhc.domain.ZsZfYz;
 import lhc.dto.TmYzInfo;
@@ -1289,6 +1290,18 @@ public class YZService {
 				logger.info("End of calZSYZ...");
 			}
 
+		}, new LrHandler() {
+
+			@Override
+			public int getSmall() {
+				return 3;
+			}
+
+			@Override
+			public int getLarge() {
+				return 5;
+			}
+
 		});
 	}
 
@@ -2163,6 +2176,18 @@ public class YZService {
 			@Override
 			public void process() {
 				logger.info("End of calLHLRYZ...");
+			}
+		});
+
+	}
+
+	@Async
+	public Future<Exception> calZSLRYZ() {
+		return calLRYZ(ZsLrYz.class, repositories.zslryzRepository, repositories.zsyzRepository, new CommonHandler() {
+
+			@Override
+			public void process() {
+				logger.info("End of calZSLRYZ...");
 			}
 		});
 

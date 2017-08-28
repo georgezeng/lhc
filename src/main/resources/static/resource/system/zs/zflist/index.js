@@ -2,7 +2,7 @@ $(document).ready(function() {
 	var lastGreen = false;
 	var lastRed = false;
 	var count = 0;
-	var sxlist = ["zf0", "zf1", "zf2", "zf3", "zf4", "zf5", "zf6", "zf7"];
+	var sxlist = ["zf0", "zf1", "zf2", "zf3", "zf4", "zf5", "zf6", "zf7", "zf8"];
 	var columns = createColumns(sxlist);
 	var columnDefs = [];
 	for(var i = 0; i < 2; i++) {
@@ -28,7 +28,7 @@ $(document).ready(function() {
 			});
 		})(i);
 	}
-	for(var i = 2; i < 10; i++) {
+	for(var i = 2; i < 11; i++) {
 		(function(index) {
 			columnDefs.push({
 				aTargets: [index],
@@ -47,7 +47,7 @@ $(document).ready(function() {
 		})(i);
 	}
 	columnDefs.push({
-		aTargets: [11],
+		aTargets: [12],
 		fnCreatedCell: function(nTd, sData, item, iRow, iCol) {
 			var value = null;
 			if(item.id) {
@@ -74,7 +74,7 @@ $(document).ready(function() {
 		}
 	});
 	columnDefs.push({
-		aTargets: [12],
+		aTargets: [13],
 		fnCreatedCell: function(nTd, sData, item, iRow, iCol) {
 			var value = null;
 			if(item.id) {

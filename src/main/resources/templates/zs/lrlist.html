@@ -1,0 +1,77 @@
+<!doctype html>
+<html xmlns:th="http://www.thymeleaf.org">
+<body>
+	<div id="page-wrapper" th:fragment="content">
+		<div class="row">
+			<div class="col-lg-12">
+				<h3 class="page-header">质数-冷热列表</h3>
+				<div class="buttonArea">
+					<span class="title">截止年份:</span><select id="years"></select>
+					<span class="title">截止期数:</span><select id="phases"></select>
+					<button id="calYZBtn" class="btn btn-info">遗值计算</button>
+					<button id="searchBtn" class="btn btn-primary">搜索</button>
+					<div class="clearfix"></div>
+				</div>
+			</div>
+		</div>
+
+		<div class="row">
+			<div class="col-lg-12">
+				<table width="100%"
+					class="table table-striped table-bordered table-hover"
+					id="dataTable">
+					<thead>
+						<tr>
+							<th>年份</th>
+							<th>期数</th>
+							<th>段位1</th>
+							<th>段位2</th>
+							<th>段位3</th>
+							<th>段位4</th>
+							<th>段位5</th>
+							<th>段位6</th>
+							<th>段位7</th>
+							<th>段位8</th>
+							<th>段位9</th>
+							<th></th>
+							<th>遗值（上期）色块</th>
+							<th></th>
+							<th>红</th>
+							<th>黄</th>
+							<th>绿</th>
+							<th>最大遗值</th>
+							<th>和</th>
+							<th>连续点数</th>
+						</tr>
+					</thead>
+					<tfoot>
+						<tr>
+							<td>年份</td>
+							<td>期数</td>
+							<td>段位1</td>
+							<td>段位2</td>
+							<td>段位3</td>
+							<td>段位4</td>
+							<td>段位5</td>
+							<td>段位6</td>
+							<td>段位7</td>
+							<td>段位8</td>
+							<td>段位9</td>
+							<td></td>
+							<td>遗值（上期）色块</td>
+							<td></td>
+							<td>红</td>
+							<td>黄</td>
+							<td>绿</td>
+							<td>最大遗值</td>
+							<td>和</td>
+							<td>连续点数</td>
+						</tr>
+					</tfoot>
+				</table>
+			</div>
+		</div>
+		
+	</div>
+</body>
+</html>

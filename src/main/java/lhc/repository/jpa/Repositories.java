@@ -43,6 +43,7 @@ import lhc.repository.jpa.api.TwelveYzRepository;
 import lhc.repository.jpa.api.TwelveZfYzRepository;
 import lhc.repository.jpa.api.WxYzRepository;
 import lhc.repository.jpa.api.WxZfYzRepository;
+import lhc.repository.jpa.api.ZsLrYzRepository;
 import lhc.repository.jpa.api.ZsYzRepository;
 import lhc.repository.jpa.api.ZsZfYzRepository;
 import lhc.repository.jpa.dao.BsYzDao;
@@ -85,6 +86,7 @@ import lhc.repository.jpa.dao.TwelveYzDao;
 import lhc.repository.jpa.dao.TwelveZfYzDao;
 import lhc.repository.jpa.dao.WxYzDao;
 import lhc.repository.jpa.dao.WxZfYzDao;
+import lhc.repository.jpa.dao.ZsLrYzDao;
 import lhc.repository.jpa.dao.ZsYzDao;
 import lhc.repository.jpa.dao.ZsZfYzDao;
 
@@ -99,6 +101,9 @@ public class Repositories {
 
 	@Autowired
 	public LhLrYzDao lhlrYzDao;
+	
+	@Autowired
+	public ZsLrYzDao zslrYzDao;
 
 	@Autowired
 	public TwelveLrYzDao twelvelrYzDao;
@@ -228,6 +233,9 @@ public class Repositories {
 
 	@Autowired
 	public LhLrYzRepository lhlryzRepository;
+	
+	@Autowired
+	public ZsLrYzRepository zslryzRepository;
 
 	@Autowired
 	public MwLrYzRepository mwlryzRepository;

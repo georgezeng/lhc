@@ -66,6 +66,7 @@ import lhc.domain.TwelveYz;
 import lhc.domain.TwelveZfYz;
 import lhc.domain.WxYz;
 import lhc.domain.WxZfYz;
+import lhc.domain.ZsLrYz;
 import lhc.domain.ZsYz;
 import lhc.domain.ZsZfYz;
 import lhc.dto.BaseResult;
@@ -194,6 +195,7 @@ public class YZController {
 		futures.add(yzService.calTwelveLRYZ());
 		futures.add(yzService.calSLQLRYZ());
 		futures.add(yzService.calPDLRYZ());
+		futures.add(yzService.calZSLRYZ());
 		futures.add(parallelYzService.calAvg(repositories.tm12fdyzRepository));
 		futures.add(parallelYzService.calAvg(repositories.tm12fdzfyzRepository));
 		if (sleep) {
@@ -211,6 +213,7 @@ public class YZController {
 		futures.add(parallelYzService.calAvg(repositories.slqlryzRepository));
 		futures.add(parallelYzService.calAvg(repositories.pdlryzRepository));
 		futures.add(parallelYzService.calAvg(repositories.lhlryzRepository));
+		futures.add(parallelYzService.calAvg(repositories.zslryzRepository));
 		if (sleep) {
 			sleep(futures, 1000);
 		} else {
@@ -295,6 +298,12 @@ public class YZController {
 	@RequestMapping("/listLHLRYZ")
 	public BaseResult listLHLRYZ(@RequestBody QueryInfo<LhLrYz> queryInfo) throws Exception {
 		PageResult<LhLrYz> result = repositories.lhlrYzDao.query(queryInfo);
+		return new BaseResult(result);
+	}
+
+	@RequestMapping("/listZSLRYZ")
+	public BaseResult listZSLRYZ(@RequestBody QueryInfo<ZsLrYz> queryInfo) throws Exception {
+		PageResult<ZsLrYz> result = repositories.zslrYzDao.query(queryInfo);
 		return new BaseResult(result);
 	}
 
@@ -408,8 +417,16 @@ public class YZController {
 	}
 
 	@RequestMapping("/listZSYZ")
-	public BaseResult listZSYZ(@RequestBody QueryInfo<ZsYz> queryInfo) throws Exception {
-		return new BaseResult(repositories.zsYzDao.query(queryInfo));
+	public BaseResult listZSYZ(@RequestBody QueryInfo<ZsYz> queryInfo, @RequestParam String mode) throws Exception {
+		PageResult<ZsYz> result = repositories.zsYzDao.query(queryInfo);
+		if ("1".equals(mode)) {
+			if (result != null && result.getTotal() > 0) {
+				ZsYz last = new ZsYz();
+				last.setTotal(result.getList().size());
+				result.getList().add(last);
+			}
+		}
+		return new BaseResult(result);
 	}
 
 	@RequestMapping("/listZSZF")
@@ -1314,6 +1331,11 @@ public class YZController {
 	@RequestMapping("/downloadLHLRYZ")
 	public String downloadLHLRYZ(DownloadDTO dto, HttpServletResponse response) throws Exception {
 		return downloadYZ("lhlryz", LhLrYz.class, dto, response, repositories.lhlrYzDao, "位置", "Pos");
+	}
+
+	@RequestMapping("/downloadZSLRYZ")
+	public String downloadZSLRYZ(DownloadDTO dto, HttpServletResponse response) throws Exception {
+		return downloadYZ("zslryz", ZsLrYz.class, dto, response, repositories.zslrYzDao, "位置", "Pos");
 	}
 
 	@RequestMapping("/downloadTwelveLRYZ")

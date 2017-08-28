@@ -4,7 +4,7 @@
 	<div id="page-wrapper" th:fragment="content">
 		<div class="row">
 			<div class="col-lg-12">
-				<h3 class="page-header">质数-振幅-列表</h3>
+				<h3 class="page-header">质数-冷热组合列表</h3>
 				<div class="buttonArea">
 					<span class="title">截止年份:</span><select id="years"></select>
 					<span class="title">截止期数:</span><select id="phases"></select>
@@ -12,7 +12,7 @@
 					<button id="calYZBtn" class="btn btn-info">遗值计算</button>
 					<button id="searchBtn" class="btn btn-primary">搜索</button>
 					<div class="clearfix"></div>
-					<form id="download" name="download" action="/mvc/yz/downloadZSZF" class="hidden">
+					<form id="download" name="download" action="/mvc/yz/downloadZSLRYZ" class="hidden">
 						<input id="size" type="hidden" name="size" />
 						<input id="endYear" type="hidden" name="year" />
 						<input id="endPhase" type="hidden" name="phase" />
@@ -30,15 +30,16 @@
 						<tr>
 							<th>年份</th>
 							<th>期数</th>
-							<th>振幅0</th>
-							<th>振幅1</th>
-							<th>振幅2</th>
-							<th>振幅3</th>
-							<th>振幅4</th>
-							<th>振幅5</th>
-							<th>振幅6</th>
-							<th>振幅7</th>
-							<th>振幅8</th>
+							<th>红红</th>
+							<th>红黄</th>
+							<th>红绿</th>
+							<th>黄红</th>
+							<th>黄黄</th>
+							<th>黄绿</th>
+							<th>绿红</th>
+							<th>绿黄</th>
+							<th>绿绿</th>
+							<th>位置</th>
 							<th>差值</th>
 							<th>遗值（上）</th>
 							<th>和（当）</th>
@@ -65,15 +66,16 @@
 						<tr>
 							<td>年份</td>
 							<td>期数</td>
-							<td>振幅0</td>
-							<td>振幅1</td>
-							<td>振幅2</td>
-							<td>振幅3</td>
-							<td>振幅4</td>
-							<td>振幅5</td>
-							<td>振幅6</td>
-							<td>振幅7</td>
-							<td>振幅8</td>
+							<td>红红</td>
+							<td>红黄</td>
+							<td>红绿</td>
+							<td>黄红</td>
+							<td>黄黄</td>
+							<td>黄绿</td>
+							<td>绿红</td>
+							<td>绿黄</td>
+							<td>绿绿</td>
+							<td>位置</td>
 							<td>差值</td>
 							<td>遗值（上）</td>
 							<td>和（当）</td>
