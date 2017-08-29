@@ -3,6 +3,7 @@ $(document).ready(function() {
 	var lastRed = false;
 	var count = 0;
 	var sxlist = [];
+	var lastItem;
 	for(var i = 1; i < 8; i++) {
 		sxlist.push("fd" + i);
 	}
@@ -111,14 +112,57 @@ $(document).ready(function() {
 			}
 		}
 	});
+	columnDefs.push({
+		aTargets: [13],
+		fnCreatedCell: function(nTd, sData, item, iRow, iCol) {
+			if(item.id) {
+				$(nTd).text(item.prevDelta);
+			} else {
+				var input = $("<input id='prevDelta' size='5' readonly=true />").appendTo($(nTd));
+			}
+		}
+	});
+	columnDefs.push({
+		aTargets: [14],
+		fnCreatedCell: function(nTd, sData, item, iRow, iCol) {
+			if(item.id) {
+				lastItem = item;
+				$(nTd).text(item.tm);
+			} else {
+				var input = $("<input size='5' maxLength='2' />").appendTo($(nTd));
+				$.removeCookie('year');
+				$.removeCookie('phase');
+				$.removeCookie('prevDelta');
+				$.removeCookie('tm');
+				input.keyup(function() {
+					var value = $(this).val();
+					if(value != "" && !isNaN(value)) {
+						var prevDelta = value - lastItem.tm;
+						$("#prevDelta").val(prevDelta);
+						$.cookie('year', lastItem.year);
+						$.cookie('phase', lastItem.phase);
+						$.cookie('tm', value);
+						$.cookie('prevDelta', prevDelta);
+					} else {
+						$("#prevDelta").val("");
+						$.removeCookie('year');
+						$.removeCookie('phase');
+						$.removeCookie('tm');
+						$.removeCookie('prevDelta');
+					}
+				});
+			}
+		}
+	});
 	datatables.push(createDataTable({
 		id : "dataTable",
-		url : "/mvc/yz/listTMFDYZ",
+		url : "/mvc/yz/listTMFDYZ?mode=1",
 		bFilter: false,
 		data : function(queryInfo, infoSettings) {
 			count = 0;
 			lastRed = false;
 			lastGreen = false;
+			lastItem = null;
 			queryInfo.object = {};
 			queryInfo.object.year = parseInt($("#years").val());
 			queryInfo.object.phase = parseInt($("#phases").val());

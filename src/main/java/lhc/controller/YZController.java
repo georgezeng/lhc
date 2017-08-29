@@ -1288,16 +1288,18 @@ public class YZController {
 	}
 
 	@RequestMapping("/listTMFDYZ")
-	public BaseResult listTMFDYZ(@RequestBody QueryInfo<TmFdYz> queryInfo) throws Exception {
+	public BaseResult listTMFDYZ(@RequestBody QueryInfo<TmFdYz> queryInfo, String mode) throws Exception {
 		PageResult<TmFdYz> result = repositories.tmfdYzDao.query(queryInfo);
-		TmFdYz queryObj = queryInfo.getObject();
-		TmYz tmResult = repositories.tmyzRepository.findByYearAndPhase(queryObj.getYear(), queryObj.getPhase());
-		if (tmResult != null) {
-			List<TmYzInfo> fdList = yzService.getTMFDList(tmResult, false);
-			if (result != null && result.getTotal() > 0) {
-				TmFdYz data = new TmFdYz();
-				data.setList(fdList);
-				result.getList().add(data);
+		if ("1".equals(mode)) {
+			TmFdYz queryObj = queryInfo.getObject();
+			TmYz tmResult = repositories.tmyzRepository.findByYearAndPhase(queryObj.getYear(), queryObj.getPhase());
+			if (tmResult != null) {
+				List<TmYzInfo> fdList = yzService.getTMFDList(tmResult, false);
+				if (result != null && result.getTotal() > 0) {
+					TmFdYz data = new TmFdYz();
+					data.setList(fdList);
+					result.getList().add(data);
+				}
 			}
 		}
 		return new BaseResult(result);
