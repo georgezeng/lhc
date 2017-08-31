@@ -77,6 +77,7 @@ import lhc.domain.ZsYz;
 import lhc.domain.ZsZfYz;
 import lhc.dto.BaseResult;
 import lhc.dto.DownloadDTO;
+import lhc.dto.DownloadPrepareTZDBW;
 import lhc.dto.PmDTO;
 import lhc.dto.PmNum;
 import lhc.dto.SpecialNum;
@@ -600,6 +601,15 @@ public class YZController {
 			}
 		}
 		return new BaseResult(result);
+	}
+
+	@RequestMapping("/listTM12FDLastPhaseList")
+	public BaseResult listTM12FDLastPhaseList() throws Exception {
+		List<Integer> years = (List<Integer>) years().getData();
+		int year = years.get(0);
+		List<Integer> phases = (List<Integer>) phases(year).getData();
+		TmYz tmResult = repositories.tmyzRepository.findByYearAndPhase(year, phases.get(0));
+		return new BaseResult(yzService.getTMFDList(tmResult, false));
 	}
 
 	@RequestMapping("/listSLQZF")
@@ -1369,6 +1379,18 @@ public class YZController {
 			}
 
 		}
+		return null;
+	}
+
+	@RequestMapping("/downloadTZDBW")
+	public String downloadTZDBW(DownloadPrepareTZDBW dto, HttpServletResponse response) throws Exception {
+		response.setContentType("text/csv;charset=gbk;");
+		response.addHeader("Content-Disposition", "attachment;filename=tzdbw.csv");
+		Writer writer = response.getWriter();
+		writer.append("号码").append("\n");
+		writer.append(dto.getAllHms()).append("\n");
+		writer.append("反转号码").append("\n");
+		writer.append(dto.getAllNonHms()).append("\n");
 		return null;
 	}
 
