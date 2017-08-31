@@ -1,41 +1,89 @@
 package lhc.dto;
 
-public class DownloadPrepareTZDBW {
+public class DownloadPrepareTZ {
 	private String allHms;
 	private String allNonHms;
+	private String allGsPlusHms;
+	private String allGsMinusHms;
+	private String allGsPlusNonHms;
+	private String allGsMinusNonHms;
 	private String hms1;
 	private String nonHms1;
+	private String gsPlusHms1;
+	private String gsMinusHms1;
+	private String gsPlusNonHms1;
+	private String gsMinusNonHms1;
 	private String categories1;
 	private String hms2;
 	private String nonHms2;
 	private String categories2;
+	private String gsPlusHms2;
+	private String gsMinusHms2;
+	private String gsPlusNonHms2;
+	private String gsMinusNonHms2;
 	private String hms3;
 	private String nonHms3;
 	private String categories3;
+	private String gsPlusHms3;
+	private String gsMinusHms3;
+	private String gsPlusNonHms3;
+	private String gsMinusNonHms3;
 	private String hms4;
 	private String nonHms4;
 	private String categories4;
+	private String gsPlusHms4;
+	private String gsMinusHms4;
+	private String gsPlusNonHms4;
+	private String gsMinusNonHms4;
 	private String hms5;
 	private String nonHms5;
 	private String categories5;
+	private String gsPlusHms5;
+	private String gsMinusHms5;
+	private String gsPlusNonHms5;
+	private String gsMinusNonHms5;
 	private String hms6;
 	private String nonHms6;
 	private String categories6;
+	private String gsPlusHms6;
+	private String gsMinusHms6;
+	private String gsPlusNonHms6;
+	private String gsMinusNonHms6;
 	private String hms7;
 	private String nonHms7;
 	private String categories7;
+	private String gsPlusHms7;
+	private String gsMinusHms7;
+	private String gsPlusNonHms7;
+	private String gsMinusNonHms7;
 	private String hms8;
 	private String nonHms8;
 	private String categories8;
+	private String gsPlusHms8;
+	private String gsMinusHms8;
+	private String gsPlusNonHms8;
+	private String gsMinusNonHms8;
 	private String hms9;
 	private String nonHms9;
 	private String categories9;
+	private String gsPlusHms9;
+	private String gsMinusHms9;
+	private String gsPlusNonHms9;
+	private String gsMinusNonHms9;
 	private String hms10;
 	private String nonHms10;
 	private String categories10;
+	private String gsPlusHms10;
+	private String gsMinusHms10;
+	private String gsPlusNonHms10;
+	private String gsMinusNonHms10;
 	private String hms11;
 	private String nonHms11;
 	private String categories11;
+	private String gsPlusHms11;
+	private String gsMinusHms11;
+	private String gsPlusNonHms11;
+	private String gsMinusNonHms11;
 	private String hms12;
 	private String nonHms12;
 	private String categories12;
@@ -111,6 +159,390 @@ public class DownloadPrepareTZDBW {
 	private String hms36;
 	private String nonHms36;
 	private String categories36;
+
+	public String getGsMinusNonHms1() {
+		return gsMinusNonHms1;
+	}
+
+	public void setGsMinusNonHms1(String gsMinusNonHms1) {
+		this.gsMinusNonHms1 = gsMinusNonHms1;
+	}
+
+	public String getGsMinusNonHms2() {
+		return gsMinusNonHms2;
+	}
+
+	public void setGsMinusNonHms2(String gsMinusNonHms2) {
+		this.gsMinusNonHms2 = gsMinusNonHms2;
+	}
+
+	public String getGsMinusNonHms3() {
+		return gsMinusNonHms3;
+	}
+
+	public void setGsMinusNonHms3(String gsMinusNonHms3) {
+		this.gsMinusNonHms3 = gsMinusNonHms3;
+	}
+
+	public String getGsMinusNonHms4() {
+		return gsMinusNonHms4;
+	}
+
+	public void setGsMinusNonHms4(String gsMinusNonHms4) {
+		this.gsMinusNonHms4 = gsMinusNonHms4;
+	}
+
+	public String getGsMinusNonHms5() {
+		return gsMinusNonHms5;
+	}
+
+	public void setGsMinusNonHms5(String gsMinusNonHms5) {
+		this.gsMinusNonHms5 = gsMinusNonHms5;
+	}
+
+	public String getGsMinusNonHms6() {
+		return gsMinusNonHms6;
+	}
+
+	public void setGsMinusNonHms6(String gsMinusNonHms6) {
+		this.gsMinusNonHms6 = gsMinusNonHms6;
+	}
+
+	public String getGsMinusNonHms7() {
+		return gsMinusNonHms7;
+	}
+
+	public void setGsMinusNonHms7(String gsMinusNonHms7) {
+		this.gsMinusNonHms7 = gsMinusNonHms7;
+	}
+
+	public String getGsMinusNonHms8() {
+		return gsMinusNonHms8;
+	}
+
+	public void setGsMinusNonHms8(String gsMinusNonHms8) {
+		this.gsMinusNonHms8 = gsMinusNonHms8;
+	}
+
+	public String getGsMinusNonHms9() {
+		return gsMinusNonHms9;
+	}
+
+	public void setGsMinusNonHms9(String gsMinusNonHms9) {
+		this.gsMinusNonHms9 = gsMinusNonHms9;
+	}
+
+	public String getGsMinusNonHms10() {
+		return gsMinusNonHms10;
+	}
+
+	public void setGsMinusNonHms10(String gsMinusNonHms10) {
+		this.gsMinusNonHms10 = gsMinusNonHms10;
+	}
+
+	public String getGsMinusNonHms11() {
+		return gsMinusNonHms11;
+	}
+
+	public void setGsMinusNonHms11(String gsMinusNonHms11) {
+		this.gsMinusNonHms11 = gsMinusNonHms11;
+	}
+
+	public String getAllGsPlusHms() {
+		return allGsPlusHms;
+	}
+
+	public void setAllGsPlusHms(String allGsPlusHms) {
+		this.allGsPlusHms = allGsPlusHms;
+	}
+
+	public String getAllGsMinusHms() {
+		return allGsMinusHms;
+	}
+
+	public void setAllGsMinusHms(String allGsMinusHms) {
+		this.allGsMinusHms = allGsMinusHms;
+	}
+
+	public String getAllGsPlusNonHms() {
+		return allGsPlusNonHms;
+	}
+
+	public void setAllGsPlusNonHms(String allGsPlusNonHms) {
+		this.allGsPlusNonHms = allGsPlusNonHms;
+	}
+
+	public String getAllGsMinusNonHms() {
+		return allGsMinusNonHms;
+	}
+
+	public void setAllGsMinusNonHms(String allGsMinusNonHms) {
+		this.allGsMinusNonHms = allGsMinusNonHms;
+	}
+
+	public String getGsPlusHms1() {
+		return gsPlusHms1;
+	}
+
+	public void setGsPlusHms1(String gsPlusHms1) {
+		this.gsPlusHms1 = gsPlusHms1;
+	}
+
+	public String getGsMinusHms1() {
+		return gsMinusHms1;
+	}
+
+	public void setGsMinusHms1(String gsMinusHms1) {
+		this.gsMinusHms1 = gsMinusHms1;
+	}
+
+	public String getGsPlusNonHms1() {
+		return gsPlusNonHms1;
+	}
+
+	public void setGsPlusNonHms1(String gsPlusNonHms1) {
+		this.gsPlusNonHms1 = gsPlusNonHms1;
+	}
+
+	public String getGsPlusHms2() {
+		return gsPlusHms2;
+	}
+
+	public void setGsPlusHms2(String gsPlusHms2) {
+		this.gsPlusHms2 = gsPlusHms2;
+	}
+
+	public String getGsMinusHms2() {
+		return gsMinusHms2;
+	}
+
+	public void setGsMinusHms2(String gsMinusHms2) {
+		this.gsMinusHms2 = gsMinusHms2;
+	}
+
+	public String getGsPlusNonHms2() {
+		return gsPlusNonHms2;
+	}
+
+	public void setGsPlusNonHms2(String gsPlusNonHms2) {
+		this.gsPlusNonHms2 = gsPlusNonHms2;
+	}
+
+	public String getGsPlusHms3() {
+		return gsPlusHms3;
+	}
+
+	public void setGsPlusHms3(String gsPlusHms3) {
+		this.gsPlusHms3 = gsPlusHms3;
+	}
+
+	public String getGsMinusHms3() {
+		return gsMinusHms3;
+	}
+
+	public void setGsMinusHms3(String gsMinusHms3) {
+		this.gsMinusHms3 = gsMinusHms3;
+	}
+
+	public String getGsPlusNonHms3() {
+		return gsPlusNonHms3;
+	}
+
+	public void setGsPlusNonHms3(String gsPlusNonHms3) {
+		this.gsPlusNonHms3 = gsPlusNonHms3;
+	}
+
+	public String getGsPlusHms4() {
+		return gsPlusHms4;
+	}
+
+	public void setGsPlusHms4(String gsPlusHms4) {
+		this.gsPlusHms4 = gsPlusHms4;
+	}
+
+	public String getGsMinusHms4() {
+		return gsMinusHms4;
+	}
+
+	public void setGsMinusHms4(String gsMinusHms4) {
+		this.gsMinusHms4 = gsMinusHms4;
+	}
+
+	public String getGsPlusNonHms4() {
+		return gsPlusNonHms4;
+	}
+
+	public void setGsPlusNonHms4(String gsPlusNonHms4) {
+		this.gsPlusNonHms4 = gsPlusNonHms4;
+	}
+
+	public String getGsPlusHms5() {
+		return gsPlusHms5;
+	}
+
+	public void setGsPlusHms5(String gsPlusHms5) {
+		this.gsPlusHms5 = gsPlusHms5;
+	}
+
+	public String getGsMinusHms5() {
+		return gsMinusHms5;
+	}
+
+	public void setGsMinusHms5(String gsMinusHms5) {
+		this.gsMinusHms5 = gsMinusHms5;
+	}
+
+	public String getGsPlusNonHms5() {
+		return gsPlusNonHms5;
+	}
+
+	public void setGsPlusNonHms5(String gsPlusNonHms5) {
+		this.gsPlusNonHms5 = gsPlusNonHms5;
+	}
+
+	public String getGsPlusHms6() {
+		return gsPlusHms6;
+	}
+
+	public void setGsPlusHms6(String gsPlusHms6) {
+		this.gsPlusHms6 = gsPlusHms6;
+	}
+
+	public String getGsMinusHms6() {
+		return gsMinusHms6;
+	}
+
+	public void setGsMinusHms6(String gsMinusHms6) {
+		this.gsMinusHms6 = gsMinusHms6;
+	}
+
+	public String getGsPlusNonHms6() {
+		return gsPlusNonHms6;
+	}
+
+	public void setGsPlusNonHms6(String gsPlusNonHms6) {
+		this.gsPlusNonHms6 = gsPlusNonHms6;
+	}
+
+	public String getGsPlusHms7() {
+		return gsPlusHms7;
+	}
+
+	public void setGsPlusHms7(String gsPlusHms7) {
+		this.gsPlusHms7 = gsPlusHms7;
+	}
+
+	public String getGsMinusHms7() {
+		return gsMinusHms7;
+	}
+
+	public void setGsMinusHms7(String gsMinusHms7) {
+		this.gsMinusHms7 = gsMinusHms7;
+	}
+
+	public String getGsPlusNonHms7() {
+		return gsPlusNonHms7;
+	}
+
+	public void setGsPlusNonHms7(String gsPlusNonHms7) {
+		this.gsPlusNonHms7 = gsPlusNonHms7;
+	}
+
+	public String getGsPlusHms8() {
+		return gsPlusHms8;
+	}
+
+	public void setGsPlusHms8(String gsPlusHms8) {
+		this.gsPlusHms8 = gsPlusHms8;
+	}
+
+	public String getGsMinusHms8() {
+		return gsMinusHms8;
+	}
+
+	public void setGsMinusHms8(String gsMinusHms8) {
+		this.gsMinusHms8 = gsMinusHms8;
+	}
+
+	public String getGsPlusNonHms8() {
+		return gsPlusNonHms8;
+	}
+
+	public void setGsPlusNonHms8(String gsPlusNonHms8) {
+		this.gsPlusNonHms8 = gsPlusNonHms8;
+	}
+
+	public String getGsPlusHms9() {
+		return gsPlusHms9;
+	}
+
+	public void setGsPlusHms9(String gsPlusHms9) {
+		this.gsPlusHms9 = gsPlusHms9;
+	}
+
+	public String getGsMinusHms9() {
+		return gsMinusHms9;
+	}
+
+	public void setGsMinusHms9(String gsMinusHms9) {
+		this.gsMinusHms9 = gsMinusHms9;
+	}
+
+	public String getGsPlusNonHms9() {
+		return gsPlusNonHms9;
+	}
+
+	public void setGsPlusNonHms9(String gsPlusNonHms9) {
+		this.gsPlusNonHms9 = gsPlusNonHms9;
+	}
+
+	public String getGsPlusHms10() {
+		return gsPlusHms10;
+	}
+
+	public void setGsPlusHms10(String gsPlusHms10) {
+		this.gsPlusHms10 = gsPlusHms10;
+	}
+
+	public String getGsMinusHms10() {
+		return gsMinusHms10;
+	}
+
+	public void setGsMinusHms10(String gsMinusHms10) {
+		this.gsMinusHms10 = gsMinusHms10;
+	}
+
+	public String getGsPlusNonHms10() {
+		return gsPlusNonHms10;
+	}
+
+	public void setGsPlusNonHms10(String gsPlusNonHms10) {
+		this.gsPlusNonHms10 = gsPlusNonHms10;
+	}
+
+	public String getGsPlusHms11() {
+		return gsPlusHms11;
+	}
+
+	public void setGsPlusHms11(String gsPlusHms11) {
+		this.gsPlusHms11 = gsPlusHms11;
+	}
+
+	public String getGsMinusHms11() {
+		return gsMinusHms11;
+	}
+
+	public void setGsMinusHms11(String gsMinusHms11) {
+		this.gsMinusHms11 = gsMinusHms11;
+	}
+
+	public String getGsPlusNonHms11() {
+		return gsPlusNonHms11;
+	}
+
+	public void setGsPlusNonHms11(String gsPlusNonHms11) {
+		this.gsPlusNonHms11 = gsPlusNonHms11;
+	}
 
 	public String getCategories1() {
 		return categories1;

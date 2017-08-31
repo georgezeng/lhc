@@ -77,7 +77,7 @@ import lhc.domain.ZsYz;
 import lhc.domain.ZsZfYz;
 import lhc.dto.BaseResult;
 import lhc.dto.DownloadDTO;
-import lhc.dto.DownloadPrepareTZDBW;
+import lhc.dto.DownloadPrepareTZ;
 import lhc.dto.PmDTO;
 import lhc.dto.PmNum;
 import lhc.dto.SpecialNum;
@@ -1383,18 +1383,48 @@ public class YZController {
 	}
 
 	@RequestMapping("/downloadTZDBW")
-	public String downloadTZDBW(DownloadPrepareTZDBW dto, HttpServletResponse response) throws Exception {
+	public String downloadTZDBW(DownloadPrepareTZ dto, HttpServletResponse response) throws Exception {
 		response.setContentType("text/csv;charset=gbk;");
 		response.addHeader("Content-Disposition", "attachment;filename=tzdbw.csv");
 		Writer writer = response.getWriter();
 		for (int i = 1; i < 37; i++) {
-			Method m1 = ReflectionUtils.findMethod(DownloadPrepareTZDBW.class, "getCategories" + i);
-			Method m2 = ReflectionUtils.findMethod(DownloadPrepareTZDBW.class, "getHms" + i);
-			Method m3 = ReflectionUtils.findMethod(DownloadPrepareTZDBW.class, "getNonHms" + i);
+			Method m1 = ReflectionUtils.findMethod(DownloadPrepareTZ.class, "getCategories" + i);
+			Method m2 = ReflectionUtils.findMethod(DownloadPrepareTZ.class, "getHms" + i);
+			Method m3 = ReflectionUtils.findMethod(DownloadPrepareTZ.class, "getNonHms" + i);
 			writer.append((String) m1.invoke(dto)).append("\n");
 			writer.append((String) m2.invoke(dto)).append("\n");
 			writer.append("反转号码").append("\n");
 			writer.append((String) m3.invoke(dto)).append("\n");
+			writer.append("\n");
+		}
+		writer.append("汇总号码").append("\n");
+		writer.append(dto.getAllHms()).append("\n");
+		writer.append("汇总反转号码").append("\n");
+		writer.append(dto.getAllNonHms()).append("\n");
+		return null;
+	}
+
+	@RequestMapping("/downloadTZDC")
+	public String downloadTZDC(DownloadPrepareTZ dto, HttpServletResponse response) throws Exception {
+		response.setContentType("text/csv;charset=gbk;");
+		response.addHeader("Content-Disposition", "attachment;filename=tzdc.csv");
+		Writer writer = response.getWriter();
+		for (int i = 1; i < 12; i++) {
+			Method m1 = ReflectionUtils.findMethod(DownloadPrepareTZ.class, "getCategories" + i);
+			Method m2 = ReflectionUtils.findMethod(DownloadPrepareTZ.class, "getGsPlusHms" + i);
+			Method m3 = ReflectionUtils.findMethod(DownloadPrepareTZ.class, "getGsMinusHms" + i);
+			Method m4 = ReflectionUtils.findMethod(DownloadPrepareTZ.class, "getGsPlusNonHms" + i);
+			Method m5 = ReflectionUtils.findMethod(DownloadPrepareTZ.class, "getGsMinusNonHms" + i);
+			writer.append((String) m1.invoke(dto)).append("\n");
+			writer.append("公式+").append("\n");
+			writer.append((String) m2.invoke(dto)).append("\n");
+			writer.append("公式-").append("\n");
+			writer.append((String) m3.invoke(dto)).append("\n");
+			writer.append("反转号码").append("\n");
+			writer.append("公式+").append("\n");
+			writer.append((String) m4.invoke(dto)).append("\n");
+			writer.append("公式-").append("\n");
+			writer.append((String) m5.invoke(dto)).append("\n");
 			writer.append("\n");
 		}
 		writer.append("汇总号码").append("\n");
