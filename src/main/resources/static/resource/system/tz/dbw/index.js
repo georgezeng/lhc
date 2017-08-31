@@ -761,6 +761,8 @@ $(document).ready(function() {
 		var allHms = [];
 		var allNonHms = [];
 		pickup = {};
+		var downloadForm = $("#download");
+		downloadForm.empty();
 		function isInArr(hms, k, isArr) {
 			for(var m in hms) {
 				contained = hms[m] == (isArr ? arr[k] : k);
@@ -797,11 +799,18 @@ $(document).ready(function() {
 				}
 			}
 			
+			hms = hms.join(", ");
+			nonHms = nonHms.join(", ");
+			
+			$("<input type='hidden' name='hms"+count+"'>").appendTo(downloadForm).val(hms);
+			$("<input type='hidden' name='nonHms"+count+"'>").appendTo(downloadForm).val(nonHms);
+			$("<input type='hidden' name='categories"+count+"'>").appendTo(downloadForm).val(categories);
+			
 			var dataTr = $("<tr>").appendTo(dataTbody);
 			$("<td>").appendTo(dataTr).text(count++);
 			$("<td>").appendTo(dataTr).text(categories);
-			$("<td>").appendTo(dataTr).text(hms.join(", "));
-			$("<td>").appendTo(dataTr).text(nonHms.join(", "));
+			$("<td>").appendTo(dataTr).text(hms);
+			$("<td>").appendTo(dataTr).text(nonHms);
 		}
 		for(var m = 1; m < 50; m++) {
 			if(!isInArr(allHms, m)) {
@@ -809,18 +818,21 @@ $(document).ready(function() {
 			}
 		}
 		
+		allHms = allHms.join(", ");
+		allNonHms = allNonHms.join(", ");
+		
 		var dataTr = $("<tr>").appendTo(dataTbody);
 		$("<td>").appendTo(dataTr).text("合计");
 		$("<td>").appendTo(dataTr).text("整合(共"+allHms.length+"个)");
-		$("<td>").appendTo(dataTr).text(allHms.join(", "));
-		$("<td>").appendTo(dataTr).text(allNonHms.join(", "));
+		$("<td>").appendTo(dataTr).text(allHms);
+		$("<td>").appendTo(dataTr).text(allNonHms);
+		$("<input type='hidden' name='allHms'>").appendTo(downloadForm).val(allHms);
+		$("<input type='hidden' name='allNonHms'>").appendTo(downloadForm).val(allNonHms);
 		
-		$("#downloadBtn").unbind().click(function() {
-			$("#allHms").val(allHms.join(", "));
-			$("#allNonHms").val(allNonHms.join(", "));
-			$("#download").submit();
-		});
-		
+	});
+	
+	$("#downloadBtn").unbind().click(function() {
+		$("#download").submit();
 	});
 	
 	
