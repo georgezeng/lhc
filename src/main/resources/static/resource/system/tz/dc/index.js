@@ -185,6 +185,10 @@ $(document).ready(function() {
 		
 		lenOfallGsPlusHms = allGsPlusHms.length;
 		lenOfallGsMinusHms = allGsMinusHms.length;
+		allGsPlusHms.sort(function(a, b){return a-b});
+		allGsMinusHms.sort(function(a, b){return a-b});
+		allGsPlusNonHms.sort(function(a, b){return a-b});
+		allGsMinusNonHms.sort(function(a, b){return a-b});
 		allGsPlusHms = allGsPlusHms.join(", ");
 		allGsMinusHms = allGsMinusHms.join(", ");
 		allGsPlusNonHms = allGsPlusNonHms.join(", ");
