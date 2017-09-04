@@ -4,6 +4,7 @@ import javax.persistence.Entity;
 import javax.persistence.EnumType;
 import javax.persistence.Enumerated;
 import javax.persistence.Table;
+import javax.persistence.Transient;
 
 import lhc.enums.SX;
 
@@ -39,6 +40,17 @@ public class KaiJiang extends BaseYz {
 	@Enumerated(EnumType.STRING)
 	private SX num6Sx;
 	private Integer num6;
+
+	@Transient
+	private String[] lastYzList = new String[12];
+
+	public String[] getLastYzList() {
+		return lastYzList;
+	}
+
+	public void setLastYzList(String[] lastYzList) {
+		this.lastYzList = lastYzList;
+	}
 
 	public SX getSpecialSx() {
 		return specialSx;

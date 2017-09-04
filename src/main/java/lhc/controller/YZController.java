@@ -23,6 +23,8 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
+import lhc.constants.SwNums;
+import lhc.constants.WxNums;
 import lhc.domain.Avg;
 import lhc.domain.BaseYz;
 import lhc.domain.Bs9qLrYz;
@@ -1080,36 +1082,68 @@ public class YZController {
 
 	@RequestMapping("/countSX10Loop")
 	public BaseResult countSX10Loop(@RequestBody QueryInfo<SxYz> queryInfo) throws Exception {
-		return countLoop(repositories.sxYzDao.query(queryInfo), 12);
-	}
-	
-	@RequestMapping("/countSW10Loop")
-	public BaseResult countSW10Loop(@RequestBody QueryInfo<SwYz> queryInfo) throws Exception {
-		return countLoop(repositories.swYzDao.query(queryInfo), 12);
-	}
-	
-	@RequestMapping("/countWX10Loop")
-	public BaseResult countWX10Loop(@RequestBody QueryInfo<WxYz> queryInfo) throws Exception {
-		return countLoop(repositories.wxYzDao.query(queryInfo), 12);
-	}
-
-	private <T extends Avg> BaseResult countLoop(PageResult<T> result, int length) throws Exception {
+		PageResult<SxYz> result = repositories.sxYzDao.query(queryInfo);
 		if (result != null && result.getTotal() > 0) {
 			for (int i = result.getList().size() - 1; i >= 0; i--) {
-				T data = result.getList().get(i);
-				int k = i - length;
-				for (int j = 0; j < length + 1; j++) {
+				SxYz data = result.getList().get(i);
+				int k = i - 12;
+				for (int j = 0; j < 13; j++) {
 					if (k > -1 && k < result.getList().size()) {
 						data.getLastYzList()[j] = result.getList().get(k).getLastYz();
 					}
 					k++;
 				}
 				if (i < result.getList().size() - 1) {
-					data.getLastYzList()[length + 1] = result.getList().get(i + 1).getLastYz();
+					data.getLastYzList()[13] = result.getList().get(i + 1).getLastYz();
 				}
 			}
 		}
 		return new BaseResult(result);
+	}
+
+	private BaseResult count10Loop(QueryInfo<KaiJiang> queryInfo, Class<?> clazz) throws Exception {
+		PageResult<KaiJiang> result = repositories.kaiJiangDao.queryForPM(queryInfo);
+		if (result != null && result.getTotal() > 0) {
+			String[] fds = (String[]) ReflectionUtils.findField(clazz, "FDS").get(null);
+			for (int i = result.getList().size() - 1; i >= 0; i--) {
+				KaiJiang data = result.getList().get(i);
+				int k = i - 10;
+				for (int j = 0; j < 11; j++) {
+					if (k > -1 && k < result.getList().size()) {
+						int num = result.getList().get(k).getSpecialNum();
+						for (String fd : fds) {
+							List<Integer> nums = (List<Integer>) ReflectionUtils.findField(clazz, fd.toUpperCase()).get(null);
+							if (nums.contains(num)) {
+								data.getLastYzList()[j] = fd;
+								break;
+							}
+						}
+					}
+					k++;
+				}
+				if (i < result.getList().size() - 1) {
+					int num = result.getList().get(k).getSpecialNum();
+					for (String fd : fds) {
+						List<Integer> nums = (List<Integer>) ReflectionUtils.findField(clazz, fd.toUpperCase()).get(null);
+						if (nums.contains(num)) {
+							data.getLastYzList()[11] = fd;
+							break;
+						}
+					}
+				}
+			}
+		}
+		return new BaseResult(result);
+	}
+
+	@RequestMapping("/countSW10Loop")
+	public BaseResult countSW10Loop(@RequestBody QueryInfo<KaiJiang> queryInfo) throws Exception {
+		return count10Loop(queryInfo, SwNums.class);
+	}
+
+	@RequestMapping("/countWX10Loop")
+	public BaseResult countWX10Loop(@RequestBody QueryInfo<KaiJiang> queryInfo) throws Exception {
+		return count10Loop(queryInfo, WxNums.class);
 	}
 
 	@RequestMapping("/listPM")

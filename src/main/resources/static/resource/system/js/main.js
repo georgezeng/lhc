@@ -1716,7 +1716,7 @@ function createZFlist(url, sxlist) {
 	}));
 }
 
-function createLoop(url, length) {
+function createLoop(url, length, dividen, list) {
 	$(document).ready(function() {
 		var sxlist = [];
 		for(var i = length; i >= 1; i--) {
@@ -1726,6 +1726,8 @@ function createLoop(url, length) {
 		for(var i in sxlist) {
 			cols.push(sxlist[i]);
 		}
+		cols.push("year");
+		cols.push("year");
 		var columns = [];
 		for(var i in cols) {
 			var col = cols[i];
@@ -1744,14 +1746,21 @@ function createLoop(url, length) {
 			}
 		}
 		var columnDefs = [];
-		for(var i = 2; i < length+2; i++) {
+		var items = [];
+		for(var i = 2; i < length+1; i++) {
 			(function(index) {
 				columnDefs.push({
 					aTargets: [index],
 					fnCreatedCell: function(nTd, sData, item, iRow, iCol) {
 						var value = item.lastYzList[index-1];
 						var isRed = false;
+						var numValue = value;
+						if(list && value) {
+							numValue = list[value];
+						}
 						if(index == 2) {
+							items[iRow] = {};
+							items[iRow].total = 0;
 							if(value && value == item.lastYzList[length+1]) {
 								isRed = true;
 								$(nTd).css("color", "white").css("backgroundColor", "red");
@@ -1762,19 +1771,35 @@ function createLoop(url, length) {
 								$(nTd).css("color", "white").css("backgroundColor", "red");
 							}
 						}
+						if(numValue) {
+							items[iRow].total += parseInt(numValue);
+						}
 						if(!isRed) {
 							$(nTd).css("backgroundColor", "#ffc");
 						}
-						$(nTd).text(value);
+						$(nTd).text(numValue);
 					}
 				});
 			})(i);
 		}
+		columnDefs.push({
+			aTargets: [length+2],
+			fnCreatedCell: function(nTd, sData, item, iRow, iCol) {
+				$(nTd).text(items[iRow].total);
+			}
+		});
+		columnDefs.push({
+			aTargets: [length+3],
+			fnCreatedCell: function(nTd, sData, item, iRow, iCol) {
+				$(nTd).text(Math.floor(items[iRow].total / dividen * 100) / 100);
+			}
+		});
 		datatables.push(createDataTable({
 			id : "dataTable",
 			url : url,
 			bFilter: false,
 			data : function(queryInfo, infoSettings) {
+				items = [];
 				queryInfo.object = {};
 				queryInfo.object.year = parseInt($("#years").val());
 				queryInfo.object.phase = parseInt($("#phases").val());
