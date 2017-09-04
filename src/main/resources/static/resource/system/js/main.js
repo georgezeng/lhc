@@ -1747,7 +1747,7 @@ function createLoop(url, length, dividen, list) {
 		}
 		var columnDefs = [];
 		var items = [];
-		for(var i = 2; i < length+1; i++) {
+		for(var i = 2; i < length+2; i++) {
 			(function(index) {
 				columnDefs.push({
 					aTargets: [index],
