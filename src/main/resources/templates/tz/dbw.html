@@ -6,6 +6,16 @@
 			<div class="col-lg-12">
 				<h3 class="page-header">投注-大包围</h3>
 				<div class="buttonArea">
+					<button id="downloadBtn" class="btn btn-success">导出</button>
+					<button id="pickupBtn" class="btn btn-primary">筛选</button>
+					<button id="clearBtn" class="btn btn-danger">清空</button>
+					<button id="qcBtn" class="btn btn-warning">去重</button>
+					<button id="addBtn" class="btn btn-info">添加</button>
+					<div class="clearfix"></div>
+					<form id="download" name="download" action="/mvc/yz/downloadTZDBW" method="post" class="hidden">
+					</form>
+				</div>
+				<div class="buttonArea">
 					<span class="title">选择种类:</span>
 					<select id="category">
 					</select>
@@ -13,14 +23,7 @@
 					<span id="hmlist_p">
 						<select id="hmlist"></select>
 					</span>
-					<span id="tip" class="title" style="display:none;">请输入号码，以英文逗号隔开: </span><input id='hmlist' size='60' />
-					<button id="downloadBtn" class="btn btn-success">导出</button>
-					<button id="pickupBtn" class="btn btn-primary">筛选</button>
-					<button id="clearBtn" class="btn btn-danger">清空</button>
-					<button id="addBtn" class="btn btn-info">添加</button>
-					<div class="clearfix"></div>
-					<form id="download" name="download" action="/mvc/yz/downloadTZDBW" method="post" class="hidden">
-					</form>
+					<span id="tip" class="title" style="display:none;">请输入号码，以英文逗号隔开: </span><input id='hmlist' size='70' />
 				</div>
 			</div>
 		</div>

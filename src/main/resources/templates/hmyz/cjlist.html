@@ -4,13 +4,19 @@
 	<div id="page-wrapper" th:fragment="content">
 		<div class="row">
 			<div class="col-lg-12">
-				<h3 class="page-header">生肖遗值-十期循环列表</h3>
+				<h3 class="page-header">重间图</h3>
 				<div class="buttonArea">
 					<span class="title">截止年份:</span><select id="years"></select>
 					<span class="title">截止期数:</span><select id="phases"></select>
+					<button id="downloadBtn" class="btn btn-success">导出</button>
 					<button id="calYZBtn" class="btn btn-info">遗值计算</button>
 					<button id="searchBtn" class="btn btn-primary">搜索</button>
 					<div class="clearfix"></div>
+					<form id="download" name="download" action="/mvc/yz/downloadCJYZ" class="hidden">
+						<input id="size" type="hidden" name="size" />
+						<input id="endYear" type="hidden" name="year" />
+						<input id="endPhase" type="hidden" name="phase" />
+					</form>
 				</div>
 			</div>
 		</div>
@@ -24,36 +30,32 @@
 						<tr>
 							<th>年份</th>
 							<th>期数</th>
-							<th>前11期</th>
-							<th>前10期</th>
-							<th>前9期</th>
-							<th>前8期</th>
-							<th>前7期</th>
-							<th>前6期</th>
-							<th>前5期</th>
-							<th>前4期</th>
-							<th>前3期</th>
-							<th>前2期</th>
-							<th>前1期</th>
-							<th>当前期</th>
+							<th>减1</th>
+							<th>加1</th>
+							<th>间0</th>
+							<th>间1</th>
+							<th>间2</th>
+							<th>间3</th>
+							<th>间4</th>
+							<th>间5</th>
+							<th>间6</th>
+							<th>间6+</th>
 						</tr>
 					</thead>
 					<tfoot>
 						<tr>
 							<td>年份</td>
 							<td>期数</td>
-							<td>前11期</td>
-							<td>前10期</td>
-							<td>前9期</td>
-							<td>前8期</td>
-							<td>前7期</td>
-							<td>前6期</td>
-							<td>前5期</td>
-							<td>前4期</td>
-							<td>前3期</td>
-							<td>前2期</td>
-							<td>前1期</td>
-							<td>当前期</td>
+							<td>减1</td>
+							<td>加1</td>
+							<td>间0</td>
+							<td>间1</td>
+							<td>间2</td>
+							<td>间3</td>
+							<td>间4</td>
+							<td>间5</td>
+							<td>间6</td>
+							<td>间6+</td>
 						</tr>
 					</tfoot>
 				</table>

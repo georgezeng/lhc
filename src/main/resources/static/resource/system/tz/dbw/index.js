@@ -25,17 +25,11 @@ $(document).ready(function() {
 		});
 	});
 	
+	$("#qcBtn").click(function() {
+		qcHm("");
+	});
+	
 	$("#pickupBtn").click(function() {
-		function isInArr(hms, k) {
-			for(var m in hms) {
-				contained = hms[m] == k;
-				if(contained) {
-					return true;
-				}
-			}
-			return false;
-		}
-		
 		var count = 1;
 		var tbody = $("#conditionTable").find("tbody");
 		if(tbody.children().length != 9) {
@@ -96,6 +90,8 @@ $(document).ready(function() {
 			}
 		}
 		
+		allHms.sort(function(a, b){return a-b});
+		allNonHms.sort(function(a, b){return a-b});
 		allHms = allHms.join(", ");
 		allNonHms = allNonHms.join(", ");
 		

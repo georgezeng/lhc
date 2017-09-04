@@ -627,6 +627,16 @@ var categories = [
 	}
 ];
 
+function isInArr(hms, k) {
+	for(var m in hms) {
+		contained = hms[m] == k;
+		if(contained) {
+			return true;
+		}
+	}
+	return false;
+}
+
 function createZHlist(max) {
 	var list = [];
 	for(var i = max - 1; i > 0; i--) {
@@ -724,6 +734,25 @@ function addTM12fdCategory() {
 				}).change();
 			}).change();
 		}
+	});
+}
+
+function qcHm(index) {
+	var tds = $("#conditionTable" + index).find("tbody").find("td[name='hm']");
+	var registered = [];
+	tds.each(function() {
+		var td = $(this);
+		var hms = td.attr("hm").split(/,\s*/);
+		var newHms = [];
+		for(var i in hms) {
+			var num = hms[i];
+			if(!isInArr(registered, num)) {
+				registered.push(num);
+				newHms.push(num); 
+			} 
+		}
+		newHms = newHms.join(", ");
+		td.attr("hm", newHms).text(newHms);
 	});
 }
 
@@ -1685,4 +1714,74 @@ function createZFlist(url, sxlist) {
 		columns : columns,
 		aoColumnDefs: columnDefs
 	}));
+}
+
+function createLoop(url, length) {
+	$(document).ready(function() {
+		var sxlist = [];
+		for(var i = length; i >= 1; i--) {
+			sxlist.push("top" + i);
+		}
+		var cols = ["year", "phase"];
+		for(var i in sxlist) {
+			cols.push(sxlist[i]);
+		}
+		var columns = [];
+		for(var i in cols) {
+			var col = cols[i];
+			if(i < 2) {
+				columns.push({
+					name : col,
+					data : col,
+					sortable: false
+				});
+			} else {
+				columns.push({
+					name : col,
+					data : "year",
+					sortable: false
+				});
+			}
+		}
+		var columnDefs = [];
+		for(var i = 2; i < length+2; i++) {
+			(function(index) {
+				columnDefs.push({
+					aTargets: [index],
+					fnCreatedCell: function(nTd, sData, item, iRow, iCol) {
+						var value = item.lastYzList[index-1];
+						var isRed = false;
+						if(index == 2) {
+							if(value && value == item.lastYzList[length+1]) {
+								isRed = true;
+								$(nTd).css("color", "white").css("backgroundColor", "red");
+							}
+						} else if(index == length+1) {
+							if(value && value == item.lastYzList[0]) {
+								isRed = true;
+								$(nTd).css("color", "white").css("backgroundColor", "red");
+							}
+						}
+						if(!isRed) {
+							$(nTd).css("backgroundColor", "#ffc");
+						}
+						$(nTd).text(value);
+					}
+				});
+			})(i);
+		}
+		datatables.push(createDataTable({
+			id : "dataTable",
+			url : url,
+			bFilter: false,
+			data : function(queryInfo, infoSettings) {
+				queryInfo.object = {};
+				queryInfo.object.year = parseInt($("#years").val());
+				queryInfo.object.phase = parseInt($("#phases").val());
+			},
+			columns : columns,
+			aoColumnDefs: columnDefs
+		}));
+		
+	});
 }

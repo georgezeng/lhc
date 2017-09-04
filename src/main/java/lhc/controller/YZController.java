@@ -1080,19 +1080,32 @@ public class YZController {
 
 	@RequestMapping("/countSX10Loop")
 	public BaseResult countSX10Loop(@RequestBody QueryInfo<SxYz> queryInfo) throws Exception {
-		PageResult<SxYz> result = repositories.sxYzDao.query(queryInfo);
+		return countLoop(repositories.sxYzDao.query(queryInfo), 12);
+	}
+	
+	@RequestMapping("/countSW10Loop")
+	public BaseResult countSW10Loop(@RequestBody QueryInfo<SwYz> queryInfo) throws Exception {
+		return countLoop(repositories.swYzDao.query(queryInfo), 12);
+	}
+	
+	@RequestMapping("/countWX10Loop")
+	public BaseResult countWX10Loop(@RequestBody QueryInfo<WxYz> queryInfo) throws Exception {
+		return countLoop(repositories.wxYzDao.query(queryInfo), 12);
+	}
+
+	private <T extends Avg> BaseResult countLoop(PageResult<T> result, int length) throws Exception {
 		if (result != null && result.getTotal() > 0) {
 			for (int i = result.getList().size() - 1; i >= 0; i--) {
-				SxYz data = result.getList().get(i);
-				int k = i - 10;
-				for (int j = 0; j < 11; j++) {
+				T data = result.getList().get(i);
+				int k = i - length;
+				for (int j = 0; j < length + 1; j++) {
 					if (k > -1 && k < result.getList().size()) {
 						data.getLastYzList()[j] = result.getList().get(k).getLastYz();
 					}
 					k++;
 				}
-				if (i < result.getList().size() - 2) {
-					data.getLastYzList()[11] = result.getList().get(i + 1).getLastYz();
+				if (i < result.getList().size() - 1) {
+					data.getLastYzList()[length + 1] = result.getList().get(i + 1).getLastYz();
 				}
 			}
 		}
@@ -1297,6 +1310,111 @@ public class YZController {
 		return new BaseResult(repositories.ptYzDao.query(queryInfo));
 	}
 
+	@RequestMapping("/listCJYZ")
+	public BaseResult listCJYZ(@RequestBody QueryInfo<PtYz> queryInfo) throws Exception {
+		PageResult<PtYz> pResult = repositories.ptYzDao.query(queryInfo);
+		PageResult<Map<String, Object>> result = new PageResult<Map<String, Object>>();
+		if (pResult != null && pResult.getTotal() > 0) {
+			List<Map<String, Object>> list = new ArrayList<Map<String, Object>>();
+			for (PtYz yz : pResult.getList()) {
+				Map<String, Object> data = new HashMap<String, Object>();
+				data.put("year", yz.getYear());
+				data.put("phase", yz.getPhase());
+				for (int i = 0; i < 7; i++) {
+					data.put("jg" + i, new ArrayList<Integer>());
+				}
+				List<Integer> hms = new ArrayList<Integer>();
+				for (int i = 1; i < 50; i++) {
+					Method m = ReflectionUtils.findMethod(PtYz.class, "getHm" + i);
+					Integer value = (Integer) m.invoke(yz);
+					if (value == 0) {
+						hms.add(value);
+					}
+				}
+				for (int i = 1; i < 50; i++) {
+					Method m = ReflectionUtils.findMethod(PtYz.class, "getHm" + i);
+					Integer value = (Integer) m.invoke(yz);
+					switch (value) {
+					case 0: {
+						putJg(data, 0, i);
+						if (i + 1 < 50 && !hms.contains(i + 1)) {
+							putAdd1orMins1(data, "add1", i + 1);
+						}
+						if (i - 1 > 0 && !hms.contains(i - 1)) {
+							putAdd1orMins1(data, "min1", i - 1);
+						}
+					}
+						break;
+					case 1:
+						putJg(data, 1, i);
+						break;
+					case 2:
+						putJg(data, 2, i);
+						break;
+					case 3:
+						putJg(data, 3, i);
+						break;
+					case 4:
+						putJg(data, 4, i);
+						break;
+					case 5:
+						putJg(data, 5, i);
+						break;
+					case 6:
+						putJg(data, 6, i);
+						break;
+					default:
+						putJg(data, 7, i);
+						break;
+					}
+				}
+				list.add(data);
+			}
+			Collections.reverse(list);
+
+			Map<String, Object> lastData = null;
+			for (Map<String, Object> data : list) {
+				if (lastData != null) {
+					List<Integer> comparor = (List<Integer>) lastData.get("jg0");
+					String[] arr = new String[] { "min1", "add1", "jg0", "jg1", "jg2", "jg3", "jg4", "jg5", "jg6", "jg6Plus" };
+					for (String key : arr) {
+						List<Integer> comparee = (List<Integer>) data.get(key);
+						List<Integer> darks = new ArrayList<Integer>();
+						for (Integer num : comparee) {
+							if (comparor.contains(num)) {
+								darks.add(num);
+							}
+						}
+						data.put("s" + key, darks);
+					}
+				}
+				lastData = data;
+			}
+			Collections.reverse(list);
+			result.setList(list);
+		}
+		return new BaseResult(result);
+	}
+
+	private void putJg(Map<String, Object> data, int index, int num) {
+		String str = "jg" + (index < 7 ? index : "6Plus");
+		List<Integer> hms = (List<Integer>) data.get(str);
+		if (hms == null) {
+			hms = new ArrayList<Integer>();
+			data.put(str, hms);
+		}
+		hms.add(num);
+	}
+
+	private void putAdd1orMins1(Map<String, Object> data, String field, int num) {
+		List<Integer> hms = (List<Integer>) data.get(field);
+		if (hms == null) {
+			hms = new ArrayList<Integer>();
+			data.put(field, hms);
+		}
+		hms.add(num);
+	}
+
 	@RequestMapping("/listTMFDYZ")
 	public BaseResult listTMFDYZ(@RequestBody QueryInfo<TmFdYz> queryInfo, String mode) throws Exception {
 		PageResult<TmFdYz> result = repositories.tmfdYzDao.query(queryInfo);
@@ -1392,7 +1510,7 @@ public class YZController {
 			Method m2 = ReflectionUtils.findMethod(DownloadPrepareTZ.class, "getHms" + i);
 			Method m3 = ReflectionUtils.findMethod(DownloadPrepareTZ.class, "getNonHms" + i);
 			writer.append((String) m1.invoke(dto)).append("\n");
-			writer.append((String) m2.invoke(dto)).append("\n");
+			// writer.append((String) m2.invoke(dto)).append("\n");
 			writer.append("反转号码").append("\n");
 			writer.append((String) m3.invoke(dto)).append("\n");
 			writer.append("\n");
@@ -1416,10 +1534,10 @@ public class YZController {
 			Method m4 = ReflectionUtils.findMethod(DownloadPrepareTZ.class, "getGsPlusNonHms" + i);
 			Method m5 = ReflectionUtils.findMethod(DownloadPrepareTZ.class, "getGsMinusNonHms" + i);
 			writer.append((String) m1.invoke(dto)).append("\n");
-			writer.append("公式+").append("\n");
-			writer.append((String) m2.invoke(dto)).append("\n");
-			writer.append("公式-").append("\n");
-			writer.append((String) m3.invoke(dto)).append("\n");
+			// writer.append("公式+").append("\n");
+			// writer.append((String) m2.invoke(dto)).append("\n");
+			// writer.append("公式-").append("\n");
+			// writer.append((String) m3.invoke(dto)).append("\n");
 			writer.append("反转号码").append("\n");
 			writer.append("公式+").append("\n");
 			writer.append((String) m4.invoke(dto)).append("\n");

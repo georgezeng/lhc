@@ -5,7 +5,10 @@ $(document).ready(function() {
 	addTM12fdCategory();
 	
 	$("#clearBtn").click(function() {
-		conditionCount = 1;
+		conditions = {
+			count1: 1,
+			count2: 1
+		};
 		$("#gs").val("");
 		$("#conditionTable1").find("tbody").empty();
 		$("#conditionTable2").find("tbody").empty();
@@ -36,17 +39,11 @@ $(document).ready(function() {
 		}
 	}
 	
+	$("#qcBtn").click(function() {
+		qcHm(1);
+	});
+	
 	$("#pickupBtn").click(function() {
-		function isInArr(hms, k) {
-			for(var m in hms) {
-				contained = hms[m] == k;
-				if(contained) {
-					return true;
-				}
-			}
-			return false;
-		}
-		
 		if($("#gs").val() == "") {
 			alert("请输入公式");
 			return;

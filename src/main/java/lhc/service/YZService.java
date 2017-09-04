@@ -1639,6 +1639,9 @@ public class YZService {
 				Method m = ReflectionUtils.findMethod(clazz, "get" + getPrefix() + pos);
 				Integer value = (Integer) m.invoke(yz);
 				if (value != null && value == 0) {
+					if (startPos == 0) {
+						pos++;
+					}
 					yz.setPos(pos);
 					break;
 				}
