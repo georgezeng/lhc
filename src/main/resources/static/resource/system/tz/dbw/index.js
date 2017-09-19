@@ -1,7 +1,7 @@
-var zhlist = createZHlist(9);
-
 $(document).ready(function() {
-	addTM12fdCategory();
+	addTM12fdCategory("");
+	
+	var zhlist = createZHlist(9);
 	
 	$("#clearBtn").click(function() {
 		conditionCount = 1;

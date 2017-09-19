@@ -50,6 +50,7 @@ import lhc.domain.BsYz;
 import lhc.domain.BsZfYz;
 import lhc.domain.DsYz;
 import lhc.domain.DsZfYz;
+import lhc.domain.HmDsYz;
 import lhc.domain.KaiJiang;
 import lhc.domain.LhLrYz;
 import lhc.domain.LhYz;
@@ -1340,6 +1341,116 @@ public class YZService {
 					});
 			logger.info("End of calTM12FDYZ...");
 		} catch (Exception e) {
+			t = e;
+		}
+		return new AsyncResult<Exception>(t);
+	}
+
+	@Async
+	public Future<Exception> calHMDSYZ() {
+		Exception t = null;
+		try {
+			Pageable request = new PageRequest(0, 200, new Sort(Direction.ASC, "date"));
+			Page<KaiJiang> result = null;
+			HmDsYz lastYz = null;
+			String[] arr = { "Small", "Large", "Odd", "Even", "SmallOdd", "SmallEven", "LargeOdd", "LargeEven" };
+			do {
+				result = repositories.kaiJiangRepository.findAll(request);
+				Method gm = null;
+				Method sm = null;
+				if (result != null && result.hasContent()) {
+					for (KaiJiang data : result.getContent()) {
+						HmDsYz yz = repositories.hmdsyzRepository.findByDate(data.getDate());
+						if (yz == null) {
+							yz = new HmDsYz();
+							yz.setYear(data.getYear());
+							yz.setPhase(data.getPhase());
+							yz.setDate(data.getDate());
+						}
+
+						Integer num = data.getSpecialNum();
+						boolean isSmallOdd = num < 26 && num % 2 != 0;
+						boolean isSmallEven = num < 26 && num % 2 == 0;
+						boolean isLargeOdd = num > 25 && num % 2 != 0;
+						boolean isLargeEven = num > 25 && num % 2 == 0;
+						boolean isSmall = num < 26;
+						boolean isOdd = num % 2 != 0;
+
+						if (isSmallOdd) {
+							yz.setSmallOdd(0);
+							if (lastYz != null) {
+								yz.setLastSLOEYz(lastYz.getSmallOdd());
+							}
+						}
+						if (isSmallEven) {
+							yz.setSmallEven(0);
+							if (lastYz != null) {
+								yz.setLastSLOEYz(lastYz.getSmallEven());
+							}
+						}
+						if (isLargeOdd) {
+							yz.setLargeOdd(0);
+							if (lastYz != null) {
+								yz.setLastSLOEYz(lastYz.getLargeOdd());
+							}
+						}
+						if (isLargeEven) {
+							yz.setLargeEven(0);
+							if (lastYz != null) {
+								yz.setLastSLOEYz(lastYz.getLargeEven());
+							}
+						}
+						if (isSmall) {
+							yz.setSmall(0);
+							if (lastYz != null) {
+								yz.setLastSLYz(lastYz.getSmall());
+							}
+						} else {
+							yz.setLarge(0);
+							if (lastYz != null) {
+								yz.setLastSLYz(lastYz.getLarge());
+							}
+						}
+						if (isOdd) {
+							yz.setOdd(0);
+							if (lastYz != null) {
+								yz.setLastOEYz(lastYz.getOdd());
+							}
+						} else {
+							yz.setEven(0);
+							if (lastYz != null) {
+								yz.setLastOEYz(lastYz.getEven());
+							}
+						}
+
+						if (lastYz != null) {
+							for (int j = 0; j < arr.length; j++) {
+								String suffix = arr[j];
+								gm = ReflectionUtils.findMethod(HmDsYz.class, "get" + suffix);
+								Integer lastValue = (Integer) gm.invoke(lastYz);
+								if (lastValue != null) {
+									Integer value = (Integer) gm.invoke(yz);
+									if (value == null || value > 0) {
+										sm = ReflectionUtils.findMethod(HmDsYz.class, "set" + suffix, Integer.class);
+										sm.invoke(yz, lastValue + 1);
+									}
+								}
+							}
+						}
+
+						repositories.hmdsyzRepository.save(yz);
+						lastYz = yz;
+
+					}
+				}
+				request = result.nextPageable();
+			} while (result != null && result.hasNext());
+
+			logger.info("End of calHMDSYZ...");
+		} catch (Exception e) {
+			if (DataAccessException.class.isAssignableFrom(e.getClass())) {
+				logger.error(e.getMessage(), e);
+			}
 			t = e;
 		}
 		return new AsyncResult<Exception>(t);

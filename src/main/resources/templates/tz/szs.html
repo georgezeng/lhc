@@ -1,0 +1,173 @@
+<!doctype html>
+<html xmlns:th="http://www.thymeleaf.org">
+<body>
+	<div id="page-wrapper" th:fragment="content">
+		<div class="row">
+			<div class="col-lg-12">
+				<h3 class="page-header">投注-三中三</h3>
+				<div class="buttonArea">
+					<button id="downloadBtn" class="btn btn-success">导出</button>
+					<button id="pickupBtn" class="btn btn-primary">筛选</button>
+					<button id="clearBtn" class="btn btn-danger">清空</button>
+					<button id="qcBtn" class="btn btn-warning">去重</button>
+					<div class="clearfix"></div>
+					<form id="download" name="download" action="/mvc/yz/downloadTZSZS" method="post" class="hidden">
+					</form>
+				</div>
+			</div>
+		</div>
+		
+		<div class="row">
+			<div class="col-lg-12">
+				<h4>选择组合结果条件</h4>
+				<div class="buttonArea">
+					<span class="title">限定组合数:</span>
+					<select id="limitList4" class="limitList">
+						<option value="3">3</option>
+						<option value="4">4</option>
+						<option value="5">5</option>
+						<option value="6">6</option>
+						<option value="7">7</option>
+						<option value="8">8</option>
+						<option value="9">9</option>
+						<option value="10">10</option>
+						<option value="11">11</option>
+					</select>
+				</div>
+				<div class="clearfix"></div>
+				<h4 class="page-header"></h4>
+			</div>
+		</div>
+		
+		<div class="row">
+			<div class="col-lg-12">
+				<h4>选择分组条件</h4>
+				<div class="buttonArea">
+					<span class="title">限定个数:</span>
+					<select id="limitList3" class="limitList">
+						<option value="0">0</option>
+						<option value="1">1</option>
+						<option value="2">2</option>
+						<option value="3">3</option>
+						<option value="4">4</option>
+						<option value="5">5</option>
+						<option value="6">6</option>
+						<option value="7">7</option>
+					</select>
+					<span class="title">请输入号码，以英文逗号隔开: </span><input id='hmlist3' size='60' />
+					<button id="addBtn3" class="btn btn-info">添加</button>
+				</div>
+				<table id="conditionTable3" width="100%"
+					class="table table-striped table-bordered table-hover">
+					<thead>
+						<tr>
+							<th>行号</th>
+							<th>限定个数</th>
+							<th>号码</th>
+							<th>操作</th>
+						</tr>
+					</thead>
+					<tbody></tbody>
+				</table>
+				<h4 class="page-header"></h4>
+			</div>
+		</div>
+		
+		<div class="row">
+			<div class="col-lg-12">
+				<h4>选择种类条件</h4>
+				<div class="buttonArea">
+					<span class="title">限定个数:</span>
+					<select id="limitList1" class="limitList">
+						<option value="0">0</option>
+						<option value="1">1</option>
+						<option value="2">2</option>
+						<option value="3">3</option>
+						<option value="4">4</option>
+						<option value="5">5</option>
+						<option value="6">6</option>
+						<option value="7">7</option>
+					</select>
+					<span class="title">种类:</span>
+					<select id="category">
+					</select>
+					<span id="subTitle" class="title">:</span>
+					<span id="hmlist_p">
+					</span>
+					<span id="tip" class="title" style="display:none;">请输入号码，以英文逗号隔开: </span><input id='hmlist1' size='60' />
+					<button id="addBtn1" class="btn btn-info">添加</button>
+				</div>
+				<table id="conditionTable1" width="100%"
+					class="table table-striped table-bordered table-hover">
+					<thead>
+						<tr>
+							<th>行号</th>
+							<th>种类</th>
+							<th>号码</th>
+							<th>操作</th>
+						</tr>
+					</thead>
+					<tbody></tbody>
+				</table>
+				<h4 class="page-header"></h4>
+			</div>
+		</div>
+		
+		<div class="row">
+			<div class="col-lg-12">
+				<h4>选择间隔条件</h4>
+				<div class="buttonArea">
+					<span class="title">限定个数:</span>
+					<select id="limitList2" class="limitList">
+						<option value="0">0</option>
+						<option value="1">1</option>
+						<option value="2">2</option>
+						<option value="3">3</option>
+						<option value="4">4</option>
+						<option value="5">5</option>
+						<option value="6">6</option>
+						<option value="7">7</option>
+					</select>
+					<span class="title">间隔数:</span>
+					<select id="jgCategory">
+					</select>
+					<textarea id="hmlist2" cols="100" rows="5"></textarea>
+					<button id="addBtn2" class="btn btn-info">添加</button>
+				</div>
+				<table id="conditionTable2" width="100%"
+					class="table table-striped table-bordered table-hover">
+					<thead>
+						<tr>
+							<th>行号</th>
+							<th>间隔数</th>
+							<th>号码</th>
+							<th>操作</th>
+						</tr>
+					</thead>
+					<tbody></tbody>
+				</table>
+				<h4 class="page-header"></h4>
+			</div>
+		</div>
+		
+		
+		
+		<div class="row">
+			<div class="col-lg-12">
+				<h4>筛选结果</h4>
+				<table width="100%"
+					class="table table-striped table-bordered table-hover"
+					id="datatable">
+					<thead>
+						<tr>
+							<th width="5%">组合号码</th>
+						</tr>
+					</thead>
+					<tbody></tbody>
+				</table>
+			</div>
+		</div>
+		
+	</div>
+</body>
+</html>

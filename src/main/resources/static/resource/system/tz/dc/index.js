@@ -2,7 +2,7 @@ var zhlist = createZHlist(5);
 
 $(document).ready(function() {
 	categories.splice(0, 1);
-	addTM12fdCategory();
+	addTM12fdCategory("");
 	
 	$("#clearBtn").click(function() {
 		conditions = {

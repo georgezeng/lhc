@@ -8,6 +8,7 @@ TRUNCATE table `lh_zf_yz`;
 TRUNCATE table `mw_lr_yz`;
 TRUNCATE table `mw_yz`;
 TRUNCATE table `mw_zf_yz`;
+TRUNCATE table `mw_cs_yz`;
 TRUNCATE table `pd_lr_yz`;
 TRUNCATE table `pd_yz`;
 TRUNCATE table `pd_zf_yz`;

@@ -34,6 +34,7 @@ import lhc.domain.BsYz;
 import lhc.domain.BsZfYz;
 import lhc.domain.DsYz;
 import lhc.domain.DsZfYz;
+import lhc.domain.HmDsYz;
 import lhc.domain.KaiJiang;
 import lhc.domain.LhLrYz;
 import lhc.domain.LhYz;
@@ -157,6 +158,8 @@ public class YZController {
 		futures.add(yzService.calPDYZ());
 		futures.add(yzService.calBS9QYZ());
 		futures.add(yzService.calWXDSYZ());
+		futures.add(yzService.calSXDSYZ());
+		futures.add(yzService.calHMDSYZ());
 		if (sleep) {
 			sleep(futures, 1000);
 		} else {
@@ -165,7 +168,6 @@ public class YZController {
 		logger.info("End of calYZ stage1...");
 
 		futures.clear();
-		futures.add(yzService.calSXDSYZ());
 		futures.add(yzService.calSXCSYZ());
 		futures.add(yzService.calTM12FDYZ());
 		futures.add(parallelYzService.calAvg(repositories.sxyzRepository));
@@ -637,6 +639,17 @@ public class YZController {
 		PageResult<SxDsYz> result = repositories.sxdsYzDao.query(queryInfo);
 		if (result != null && result.getTotal() > 0) {
 			SxDsYz last = new SxDsYz();
+			last.setTotal(result.getList().size());
+			result.getList().add(last);
+		}
+		return new BaseResult(result);
+	}
+	
+	@RequestMapping("/listHMDSYZ")
+	public BaseResult listHMDSYZ(@RequestBody QueryInfo<HmDsYz> queryInfo) throws Exception {
+		PageResult<HmDsYz> result = repositories.hmdsYzDao.query(queryInfo);
+		if (result != null && result.getTotal() > 0) {
+			HmDsYz last = new HmDsYz();
 			last.setTotal(result.getList().size());
 			result.getList().add(last);
 		}
@@ -1344,6 +1357,23 @@ public class YZController {
 		return new BaseResult(repositories.ptYzDao.query(queryInfo));
 	}
 
+	@RequestMapping("/listLastCJ")
+	public BaseResult listLastCJ() throws Exception {
+		Integer year = ((List<Integer>) years().getData()).get(0);
+		Integer phase = ((List<Integer>) phases(year).getData()).get(0);
+		QueryInfo<PtYz> queryInfo = new QueryInfo<PtYz>();
+		PtYz object = new PtYz();
+		object.setYear(year);
+		object.setPhase(phase);
+		queryInfo.setObject(object);
+		PageInfo page = new PageInfo();
+		page.setPageNo(1);
+		page.setPageSize(1);
+		page.setToSort(false);
+		queryInfo.setPageInfo(page);
+		return listCJYZ(queryInfo);
+	}
+
 	@RequestMapping("/listCJYZ")
 	public BaseResult listCJYZ(@RequestBody QueryInfo<PtYz> queryInfo) throws Exception {
 		PageResult<PtYz> pResult = repositories.ptYzDao.query(queryInfo);
@@ -1540,11 +1570,12 @@ public class YZController {
 		response.addHeader("Content-Disposition", "attachment;filename=tzdbw.csv");
 		Writer writer = response.getWriter();
 		for (int i = 1; i < 37; i++) {
-			Method m1 = ReflectionUtils.findMethod(DownloadPrepareTZ.class, "getCategories" + i);
+			// Method m1 = ReflectionUtils.findMethod(DownloadPrepareTZ.class,
+			// "getCategories" + i);
 			Method m2 = ReflectionUtils.findMethod(DownloadPrepareTZ.class, "getHms" + i);
 			Method m3 = ReflectionUtils.findMethod(DownloadPrepareTZ.class, "getNonHms" + i);
-			writer.append((String) m1.invoke(dto)).append("\n");
-			// writer.append((String) m2.invoke(dto)).append("\n");
+			// writer.append((String) m1.invoke(dto)).append("\n");
+			writer.append((String) m2.invoke(dto)).append("\n");
 			writer.append("反转号码").append("\n");
 			writer.append((String) m3.invoke(dto)).append("\n");
 			writer.append("\n");
@@ -1556,22 +1587,35 @@ public class YZController {
 		return null;
 	}
 
+	@RequestMapping("/downloadTZSZS")
+	public String downloadTZSZS(Map<String, Object> dto, HttpServletResponse response) throws Exception {
+		response.setContentType("text/csv;charset=gbk;");
+		response.addHeader("Content-Disposition", "attachment;filename=tzszs.csv");
+		Writer writer = response.getWriter();
+		Integer total = (Integer) dto.get("total");
+		for (int i = 0; i < total; i++) {
+			writer.append(dto.get("hms" + i).toString()).append("\n");
+		}
+		return null;
+	}
+
 	@RequestMapping("/downloadTZDC")
 	public String downloadTZDC(DownloadPrepareTZ dto, HttpServletResponse response) throws Exception {
 		response.setContentType("text/csv;charset=gbk;");
 		response.addHeader("Content-Disposition", "attachment;filename=tzdc.csv");
 		Writer writer = response.getWriter();
 		for (int i = 1; i < 12; i++) {
-			Method m1 = ReflectionUtils.findMethod(DownloadPrepareTZ.class, "getCategories" + i);
+			// Method m1 = ReflectionUtils.findMethod(DownloadPrepareTZ.class,
+			// "getCategories" + i);
 			Method m2 = ReflectionUtils.findMethod(DownloadPrepareTZ.class, "getGsPlusHms" + i);
 			Method m3 = ReflectionUtils.findMethod(DownloadPrepareTZ.class, "getGsMinusHms" + i);
 			Method m4 = ReflectionUtils.findMethod(DownloadPrepareTZ.class, "getGsPlusNonHms" + i);
 			Method m5 = ReflectionUtils.findMethod(DownloadPrepareTZ.class, "getGsMinusNonHms" + i);
-			writer.append((String) m1.invoke(dto)).append("\n");
-			// writer.append("公式+").append("\n");
-			// writer.append((String) m2.invoke(dto)).append("\n");
-			// writer.append("公式-").append("\n");
-			// writer.append((String) m3.invoke(dto)).append("\n");
+			// writer.append((String) m1.invoke(dto)).append("\n");
+			writer.append("公式+").append("\n");
+			writer.append((String) m2.invoke(dto)).append("\n");
+			writer.append("公式-").append("\n");
+			writer.append((String) m3.invoke(dto)).append("\n");
 			writer.append("反转号码").append("\n");
 			writer.append("公式+").append("\n");
 			writer.append((String) m4.invoke(dto)).append("\n");

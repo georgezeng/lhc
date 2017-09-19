@@ -71,4 +71,5 @@
 	<include file="/db/v65.sql" />
 	<include file="/db/v66.sql" />
 	<include file="/db/v67.sql" />
+	<include file="/db/v68.sql" />
 </databaseChangeLog>

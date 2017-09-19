@@ -669,7 +669,59 @@ function createZHlist(max) {
 	return list;
 }
 
-function addTM12fdCategory() {
+/**
+ * 获得从m中取n的所有组合
+ */
+function getCompositeArrs(arr, n) {
+    var resultArrs = [],
+        compositeArr = [],
+        flagArr = [],
+        isEnd = false,
+        m = arr.length,
+        i, j, leftCnt;
+ 
+    for (i = 0; i < m; i++) {
+    	flagArr[i] = i < n ? 1 : 0;
+    	if(flagArr[i]) {
+    		compositeArr.push(arr[i]);
+    	}
+    }
+ 
+    // 第一个组合
+    resultArrs.push(compositeArr);
+    
+    if(n < m) {
+    	while (!isEnd) {
+    		leftCnt = 0;
+    		for (i = 0; i < m - 1; i++) {
+    			if (flagArr[i] && !flagArr[i+1]) {
+    				for(j = 0; j < i; j++) {
+    					flagArr[j] = j < leftCnt ? 1 : 0;
+    				}
+    				flagArr[i] = 0;
+    				flagArr[i+1] = 1;
+    				var aTmp = flagArr.concat();
+    				compositeArr = [];
+    				for (k = 0; k < m; k++) {
+    			    	if(aTmp[k]) {
+    			    		compositeArr.push(arr[k]);
+    			    	}
+    			    }
+    				resultArrs.push(compositeArr);
+    				if(aTmp.slice(-n).join("").indexOf('0') == -1) {
+    					isEnd = true;
+    				}
+    				break;
+    			}
+    			flagArr[i] && leftCnt++;
+    		}
+    	}
+    }
+ 
+    return resultArrs;
+}
+
+function addTM12fdCategory(index) {
 	post({
 		url: "/mvc/yz/listTM12FDLastPhaseList",
 		success: function(list) {
@@ -730,7 +782,7 @@ function addTM12fdCategory() {
 					} else {
 						$("#tip").hide();
 					}
-					$("#hmlist").val(item.value).attr("text", category.text + "-" + item.text);
+					$("#hmlist" + index).val(item.value).attr("text", category.text + "-" + item.text);
 				}).change();
 			}).change();
 		}
