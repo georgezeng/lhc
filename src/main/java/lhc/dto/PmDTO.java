@@ -1,8 +1,10 @@
 package lhc.dto;
 
 import java.math.BigDecimal;
+import java.util.Date;
 
 public class PmDTO {
+	private String date;
 	private int year;
 	private int phase;
 	private PmNum num1;
@@ -21,6 +23,14 @@ public class PmDTO {
 	private SpecialNum specialNum;
 	private Integer lastYz;
 	private int[] lastYzList = new int[34];
+
+	public String getDate() {
+		return date;
+	}
+
+	public void setDate(String date) {
+		this.date = date;
+	}
 
 	public Integer getLastYz() {
 		return lastYz;

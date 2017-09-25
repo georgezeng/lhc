@@ -1,7 +1,9 @@
+categories = categories.slice(1);
+
 $(document).ready(function() {
 	addTM12fdCategory("");
 	
-	var zhlist = createZHlist(9);
+	var zhlist = createZHlist(13);
 	
 	$("#clearBtn").click(function() {
 		conditionCount = 1;
@@ -32,17 +34,13 @@ $(document).ready(function() {
 	$("#pickupBtn").click(function() {
 		var count = 1;
 		var tbody = $("#conditionTable").find("tbody");
-		if(tbody.children().length != 9) {
-			alert("请选择9种分类");
+		if(tbody.children().length != 13) {
+			alert("请选择13种分类");
 			return;
 		}
 		var tds = tbody.find("td[name='hm']");
+		$("#datatable2").find("tbody").empty();
 		var dataTbody = $("#datatable").find("tbody").empty();
-		var allHms = [];
-		var allNonHms = [];
-		pickup = {};
-		var downloadForm = $("#download");
-		downloadForm.empty();
 		for(var i in zhlist) {
 			var zh = zhlist[i];
 			var categories = [];
@@ -55,9 +53,6 @@ $(document).ready(function() {
 					var num = arr[k];
 					if(!isInArr(hms, num)) {
 						hms.push(num);
-					}
-					if(!isInArr(allHms, num)) {
-						allHms.push(num);
 					}
 				}
 			}
@@ -74,34 +69,30 @@ $(document).ready(function() {
 			hms = hms.join(", ");
 			nonHms = nonHms.join(", ");
 			
-			$("<input type='hidden' name='hms"+count+"'>").appendTo(downloadForm).val(hms);
-			$("<input type='hidden' name='nonHms"+count+"'>").appendTo(downloadForm).val(nonHms);
-			$("<input type='hidden' name='categories"+count+"'>").appendTo(downloadForm).val(categories);
-			
 			var dataTr = $("<tr>").appendTo(dataTbody);
 			$("<td>").appendTo(dataTr).text(count++);
 			$("<td>").appendTo(dataTr).text(categories);
-			$("<td>").appendTo(dataTr).text(hms);
+//			$("<td>").appendTo(dataTr).text(hms);
 			$("<td>").appendTo(dataTr).text(nonHms);
+			$("<td>").appendTo(dataTr).append($("<input name='ctlist' type='checkbox' />").attr("categories", categories).val(nonHms).click(function() {
+				var checkedAll = false;
+				$("input[name='ctlist']").each(function() {
+					checkedAll = $(this).prop("checked");
+					if(!checkedAll) {
+						return false;
+					}
+				}); 
+				$("input[name='allCheck']").prop("checked", checkedAll);
+			})).append($("<a href='javascript:;' style='margin-left: 20px;'>删除</a>").click(function() {
+				$(this).parents("tr").remove();
+			}));
 		}
-		for(var m = 1; m < 50; m++) {
-			if(!isInArr(allHms, m)) {
-				allNonHms.push(m);
-			}
-		}
-		
-		allHms.sort(function(a, b){return a-b});
-		allNonHms.sort(function(a, b){return a-b});
-		allHms = allHms.join(", ");
-		allNonHms = allNonHms.join(", ");
 		
 		var dataTr = $("<tr>").appendTo(dataTbody);
-		$("<td>").appendTo(dataTr).text("合计");
-		$("<td>").appendTo(dataTr).text("整合(共"+allHms.length+"个)");
-		$("<td>").appendTo(dataTr).text(allHms);
-		$("<td>").appendTo(dataTr).text(allNonHms);
-		$("<input type='hidden' name='allHms'>").appendTo(downloadForm).val(allHms);
-		$("<input type='hidden' name='allNonHms'>").appendTo(downloadForm).val(allNonHms);
+		$("<td>").appendTo(dataTr).text("行号");
+		$("<td>").appendTo(dataTr).text("组合");
+		$("<td>").appendTo(dataTr).text("反转");
+		$("<td>").appendTo(dataTr).append($("<input name='allCheck' type='checkbox' />").click(checkAllOrNot));
 		
 	});
 	
@@ -109,7 +100,100 @@ $(document).ready(function() {
 		$("#download").submit();
 	});
 	
+	$("input[name='allCheck']").click(checkAllOrNot);
 	
+	function checkAllOrNot(obj) {
+		var checked = $(this).prop("checked");
+		$("input[name='allCheck']").prop("checked", checked);
+		$("input[name='ctlist']").prop("checked", checked);
+	}
+	
+	$("#mergeBtn").click(function() {
+		var arr = [];
+		$("input[name='ctlist']").each(function (){
+			if($(this).prop("checked")) {
+				arr.push($(this));
+			}
+		});
+		if(arr.length == 0) {
+			alert("请选择至少一条筛选结果");
+			return;
+		}
+		var gsHms = $("#gslist").val().split(/,\s*/);
+		if(!gsHms || gsHms.length == 1 && gsHms == "") {
+			alert("请输入公式号码");
+			return;
+		}
+		var nonGsHms = [];
+		for(var m = 1; m < 50; m++) {
+			if(!isInArr(gsHms, m)) {
+				nonGsHms.push(m);
+			}
+		}
+		gsHms = nonGsHms;
+		
+		var count = 1;
+		var dataTbody = $("#datatable2").find("tbody").empty();
+		var allHms = [];
+		var downloadForm = $("#download").empty();
+		for(var i in arr) {
+			var hms = arr[i].val().split(/,\s*/);
+			var categories = arr[i].attr("categories");
+			var newHms = gsHms.concat();
+			for(var j in hms) {
+				var num = hms[j];
+				if(!isInArr(newHms, num)) {
+					newHms.push(num);
+				}
+			}
+			newHms.sort(function(a, b){return a-b});
+			
+			for(var i in newHms) {
+				var hm = newHms[i];
+				var isIn = false;
+				for(var j in allHms) {
+					var hmObj = allHms[j];
+					if(hmObj.num == hm) {
+						hmObj.count++;
+						isIn = true;
+						break;
+					}
+				}
+				if(!isIn) {
+					allHms.push({num: hm, count: 1});
+				}
+			}
+			
+			newHms = newHms.join(", ");
+			
+			$("<input type='hidden' name='hms"+count+"'>").appendTo(downloadForm).val(newHms);
+			$("<input type='hidden' name='categories"+count+"'>").appendTo(downloadForm).val(categories);
+			
+			var dataTr = $("<tr>").appendTo(dataTbody);
+			$("<td>").appendTo(dataTr).text(count++);
+			$("<td>").appendTo(dataTr).text(categories);
+			$("<td>").appendTo(dataTr).text(newHms);
+		}
+		
+		allHms.sort(function(a, b) {
+			return a.num-b.num;
+		});
+		var allHmsHtml = "";
+		for(var i in allHms) {
+			var hm = allHms[i];
+			allHmsHtml += "<div style='float: left; border: 1px solid black; margin-right: 10px; margin-bottom: 10px;'>";
+			allHmsHtml += "<div style='padding: 5px; color: white; background-color: red;'>" + (hm.num > 9 ? hm.num : "&nbsp;" + hm.num + "&nbsp;") + "</div>";
+			allHmsHtml += "<div style='padding: 5px;'>" + (hm.count > 9 ? hm.count : "&nbsp;" + hm.count + "&nbsp;") + "</div>";
+			allHmsHtml += "</div>";
+		}
+		
+		var dataTr = $("<tr>").appendTo(dataTbody);
+		$("<td>").appendTo(dataTr).text("合计");
+		$("<td>").appendTo(dataTr).text("");
+		$("<td>").appendTo(dataTr).html(allHmsHtml);
+		$("<input type='hidden' name='allHms'>").appendTo(downloadForm).val(allHms);
+		$("<input type='hidden' name='allNonHms'>").appendTo(downloadForm).val(allNonHms);
+	});
 });
 
 

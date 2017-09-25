@@ -644,7 +644,7 @@ public class YZController {
 		}
 		return new BaseResult(result);
 	}
-	
+
 	@RequestMapping("/listHMDSYZ")
 	public BaseResult listHMDSYZ(@RequestBody QueryInfo<HmDsYz> queryInfo) throws Exception {
 		PageResult<HmDsYz> result = repositories.hmdsYzDao.query(queryInfo);
@@ -1181,6 +1181,7 @@ public class YZController {
 					PmDTO dto = map.get(pmData.getDate());
 					if (dto == null) {
 						dto = new PmDTO();
+						dto.setDate(pmData.getDate());
 						dto.setYear(pmData.getYear());
 						dto.setPhase(pmData.getPhase());
 						SpecialNum specialNum = new SpecialNum();
@@ -1564,8 +1565,8 @@ public class YZController {
 		return null;
 	}
 
-	@RequestMapping("/downloadTZDBW")
-	public String downloadTZDBW(DownloadPrepareTZ dto, HttpServletResponse response) throws Exception {
+	@RequestMapping("/downloadTZXBW")
+	public String downloadTZXBW(DownloadPrepareTZ dto, HttpServletResponse response) throws Exception {
 		response.setContentType("text/csv;charset=gbk;");
 		response.addHeader("Content-Disposition", "attachment;filename=tzdbw.csv");
 		Writer writer = response.getWriter();
@@ -1844,6 +1845,41 @@ public class YZController {
 				writer.append(data.getTotal() + "").append(", ");
 				writer.append(data.getDelta() + "").append(", ");
 				writer.append(data.getLastYz() + "").append("\n");
+			}
+		}
+		return null;
+	}
+
+	@RequestMapping("/downloadHMPMYZ")
+	public String downloadHMPMYZ(DownloadDTO dto, HttpServletResponse response) throws Exception {
+		response.setContentType("text/csv;charset=gbk;");
+		response.addHeader("Content-Disposition", "attachment;filename=hmpm.csv");
+		QueryInfo<KaiJiang> queryInfo = new QueryInfo<KaiJiang>();
+		KaiJiang queryObj = new KaiJiang();
+		queryObj.setYear(dto.getYear());
+		queryObj.setPhase(dto.getPhase());
+		queryInfo.setObject(queryObj);
+		PageInfo pageInfo = new PageInfo();
+		pageInfo.setPageNo(1);
+		pageInfo.setPageSize(dto.getSize());
+		queryInfo.setPageInfo(pageInfo);
+		PageResult<PmDTO> result = getPMList(queryInfo, false);
+		if (result != null && result.getList() != null && !result.getList().isEmpty()) {
+			Writer writer = response.getWriter();
+			writer.append("日期, 年份, 期数, 特码, 平码1, 平码2, 平码3, 平码4, 平码5, 平码6, 期差").append("\n");
+			for (PmDTO data : result.getList()) {
+				writer.append(data.getDate()).append(", ");
+				writer.append(data.getYear() + "").append(", ");
+				writer.append(data.getPhase() + "").append(", ");
+				writer.append(data.getSpecialNum().getNum() + "").append(", ");
+				writer.append(data.getNum1().getNum() + "").append(", ");
+				writer.append(data.getNum2().getNum() + "").append(", ");
+				writer.append(data.getNum3().getNum() + "").append(", ");
+				writer.append(data.getNum4().getNum() + "").append(", ");
+				writer.append(data.getNum5().getNum() + "").append(", ");
+				writer.append(data.getNum6().getNum() + "").append(", ");
+				writer.append((data.getSpecialNum().getDelta() != null ? data.getSpecialNum().getDelta() : "") + "")
+						.append("\n");
 			}
 		}
 		return null;
