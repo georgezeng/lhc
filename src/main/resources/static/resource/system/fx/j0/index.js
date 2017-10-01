@@ -16,7 +16,12 @@ $(document).ready(function() {
 				td.hide();
 			}
 		});
+		countNumber();
+	});
+	
+	function countNumber() {
 		count = 0;
+		var table = $("#dataTable");
 		table.find("tr").each(function() {
 			var tr = $(this);
 			var subCount = 0;
@@ -34,7 +39,7 @@ $(document).ready(function() {
 			}
 		});
 		$("#counter").text(count);
-	});
+	}
 	
 	var sxlist = [
 		"sxj0", "sxzfj0",
@@ -92,6 +97,14 @@ $(document).ready(function() {
 						} else {
 							$(nTd).css("backgroundColor", "#ffc")
 						}
+					}
+					var th = $("#dataTable").find("th").eq(index);
+					if(th.attr("status") == "hide") {
+						$(nTd).attr("status", "hide");
+						setTimeout(function() {
+							$(nTd).hide();
+						}, 100);
+					} else {
 						$(nTd).attr("status", "show");
 					}
 					$(nTd).text(value);
@@ -115,6 +128,7 @@ $(document).ready(function() {
 			} else {
 				value = count;
 				$(nTd).attr("id", "counter");
+				countNumber();
 			}
 			$(nTd).text(value);
 		}
