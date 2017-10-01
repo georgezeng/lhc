@@ -8,4 +8,6 @@ import lhc.domain.BaseYz;
 @Transactional
 public interface BaseYzRepository<T extends BaseYz> extends PagingAndSortingRepository<T, Long> {
 	T findByDate(String date);
+
+	T findByYearAndPhase(int year, int phase);
 }

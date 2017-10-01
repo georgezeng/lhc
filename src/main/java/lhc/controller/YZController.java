@@ -85,6 +85,7 @@ import lhc.dto.PmDTO;
 import lhc.dto.PmNum;
 import lhc.dto.SpecialNum;
 import lhc.dto.TmYzInfo;
+import lhc.dto.J0Yz;
 import lhc.dto.query.PageInfo;
 import lhc.dto.query.PageResult;
 import lhc.dto.query.QueryInfo;
@@ -872,6 +873,15 @@ public class YZController {
 		PageResult<MwCsYz> result = (PageResult<MwCsYz>) map.get("result");
 		if (result != null && result.getTotal() > 0) {
 			result.getList().add(new MwCsYz());
+		}
+		return new BaseResult(result);
+	}
+
+	@RequestMapping("/listAllJ0")
+	public BaseResult listAllJ0(@RequestBody QueryInfo<J0Yz> queryInfo) throws Exception {
+		PageResult<J0Yz> result = repositories.commonDao.getTop0List(queryInfo);
+		if (result != null && result.getTotal() > 0) {
+			result.getList().add(new J0Yz());
 		}
 		return new BaseResult(result);
 	}

@@ -3,8 +3,6 @@ categories = categories.slice(1);
 $(document).ready(function() {
 	addTM12fdCategory("");
 	
-	var zhlist = createZHlist(13);
-	
 	$("#clearBtn").click(function() {
 		conditionCount = 1;
 		$("#conditionTable").find("tbody").empty();
@@ -34,10 +32,12 @@ $(document).ready(function() {
 	$("#pickupBtn").click(function() {
 		var count = 1;
 		var tbody = $("#conditionTable").find("tbody");
-		if(tbody.children().length != 13) {
-			alert("请选择13种分类");
+		if(!(tbody.children().length == 9 || tbody.children().length == 13)) {
+			alert("请选择9或13种分类");
 			return;
 		}
+		
+		var zhlist = createZHlist(tbody.children().length);
 		var tds = tbody.find("td[name='hm']");
 		$("#datatable2").find("tbody").empty();
 		var dataTbody = $("#datatable").find("tbody").empty();
@@ -124,13 +124,6 @@ $(document).ready(function() {
 			alert("请输入公式号码");
 			return;
 		}
-		var nonGsHms = [];
-		for(var m = 1; m < 50; m++) {
-			if(!isInArr(gsHms, m)) {
-				nonGsHms.push(m);
-			}
-		}
-		gsHms = nonGsHms;
 		
 		var count = 1;
 		var dataTbody = $("#datatable2").find("tbody").empty();
@@ -139,10 +132,10 @@ $(document).ready(function() {
 		for(var i in arr) {
 			var hms = arr[i].val().split(/,\s*/);
 			var categories = arr[i].attr("categories");
-			var newHms = gsHms.concat();
+			var newHms = [];
 			for(var j in hms) {
 				var num = hms[j];
-				if(!isInArr(newHms, num)) {
+				if(!isInArr(gsHms, num)) {
 					newHms.push(num);
 				}
 			}

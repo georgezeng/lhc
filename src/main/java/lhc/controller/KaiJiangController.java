@@ -38,7 +38,7 @@ public class KaiJiangController {
 
 	@RequestMapping("/save")
 	public BaseResult save(@RequestBody KaiJiang data) throws Exception {
-		KaiJiang oldData = kaiJiangRepository.findByDate(data.getDate());
+		KaiJiang oldData = kaiJiangRepository.findByYearAndPhase(data.getYear(), data.getPhase());
 		if (oldData != null) {
 			BeanUtils.copyProperties(data, oldData, "id");
 		} else {

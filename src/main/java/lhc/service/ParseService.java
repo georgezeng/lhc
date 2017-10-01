@@ -41,7 +41,7 @@ public class ParseService {
 				KaiJiang data = kaiJiangRepository.findByDate(date);
 				if (data == null) {
 					data = new KaiJiang();
-					data.setDate(date);
+					data.setDate(date.replaceAll("\\/", "-"));
 				}
 				data.setYear(year);
 				data.setPhase(Integer.valueOf(phaseEl.text().trim().replace("期", "")));
