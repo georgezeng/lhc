@@ -16,7 +16,20 @@ public class LhNums {
 	public static final List<Integer> W7 = new ArrayList<Integer>();
 	public static final List<Integer> W8 = new ArrayList<Integer>();
 	public static final List<Integer> W9 = new ArrayList<Integer>();
+	@SuppressWarnings("unchecked")
+	public static final List<Integer>[] NUMS = new List[10];
 	static {
+		NUMS[0] = W0;
+		NUMS[1] = W1;
+		NUMS[2] = W2;
+		NUMS[3] = W3;
+		NUMS[4] = W4;
+		NUMS[5] = W5;
+		NUMS[6] = W6;
+		NUMS[7] = W7;
+		NUMS[8] = W8;
+		NUMS[9] = W9;
+		
 		W0.add(19);
 		W0.add(28);
 		W0.add(37);

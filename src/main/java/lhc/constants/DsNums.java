@@ -17,7 +17,21 @@ public class DsNums {
 	public static final List<Integer> DS3EVEN = new ArrayList<Integer>();
 	public static final List<Integer> DS4ODD = new ArrayList<Integer>();
 	public static final List<Integer> DS4EVEN = new ArrayList<Integer>();
+	
+	@SuppressWarnings("unchecked")
+	public static final List<Integer>[] NUMS = new List[10];
 	static {
+		NUMS[0] = DS0ODD;
+		NUMS[1] = DS0EVEN;
+		NUMS[2] = DS1ODD;
+		NUMS[3] = DS1EVEN;
+		NUMS[4] = DS2ODD;
+		NUMS[5] = DS2EVEN;
+		NUMS[6] = DS3ODD;
+		NUMS[7] = DS3EVEN;
+		NUMS[8] = DS4ODD;
+		NUMS[9] = DS4EVEN;
+		
 		DS0ODD.add(1);
 		DS0ODD.add(3);
 		DS0ODD.add(5);

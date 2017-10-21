@@ -18,7 +18,22 @@ public class TwelveNums {
 	public static final List<Integer> W10 = new ArrayList<Integer>();
 	public static final List<Integer> W11 = new ArrayList<Integer>();
 	public static final List<Integer> W12 = new ArrayList<Integer>();
+	@SuppressWarnings("unchecked")
+	public static final List<Integer>[] NUMS = new List[12];
 	static {
+		NUMS[0] = W1;
+		NUMS[1] = W2;
+		NUMS[2] = W3;
+		NUMS[3] = W4;
+		NUMS[4] = W5;
+		NUMS[5] = W6;
+		NUMS[6] = W7;
+		NUMS[7] = W8;
+		NUMS[8] = W9;
+		NUMS[9] = W10;
+		NUMS[10] = W11;
+		NUMS[11] = W12;
+		
 		W1.add(1);
 		W1.add(2);
 		W1.add(3);

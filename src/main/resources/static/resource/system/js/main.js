@@ -580,7 +580,7 @@ var categories = [
 				text: "位5"
 			},
 			{
-				value: "16, 17, 18, 19, 20",
+				value: "16, 17, 18,",
 				text: "位6"
 			},
 			{
@@ -1408,7 +1408,7 @@ function createJZTable(url) {
 	}));
 }
 
-function createCSList(url, sxlist, itemPropertyCallback) {
+function createCSList(url, sxlist, itemPropertyCallback, extraCols) {
 	var lastRed = false;
 	var lastGreen = false;
 	var count = 0;
@@ -1416,6 +1416,12 @@ function createCSList(url, sxlist, itemPropertyCallback) {
 	var cols = ["year", "phase"];
 	for(var i in sxlist) {
 		cols.push(sxlist[i]);
+	}
+	if(!extraCols) {
+		extraCols = [];
+	}
+	for(var i in extraCols) {
+		cols.push(extraCols[i]);
 	}
 	cols.push("avg");
 	cols.push("avg");
@@ -1474,7 +1480,7 @@ function createCSList(url, sxlist, itemPropertyCallback) {
 		})(i);
 	}
 	columnDefs.push({
-		aTargets: [sxlist.length + 3],
+		aTargets: [sxlist.length + 3 + extraCols.length],
 		fnCreatedCell: function(nTd, sData, item, iRow, iCol) {
 			var value = null;
 			if(item.id) {
@@ -1506,7 +1512,7 @@ function createCSList(url, sxlist, itemPropertyCallback) {
 		}
 	});
 	columnDefs.push({
-		aTargets: [sxlist.length + 4],
+		aTargets: [sxlist.length + 4 + extraCols.length],
 		fnCreatedCell: function(nTd, sData, item, iRow, iCol) {
 			var value = null;
 			if(item.id) {

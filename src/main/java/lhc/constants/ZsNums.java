@@ -14,7 +14,19 @@ public class ZsNums {
 	public static final List<Integer> FD7 = new ArrayList<Integer>();
 	public static final List<Integer> FD8 = new ArrayList<Integer>();
 	public static final List<Integer> FD9 = new ArrayList<Integer>();
+	@SuppressWarnings("unchecked")
+	public static final List<Integer>[] NUMS = new List[9];
 	static {
+		NUMS[0] = FD1;
+		NUMS[1] = FD2;
+		NUMS[2] = FD3;
+		NUMS[3] = FD4;
+		NUMS[4] = FD5;
+		NUMS[5] = FD6;
+		NUMS[6] = FD7;
+		NUMS[7] = FD8;
+		NUMS[8] = FD9;
+		
 		FD1.add(2);
 		FD1.add(3);
 		FD1.add(5);

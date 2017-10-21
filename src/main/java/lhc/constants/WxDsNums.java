@@ -17,7 +17,20 @@ public class WxDsNums {
 	public static final List<Integer> HUOEVEN = new ArrayList<Integer>();
 	public static final List<Integer> TUODD = new ArrayList<Integer>();
 	public static final List<Integer> TUEVEN = new ArrayList<Integer>();
+	@SuppressWarnings("unchecked")
+	public static final List<Integer>[] NUMS = new List[10];
 	static {
+		NUMS[0] = JINODD;
+		NUMS[1] = JINEVEN;
+		NUMS[2] = MUODD;
+		NUMS[3] = MUEVEN;
+		NUMS[4] = SHUIODD;
+		NUMS[5] = SHUIEVEN;
+		NUMS[6] = HUOODD;
+		NUMS[7] = HUOEVEN;
+		NUMS[8] = TUODD;
+		NUMS[9] = TUEVEN;
+		
 		JINODD.add(5);
 		JINODD.add(13);
 		JINODD.add(21);

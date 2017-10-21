@@ -4,7 +4,9 @@ import java.lang.reflect.Field;
 import java.lang.reflect.Method;
 import java.math.BigDecimal;
 import java.math.RoundingMode;
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Calendar;
 import java.util.Collections;
 import java.util.Comparator;
 import java.util.HashMap;
@@ -36,6 +38,7 @@ import lhc.constants.PdNums;
 import lhc.constants.QqNums;
 import lhc.constants.SlqNums;
 import lhc.constants.SwNums;
+import lhc.constants.SxNums;
 import lhc.constants.TwelveNums;
 import lhc.constants.WxDsNums;
 import lhc.constants.WxNums;
@@ -48,6 +51,7 @@ import lhc.domain.Bs9qYz;
 import lhc.domain.Bs9qZfYz;
 import lhc.domain.BsYz;
 import lhc.domain.BsZfYz;
+import lhc.domain.DsLrYz;
 import lhc.domain.DsYz;
 import lhc.domain.DsZfYz;
 import lhc.domain.HmDsYz;
@@ -96,13 +100,16 @@ import lhc.domain.WxdsZfYz;
 import lhc.domain.ZsLrYz;
 import lhc.domain.ZsYz;
 import lhc.domain.ZsZfYz;
+import lhc.dto.J0Yz;
 import lhc.dto.TmYzInfo;
 import lhc.dto.query.PageInfo;
 import lhc.dto.query.PageResult;
+import lhc.dto.query.QueryInfo;
 import lhc.enums.Color;
 import lhc.enums.SX;
 import lhc.repository.jpa.BaseYzRepository;
 import lhc.repository.jpa.Repositories;
+import lhc.util.DateUtil;
 
 @Service
 @Transactional
@@ -242,13 +249,13 @@ public class YZService {
 				result = repositories.sxyzRepository.findAll(request);
 				if (result != null && result.hasContent()) {
 					for (SxYz data : result.getContent()) {
-						SxZfYz zfYz = repositories.sxzfyzRepository.findByDate(data.getDate());
+						SxZfYz zfYz = repositories.sxzfyzRepository.findByYearAndPhase(data.getYear(), data.getPhase());
 						if (zfYz == null) {
 							zfYz = new SxZfYz();
 							zfYz.setYear(data.getYear());
 							zfYz.setPhase(data.getPhase());
-							zfYz.setDate(data.getDate());
 						}
+						zfYz.setDate(data.getDate());
 
 						Integer pos = null;
 						if (lastYZ != null) {
@@ -317,13 +324,13 @@ public class YZService {
 				Method sm = null;
 				if (result != null && result.hasContent()) {
 					for (KaiJiang data : result.getContent()) {
-						QwYz yz = repositories.qwyzRepository.findByDate(data.getDate());
+						QwYz yz = repositories.qwyzRepository.findByYearAndPhase(data.getYear(), data.getPhase());
 						if (yz == null) {
 							yz = new QwYz();
 							yz.setYear(data.getYear());
 							yz.setPhase(data.getPhase());
-							yz.setDate(data.getDate());
 						}
+						yz.setDate(data.getDate());
 
 						for (int i = 1; i < 7; i++) {
 							gm = ReflectionUtils.findMethod(KaiJiang.class, "getNum" + i);
@@ -689,13 +696,13 @@ public class YZService {
 				Method sm = null;
 				if (result != null && result.hasContent()) {
 					for (KaiJiang data : result.getContent()) {
-						SqYz yz = repositories.sqyzRepository.findByDate(data.getDate());
+						SqYz yz = repositories.sqyzRepository.findByYearAndPhase(data.getYear(), data.getPhase());
 						if (yz == null) {
 							yz = new SqYz();
 							yz.setYear(data.getYear());
 							yz.setPhase(data.getPhase());
-							yz.setDate(data.getDate());
 						}
+						yz.setDate(data.getDate());
 
 						SX sx = data.getSpecialSx();
 						sm = ReflectionUtils.findMethod(SqYz.class, "setW" + sx.getSector(), Integer.class);
@@ -763,13 +770,13 @@ public class YZService {
 				Method sm = null;
 				if (result != null && result.hasContent()) {
 					for (KaiJiang data : result.getContent()) {
-						SxDsYz yz = repositories.sxdsyzRepository.findByDate(data.getDate());
+						SxDsYz yz = repositories.sxdsyzRepository.findByYearAndPhase(data.getYear(), data.getPhase());
 						if (yz == null) {
 							yz = new SxDsYz();
 							yz.setYear(data.getYear());
 							yz.setPhase(data.getPhase());
-							yz.setDate(data.getDate());
 						}
+						yz.setDate(data.getDate());
 
 						SX sx = data.getSpecialSx();
 						boolean isSmall = sx.isSmall();
@@ -868,13 +875,13 @@ public class YZService {
 				Method sm = null;
 				if (result != null && result.hasContent()) {
 					for (KaiJiang data : result.getContent()) {
-						TmYz yz = repositories.tmyzRepository.findByDate(data.getDate());
+						TmYz yz = repositories.tmyzRepository.findByYearAndPhase(data.getYear(), data.getPhase());
 						if (yz == null) {
 							yz = new TmYz();
 							yz.setYear(data.getYear());
 							yz.setPhase(data.getPhase());
-							yz.setDate(data.getDate());
 						}
+						yz.setDate(data.getDate());
 
 						Integer num = data.getSpecialNum();
 						sm = ReflectionUtils.findMethod(TmYz.class, "setHm" + num, Integer.class);
@@ -950,13 +957,13 @@ public class YZService {
 				Method sm = null;
 				if (result != null && result.hasContent()) {
 					for (KaiJiang data : result.getContent()) {
-						PtYz yz = repositories.ptyzRepository.findByDate(data.getDate());
+						PtYz yz = repositories.ptyzRepository.findByYearAndPhase(data.getYear(), data.getPhase());
 						if (yz == null) {
 							yz = new PtYz();
 							yz.setYear(data.getYear());
 							yz.setPhase(data.getPhase());
-							yz.setDate(data.getDate());
 						}
+						yz.setDate(data.getDate());
 
 						Integer num = data.getSpecialNum();
 						sm = ReflectionUtils.findMethod(clazz, "setHm" + num, Integer.class);
@@ -1072,13 +1079,13 @@ public class YZService {
 			Method sm = null;
 			if (result != null && result.hasContent()) {
 				for (TmYz data : result.getContent()) {
-					T yz = repository.findByDate(data.getDate());
+					T yz = repository.findByYearAndPhase(data.getYear(), data.getPhase());
 					if (yz == null) {
 						yz = clazz.newInstance();
 						yz.setYear(data.getYear());
 						yz.setPhase(data.getPhase());
-						yz.setDate(data.getDate());
 					}
+					yz.setDate(data.getDate());
 
 					List<TmYzInfo> infos = getTMFDList(data, true);
 					Method m = ReflectionUtils.findMethod(clazz, "setTm", Integer.class);
@@ -1360,13 +1367,13 @@ public class YZService {
 				Method sm = null;
 				if (result != null && result.hasContent()) {
 					for (KaiJiang data : result.getContent()) {
-						HmDsYz yz = repositories.hmdsyzRepository.findByDate(data.getDate());
+						HmDsYz yz = repositories.hmdsyzRepository.findByYearAndPhase(data.getYear(), data.getPhase());
 						if (yz == null) {
 							yz = new HmDsYz();
 							yz.setYear(data.getYear());
 							yz.setPhase(data.getPhase());
-							yz.setDate(data.getDate());
 						}
+						yz.setDate(data.getDate());
 
 						Integer num = data.getSpecialNum();
 						boolean isSmallOdd = num < 26 && num % 2 != 0;
@@ -1507,6 +1514,17 @@ public class YZService {
 				logger.info("End of calDSYZ...");
 			}
 
+		}, new LrHandler() {
+
+			@Override
+			public int getSmall() {
+				return 3;
+			}
+
+			@Override
+			public int getLarge() {
+				return 5;
+			}
 		});
 	}
 
@@ -1598,13 +1616,13 @@ public class YZService {
 				result = yzRepository.findAll(request);
 				if (result != null && result.hasContent()) {
 					for (R data : result.getContent()) {
-						T zfYz = zfRepository.findByDate(data.getDate());
+						T zfYz = zfRepository.findByYearAndPhase(data.getYear(), data.getPhase());
 						if (zfYz == null) {
 							zfYz = yzzfClazz.newInstance();
 							zfYz.setYear(data.getYear());
 							zfYz.setPhase(data.getPhase());
-							zfYz.setDate(data.getDate());
 						}
+						zfYz.setDate(data.getDate());
 
 						Integer pos = handler.process(zfYz, lastZFYZ, data, lastYZ, yzClazz, yzzfClazz, zfLength);
 
@@ -1929,13 +1947,13 @@ public class YZService {
 				result = scanRepository.findAll(request);
 				if (result != null && result.hasContent()) {
 					for (R data : result.getContent()) {
-						T yz = repository.findByDate(data.getDate());
+						T yz = repository.findByYearAndPhase(data.getYear(), data.getPhase());
 						if (yz == null) {
 							yz = clazz.newInstance();
 							yz.setYear(data.getYear());
 							yz.setPhase(data.getPhase());
-							yz.setDate(data.getDate());
 						}
+						yz.setDate(data.getDate());
 
 						List<Integer> topValues = yzHandler.process(yz, lastYZ, data, lastData);
 						if (topValues != null) {
@@ -2073,14 +2091,14 @@ public class YZService {
 			for (T data : result.getList()) {
 				C yz = null;
 				if (repository != null) {
-					yz = repository.findByDate(data.getDate());
+					yz = repository.findByYearAndPhase(data.getYear(), data.getPhase());
 				}
 				if (yz == null) {
 					yz = clazz.newInstance();
 					yz.setYear(data.getYear());
 					yz.setPhase(data.getPhase());
-					yz.setDate(data.getDate());
 				}
+				yz.setDate(data.getDate());
 
 				for (String fd : fds) {
 					Method sm = ReflectionUtils.findMethod(clazz, "set" + fd, Integer.class);
@@ -2355,6 +2373,18 @@ public class YZService {
 		});
 
 	}
+	
+	@Async
+	public Future<Exception> calDSLRYZ() {
+		return calLRYZ(DsLrYz.class, repositories.dslrYzRepository, repositories.dsyzRepository, new CommonHandler() {
+			
+			@Override
+			public void process() {
+				logger.info("End of calDSLRYZ...");
+			}
+		});
+		
+	}
 
 	@Async
 	public Future<Exception> calLHLRYZ() {
@@ -2403,6 +2433,365 @@ public class YZService {
 		});
 
 	}
+
+	public PageResult<J0Yz> getJ0List(QueryInfo<J0Yz> queryInfo) throws Exception {
+		PageResult<J0Yz> result = repositories.commonDao.getTop0List(queryInfo);
+		for (J0Yz yz : result.getList()) {
+			calSxForJ0(yz);
+			calDsForJ0(yz);
+			calSwForJ0(yz);
+			calMwForJ0(yz);
+			calLhForJ0(yz);
+			calBsForJ0(yz);
+			calZsForJ0(yz);
+			calWxForJ0(yz);
+			calWxdsForJ0(yz);
+			calPdForJ0(yz);
+			calFdForJ0(yz);
+			calQqForJ0(yz);
+			calTwelveForJ0(yz);
+			calSlqForJ0(yz);
+		}
+		return result;
+	}
+
+	private void calSxForJ0(J0Yz yz) throws Exception {
+		SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd");
+		Calendar c = Calendar.getInstance();
+		SxYz sxYz = repositories.sxyzRepository.findByYearAndPhase(yz.getYear(), yz.getPhase());
+		c.setTime(sdf.parse(sxYz.getDate()));
+		SX bmnSX = DateUtil.getYear(c.get(Calendar.YEAR));
+		yz.setSxNums(getSxNums(bmnSX, sxYz.getCurrentSx()));
+
+		SxZfYz2 sxzfYz = repositories.sxzfyz2Repository.findByYearAndPhase(yz.getYear(), yz.getPhase());
+		int pos = sxYz.getCurrentSx().getPos() + sxzfYz.getCurrentPos();
+		if (pos >= SX.values().length) {
+			pos = pos - SX.values().length;
+		}
+		SX nextSX = SX.seq()[pos];
+		yz.setSxzfNums(getSxNums(bmnSX, nextSX));
+	}
+	
+	private List<Integer> getSxNums(SX bmnSX, SX sx) {
+		int delta = sx.getPos() - bmnSX.getPos();
+		if (delta < 0) {
+			delta = 12 + delta;
+		}
+		return SxNums.NUMS[delta];
+	}
+
+	private void calDsForJ0(J0Yz yz) throws Exception {
+		DsYz dsYz = repositories.dsyzRepository.findByYearAndPhase(yz.getYear(), yz.getPhase());
+		int currentPos = 0;
+		for (int i = 0; i < 5; i++) {
+			Method m = DsYz.class.getDeclaredMethod("getDs" + i + "Odd");
+			if ((Integer) m.invoke(dsYz) == 0) {
+				Field f = DsNums.class.getDeclaredField("DS" + i + "ODD");
+				yz.setDsNums((List<Integer>) f.get(null));
+				break;
+			}
+			currentPos++;
+			m = DsYz.class.getDeclaredMethod("getDs" + i + "Even");
+			if ((Integer) m.invoke(dsYz) == 0) {
+				Field f = DsNums.class.getDeclaredField("DS" + i + "EVEN");
+				yz.setDsNums((List<Integer>) f.get(null));
+				break;
+			}
+			currentPos++;
+		}
+
+		DsZfYz dszfYz = repositories.dszfyzRepository.findByYearAndPhase(yz.getYear(), yz.getPhase());
+		int pos = currentPos + dszfYz.getCurrentPos();
+		if (pos >= DsNums.FDS.length) {
+			pos = pos - DsNums.FDS.length;
+		}
+		yz.setDszfNums(DsNums.NUMS[pos]);
+	}
+
+	private void calSwForJ0(J0Yz yz) throws Exception {
+		SwYz swYz = repositories.swyzRepository.findByYearAndPhase(yz.getYear(), yz.getPhase());
+		int currentPos = 0;
+		for (int i = 0; i < 5; i++) {
+			currentPos = i;
+			Method m = SwYz.class.getDeclaredMethod("getW" + i);
+			if ((Integer) m.invoke(swYz) == 0) {
+				Field f = SwNums.class.getDeclaredField("W" + i);
+				yz.setSwNums((List<Integer>) f.get(null));
+				break;
+			}
+		}
+
+		SwZfYz swzfYz = repositories.swzfyzRepository.findByYearAndPhase(yz.getYear(), yz.getPhase());
+		int pos = currentPos + swzfYz.getCurrentPos();
+		if (pos >= SwNums.FDS.length) {
+			pos = pos - SwNums.FDS.length;
+		}
+		yz.setSwzfNums(SwNums.NUMS[pos]);
+	}
+
+	private void calMwForJ0(J0Yz yz) throws Exception {
+		MwYz mwYz = repositories.mwyzRepository.findByYearAndPhase(yz.getYear(), yz.getPhase());
+		int currentPos = 0;
+		for (int i = 0; i < 10; i++) {
+			currentPos = i;
+			Method m = MwYz.class.getDeclaredMethod("getW" + i);
+			if ((Integer) m.invoke(mwYz) == 0) {
+				Field f = MwNums.class.getDeclaredField("W" + i);
+				yz.setMwNums((List<Integer>) f.get(null));
+				break;
+			}
+		}
+
+		MwZfYz mwzfYz = repositories.mwzfyzRepository.findByYearAndPhase(yz.getYear(), yz.getPhase());
+		int pos = currentPos + mwzfYz.getCurrentPos();
+		if (pos >= MwNums.FDS.length) {
+			pos = pos - MwNums.FDS.length;
+		}
+		yz.setMwzfNums(MwNums.NUMS[pos]);
+	}
+
+	private void calLhForJ0(J0Yz yz) throws Exception {
+		LhYz lhYz = repositories.lhyzRepository.findByYearAndPhase(yz.getYear(), yz.getPhase());
+		int currentPos = 0;
+		for (int i = 0; i < 10; i++) {
+			currentPos = i;
+			Method m = LhYz.class.getDeclaredMethod("getW" + i);
+			if ((Integer) m.invoke(lhYz) == 0) {
+				Field f = LhNums.class.getDeclaredField("W" + i);
+				yz.setLhNums((List<Integer>) f.get(null));
+				break;
+			}
+		}
+
+		LhZfYz lhzfYz = repositories.lhzfyzRepository.findByYearAndPhase(yz.getYear(), yz.getPhase());
+		int pos = currentPos + lhzfYz.getCurrentPos();
+		if (pos >= LhNums.FDS.length) {
+			pos = pos - LhNums.FDS.length;
+		}
+		yz.setLhzfNums(LhNums.NUMS[pos]);
+	}
+
+	private void calBsForJ0(J0Yz yz) throws Exception {
+		Bs9qYz bsYz = repositories.bs9qyzRepository.findByYearAndPhase(yz.getYear(), yz.getPhase());
+		String[] colors = new String[] { "Red", "Blue", "Green" };
+		int currentPos = 0;
+		for (String color : colors) {
+			for (int i = 1; i < 4; i++) {
+				Method m = Bs9qYz.class.getDeclaredMethod("get" + color + i);
+				if ((Integer) m.invoke(bsYz) == 0) {
+					Field f = Bs9qNums.class.getDeclaredField(color.toUpperCase() + i);
+					yz.setBsNums((List<Integer>) f.get(null));
+					break;
+				}
+				currentPos++;
+			}
+		}
+
+		Bs9qZfYz bszfYz = repositories.bs9qzfyzRepository.findByYearAndPhase(yz.getYear(), yz.getPhase());
+		int pos = currentPos + bszfYz.getCurrentPos();
+		if (pos >= Bs9qNums.FDS.length) {
+			pos = pos - Bs9qNums.FDS.length;
+		}
+		yz.setBszfNums(Bs9qNums.NUMS[pos]);
+	}
+
+	private void calZsForJ0(J0Yz yz) throws Exception {
+		ZsYz zsYz = repositories.zsyzRepository.findByYearAndPhase(yz.getYear(), yz.getPhase());
+		int currentPos = 0;
+		for (int i = 1; i < 10; i++) {
+			currentPos = i - 1;
+			Method m = ZsYz.class.getDeclaredMethod("getFd" + i);
+			if ((Integer) m.invoke(zsYz) == 0) {
+				Field f = ZsNums.class.getDeclaredField("FD" + i);
+				yz.setZsNums((List<Integer>) f.get(null));
+				break;
+			}
+		}
+
+		ZsZfYz zszfYz = repositories.zszfyzRepository.findByYearAndPhase(yz.getYear(), yz.getPhase());
+		int pos = currentPos + zszfYz.getCurrentPos();
+		if (pos >= ZsNums.FDS.length) {
+			pos = pos - ZsNums.FDS.length;
+		}
+		yz.setZszfNums(ZsNums.NUMS[pos]);
+	}
+
+	private void calWxForJ0(J0Yz yz) throws Exception {
+		WxYz wxYz = repositories.wxyzRepository.findByYearAndPhase(yz.getYear(), yz.getPhase());
+		int currentPos = 0;
+		String[] arr = new String[] { "Jin", "Mu", "Shui", "Huo", "Tu" };
+		for (int i = 0; i < arr.length; i++) {
+			currentPos = i;
+			Method m = WxYz.class.getDeclaredMethod("get" + arr[i]);
+			if ((Integer) m.invoke(wxYz) == 0) {
+				Field f = WxNums.class.getDeclaredField(arr[i].toUpperCase());
+				yz.setWxNums((List<Integer>) f.get(null));
+				break;
+			}
+		}
+
+		WxZfYz wxzfYz = repositories.wxzfyzRepository.findByYearAndPhase(yz.getYear(), yz.getPhase());
+		int pos = currentPos + wxzfYz.getCurrentPos();
+		if (pos >= WxNums.FDS.length) {
+			pos = pos - WxNums.FDS.length;
+		}
+		yz.setWxzfNums(WxNums.NUMS[pos]);
+	}
+
+	private void calWxdsForJ0(J0Yz yz) throws Exception {
+		WxdsYz wxdsYz = repositories.wxdsyzRepository.findByYearAndPhase(yz.getYear(), yz.getPhase());
+		int currentPos = 0;
+		String[] arr = new String[] { "JinOdd", "JinEven", "MuOdd", "MuEven", "ShuiOdd", "ShuiEven", "HuoOdd", "HuoEven",
+				"TuOdd", "TuEven" };
+		for (int i = 0; i < arr.length; i++) {
+			currentPos = i;
+			Method m = WxdsYz.class.getDeclaredMethod("get" + arr[i]);
+			if ((Integer) m.invoke(wxdsYz) == 0) {
+				Field f = WxDsNums.class.getDeclaredField(arr[i].toUpperCase());
+				yz.setWxdsNums((List<Integer>) f.get(null));
+				break;
+			}
+		}
+
+		WxdsZfYz wxdszfYz = repositories.wxdszfyzRepository.findByYearAndPhase(yz.getYear(), yz.getPhase());
+		int pos = currentPos + wxdszfYz.getCurrentPos();
+		if (pos >= WxDsNums.FDS.length) {
+			pos = pos - WxDsNums.FDS.length;
+		}
+		yz.setWxdszfNums(WxDsNums.NUMS[pos]);
+	}
+
+	private void calPdForJ0(J0Yz yz) throws Exception {
+		PdYz yzData = repositories.pdyzRepository.findByYearAndPhase(yz.getYear(), yz.getPhase());
+		int currentPos = 0;
+		for (int i = 1; i < 13; i++) {
+			currentPos = i - 1;
+			Method m = PdYz.class.getDeclaredMethod("getW" + i);
+			if ((Integer) m.invoke(yzData) == 0) {
+				Field f = PdNums.class.getDeclaredField("W" + i);
+				yz.setPdNums((List<Integer>) f.get(null));
+				break;
+			}
+		}
+
+		PdZfYz zfData = repositories.pdzfyzRepository.findByYearAndPhase(yz.getYear(), yz.getPhase());
+		int pos = currentPos + zfData.getCurrentPos();
+		if (pos >= PdNums.FDS.length) {
+			pos = pos - PdNums.FDS.length;
+		}
+		yz.setPdzfNums(PdNums.NUMS[pos]);
+	}
+
+	private void calFdForJ0(J0Yz yz) throws Exception {
+		TmYz tmData = repositories.tmyzRepository.findByYearAndPhase(yz.getYear(), yz.getPhase());
+		List<TmYzInfo> infos = getTMFDList(tmData, true);
+		int currentPos = 1;
+		for (TmYzInfo info : infos) {
+			if (info.isTm()) {
+				break;
+			}
+			currentPos++;
+		}
+		int range = 4;
+		int length = 12;
+		if (currentPos % range == 0) {
+			currentPos = currentPos / range;
+		} else {
+			currentPos = currentPos / range + 1;
+		}
+		int maxLength = 4;
+		if (currentPos >= length) {
+			currentPos = length;
+			maxLength = 5;
+		}
+		currentPos = currentPos - 1;
+		int startPos = currentPos * range;
+		List<Integer> nums = new ArrayList<Integer>();
+		for (int i = startPos; i < startPos + maxLength; i++) {
+			nums.add(infos.get(i).getNum());
+		}
+		yz.setFdNums(nums);
+
+		Tm12FdZfYz zfData = repositories.tm12fdzfyzRepository.findByYearAndPhase(yz.getYear(), yz.getPhase());
+		int pos = currentPos + zfData.getCurrentPos();
+		if (pos >= 12) {
+			pos = pos - 12;
+		}
+		maxLength = 4;
+		if (pos == 11) {
+			maxLength = 5;
+		}
+		startPos = pos * range;
+		nums = new ArrayList<Integer>();
+		for (int i = startPos; i < startPos + maxLength; i++) {
+			nums.add(infos.get(i).getNum());
+		}
+		yz.setFdzfNums(nums);
+	}
+
+	private void calQqForJ0(J0Yz yz) throws Exception {
+		QqYz yzData = repositories.qqyzRepository.findByYearAndPhase(yz.getYear(), yz.getPhase());
+		int currentPos = 0;
+		for (int i = 1; i < 8; i++) {
+			currentPos = i - 1;
+			Method m = QqYz.class.getDeclaredMethod("getW" + i);
+			if ((Integer) m.invoke(yzData) == 0) {
+				Field f = QqNums.class.getDeclaredField("W" + i);
+				yz.setQqNums((List<Integer>) f.get(null));
+				break;
+			}
+		}
+
+		QqZfYz zfData = repositories.qqzfyzRepository.findByYearAndPhase(yz.getYear(), yz.getPhase());
+		int pos = currentPos + zfData.getCurrentPos();
+		if (pos >= QqNums.FDS.length) {
+			pos = pos - QqNums.FDS.length;
+		}
+		yz.setQqzfNums(QqNums.NUMS[pos]);
+	}
+
+	private void calTwelveForJ0(J0Yz yz) throws Exception {
+		TwelveYz yzData = repositories.twelveyzRepository.findByYearAndPhase(yz.getYear(), yz.getPhase());
+		int currentPos = 0;
+		for (int i = 1; i < 13; i++) {
+			currentPos = i - 1;
+			Method m = TwelveYz.class.getDeclaredMethod("getW" + i);
+			if ((Integer) m.invoke(yzData) == 0) {
+				Field f = TwelveNums.class.getDeclaredField("W" + i);
+				yz.setTwelveNums((List<Integer>) f.get(null));
+				break;
+			}
+		}
+
+		TwelveZfYz zfData = repositories.twelvezfyzRepository.findByYearAndPhase(yz.getYear(), yz.getPhase());
+		int pos = currentPos + zfData.getCurrentPos();
+		if (pos >= TwelveNums.FDS.length) {
+			pos = pos - TwelveNums.FDS.length;
+		}
+		yz.setTwelvezfNums(TwelveNums.NUMS[pos]);
+	}
+
+	private void calSlqForJ0(J0Yz yz) throws Exception {
+		SlqYz yzData = repositories.slqyzRepository.findByYearAndPhase(yz.getYear(), yz.getPhase());
+		int currentPos = 0;
+		for (int i = 1; i < 17; i++) {
+			currentPos = i - 1;
+			Method m = SlqYz.class.getDeclaredMethod("getW" + i);
+			if ((Integer) m.invoke(yzData) == 0) {
+				Field f = SlqNums.class.getDeclaredField("W" + i);
+				yz.setSlqNums((List<Integer>) f.get(null));
+				break;
+			}
+		}
+
+		SlqZfYz zfData = repositories.slqzfyzRepository.findByYearAndPhase(yz.getYear(), yz.getPhase());
+		int pos = currentPos + zfData.getCurrentPos();
+		if (pos >= SlqNums.FDS.length) {
+			pos = pos - SlqNums.FDS.length;
+		}
+		yz.setSlqzfNums(SlqNums.NUMS[pos]);
+	}
+
 }
 
 class LrInfo {

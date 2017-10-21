@@ -3,6 +3,7 @@ package lhc.domain;
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.Table;
+import javax.persistence.Transient;
 
 import lhc.enums.SX;
 
@@ -23,6 +24,47 @@ public class SxCsYz extends BaseCsYz {
 	private Integer Gou;
 	private Integer Zhu;
 	private SX currentSx;
+
+	@Transient
+	private Integer max;
+	@Transient
+	private Integer maxYz;
+	@Transient
+	private Integer min;
+	@Transient
+	private Integer minYz;
+
+	public Integer getMax() {
+		return max;
+	}
+
+	public void setMax(Integer max) {
+		this.max = max;
+	}
+
+	public Integer getMaxYz() {
+		return maxYz;
+	}
+
+	public void setMaxYz(Integer maxYz) {
+		this.maxYz = maxYz;
+	}
+
+	public Integer getMin() {
+		return min;
+	}
+
+	public void setMin(Integer min) {
+		this.min = min;
+	}
+
+	public Integer getMinYz() {
+		return minYz;
+	}
+
+	public void setMinYz(Integer minYz) {
+		this.minYz = minYz;
+	}
 
 	public SX getCurrentSx() {
 		return currentSx;

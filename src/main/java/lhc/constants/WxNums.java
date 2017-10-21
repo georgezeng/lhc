@@ -11,7 +11,15 @@ public class WxNums {
 	public static final List<Integer> SHUI = new ArrayList<Integer>();
 	public static final List<Integer> HUO = new ArrayList<Integer>();
 	public static final List<Integer> TU = new ArrayList<Integer>();
+	@SuppressWarnings("unchecked")
+	public static final List<Integer>[] NUMS = new List[5];
 	static {
+		NUMS[0] = JIN;
+		NUMS[1] = MU;
+		NUMS[2] = SHUI;
+		NUMS[3] = HUO;
+		NUMS[4] = TU;
+		
 		JIN.add(5);
 		JIN.add(6);
 		JIN.add(13);

@@ -36,8 +36,18 @@ public class CommonDao {
 			}
 			pageRequest = queryInfo.getPageInfo().toPageRequest();
 		}
+		List<Object> args = new ArrayList<Object>();
 		StringBuilder condition = new StringBuilder();
-		condition.append("from sx_yz sx").append("\n");
+		condition.append("from").append("\n");
+		if (queryInfo.getObject() != null) {
+			condition.append("(select yp.date from sx_yz yp").append("\n");
+			condition.append("where yp.year = ?").append("\n");
+			condition.append("and yp.phase = ?) t,").append("\n");
+			J0Yz yz = queryInfo.getObject();
+			args.add(yz.getYear());
+			args.add(yz.getPhase());
+		}
+		condition.append("sx_yz sx").append("\n");
 		condition.append("left join sx_zf_yz2 sxzf on sx.date=sxzf.date").append("\n");
 		condition.append("left join ds_yz ds on sx.date=ds.date").append("\n");
 		condition.append("left join ds_zf_yz dszf on sx.date=dszf.date").append("\n");
@@ -65,13 +75,9 @@ public class CommonDao {
 		condition.append("left join twelve_zf_yz twelvezf on sx.date=twelvezf.date").append("\n");
 		condition.append("left join slq_yz slq on sx.date=slq.date").append("\n");
 		condition.append("left join slq_zf_yz slqzf on sx.date=slqzf.date").append("\n");
-		List<Object> args = new ArrayList<Object>();
+		condition.append("where 1=1").append("\n");
 		if (queryInfo.getObject() != null) {
-			condition.append("where sx.year <= ?").append("\n");
-			condition.append("and sx.phase <= ?").append("\n");
-			J0Yz yz = queryInfo.getObject();
-			args.add(yz.getYear());
-			args.add(yz.getPhase());
+			condition.append("and sx.date<=t.date").append("\n");
 		}
 		StringBuilder countSql = new StringBuilder("select count(sx.date)");
 		countSql.append("\n").append(condition);

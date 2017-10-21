@@ -11,6 +11,7 @@ import java.util.List;
 import java.util.Map;
 import java.util.concurrent.Future;
 
+import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
 import org.slf4j.Logger;
@@ -32,6 +33,7 @@ import lhc.domain.Bs9qYz;
 import lhc.domain.Bs9qZfYz;
 import lhc.domain.BsYz;
 import lhc.domain.BsZfYz;
+import lhc.domain.DsLrYz;
 import lhc.domain.DsYz;
 import lhc.domain.DsZfYz;
 import lhc.domain.HmDsYz;
@@ -81,14 +83,15 @@ import lhc.domain.ZsZfYz;
 import lhc.dto.BaseResult;
 import lhc.dto.DownloadDTO;
 import lhc.dto.DownloadPrepareTZ;
+import lhc.dto.J0Yz;
 import lhc.dto.PmDTO;
 import lhc.dto.PmNum;
 import lhc.dto.SpecialNum;
 import lhc.dto.TmYzInfo;
-import lhc.dto.J0Yz;
 import lhc.dto.query.PageInfo;
 import lhc.dto.query.PageResult;
 import lhc.dto.query.QueryInfo;
+import lhc.enums.SX;
 import lhc.repository.jpa.BaseYzDao;
 import lhc.repository.jpa.Repositories;
 import lhc.service.ParallelYzServiceWrapper;
@@ -208,6 +211,7 @@ public class YZController {
 
 		futures.clear();
 		futures.add(yzService.calSXLRYZ());
+		futures.add(yzService.calDSLRYZ());
 		futures.add(yzService.calMWLRYZ());
 		futures.add(yzService.calLHLRYZ());
 		futures.add(yzService.calTwelveLRYZ());
@@ -228,6 +232,7 @@ public class YZController {
 		futures.clear();
 		futures.add(yzService.calTM12FDLRYZ());
 		futures.add(parallelYzService.calAvg(repositories.sxlryzRepository));
+		futures.add(parallelYzService.calAvg(repositories.dslrYzRepository));
 		futures.add(parallelYzService.calAvg(repositories.mwlryzRepository));
 		futures.add(parallelYzService.calAvg(repositories.twelvelryzRepository));
 		futures.add(parallelYzService.calAvg(repositories.slqlryzRepository));
@@ -319,6 +324,12 @@ public class YZController {
 	@RequestMapping("/listMWLRYZ")
 	public BaseResult listMWLRYZ(@RequestBody QueryInfo<MwLrYz> queryInfo) throws Exception {
 		PageResult<MwLrYz> result = repositories.mwlrYzDao.query(queryInfo);
+		return new BaseResult(result);
+	}
+	
+	@RequestMapping("/listDSLRYZ")
+	public BaseResult listDSLRYZ(@RequestBody QueryInfo<DsLrYz> queryInfo) throws Exception {
+		PageResult<DsLrYz> result = repositories.dslrYzDao.query(queryInfo);
 		return new BaseResult(result);
 	}
 
@@ -860,7 +871,33 @@ public class YZController {
 		PageResult<SxYz> sxResult = repositories.sxYzDao.query(queryInfo);
 		Map<String, Object> map = yzService.calSXCSYZ(queryInfo.getPageInfo(), sxResult, null, null);
 		PageResult<SxCsYz> result = (PageResult<SxCsYz>) map.get("result");
+		SX[] sxlist = SX.seq();
 		if (result != null && result.getTotal() > 0) {
+			for (SxCsYz data : result.getList()) {
+				SX maxSX = null;
+				SX minSX = null;
+				Integer max = 0;
+				Integer min = Integer.MAX_VALUE;
+				for (SX sx : sxlist) {
+					Method m = ReflectionUtils.findMethod(SxCsYz.class, "get" + sx.name());
+					Integer value = (Integer) m.invoke(data);
+					if (value < min) {
+						min = value;
+						minSX = sx;
+					}
+					if (value > max) {
+						max = value;
+						maxSX = sx;
+					}
+				}
+				SxYz yz = repositories.sxyzRepository.findByYearAndPhase(data.getYear(), data.getPhase());
+				Method m = ReflectionUtils.findMethod(SxYz.class, "get" + minSX.name());
+				data.setMinYz((Integer) m.invoke(yz));
+				m = ReflectionUtils.findMethod(SxYz.class, "get" + maxSX.name());
+				data.setMaxYz((Integer) m.invoke(yz));
+				data.setMin(min);
+				data.setMax(max);
+			}
 			result.getList().add(new SxCsYz());
 		}
 		return new BaseResult(result);
@@ -879,7 +916,7 @@ public class YZController {
 
 	@RequestMapping("/listAllJ0")
 	public BaseResult listAllJ0(@RequestBody QueryInfo<J0Yz> queryInfo) throws Exception {
-		PageResult<J0Yz> result = repositories.commonDao.getTop0List(queryInfo);
+		PageResult<J0Yz> result = yzService.getJ0List(queryInfo);
 		if (result != null && result.getTotal() > 0) {
 			result.getList().add(new J0Yz());
 		}
@@ -1576,25 +1613,24 @@ public class YZController {
 	}
 
 	@RequestMapping("/downloadTZXBW")
-	public String downloadTZXBW(DownloadPrepareTZ dto, HttpServletResponse response) throws Exception {
+	public String downloadTZXBW(HttpServletRequest request, HttpServletResponse response) throws Exception {
 		response.setContentType("text/csv;charset=gbk;");
-		response.addHeader("Content-Disposition", "attachment;filename=tzdbw.csv");
+		response.addHeader("Content-Disposition", "attachment;filename=tzxbw.csv");
 		Writer writer = response.getWriter();
-		for (int i = 1; i < 37; i++) {
-			// Method m1 = ReflectionUtils.findMethod(DownloadPrepareTZ.class,
-			// "getCategories" + i);
-			Method m2 = ReflectionUtils.findMethod(DownloadPrepareTZ.class, "getHms" + i);
-			Method m3 = ReflectionUtils.findMethod(DownloadPrepareTZ.class, "getNonHms" + i);
-			// writer.append((String) m1.invoke(dto)).append("\n");
-			writer.append((String) m2.invoke(dto)).append("\n");
-			writer.append("反转号码").append("\n");
-			writer.append((String) m3.invoke(dto)).append("\n");
-			writer.append("\n");
+		writer.append("组合").append(", ");
+		writer.append("反转号码").append("\n");
+		Integer totalResult = Integer.valueOf(request.getParameter("totalResult"));
+		String[] fds = new String[] { "ABCD", "ABCH", "ABGD", "AFCD", "EBCD", "EFGH", "EFGD", "EFCH", "EBGH", "AFGH" };
+		for (int i = 0; i < totalResult; i++) {
+			for (int j = 0; j < fds.length; j++) {
+				writer.append(request.getParameter("fd_" + fds[j] + "_name_" + i)).append(", ");
+				writer.append(request.getParameter("fd_" + fds[j] + "_value_" + i)).append("\n");
+			}
+			writer.append("合计").append(", ");
+			writer.append(request.getParameter("fdlist_" + i)).append("\n");
 		}
-		writer.append("汇总号码").append("\n");
-		writer.append(dto.getAllHms()).append("\n");
-		writer.append("汇总反转号码").append("\n");
-		writer.append(dto.getAllNonHms()).append("\n");
+		writer.append("总计").append(", ");
+		writer.append(request.getParameter("totalList")).append("\n");
 		return null;
 	}
 
@@ -1714,6 +1750,11 @@ public class YZController {
 	@RequestMapping("/downloadMWLRYZ")
 	public String downloadMWLRYZ(DownloadDTO dto, HttpServletResponse response) throws Exception {
 		return downloadYZ("mwlryz", MwLrYz.class, dto, response, repositories.mwlrYzDao, "位置", "Pos");
+	}
+	
+	@RequestMapping("/downloadDSLRYZ")
+	public String downloadDSLRYZ(DownloadDTO dto, HttpServletResponse response) throws Exception {
+		return downloadYZ("dslryz", DsLrYz.class, dto, response, repositories.dslrYzDao, "位置", "Pos");
 	}
 
 	@RequestMapping("/downloadLHLRYZ")

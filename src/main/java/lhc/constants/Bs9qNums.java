@@ -15,7 +15,19 @@ public class Bs9qNums {
 	public static final List<Integer> GREEN1 = new ArrayList<Integer>();
 	public static final List<Integer> GREEN2 = new ArrayList<Integer>();
 	public static final List<Integer> GREEN3 = new ArrayList<Integer>();
+	@SuppressWarnings("unchecked")
+	public static final List<Integer>[] NUMS = new List[9];
 	static {
+		NUMS[0] = RED1;
+		NUMS[1] = RED2;
+		NUMS[2] = RED3;
+		NUMS[3] = BLUE1;
+		NUMS[4] = BLUE2;
+		NUMS[5] = BLUE3;
+		NUMS[6] = GREEN1;
+		NUMS[7] = GREEN2;
+		NUMS[8] = GREEN3;
+		
 		RED1.add(1);
 		RED1.add(2);
 		RED1.add(7);

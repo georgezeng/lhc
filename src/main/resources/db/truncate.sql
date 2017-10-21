@@ -1,6 +1,7 @@
 TRUNCATE table `bs_yz`;
 TRUNCATE table `bs_zf_yz`;
 TRUNCATE table `ds_yz`;
+TRUNCATE table `ds_lr_yz`;
 TRUNCATE table `ds_zf_yz`;
 TRUNCATE table `lh_lr_yz`;
 TRUNCATE table `lh_yz`;
@@ -46,3 +47,4 @@ TRUNCATE table `bs9q_zf_yz`;
 TRUNCATE table `wxds_lr_yz`;
 TRUNCATE table `wxds_yz`;
 TRUNCATE table `wxds_zf_yz`;
+TRUNCATE table `hm_ds_yz`;

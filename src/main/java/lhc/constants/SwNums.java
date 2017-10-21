@@ -10,7 +10,16 @@ public class SwNums {
 	public static final List<Integer> W2 = new ArrayList<Integer>();
 	public static final List<Integer> W3 = new ArrayList<Integer>();
 	public static final List<Integer> W4 = new ArrayList<Integer>();
+	
+	@SuppressWarnings("unchecked")
+	public static final List<Integer>[] NUMS = new List[5];
 	static {
+		NUMS[0] = W0;
+		NUMS[1] = W1;
+		NUMS[2] = W2;
+		NUMS[3] = W3;
+		NUMS[4] = W4;
+		
 		W0.add(1);
 		W0.add(2);
 		W0.add(3);

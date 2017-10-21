@@ -1,5 +1,6 @@
 $(document).ready(function() {
 	var count = 0;
+	var lastHms = null;
 	
 	$("#columns").combobox();
 	
@@ -14,6 +15,12 @@ $(document).ready(function() {
 			} else {
 				td.attr("status", "hide");
 				td.hide();
+			}
+			if($(this).children().eq(31).text() != "反转") {
+				if(lastHms) {
+					$(this).children().eq(31).text(lastHms);
+				}
+				lastHms = countReverseNums($(this).children().eq(31));
 			}
 		});
 		countNumber();
@@ -41,6 +48,37 @@ $(document).ready(function() {
 		$("#counter").text(count);
 	}
 	
+	function countReverseNums(nTd) {
+		var allHms = [];
+		nTd.parent("tr").find("td[status='show']").each(function() {
+			allHms = allHms.concat($(this).attr("hms").split(/,\s*/));
+		});
+		var reverseNums = [];
+		for(var i = 1; i < 50; i++) {
+			if(!isInArr(allHms, i)) {
+				reverseNums.push(i);
+			}
+		}
+		return reverseNums.join(", ");
+	}
+	
+	var numlist = [
+		"sxNums", "sxzfNums",
+		"dsNums", "dszfNums",
+		"swNums", "swzfNums",
+		"mwNums", "mwzfNums",
+		"lhNums", "lhzfNums",
+		"bsNums", "bszfNums",
+		"zsNums", "zszfNums",
+		"wxNums", "wxzfNums",
+		"wxdsNums", "wxdszfNums",
+		"pdNums", "pdzfNums",
+		"fdNums", "fdzfNums",
+		"qqNums", "qqzfNums",
+		"twelveNums", "twelvezfNums",
+		"slqNums", "slqzfNums",
+	];
+	
 	var sxlist = [
 		"sxj0", "sxzfj0",
 		"dsj0", "dszfj0",
@@ -61,6 +99,7 @@ $(document).ready(function() {
 	for(var i in sxlist) {
 		cols.push(sxlist[i]);
 	}
+	cols.push("phase");
 	cols.push("phase");
 	var columns = [];
 	for(var i in cols) {
@@ -97,7 +136,8 @@ $(document).ready(function() {
 						} else {
 							$(nTd).css("backgroundColor", "#ffc")
 						}
-					}
+						$(nTd).attr("hms", item[numlist[index-2]].join(","));
+					} 
 					var th = $("#dataTable").find("th").eq(index);
 					if(th.attr("status") == "hide") {
 						$(nTd).attr("status", "hide");
@@ -133,12 +173,28 @@ $(document).ready(function() {
 			$(nTd).text(value);
 		}
 	});
+	columnDefs.push({
+		aTargets: [31],
+		fnCreatedCell: function(nTd, sData, item, iRow, iCol) {
+			if(lastHms) {
+				$(nTd).text(lastHms);
+			} else {
+				$(nTd).text("");
+			}
+			if(item.date) {
+				lastHms = countReverseNums($(nTd));
+			} else {
+				lastHms = null;
+			}
+		}
+	});
 	datatables.push(createDataTable({
 		id : "dataTable",
 		url : "/mvc/yz/listAllJ0",
 		bFilter: false,
 		data : function(queryInfo, infoSettings) {
 			count = 0;
+			lastHms = null;
 			queryInfo.object = {};
 			queryInfo.object.year = parseInt($("#years").val());
 			queryInfo.object.phase = parseInt($("#phases").val());

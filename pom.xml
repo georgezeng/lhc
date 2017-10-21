@@ -27,10 +27,10 @@
 			<artifactId>spring-boot-devtools</artifactId>
 			<optional>true</optional>
 		</dependency>
-		<!-- <dependency> <groupId>org.springframework.boot</groupId> <artifactId>spring-boot-starter-data-redis</artifactId> 
-			</dependency> <dependency> <groupId>org.springframework.boot</groupId> <artifactId>spring-boot-starter-security</artifactId> 
-			</dependency> <dependency> <groupId>org.springframework.session</groupId> 
-			<artifactId>spring-session</artifactId> </dependency> -->
+		<dependency>
+			<groupId>org.springframework.boot</groupId>
+			<artifactId>spring-boot-starter-security</artifactId>
+		</dependency>
 		<dependency>
 			<groupId>org.springframework.boot</groupId>
 			<artifactId>spring-boot-starter-web</artifactId>
@@ -88,20 +88,6 @@
 				<artifactId>maven-surefire-plugin</artifactId>
 				<configuration>
 					<skipTests>true</skipTests>
-				</configuration>
-			</plugin>
-			
-			<plugin>
-				<groupId>org.liquibase</groupId>
-				<artifactId>liquibase-maven-plugin</artifactId>
-				<version>3.5.3</version>
-				<configuration>
-					<changeLogFile>db/main.xml</changeLogFile>
-					<driver>com.mysql.jdbc.Driver</driver>
-					<username>root</username>
-					<password>111111</password>
-					<url>jdbc:mysql://localhost:3306/demo?useUnicode=true&amp;characterEncoding=utf8</url>
-					<rollbackCount>1</rollbackCount>					
 				</configuration>
 			</plugin>
 		</plugins>

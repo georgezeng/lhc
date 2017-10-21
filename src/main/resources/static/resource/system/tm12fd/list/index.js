@@ -18,7 +18,7 @@ $(document).ready(function() {
 				text.push(item.list[j].num);
 			}
 		}
-		$(nTd).text(text.join(", "));
+		return text.join(", ");
 	});
 });
 
