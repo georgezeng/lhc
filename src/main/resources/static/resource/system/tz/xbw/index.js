@@ -5,7 +5,11 @@ $(document).ready(function() {
 	
 	$("#clearBtn").click(function() {
 		$("#conditionTable").find("tbody").empty();
-		//$("#gslist").val("");
+		$("#gslist").val("");
+		$("#qlBtn").click();
+	});
+	
+	$("#qlBtn").click(function() {
 		var datatable = $("#datatable").find("tbody").empty();
 		$("<td id='totalTd'></td>").appendTo(
 			$("<tr id='totalTr'><td>总计</td></tr>")
@@ -18,7 +22,7 @@ $(document).ready(function() {
 		lastResult = 0;
 		lastColor = null;
 		totalHms = [];
-	});
+	})
 	
 	var totalHms;
 	var lastSZColor;
@@ -60,12 +64,16 @@ $(document).ready(function() {
 	$("#tclist").combobox();
 	
 	$("#qcBtn").click(function() {
-		qcHm("");
+		filter(true);
 	});
 	
 	var lastColor;
 	var lastResult = 0;
 	$("#pickupBtn").click(function() {
+		filter(false);
+	});
+	
+	function filter(isQc) {
 		var tbody = $("#conditionTable").find("tbody");
 		function collectSZ(index) {
 			var sz = [];
@@ -125,16 +133,44 @@ $(document).ready(function() {
 		var G = collectSZ('G');
 		var H = collectSZ('H');
 		
+		var AE=[A, E],BF=[B, F],CG=[C, G],DH=[D, H];
+		if(isQc) {
+			function qc(fd1, fd2) {
+				var a = [];
+				for(var i in fd1) {
+					var hm = fd1[i];
+					if(!isInArr(fd2, hm)) {
+						a.push(hm);
+					}
+				}
+				var b = [];
+				for(var i in fd2) {
+					var hm = fd2[i];
+					if(!isInArr(fd1, hm)) {
+						b.push(hm);
+					}
+				}
+				return [a, b];
+			}
+			
+			AE = qc(A, E);
+			BF = qc(B, F);
+			CG = qc(C, G);
+			DH = qc(D, H);
+		}
+		
 		var ABCD = collectFD(A, B, C, D);
-		var ABCH = collectFD(A, B, C, H);
-		var ABGD = collectFD(A, B, G, D);
-		var AFCD = collectFD(A, F, C, D);
-		var EBCD = collectFD(E, B, C, D);
 		var EFGH = collectFD(E, F, G, H);
-		var EFGD = collectFD(E, F, G, D);
-		var EFCH = collectFD(E, F, C, H);
-		var EBGH = collectFD(E, B, G, H);
-		var AFGH = collectFD(A, F, G, H);
+		
+		var EBCD = collectFD(AE[1], B, C, D);
+		var AFCD = collectFD(A, BF[1], C, D);
+		var ABGD = collectFD(A, B, CG[1], D);
+		var ABCH = collectFD(A, B, C, DH[1]);
+		
+		var AFGH = collectFD(AE[0], F, G, H);
+		var EBGH = collectFD(E, BF[0], G, H);
+		var EFCH = collectFD(E, F, CG[0], H);
+		var EFGD = collectFD(E, F, G, DH[0]);
 		
 		var datatable = $("#datatable").find("tbody");
 		if(lastResult % 2 == 0) {
@@ -195,15 +231,15 @@ $(document).ready(function() {
 		
 		var trs = [
 			"ABCD",
-			"ABCH",
-			"ABGD",
-			"AFCD",
-			"EBCD",
 			"EFGH",
-			"EFGD",
-			"EFCH",
+			"EBCD",
+			"AFCD",
+			"ABGD",
+			"ABCH",
+			"AFGH",
 			"EBGH",
-			"AFGH"
+			"EFCH",
+			"EFGD"
 		];
 		for(var i in trs) {
 			createTr(trs[i]);
@@ -262,7 +298,7 @@ $(document).ready(function() {
 			.html(allHmsHtml);
 		$("<tr>").appendTo(datatable).before($("#totalTr"));
 		$("#totalTd").html(totalHmsHtml);
-	});
+	}
 	
 	$("#downloadBtn").unbind().click(function() {
 		$("#download").submit();

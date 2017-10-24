@@ -33,7 +33,7 @@ public class PdNums {
 		NUMS[9] = W10;
 		NUMS[10] = W11;
 		NUMS[11] = W12;
-		
+
 		W1.add(1);
 		W1.add(38);
 		W1.add(39);
@@ -54,11 +54,11 @@ public class PdNums {
 		W4.add(15);
 		W4.add(25);
 		W4.add(35);
-
+		
 		W5.add(6);
-		W5.add(18);
-		W5.add(23);
-		W5.add(29);
+		W5.add(12);
+		W5.add(24);
+		W5.add(48);
 
 		W6.add(7);
 		W6.add(21);
@@ -75,25 +75,25 @@ public class PdNums {
 		W8.add(33);
 		W8.add(44);
 
-		W9.add(12);
-		W9.add(24);
-		W9.add(36);
-		W9.add(48);
+		W9.add(13);
+		W9.add(17);
+		W9.add(31);
+		W9.add(47);
 
-		W10.add(13);
-		W10.add(17);
-		W10.add(31);
-		W10.add(47);
-
-		W11.add(14);
-		W11.add(34);
-		W11.add(41);
-		W11.add(43);
+		W10.add(14);
+		W10.add(34);
+		W10.add(41);
+		W10.add(43);
+		
+		W11.add(18);
+		W11.add(23);
+		W11.add(29);
+		W11.add(46);
 
 		W12.add(19);
 		W12.add(28);
+		W12.add(36);
 		W12.add(37);
-		W12.add(46);
 
 	}
 }

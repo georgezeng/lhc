@@ -434,8 +434,8 @@ var categories = [
 				text: "位4"
 			},
 			{
-				value: "6, 18, 23, 29",
-				text: "位5"
+				value: "6, 12, 24, 48",
+				text: "位9"
 			},
 			{
 				value: "7, 21, 26, 49",
@@ -450,10 +450,6 @@ var categories = [
 				text: "位8"
 			},
 			{
-				value: "12, 24, 36, 48",
-				text: "位9"
-			},
-			{
 				value: "13, 17, 31, 47",
 				text: "位10"
 			},
@@ -462,7 +458,11 @@ var categories = [
 				text: "位11"
 			},
 			{
-				value: "19, 28, 37, 46",
+				value: "18, 23, 29, 46",
+				text: "位5"
+			},
+			{
+				value: "19, 28, 36, 37",
 				text: "位12"
 			}
 		]
