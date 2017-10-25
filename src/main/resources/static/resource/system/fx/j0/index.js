@@ -11,7 +11,7 @@ $(document).ready(function() {
 		lastHms = null;
 		if(value == "0" || value == "1") {
 			var zf = value == "0" ? "false" : "true";
-			table.find("th[zf='"+zf+"']").each(function() {
+			table.find("th[zf='"+zf+"']").add(table.find("td[zf='"+zf+"']")).each(function() {
 				var td = $(this);
 				if(td.attr("status") == "hide") {
 					td.attr("status", "show");
@@ -22,16 +22,8 @@ $(document).ready(function() {
 				}
 			});
 			
-			table.find("td[zf='"+zf+"']").each(function() {
-				var td = $(this);
-				if(td.attr("status") == "hide") {
-					td.attr("status", "show");
-					td.show();
-				} else {
-					td.attr("status", "hide");
-					td.hide();
-				}
-				td = td.parent().children().eq(31);
+			table.find("tbody").find("tr").each(function() {
+				var td = $(this).children().eq(34);
 				if(td.text() != "反转") {
 					if(lastHms) {
 						td.text(lastHms);
@@ -49,7 +41,7 @@ $(document).ready(function() {
 					td.attr("status", "hide");
 					td.hide();
 				}
-				td = $(this).children().eq(31);
+				td = $(this).children().eq(34);
 				if(td.text() != "反转") {
 					if(lastHms) {
 						td.text(lastHms);

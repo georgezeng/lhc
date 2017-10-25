@@ -3278,7 +3278,7 @@ public class YZService {
 				D1Yz yz = list.get(i++);
 				int max = 0;
 				for (String fd : QiwNums.FDS) {
-					Method m = ReflectionUtils.findMethod(QqYz.class, "get" + fd);
+					Method m = ReflectionUtils.findMethod(QiwYz.class, "get" + fd);
 					Integer value = (Integer) m.invoke(data);
 					if (value != null && value > max) {
 						max = value;
@@ -3310,7 +3310,7 @@ public class YZService {
 				D1Yz yz = list.get(i++);
 				int max = 0;
 				for (int j = 0; j < QiwNums.FDS.length; j++) {
-					Method m = ReflectionUtils.findMethod(QqYz.class, "getZf" + j);
+					Method m = ReflectionUtils.findMethod(QiwZfYz.class, "getZf" + j);
 					Integer value = (Integer) m.invoke(data);
 					if (value != null && value > max) {
 						max = value;
