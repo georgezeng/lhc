@@ -560,67 +560,67 @@ var categories = [
 		text: "十六区",
 		subs: [
 			{
-				value: "1, 2, 3",
+				value: "1, 26, 49",
 				text: "位1"
 			},
 			{
-				value: "4, 5, 6",
+				value: "2, 24, 48",
 				text: "位2"
 			},
 			{
-				value: "7, 8, 9",
+				value: "3, 27, 47",
 				text: "位3"
 			},
 			{
-				value: "10, 11, 12",
+				value: "4, 23, 46",
 				text: "位4"
 			},
 			{
-				value: "13, 14, 15",
+				value: "5, 28, 45",
 				text: "位5"
 			},
 			{
-				value: "16, 17, 18,",
+				value: "6, 22, 44,",
 				text: "位6"
 			},
 			{
-				value: "19, 20, 21",
+				value: "7, 29, 43",
 				text: "位7"
 			},
 			{
-				value: "22, 23, 24",
+				value: "8, 21, 42",
 				text: "位8"
 			},
 			{
-				value: "25, 26, 27",
+				value: "9, 30, 41",
 				text: "位9"
 			},
 			{
-				value: "28, 29, 30",
+				value: "10, 20, 40",
 				text: "位10"
 			},
 			{
-				value: "31, 32, 33",
+				value: "11, 31, 39",
 				text: "位11"
 			},
 			{
-				value: "34, 35, 36",
+				value: "12, 19, 38",
 				text: "位12"
 			},
 			{
-				value: "37, 38, 39",
+				value: "13, 32, 37",
 				text: "位13"
 			},
 			{
-				value: "40, 41, 42",
+				value: "14, 18, 36",
 				text: "位14"
 			},
 			{
-				value: "43, 44, 45",
+				value: "15, 33, 35",
 				text: "位15"
 			},
 			{
-				value: "46, 47, 48, 49",
+				value: "16, 17, 25, 34",
 				text: "位16"
 			}
 		]

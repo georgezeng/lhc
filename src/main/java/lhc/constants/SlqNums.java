@@ -43,68 +43,68 @@ public class SlqNums {
 		NUMS[15] = W16;
 		
 		W1.add(1);
-		W1.add(2);
-		W1.add(3);
+		W1.add(26);
+		W1.add(49);
 		
-		W2.add(4);
-		W2.add(5);
-		W2.add(6);
+		W2.add(2);
+		W2.add(24);
+		W2.add(48);
 		
-		W3.add(7);
-		W3.add(8);
-		W3.add(9);
+		W3.add(3);
+		W3.add(27);
+		W3.add(47);
 		
-		W4.add(10);
-		W4.add(11);
-		W4.add(12);
+		W4.add(4);
+		W4.add(23);
+		W4.add(46);
 		
-		W5.add(13);
-		W5.add(14);
-		W5.add(15);
+		W5.add(5);
+		W5.add(28);
+		W5.add(45);
 		
-		W6.add(16);
-		W6.add(17);
-		W6.add(18);
+		W6.add(6);
+		W6.add(22);
+		W6.add(44);
 		
-		W7.add(19);
-		W7.add(20);
-		W7.add(21);
+		W7.add(7);
+		W7.add(29);
+		W7.add(43);
 		
-		W8.add(22);
-		W8.add(23);
-		W8.add(24);
+		W8.add(8);
+		W8.add(21);
+		W8.add(42);
 		
-		W9.add(25);
-		W9.add(26);
-		W9.add(27);
+		W9.add(9);
+		W9.add(30);
+		W9.add(41);
 		
-		W10.add(28);
-		W10.add(29);
-		W10.add(30);
+		W10.add(10);
+		W10.add(20);
+		W10.add(40);
 		
+		W11.add(11);
 		W11.add(31);
-		W11.add(32);
-		W11.add(33);
+		W11.add(39);
 		
-		W12.add(34);
-		W12.add(35);
-		W12.add(36);
+		W12.add(12);
+		W12.add(19);
+		W12.add(38);
 
+		W13.add(13);
+		W13.add(32);
 		W13.add(37);
-		W13.add(38);
-		W13.add(39);
 		
-		W14.add(40);
-		W14.add(41);
-		W14.add(42);
+		W14.add(14);
+		W14.add(18);
+		W14.add(36);
 		
-		W15.add(43);
-		W15.add(44);
-		W15.add(45);
+		W15.add(15);
+		W15.add(33);
+		W15.add(35);
 		
-		W16.add(46);
-		W16.add(47);
-		W16.add(48);
-		W16.add(49);
+		W16.add(16);
+		W16.add(17);
+		W16.add(25);
+		W16.add(34);
 	}
 }

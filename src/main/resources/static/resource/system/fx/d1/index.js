@@ -1,6 +1,5 @@
 $(document).ready(function() {
 	var count = 0;
-	var lastHms = null;
 	
 	$("#columns").combobox();
 	
@@ -10,7 +9,7 @@ $(document).ready(function() {
 		lastHms = null;
 		if(value == "0" || value == "1") {
 			var zf = value == "0" ? "false" : "true";
-			table.find("th[zf='"+zf+"']").each(function() {
+			table.find("th[zf='"+zf+"']").add(table.find("td[zf='"+zf+"']")).each(function() {
 				var td = $(this);
 				if(td.attr("status") == "hide") {
 					td.attr("status", "show");
@@ -18,24 +17,6 @@ $(document).ready(function() {
 				} else {
 					td.attr("status", "hide");
 					td.hide();
-				}
-			});
-			
-			table.find("td[zf='"+zf+"']").each(function() {
-				var td = $(this);
-				if(td.attr("status") == "hide") {
-					td.attr("status", "show");
-					td.show();
-				} else {
-					td.attr("status", "hide");
-					td.hide();
-				}
-				td = td.parent().children().eq(31);
-				if(td.text() != "反转") {
-					if(lastHms) {
-						td.text(lastHms);
-					}
-					lastHms = countReverseNums(td);
 				}
 			});
 		} else {
@@ -47,13 +28,6 @@ $(document).ready(function() {
 				} else {
 					td.attr("status", "hide");
 					td.hide();
-				}
-				td = $(this).children().eq(31);
-				if(td.text() != "反转") {
-					if(lastHms) {
-						td.text(lastHms);
-					}
-					lastHms = countReverseNums(td);
 				}
 			});
 		}
@@ -67,7 +41,7 @@ $(document).ready(function() {
 			var tr = $(this);
 			var subCount = 0;
 			tr.children().each(function() {
-				if($(this).attr("status") == "show" && $(this).text() == "0") {
+				if($(this).attr("status") == "show" && $(this).attr("red") == "true") {
 					count++;
 					subCount++;
 					return false;
@@ -82,60 +56,26 @@ $(document).ready(function() {
 		$("#counter").text(count);
 	}
 	
-	function countReverseNums(nTd) {
-		var allHms = [];
-		nTd.parent("tr").find("td[status='show']").each(function() {
-			if($(this).attr("hms")) {
-				allHms = allHms.concat($(this).attr("hms").split(/,\s*/));
-			}
-		});
-		var reverseNums = [];
-		for(var i = 1; i < 50; i++) {
-			if(!isInArr(allHms, i)) {
-				reverseNums.push(i);
-			}
-		}
-		return reverseNums.join(", ");
-	}
-	
-	var numlist = [
-		"sxNums", "sxzfNums",
-		"dsNums", "dszfNums",
-		"swNums", "swzfNums",
-		"mwNums", "mwzfNums",
-		"lhNums", "lhzfNums",
-		"bsNums", "bszfNums",
-		"zsNums", "zszfNums",
-		"wxNums", "wxzfNums",
-		"wxdsNums", "wxdszfNums",
-		"pdNums", "pdzfNums",
-		"fdNums", "fdzfNums",
-		"qqNums", "qqzfNums",
-		"twelveNums", "twelvezfNums",
-		"slqNums", "slqzfNums",
-	];
-	
 	var sxlist = [
-		"sxj0", "sxzfj0",
-		"dsj0", "dszfj0",
-		"swj0", "swzfj0",
-		"mwj0", "mwzfj0",
-		"lhj0", "lhzfj0",
-		"bsj0", "bszfj0",
-		"zsj0", "zszfj0",
-		"wxj0", "wxzfj0",
-		"wxdsj0", "wxdszfj0",
-		"pdj0", "pdzfj0",
-		"fdj0", "fdzfj0",
-		"qqj0", "qqzfj0",
-		"twelvej0", "twelvezfj0",
-		"slqj0", "slqzfj0",
+		"sxd1", "sxzfd1",
+		"dsd1", "dszfd1",
+		"swd1", "swzfd1",
+		"mwd1", "mwzfd1",
+		"lhd1", "lhzfd1",
+		"bsd1", "bszfd1",
+		"zsd1", "zszfd1",
+		"wxd1", "wxzfd1",
+		"wxdsd1", "wxdszfd1",
+		"pdd1", "pdzfd1",
+		"fdd1", "fdzfd1",
+		"qqd1", "qqzfd1",
+		"twelved1", "twelvezfd1",
+		"slqd1", "slqzfd1",
 	];
 	var cols = ["year", "phase"];
 	for(var i in sxlist) {
 		cols.push(sxlist[i]);
 	}
-	cols.push("phase");
 	cols.push("phase");
 	var columns = [];
 	for(var i in cols) {
@@ -167,12 +107,11 @@ $(document).ready(function() {
 					var value = "";
 					if(item.date) {
 						value = item[sxlist[index-2]];
-						if(value == 0) {
-							$(nTd).css("backgroundColor", "red").css("color", "white");
+						if(item["redFor" + sxlist[index-2]]) {
+							$(nTd).attr("red", "true").css("backgroundColor", "red").css("color", "white");
 						} else {
 							$(nTd).css("backgroundColor", "#ffc")
 						}
-						$(nTd).attr("hms", item[numlist[index-2]].join(","));
 					} 
 					var th = $("#dataTable").find("th").eq(index);
 					if(th.attr("status") == "hide") {
@@ -199,7 +138,7 @@ $(document).ready(function() {
 			var value = 0;
 			if(item.date) {
 				for(var i in sxlist) {
-					if(item[sxlist[i]] == 0) {
+					if(item["redFor" + sxlist[i]]) {
 						value = 1;
 						count++;
 						break;
@@ -214,28 +153,12 @@ $(document).ready(function() {
 			$(nTd).text(value);
 		}
 	});
-	columnDefs.push({
-		aTargets: [31],
-		fnCreatedCell: function(nTd, sData, item, iRow, iCol) {
-			if(lastHms) {
-				$(nTd).text(lastHms);
-			} else {
-				$(nTd).text("");
-			}
-			if(item.date) {
-				lastHms = countReverseNums($(nTd));
-			} else {
-				lastHms = null;
-			}
-		}
-	});
 	datatables.push(createDataTable({
 		id : "dataTable",
-		url : "/mvc/yz/listAllJ0",
+		url : "/mvc/yz/listAllD1",
 		bFilter: false,
 		data : function(queryInfo, infoSettings) {
 			count = 0;
-			lastHms = null;
 			queryInfo.object = {};
 			queryInfo.object.year = parseInt($("#years").val());
 			queryInfo.object.phase = parseInt($("#phases").val());

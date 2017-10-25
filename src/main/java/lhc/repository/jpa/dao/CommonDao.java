@@ -21,11 +21,11 @@ import lhc.util.DatabaseUtil;
 import lhc.util.QueryUtil;
 
 @Repository
+@SuppressWarnings("unchecked")
 public class CommonDao {
 	@Autowired
 	private EntityManager em;
 
-	@SuppressWarnings("unchecked")
 	public PageResult<J0Yz> getTop0List(QueryInfo<J0Yz> queryInfo) {
 		PageRequest pageRequest = null;
 		if (queryInfo.getPageInfo() != null) {

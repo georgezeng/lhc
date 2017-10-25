@@ -81,6 +81,7 @@ import lhc.domain.ZsLrYz;
 import lhc.domain.ZsYz;
 import lhc.domain.ZsZfYz;
 import lhc.dto.BaseResult;
+import lhc.dto.D1Yz;
 import lhc.dto.DownloadDTO;
 import lhc.dto.DownloadPrepareTZ;
 import lhc.dto.J0Yz;
@@ -936,6 +937,15 @@ public class YZController {
 		PageResult<J0Yz> result = yzService.getJ0List(queryInfo);
 		if (result != null && result.getTotal() > 0) {
 			result.getList().add(new J0Yz());
+		}
+		return new BaseResult(result);
+	}
+
+	@RequestMapping("/listAllD1")
+	public BaseResult listAllD1(@RequestBody QueryInfo<SxYz> queryInfo) throws Exception {
+		PageResult<D1Yz> result = yzService.getD1List(queryInfo);
+		if (result != null && result.getTotal() > 0) {
+			result.getList().add(new D1Yz());
 		}
 		return new BaseResult(result);
 	}
