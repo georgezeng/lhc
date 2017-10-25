@@ -2373,17 +2373,17 @@ public class YZService {
 		});
 
 	}
-	
+
 	@Async
 	public Future<Exception> calDSLRYZ() {
 		return calLRYZ(DsLrYz.class, repositories.dslrYzRepository, repositories.dsyzRepository, new CommonHandler() {
-			
+
 			@Override
 			public void process() {
 				logger.info("End of calDSLRYZ...");
 			}
 		});
-		
+
 	}
 
 	@Async
@@ -2471,7 +2471,7 @@ public class YZService {
 		SX nextSX = SX.seq()[pos];
 		yz.setSxzfNums(getSxNums(bmnSX, nextSX));
 	}
-	
+
 	private List<Integer> getSxNums(SX bmnSX, SX sx) {
 		int delta = sx.getPos() - bmnSX.getPos();
 		if (delta < 0) {
@@ -2790,6 +2790,33 @@ public class YZService {
 			pos = pos - SlqNums.FDS.length;
 		}
 		yz.setSlqzfNums(SlqNums.NUMS[pos]);
+	}
+
+	@Async
+	public Future<Exception> calSXCSYZForMax(QueryInfo<SxYz> queryInfo, SxCsYz data) {
+		try {
+			Integer max = 0;
+			PageResult<SxYz> subSxResult = repositories.sxYzDao.query(queryInfo);
+			Map<String, Object> subMap = calSXCSYZ(queryInfo.getPageInfo(), subSxResult, null, null);
+			PageResult<SxCsYz> subResult = (PageResult<SxCsYz>) subMap.get("result");
+			if (subResult != null && subResult.getTotal() > 0) {
+				SX[] sxlist = SX.seq();
+				for (SxCsYz currentData : subResult.getList()) {
+					for (SX sx : sxlist) {
+						Method m = ReflectionUtils.findMethod(SxCsYz.class, "get" + sx.name());
+						Integer value = (Integer) m.invoke(currentData);
+						if (value > max) {
+							max = value;
+						}
+					}
+				}
+			}
+			data.setMax(max);
+			return new AsyncResult<Exception>(null);
+		} catch (Exception e) {
+			logger.error(e.getMessage(), e);
+			return new AsyncResult<Exception>(e);
+		}
 	}
 
 }

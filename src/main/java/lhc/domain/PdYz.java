@@ -4,6 +4,8 @@ import javax.persistence.Entity;
 import javax.persistence.Table;
 import javax.persistence.Transient;
 
+import lhc.constants.PdNums;
+
 @Entity
 @Table(name = "pd_yz")
 public class PdYz extends Lr {
@@ -21,18 +23,18 @@ public class PdYz extends Lr {
 	private Integer w12;
 	@Transient
 	private Integer[][] list = new Integer[][]{
-			{1, 38, 39, 42},
-			{2, 4, 8, 16, 32},
-			{3, 9, 27, 45},
-			{5, 15, 25, 35},
-			{6, 18, 23, 29},
-			{7, 21, 26, 49},
-			{10, 20, 30, 40},
-			{11, 22, 33, 44},
-			{12, 24, 36, 48},
-			{13, 17, 31, 47},
-			{14, 34, 41, 43},
-			{19, 28, 37, 46}
+		PdNums.NUMS[0].toArray(new Integer[] {}),
+		PdNums.NUMS[1].toArray(new Integer[] {}),
+		PdNums.NUMS[2].toArray(new Integer[] {}),
+		PdNums.NUMS[3].toArray(new Integer[] {}),
+		PdNums.NUMS[4].toArray(new Integer[] {}),
+		PdNums.NUMS[5].toArray(new Integer[] {}),
+		PdNums.NUMS[6].toArray(new Integer[] {}),
+		PdNums.NUMS[7].toArray(new Integer[] {}),
+		PdNums.NUMS[8].toArray(new Integer[] {}),
+		PdNums.NUMS[9].toArray(new Integer[] {}),
+		PdNums.NUMS[10].toArray(new Integer[] {}),
+		PdNums.NUMS[11].toArray(new Integer[] {})
 	};
 
 

@@ -326,7 +326,7 @@ public class YZController {
 		PageResult<MwLrYz> result = repositories.mwlrYzDao.query(queryInfo);
 		return new BaseResult(result);
 	}
-	
+
 	@RequestMapping("/listDSLRYZ")
 	public BaseResult listDSLRYZ(@RequestBody QueryInfo<DsLrYz> queryInfo) throws Exception {
 		PageResult<DsLrYz> result = repositories.dslrYzDao.query(queryInfo);
@@ -873,11 +873,15 @@ public class YZController {
 		PageResult<SxCsYz> result = (PageResult<SxCsYz>) map.get("result");
 		SX[] sxlist = SX.seq();
 		if (result != null && result.getTotal() > 0) {
-			for (SxCsYz data : result.getList()) {
+			List<Future<Exception>> fList = new ArrayList<Future<Exception>>();
+			for (int i = result.getList().size() - 1; i > -1; i--) {
+				SxCsYz data = result.getList().get(i);
 				SX maxSX = null;
 				SX minSX = null;
 				Integer max = 0;
 				Integer min = Integer.MAX_VALUE;
+
+				SxYz sxyz = repositories.sxyzRepository.findByYearAndPhase(data.getYear(), data.getPhase());
 				for (SX sx : sxlist) {
 					Method m = ReflectionUtils.findMethod(SxCsYz.class, "get" + sx.name());
 					Integer value = (Integer) m.invoke(data);
@@ -890,16 +894,29 @@ public class YZController {
 						maxSX = sx;
 					}
 				}
-				SxYz yz = repositories.sxyzRepository.findByYearAndPhase(data.getYear(), data.getPhase());
-				Method m = ReflectionUtils.findMethod(SxYz.class, "get" + minSX.name());
-				data.setMinYz((Integer) m.invoke(yz));
-				m = ReflectionUtils.findMethod(SxYz.class, "get" + maxSX.name());
-				data.setMaxYz((Integer) m.invoke(yz));
+				if (minSX != null) {
+					Method m = ReflectionUtils.findMethod(SxYz.class, "get" + minSX.name());
+					data.setMinYz((Integer) m.invoke(sxyz));
+				}
+				if (maxSX != null) {
+					Method m = ReflectionUtils.findMethod(SxYz.class, "get" + maxSX.name());
+					data.setMaxYz((Integer) m.invoke(sxyz));
+				}
 				data.setMin(min);
-				data.setMax(max);
+
+				QueryInfo<SxYz> subQueryInfo = new QueryInfo<SxYz>();
+				SxYz condition = new SxYz();
+				condition.setYear(data.getYear());
+				condition.setPhase(data.getPhase());
+				subQueryInfo.setObject(condition);
+				subQueryInfo.setToReverse(queryInfo.isToReverse());
+				subQueryInfo.setPageInfo(queryInfo.getPageInfo());
+				fList.add(yzService.calSXCSYZForMax(subQueryInfo, data));
 			}
 			result.getList().add(new SxCsYz());
+			sleep(fList, 500);
 		}
+
 		return new BaseResult(result);
 	}
 
@@ -1751,7 +1768,7 @@ public class YZController {
 	public String downloadMWLRYZ(DownloadDTO dto, HttpServletResponse response) throws Exception {
 		return downloadYZ("mwlryz", MwLrYz.class, dto, response, repositories.mwlrYzDao, "位置", "Pos");
 	}
-	
+
 	@RequestMapping("/downloadDSLRYZ")
 	public String downloadDSLRYZ(DownloadDTO dto, HttpServletResponse response) throws Exception {
 		return downloadYZ("dslryz", DsLrYz.class, dto, response, repositories.dslrYzDao, "位置", "Pos");
