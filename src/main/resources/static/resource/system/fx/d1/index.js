@@ -1,5 +1,6 @@
 $(document).ready(function() {
 	var count = 0;
+	var totalCount = 0;
 	
 	$("#columns").combobox();
 	
@@ -47,13 +48,27 @@ $(document).ready(function() {
 					return false;
 				}
 			});
-			if(subCount > 0) {
-				$(tr).find("td[name='counter']").text("1");
-			} else {
-				$(tr).find("td[name='counter']").text("0");
-			}
+			$(tr).find("td[name='counter']").text(subCount);
 		});
 		$("#counter").text(count);
+		countTotalNumber();
+	}
+	
+	function countTotalNumber() {
+		totalCount = 0;
+		var table = $("#dataTable");
+		table.find("tr").each(function() {
+			var tr = $(this);
+			var subCount = 0;
+			tr.children().each(function() {
+				if($(this).attr("status") == "show" && $(this).attr("red") == "true") {
+					totalCount++;
+					subCount++;
+				}
+			});
+			$(tr).find("td[name='totalCounter']").text(subCount);
+		});
+		$("#totalCounter").text(totalCount);
 	}
 	
 	var sxlist = [
@@ -69,6 +84,7 @@ $(document).ready(function() {
 		"pdd1", "pdzfd1",
 		"fdd1", "fdzfd1",
 		"qqd1", "qqzfd1",
+		"qiwd1", "qiwzfd1",
 		"twelved1", "twelvezfd1",
 		"slqd1", "slqzfd1",
 	];
@@ -76,6 +92,7 @@ $(document).ready(function() {
 	for(var i in sxlist) {
 		cols.push(sxlist[i]);
 	}
+	cols.push("phase");
 	cols.push("phase");
 	var columns = [];
 	for(var i in cols) {
@@ -99,7 +116,7 @@ $(document).ready(function() {
 			$(nTd).text(value);
 		}
 	});
-	for(var i = 2; i < 30; i++) {
+	for(var i = 2; i < 32; i++) {
 		(function(index) {
 			columnDefs.push({
 				aTargets: [index],
@@ -133,7 +150,7 @@ $(document).ready(function() {
 		})(i);
 	}
 	columnDefs.push({
-		aTargets: [30],
+		aTargets: [32],
 		fnCreatedCell: function(nTd, sData, item, iRow, iCol) {
 			var value = 0;
 			if(item.date) {
@@ -153,12 +170,33 @@ $(document).ready(function() {
 			$(nTd).text(value);
 		}
 	});
+	columnDefs.push({
+		aTargets: [33],
+		fnCreatedCell: function(nTd, sData, item, iRow, iCol) {
+			var currentCount = 0;
+			if(item.date) {
+				for(var i in sxlist) {
+					if(item["redFor" + sxlist[i]]) {
+						currentCount++;
+						totalCount++;
+					}
+				}
+				$(nTd).attr("name", "totalCounter");
+			} else {
+				value = currentCount;
+				$(nTd).attr("id", "totalCounter");
+				countTotalNumber();
+			}
+			$(nTd).text(currentCount);
+		}
+	});
 	datatables.push(createDataTable({
 		id : "dataTable",
 		url : "/mvc/yz/listAllD1",
 		bFilter: false,
 		data : function(queryInfo, infoSettings) {
 			count = 0;
+			totalCount = 0;
 			queryInfo.object = {};
 			queryInfo.object.year = parseInt($("#years").val());
 			queryInfo.object.phase = parseInt($("#phases").val());

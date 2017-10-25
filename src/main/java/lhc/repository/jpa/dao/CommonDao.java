@@ -71,6 +71,8 @@ public class CommonDao {
 		condition.append("left join tm12fd_zf_yz tm12fdzf on sx.date=tm12fdzf.date").append("\n");
 		condition.append("left join qq_yz qq on sx.date=qq.date").append("\n");
 		condition.append("left join qq_zf_yz qqzf on sx.date=qqzf.date").append("\n");
+		condition.append("left join qiw_yz qiw on sx.date=qiw.date").append("\n");
+		condition.append("left join qiw_zf_yz qiwzf on sx.date=qiwzf.date").append("\n");
 		condition.append("left join twelve_yz twelve on sx.date=twelve.date").append("\n");
 		condition.append("left join twelve_zf_yz twelvezf on sx.date=twelvezf.date").append("\n");
 		condition.append("left join slq_yz slq on sx.date=slq.date").append("\n");
@@ -98,6 +100,7 @@ public class CommonDao {
 			sql.append("pd.min0 as pdj0, pdzf.min0 as pdzfj0,").append("\n");
 			sql.append("tm12fd.min0 as fdj0, tm12fdzf.min0 as fdzfj0,").append("\n");
 			sql.append("qq.min0 as qqj0, qqzf.min0 as qqzfj0,").append("\n");
+			sql.append("qiw.min0 as qiwj0, qiwzf.min0 as qiwzfj0,").append("\n");
 			sql.append("twelve.min0 as twelvej0, twelvezf.min0 as twelvezfj0,").append("\n");
 			sql.append("slq.min0 as slqj0, slqzf.min0 as slqzfj0").append("\n");
 			sql.append(condition).append("\n");

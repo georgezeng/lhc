@@ -1,5 +1,6 @@
 $(document).ready(function() {
 	var count = 0;
+	var totalCount = 0;
 	var lastHms = null;
 	
 	$("#columns").combobox();
@@ -80,6 +81,24 @@ $(document).ready(function() {
 			}
 		});
 		$("#counter").text(count);
+		countTotalNumber();
+	}
+	
+	function countTotalNumber() {
+		totalCount = 0;
+		var table = $("#dataTable");
+		table.find("tr").each(function() {
+			var tr = $(this);
+			var subCount = 0;
+			tr.children().each(function() {
+				if($(this).attr("status") == "show" && $(this).text() == "0") {
+					totalCount++;
+					subCount++;
+				}
+			});
+			$(tr).find("td[name='totalCounter']").text(subCount);
+		});
+		$("#totalCounter").text(totalCount);
 	}
 	
 	function countReverseNums(nTd) {
@@ -111,6 +130,7 @@ $(document).ready(function() {
 		"pdNums", "pdzfNums",
 		"fdNums", "fdzfNums",
 		"qqNums", "qqzfNums",
+		"qiwNums", "qiwzfNums",
 		"twelveNums", "twelvezfNums",
 		"slqNums", "slqzfNums",
 	];
@@ -128,6 +148,7 @@ $(document).ready(function() {
 		"pdj0", "pdzfj0",
 		"fdj0", "fdzfj0",
 		"qqj0", "qqzfj0",
+		"qiwj0", "qiwzfj0",
 		"twelvej0", "twelvezfj0",
 		"slqj0", "slqzfj0",
 	];
@@ -135,6 +156,7 @@ $(document).ready(function() {
 	for(var i in sxlist) {
 		cols.push(sxlist[i]);
 	}
+	cols.push("phase");
 	cols.push("phase");
 	cols.push("phase");
 	var columns = [];
@@ -159,7 +181,7 @@ $(document).ready(function() {
 			$(nTd).text(value);
 		}
 	});
-	for(var i = 2; i < 30; i++) {
+	for(var i = 2; i < 32; i++) {
 		(function(index) {
 			columnDefs.push({
 				aTargets: [index],
@@ -194,7 +216,7 @@ $(document).ready(function() {
 		})(i);
 	}
 	columnDefs.push({
-		aTargets: [30],
+		aTargets: [32],
 		fnCreatedCell: function(nTd, sData, item, iRow, iCol) {
 			var value = 0;
 			if(item.date) {
@@ -215,7 +237,27 @@ $(document).ready(function() {
 		}
 	});
 	columnDefs.push({
-		aTargets: [31],
+		aTargets: [33],
+		fnCreatedCell: function(nTd, sData, item, iRow, iCol) {
+			var currentCount = 0;
+			if(item.date) {
+				for(var i in sxlist) {
+					if(item[sxlist[i]] == 0) {
+						currentCount++;
+						totalCount++;
+					}
+				}
+				$(nTd).attr("name", "totalCounter");
+			} else {
+				value = currentCount;
+				$(nTd).attr("id", "totalCounter");
+				countTotalNumber();
+			}
+			$(nTd).text(currentCount);
+		}
+	});
+	columnDefs.push({
+		aTargets: [34],
 		fnCreatedCell: function(nTd, sData, item, iRow, iCol) {
 			if(lastHms) {
 				$(nTd).text(lastHms);
@@ -235,6 +277,7 @@ $(document).ready(function() {
 		bFilter: false,
 		data : function(queryInfo, infoSettings) {
 			count = 0;
+			totalCount = 0;
 			lastHms = null;
 			queryInfo.object = {};
 			queryInfo.object.year = parseInt($("#years").val());

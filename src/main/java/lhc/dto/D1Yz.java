@@ -53,6 +53,10 @@ public class D1Yz {
 	private boolean isRedForqqd1;
 	private Integer qqzfd1;
 	private boolean isRedForqqzfd1;
+	private Integer qiwd1;
+	private boolean isRedForqiwd1;
+	private Integer qiwzfd1;
+	private boolean isRedForqiwzfd1;
 	private Integer twelved1;
 	private boolean isRedFortwelved1;
 	private Integer twelvezfd1;
@@ -61,6 +65,38 @@ public class D1Yz {
 	private boolean isRedForslqd1;
 	private Integer slqzfd1;
 	private boolean isRedForslqzfd1;
+
+	public Integer getQiwd1() {
+		return qiwd1;
+	}
+
+	public void setQiwd1(Integer qiwd1) {
+		this.qiwd1 = qiwd1;
+	}
+
+	public boolean isRedForqiwd1() {
+		return isRedForqiwd1;
+	}
+
+	public void setRedForqiwd1(boolean isRedForqiwd1) {
+		this.isRedForqiwd1 = isRedForqiwd1;
+	}
+
+	public Integer getQiwzfd1() {
+		return qiwzfd1;
+	}
+
+	public void setQiwzfd1(Integer qiwzfd1) {
+		this.qiwzfd1 = qiwzfd1;
+	}
+
+	public boolean isRedForqiwzfd1() {
+		return isRedForqiwzfd1;
+	}
+
+	public void setRedForqiwzfd1(boolean isRedForqiwzfd1) {
+		this.isRedForqiwzfd1 = isRedForqiwzfd1;
+	}
 
 	public boolean isRedForsxd1() {
 		return isRedForsxd1;

@@ -23,6 +23,8 @@ import lhc.repository.jpa.api.PdLrYzRepository;
 import lhc.repository.jpa.api.PdYzRepository;
 import lhc.repository.jpa.api.PdZfYzRepository;
 import lhc.repository.jpa.api.PtYzRepository;
+import lhc.repository.jpa.api.QiwYzRepository;
+import lhc.repository.jpa.api.QiwZfYzRepository;
 import lhc.repository.jpa.api.QqYzRepository;
 import lhc.repository.jpa.api.QqZfYzRepository;
 import lhc.repository.jpa.api.QwYzRepository;
@@ -75,6 +77,8 @@ import lhc.repository.jpa.dao.PdLrYzDao;
 import lhc.repository.jpa.dao.PdYzDao;
 import lhc.repository.jpa.dao.PdZfYzDao;
 import lhc.repository.jpa.dao.PtYzDao;
+import lhc.repository.jpa.dao.QiwYzDao;
+import lhc.repository.jpa.dao.QiwZfYzDao;
 import lhc.repository.jpa.dao.QqYzDao;
 import lhc.repository.jpa.dao.QqZfYzDao;
 import lhc.repository.jpa.dao.QwYzDao;
@@ -121,6 +125,18 @@ public class Repositories {
 	
 	@Autowired
 	public DsLrYzRepository dslrYzRepository;
+	
+	@Autowired
+	public QiwYzRepository qiwYzRepository;
+	
+	@Autowired
+	public QiwZfYzRepository qiwzfYzRepository;
+	
+	@Autowired
+	public QiwYzDao qiwYzDao;
+	
+	@Autowired
+	public QiwZfYzDao qiwzfYzDao;
 
 	@Autowired
 	public LhLrYzDao lhlrYzDao;

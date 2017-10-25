@@ -502,6 +502,40 @@ var categories = [
 		]
 	},
 	{
+		code: "qiw",
+		text: "七位",
+		subs: [
+			{
+				value: "1, 8, 15, 22, 29, 36, 43",
+				text: "位1"
+			},
+			{
+				value: "2, 9, 16, 23, 30, 37, 44",
+				text: "位2"
+			},
+			{
+				value: "3, 10, 17, 24, 31, 38, 45",
+				text: "位3"
+			},
+			{
+				value: "4, 11, 18, 25, 32, 39, 46",
+				text: "位4"
+			},
+			{
+				value: "5, 12, 19, 26, 33, 40, 47",
+				text: "位5"
+			},
+			{
+				value: "6, 13, 20, 27, 34, 41, 48",
+				text: "位6"
+			},
+			{
+				value: "7, 14, 21, 28, 35, 42, 49",
+				text: "位7"
+			}
+		]
+	},
+	{
 		code: "twelve",
 		text: "十二区",
 		subs: [
@@ -720,6 +754,12 @@ function getCompositeArrs(arr, n) {
  
     return resultArrs;
 }
+
+$(document).ready(function() {
+	setInterval(function() {
+		$.ajax("/ok");
+	}, 1000 * 60 * 5)
+});
 
 function addTM12fdCategory(index) {
 	post({

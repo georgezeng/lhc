@@ -35,6 +35,7 @@ import lhc.constants.DsNums;
 import lhc.constants.LhNums;
 import lhc.constants.MwNums;
 import lhc.constants.PdNums;
+import lhc.constants.QiwNums;
 import lhc.constants.QqNums;
 import lhc.constants.SlqNums;
 import lhc.constants.SwNums;
@@ -69,6 +70,8 @@ import lhc.domain.PdYz;
 import lhc.domain.PdZfYz;
 import lhc.domain.PosAvg;
 import lhc.domain.PtYz;
+import lhc.domain.QiwYz;
+import lhc.domain.QiwZfYz;
 import lhc.domain.QqYz;
 import lhc.domain.QqZfYz;
 import lhc.domain.QwYz;
@@ -541,6 +544,26 @@ public class YZService {
 
 						});
 				logger.info("End of calQQYZ...");
+			}
+		}, 1, 8);
+	}
+
+	@Async
+	public Future<Exception> calQIWYZ() {
+		return calPosFDYZ(QiwYz.class, QiwNums.class, repositories.qiwYzRepository, new CommonHandler() {
+
+			@Override
+			public void process() {
+				calZF(QiwNums.FDS.length, QiwYz.class, QiwZfYz.class, repositories.qiwYzRepository,
+						repositories.qiwzfYzRepository, new GetSuffixHandler<QiwZfYz, QiwYz>() {
+
+							@Override
+							public String process(int index) {
+								return QiwNums.FDS[index];
+							}
+
+						});
+				logger.info("End of calQIWYZ...");
 			}
 		}, 1, 8);
 	}
@@ -2460,6 +2483,8 @@ public class YZService {
 		calFdZfForD1(queryInfo, result);
 		calQqForD1(queryInfo, result);
 		calQqZfForD1(queryInfo, result);
+		calQiwForD1(queryInfo, result);
+		calQiwZfForD1(queryInfo, result);
 		calTwelveForD1(queryInfo, result);
 		calTwelveZfForD1(queryInfo, result);
 		calSlqForD1(queryInfo, result);
@@ -3236,6 +3261,70 @@ public class YZService {
 		}
 	}
 
+	private void calQiwForD1(QueryInfo<SxYz> queryInfo, PageResult<D1Yz> result) throws Exception {
+		QueryInfo<QiwYz> dataQueryInfo = new QueryInfo<QiwYz>();
+		QiwYz condition = new QiwYz();
+		condition.setYear(queryInfo.getObject().getYear());
+		condition.setPhase(queryInfo.getObject().getPhase());
+		dataQueryInfo.setObject(condition);
+		dataQueryInfo.setPageInfo(queryInfo.getPageInfo());
+		dataQueryInfo.setToReverse(queryInfo.isToReverse());
+		PageResult<QiwYz> dataResult = repositories.qiwYzDao.query(dataQueryInfo);
+		if (dataResult != null && dataResult.getTotal() > 0) {
+			List<D1Yz> list = result.getList();
+			int i = 0;
+			Integer lastMax = null;
+			for (QiwYz data : dataResult.getList()) {
+				D1Yz yz = list.get(i++);
+				int max = 0;
+				for (String fd : QiwNums.FDS) {
+					Method m = ReflectionUtils.findMethod(QqYz.class, "get" + fd);
+					Integer value = (Integer) m.invoke(data);
+					if (value != null && value > max) {
+						max = value;
+					}
+				}
+				if (lastMax != null && lastMax >= max) {
+					yz.setRedForqiwd1(true);
+				}
+				lastMax = max;
+				yz.setQiwd1(max);
+			}
+		}
+	}
+
+	private void calQiwZfForD1(QueryInfo<SxYz> queryInfo, PageResult<D1Yz> result) throws Exception {
+		QueryInfo<QiwZfYz> dataQueryInfo = new QueryInfo<QiwZfYz>();
+		QiwZfYz condition = new QiwZfYz();
+		condition.setYear(queryInfo.getObject().getYear());
+		condition.setPhase(queryInfo.getObject().getPhase());
+		dataQueryInfo.setObject(condition);
+		dataQueryInfo.setPageInfo(queryInfo.getPageInfo());
+		dataQueryInfo.setToReverse(queryInfo.isToReverse());
+		PageResult<QiwZfYz> dataResult = repositories.qiwzfYzDao.query(dataQueryInfo);
+		if (dataResult != null && dataResult.getTotal() > 0) {
+			List<D1Yz> list = result.getList();
+			int i = 0;
+			Integer lastMax = null;
+			for (QiwZfYz data : dataResult.getList()) {
+				D1Yz yz = list.get(i++);
+				int max = 0;
+				for (int j = 0; j < QiwNums.FDS.length; j++) {
+					Method m = ReflectionUtils.findMethod(QqYz.class, "getZf" + j);
+					Integer value = (Integer) m.invoke(data);
+					if (value != null && value > max) {
+						max = value;
+					}
+				}
+				if (lastMax != null && lastMax >= max) {
+					yz.setRedForqiwzfd1(true);
+				}
+				lastMax = max;
+				yz.setQiwzfd1(max);
+			}
+		}
+	}
+
 	private void calTwelveForD1(QueryInfo<SxYz> queryInfo, PageResult<D1Yz> result) throws Exception {
 		QueryInfo<TwelveYz> dataQueryInfo = new QueryInfo<TwelveYz>();
 		TwelveYz condition = new TwelveYz();
@@ -3379,6 +3468,7 @@ public class YZService {
 			calPdForJ0(yz);
 			calFdForJ0(yz);
 			calQqForJ0(yz);
+			calQiwForJ0(yz);
 			calTwelveForJ0(yz);
 			calSlqForJ0(yz);
 		}
@@ -3678,6 +3768,27 @@ public class YZService {
 			pos = pos - QqNums.FDS.length;
 		}
 		yz.setQqzfNums(QqNums.NUMS[pos]);
+	}
+
+	private void calQiwForJ0(J0Yz yz) throws Exception {
+		QiwYz yzData = repositories.qiwYzRepository.findByYearAndPhase(yz.getYear(), yz.getPhase());
+		int currentPos = 0;
+		for (int i = 1; i < 8; i++) {
+			currentPos = i - 1;
+			Method m = QiwYz.class.getDeclaredMethod("getW" + i);
+			if ((Integer) m.invoke(yzData) == 0) {
+				Field f = QiwNums.class.getDeclaredField("W" + i);
+				yz.setQiwNums((List<Integer>) f.get(null));
+				break;
+			}
+		}
+
+		QiwZfYz zfData = repositories.qiwzfYzRepository.findByYearAndPhase(yz.getYear(), yz.getPhase());
+		int pos = currentPos + zfData.getCurrentPos();
+		if (pos >= QiwNums.FDS.length) {
+			pos = pos - QiwNums.FDS.length;
+		}
+		yz.setQiwzfNums(QiwNums.NUMS[pos]);
 	}
 
 	private void calTwelveForJ0(J0Yz yz) throws Exception {

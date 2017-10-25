@@ -13,16 +13,16 @@ import org.springframework.scheduling.concurrent.ThreadPoolTaskExecutor;
 @Configuration
 @EnableAsync
 @EnableScheduling
-//@EnableRedisHttpSession
-//@EnableRedisRepositories(basePackages = { "lhc.repository.redis.api" })
+// @EnableRedisHttpSession
+// @EnableRedisRepositories(basePackages = { "lhc.repository.redis.api" })
 @EnableJpaRepositories(basePackages = { "lhc.repository.jpa.api" })
 public class AppConfig extends AsyncConfigurerSupport {
 	@Override
 	public Executor getAsyncExecutor() {
 		ThreadPoolTaskExecutor executor = new ThreadPoolTaskExecutor();
-		executor.setCorePoolSize(30);
-		executor.setMaxPoolSize(30);
-		executor.setQueueCapacity(99999999);
+		executor.setCorePoolSize(60);
+		executor.setMaxPoolSize(60);
+		executor.setQueueCapacity(Integer.MAX_VALUE);
 		executor.setThreadNamePrefix("Async-Executor-");
 		executor.initialize();
 		return executor;
@@ -33,19 +33,19 @@ public class AppConfig extends AsyncConfigurerSupport {
 	 * 
 	 * @return
 	 */
-//	@Bean
-//	public static ConfigureRedisAction configureRedisAction() {
-//		return ConfigureRedisAction.NO_OP;
-//	}
+	// @Bean
+	// public static ConfigureRedisAction configureRedisAction() {
+	// return ConfigureRedisAction.NO_OP;
+	// }
 
-//	@Value("${spring.session.redis.namespace}")
-//	private String sessionKeyNamespace;
+	// @Value("${spring.session.redis.namespace}")
+	// private String sessionKeyNamespace;
 
-//	@Autowired
-//	private RedisOperationsSessionRepository sessionReporitory;
-//
-//	@PostConstruct
-//	public void init() {
-//		sessionReporitory.setRedisKeyNamespace(sessionKeyNamespace);
-//	}
+	// @Autowired
+	// private RedisOperationsSessionRepository sessionReporitory;
+	//
+	// @PostConstruct
+	// public void init() {
+	// sessionReporitory.setRedisKeyNamespace(sessionKeyNamespace);
+	// }
 }

@@ -23,7 +23,8 @@ import javax.persistence.Transient;
 		@ColumnResult(name = "wxdszfj0", type = Integer.class), @ColumnResult(name = "pdj0", type = Integer.class),
 		@ColumnResult(name = "pdzfj0", type = Integer.class), @ColumnResult(name = "fdj0", type = Integer.class),
 		@ColumnResult(name = "fdzfj0", type = Integer.class), @ColumnResult(name = "qqj0", type = Integer.class),
-		@ColumnResult(name = "qqzfj0", type = Integer.class), @ColumnResult(name = "twelvej0", type = Integer.class),
+		@ColumnResult(name = "qqzfj0", type = Integer.class), @ColumnResult(name = "qiwj0", type = Integer.class),
+		@ColumnResult(name = "qiwzfj0", type = Integer.class), @ColumnResult(name = "twelvej0", type = Integer.class),
 		@ColumnResult(name = "twelvezfj0", type = Integer.class), @ColumnResult(name = "slqj0", type = Integer.class),
 		@ColumnResult(name = "slqzfj0", type = Integer.class) }))
 @Entity
@@ -34,8 +35,8 @@ public class J0Yz {
 	public J0Yz(String date, Integer year, Integer phase, Integer sxj0, Integer sxzfj0, Integer dsj0, Integer dszfj0,
 			Integer swj0, Integer swzfj0, Integer mwj0, Integer mwzfj0, Integer lhj0, Integer lhzfj0, Integer bsj0,
 			Integer bszfj0, Integer zsj0, Integer zszfj0, Integer wxj0, Integer wxzfj0, Integer wxdsj0, Integer wxdszfj0,
-			Integer pdj0, Integer pdzfj0, Integer fdj0, Integer fdzfj0, Integer qqj0, Integer qqzfj0, Integer twelvej0,
-			Integer twelvezfj0, Integer slqj0, Integer slqzfj0) {
+			Integer pdj0, Integer pdzfj0, Integer fdj0, Integer fdzfj0, Integer qqj0, Integer qqzfj0, Integer qiwj0,
+			Integer qiwzfj0, Integer twelvej0, Integer twelvezfj0, Integer slqj0, Integer slqzfj0) {
 		this.date = date;
 		this.year = year;
 		this.phase = phase;
@@ -63,6 +64,8 @@ public class J0Yz {
 		this.fdzfj0 = fdzfj0;
 		this.qqj0 = qqj0;
 		this.qqzfj0 = qqzfj0;
+		this.qiwj0 = qiwj0;
+		this.qiwzfj0 = qiwzfj0;
 		this.twelvej0 = twelvej0;
 		this.twelvezfj0 = twelvezfj0;
 		this.slqj0 = slqj0;
@@ -98,6 +101,8 @@ public class J0Yz {
 	private Integer fdzfj0;
 	private Integer qqj0;
 	private Integer qqzfj0;
+	private Integer qiwj0;
+	private Integer qiwzfj0;
 	private Integer twelvej0;
 	private Integer twelvezfj0;
 	private Integer slqj0;
@@ -151,6 +156,10 @@ public class J0Yz {
 	@Transient
 	private List<Integer> qqzfNums;
 	@Transient
+	private List<Integer> qiwNums;
+	@Transient
+	private List<Integer> qiwzfNums;
+	@Transient
 	private List<Integer> twelveNums;
 	@Transient
 	private List<Integer> twelvezfNums;
@@ -158,6 +167,38 @@ public class J0Yz {
 	private List<Integer> slqNums;
 	@Transient
 	private List<Integer> slqzfNums;
+
+	public Integer getQiwj0() {
+		return qiwj0;
+	}
+
+	public void setQiwj0(Integer qiwj0) {
+		this.qiwj0 = qiwj0;
+	}
+
+	public Integer getQiwzfj0() {
+		return qiwzfj0;
+	}
+
+	public void setQiwzfj0(Integer qiwzfj0) {
+		this.qiwzfj0 = qiwzfj0;
+	}
+
+	public List<Integer> getQiwNums() {
+		return qiwNums;
+	}
+
+	public void setQiwNums(List<Integer> qiwNums) {
+		this.qiwNums = qiwNums;
+	}
+
+	public List<Integer> getQiwzfNums() {
+		return qiwzfNums;
+	}
+
+	public void setQiwzfNums(List<Integer> qiwzfNums) {
+		this.qiwzfNums = qiwzfNums;
+	}
 
 	public List<Integer> getQqNums() {
 		return qqNums;

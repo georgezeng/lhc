@@ -15,6 +15,8 @@ TRUNCATE table `pd_zf_yz`;
 TRUNCATE table `pt_yz`;
 TRUNCATE table `qq_yz`;
 TRUNCATE table `qq_zf_yz`;
+TRUNCATE table `qiw_yz`;
+TRUNCATE table `qiw_zf_yz`;
 TRUNCATE table `qw_yz`;
 TRUNCATE table `sq_yz`;
 TRUNCATE table `sw_yz`;
