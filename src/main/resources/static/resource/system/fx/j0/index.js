@@ -51,6 +51,7 @@ $(document).ready(function() {
 			});
 		}
 		countNumber();
+		countTotalNumber();
 	});
 	
 	function countNumber() {
@@ -73,7 +74,6 @@ $(document).ready(function() {
 			}
 		});
 		$("#counter").text(count);
-		countTotalNumber();
 	}
 	
 	function countTotalNumber() {
@@ -219,13 +219,11 @@ $(document).ready(function() {
 						break;
 					}
 				}
-				$(nTd).attr("name", "counter");
+				$(nTd).attr("name", "counter").text(value);
 			} else {
 				value = count;
-				$(nTd).attr("id", "counter");
-				countNumber();
+				$(nTd).attr("id", "counter").text(count);
 			}
-			$(nTd).text(value);
 		}
 	});
 	columnDefs.push({
@@ -239,13 +237,10 @@ $(document).ready(function() {
 						totalCount++;
 					}
 				}
-				$(nTd).attr("name", "totalCounter");
+				$(nTd).attr("name", "totalCounter").text(currentCount);
 			} else {
-				value = currentCount;
-				$(nTd).attr("id", "totalCounter");
-				countTotalNumber();
+				$(nTd).attr("id", "totalCounter").text(totalCount);
 			}
-			$(nTd).text(currentCount);
 		}
 	});
 	columnDefs.push({
@@ -278,6 +273,13 @@ $(document).ready(function() {
 		columns : columns,
 		aoColumnDefs: columnDefs
 	}));
+	
+	$("#downloadBtn").click(function() {
+		$("#size").val($("select[name='dataTable_length']").val());
+		$("#endYear").val($("#years").val());
+		$("#endPhase").val($("#phases").val());
+		$("#download").submit();
+	});
 	
 });
 

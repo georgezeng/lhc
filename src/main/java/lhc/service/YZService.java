@@ -2460,35 +2460,37 @@ public class YZService {
 
 	public PageResult<D1Yz> getD1List(QueryInfo<SxYz> queryInfo) throws Exception {
 		PageResult<D1Yz> result = calSxForD1(queryInfo);
-		calSxZfForD1(queryInfo, result);
-		calDsForD1(queryInfo, result);
-		calDsZfForD1(queryInfo, result);
-		calSwForD1(queryInfo, result);
-		calSwZfForD1(queryInfo, result);
-		calMwForD1(queryInfo, result);
-		calMwZfForD1(queryInfo, result);
-		calLhForD1(queryInfo, result);
-		calLhZfForD1(queryInfo, result);
-		calBsForD1(queryInfo, result);
-		calBsZfForD1(queryInfo, result);
-		calZsForD1(queryInfo, result);
-		calZsZfForD1(queryInfo, result);
-		calWxForD1(queryInfo, result);
-		calWxZfForD1(queryInfo, result);
-		calWxdsForD1(queryInfo, result);
-		calWxdsZfForD1(queryInfo, result);
-		calPdForD1(queryInfo, result);
-		calPdZfForD1(queryInfo, result);
-		calFdForD1(queryInfo, result);
-		calFdZfForD1(queryInfo, result);
-		calQqForD1(queryInfo, result);
-		calQqZfForD1(queryInfo, result);
-		calQiwForD1(queryInfo, result);
-		calQiwZfForD1(queryInfo, result);
-		calTwelveForD1(queryInfo, result);
-		calTwelveZfForD1(queryInfo, result);
-		calSlqForD1(queryInfo, result);
-		calSlqZfForD1(queryInfo, result);
+		List<Future<Exception>> futures = new ArrayList<Future<Exception>>();
+		futures.add(calSxZfForD1(queryInfo, result));
+		futures.add(calDsForD1(queryInfo, result));
+		futures.add(calDsZfForD1(queryInfo, result));
+		futures.add(calSwForD1(queryInfo, result));
+		futures.add(calSwZfForD1(queryInfo, result));
+		futures.add(calMwForD1(queryInfo, result));
+		futures.add(calMwZfForD1(queryInfo, result));
+		futures.add(calLhForD1(queryInfo, result));
+		futures.add(calLhZfForD1(queryInfo, result));
+		futures.add(calBsForD1(queryInfo, result));
+		futures.add(calBsZfForD1(queryInfo, result));
+		futures.add(calZsForD1(queryInfo, result));
+		futures.add(calZsZfForD1(queryInfo, result));
+		futures.add(calWxForD1(queryInfo, result));
+		futures.add(calWxZfForD1(queryInfo, result));
+		futures.add(calWxdsForD1(queryInfo, result));
+		futures.add(calWxdsZfForD1(queryInfo, result));
+		futures.add(calPdForD1(queryInfo, result));
+		futures.add(calPdZfForD1(queryInfo, result));
+		futures.add(calFdForD1(queryInfo, result));
+		futures.add(calFdZfForD1(queryInfo, result));
+		futures.add(calQqForD1(queryInfo, result));
+		futures.add(calQqZfForD1(queryInfo, result));
+		futures.add(calQiwForD1(queryInfo, result));
+		futures.add(calQiwZfForD1(queryInfo, result));
+		futures.add(calTwelveForD1(queryInfo, result));
+		futures.add(calTwelveZfForD1(queryInfo, result));
+		futures.add(calSlqForD1(queryInfo, result));
+		futures.add(calSlqZfForD1(queryInfo, result));
+		sleep(futures, 100);
 		return result;
 	}
 
@@ -2525,937 +2527,1170 @@ public class YZService {
 		return result;
 	}
 
-	private void calSxZfForD1(QueryInfo<SxYz> queryInfo, PageResult<D1Yz> result) throws Exception {
-		QueryInfo<SxZfYz2> dataQueryInfo = new QueryInfo<SxZfYz2>();
-		SxZfYz2 condition = new SxZfYz2();
-		condition.setYear(queryInfo.getObject().getYear());
-		condition.setPhase(queryInfo.getObject().getPhase());
-		dataQueryInfo.setObject(condition);
-		dataQueryInfo.setPageInfo(queryInfo.getPageInfo());
-		dataQueryInfo.setToReverse(queryInfo.isToReverse());
-		PageResult<SxZfYz2> dataResult = repositories.sxZfYz2Dao.query(dataQueryInfo);
-		if (dataResult != null && dataResult.getTotal() > 0) {
-			List<D1Yz> list = result.getList();
-			int i = 0;
-			Integer lastMax = null;
-			for (SxZfYz2 data : dataResult.getList()) {
-				D1Yz yz = list.get(i++);
-				int max = 0;
-				for (int j = 0; j < SX.seq().length; j++) {
-					Method m = ReflectionUtils.findMethod(SxZfYz2.class, "getZf" + j);
-					Integer value = (Integer) m.invoke(data);
-					if (value != null && value > max) {
-						max = value;
+	@Async
+	public Future<Exception> calSxZfForD1(QueryInfo<SxYz> queryInfo, PageResult<D1Yz> result) throws Exception {
+		try {
+			QueryInfo<SxZfYz2> dataQueryInfo = new QueryInfo<SxZfYz2>();
+			SxZfYz2 condition = new SxZfYz2();
+			condition.setYear(queryInfo.getObject().getYear());
+			condition.setPhase(queryInfo.getObject().getPhase());
+			dataQueryInfo.setObject(condition);
+			dataQueryInfo.setPageInfo(queryInfo.getPageInfo());
+			dataQueryInfo.setToReverse(queryInfo.isToReverse());
+			PageResult<SxZfYz2> dataResult = repositories.sxZfYz2Dao.query(dataQueryInfo);
+			if (dataResult != null && dataResult.getTotal() > 0) {
+				List<D1Yz> list = result.getList();
+				int i = 0;
+				Integer lastMax = null;
+				for (SxZfYz2 data : dataResult.getList()) {
+					D1Yz yz = list.get(i++);
+					int max = 0;
+					for (int j = 0; j < SX.seq().length; j++) {
+						Method m = ReflectionUtils.findMethod(SxZfYz2.class, "getZf" + j);
+						Integer value = (Integer) m.invoke(data);
+						if (value != null && value > max) {
+							max = value;
+						}
 					}
+					if (lastMax != null && lastMax >= max) {
+						yz.setRedForsxzfd1(true);
+					}
+					lastMax = max;
+					yz.setSxzfd1(max);
 				}
-				if (lastMax != null && lastMax >= max) {
-					yz.setRedForsxzfd1(true);
-				}
-				lastMax = max;
-				yz.setSxzfd1(max);
 			}
+			return new AsyncResult<Exception>(null);
+		} catch (Exception e) {
+			logger.error(e.getMessage(), e);
+			return new AsyncResult<Exception>(e);
 		}
 	}
 
-	private void calDsForD1(QueryInfo<SxYz> queryInfo, PageResult<D1Yz> result) throws Exception {
-		QueryInfo<DsYz> dataQueryInfo = new QueryInfo<DsYz>();
-		DsYz condition = new DsYz();
-		condition.setYear(queryInfo.getObject().getYear());
-		condition.setPhase(queryInfo.getObject().getPhase());
-		dataQueryInfo.setObject(condition);
-		dataQueryInfo.setPageInfo(queryInfo.getPageInfo());
-		dataQueryInfo.setToReverse(queryInfo.isToReverse());
-		PageResult<DsYz> dataResult = repositories.dsYzDao.query(dataQueryInfo);
-		if (dataResult != null && dataResult.getTotal() > 0) {
-			List<D1Yz> list = result.getList();
-			int i = 0;
-			Integer lastMax = null;
-			for (DsYz data : dataResult.getList()) {
-				D1Yz yz = list.get(i++);
-				int max = 0;
-				for (String fd : DsNums.FDS) {
-					Method m = ReflectionUtils.findMethod(DsYz.class, "get" + fd);
-					Integer value = (Integer) m.invoke(data);
-					if (value != null && value > max) {
-						max = value;
+	@Async
+	public Future<Exception> calDsForD1(QueryInfo<SxYz> queryInfo, PageResult<D1Yz> result) throws Exception {
+		try {
+			QueryInfo<DsYz> dataQueryInfo = new QueryInfo<DsYz>();
+			DsYz condition = new DsYz();
+			condition.setYear(queryInfo.getObject().getYear());
+			condition.setPhase(queryInfo.getObject().getPhase());
+			dataQueryInfo.setObject(condition);
+			dataQueryInfo.setPageInfo(queryInfo.getPageInfo());
+			dataQueryInfo.setToReverse(queryInfo.isToReverse());
+			PageResult<DsYz> dataResult = repositories.dsYzDao.query(dataQueryInfo);
+			if (dataResult != null && dataResult.getTotal() > 0) {
+				List<D1Yz> list = result.getList();
+				int i = 0;
+				Integer lastMax = null;
+				for (DsYz data : dataResult.getList()) {
+					D1Yz yz = list.get(i++);
+					int max = 0;
+					for (String fd : DsNums.FDS) {
+						Method m = ReflectionUtils.findMethod(DsYz.class, "get" + fd);
+						Integer value = (Integer) m.invoke(data);
+						if (value != null && value > max) {
+							max = value;
+						}
 					}
+					if (lastMax != null && lastMax >= max) {
+						yz.setRedFordsd1(true);
+					}
+					lastMax = max;
+					yz.setDsd1(max);
 				}
-				if (lastMax != null && lastMax >= max) {
-					yz.setRedFordsd1(true);
-				}
-				lastMax = max;
-				yz.setDsd1(max);
 			}
+			return new AsyncResult<Exception>(null);
+		} catch (Exception e) {
+			logger.error(e.getMessage(), e);
+			return new AsyncResult<Exception>(e);
 		}
 	}
 
-	private void calDsZfForD1(QueryInfo<SxYz> queryInfo, PageResult<D1Yz> result) throws Exception {
-		QueryInfo<DsZfYz> dataQueryInfo = new QueryInfo<DsZfYz>();
-		DsZfYz condition = new DsZfYz();
-		condition.setYear(queryInfo.getObject().getYear());
-		condition.setPhase(queryInfo.getObject().getPhase());
-		dataQueryInfo.setObject(condition);
-		dataQueryInfo.setPageInfo(queryInfo.getPageInfo());
-		dataQueryInfo.setToReverse(queryInfo.isToReverse());
-		PageResult<DsZfYz> dataResult = repositories.dszfYzDao.query(dataQueryInfo);
-		if (dataResult != null && dataResult.getTotal() > 0) {
-			List<D1Yz> list = result.getList();
-			int i = 0;
-			Integer lastMax = null;
-			for (DsZfYz data : dataResult.getList()) {
-				D1Yz yz = list.get(i++);
-				int max = 0;
-				for (int j = 0; j < DsNums.FDS.length; j++) {
-					Method m = ReflectionUtils.findMethod(DsZfYz.class, "getZf" + j);
-					Integer value = (Integer) m.invoke(data);
-					if (value != null && value > max) {
-						max = value;
+	@Async
+	public Future<Exception> calDsZfForD1(QueryInfo<SxYz> queryInfo, PageResult<D1Yz> result) throws Exception {
+		try {
+			QueryInfo<DsZfYz> dataQueryInfo = new QueryInfo<DsZfYz>();
+			DsZfYz condition = new DsZfYz();
+			condition.setYear(queryInfo.getObject().getYear());
+			condition.setPhase(queryInfo.getObject().getPhase());
+			dataQueryInfo.setObject(condition);
+			dataQueryInfo.setPageInfo(queryInfo.getPageInfo());
+			dataQueryInfo.setToReverse(queryInfo.isToReverse());
+			PageResult<DsZfYz> dataResult = repositories.dszfYzDao.query(dataQueryInfo);
+			if (dataResult != null && dataResult.getTotal() > 0) {
+				List<D1Yz> list = result.getList();
+				int i = 0;
+				Integer lastMax = null;
+				for (DsZfYz data : dataResult.getList()) {
+					D1Yz yz = list.get(i++);
+					int max = 0;
+					for (int j = 0; j < DsNums.FDS.length; j++) {
+						Method m = ReflectionUtils.findMethod(DsZfYz.class, "getZf" + j);
+						Integer value = (Integer) m.invoke(data);
+						if (value != null && value > max) {
+							max = value;
+						}
 					}
+					if (lastMax != null && lastMax >= max) {
+						yz.setRedFordszfd1(true);
+					}
+					lastMax = max;
+					yz.setDszfd1(max);
 				}
-				if (lastMax != null && lastMax >= max) {
-					yz.setRedFordszfd1(true);
-				}
-				lastMax = max;
-				yz.setDszfd1(max);
 			}
+			return new AsyncResult<Exception>(null);
+		} catch (Exception e) {
+			logger.error(e.getMessage(), e);
+			return new AsyncResult<Exception>(e);
 		}
 	}
 
-	private void calSwForD1(QueryInfo<SxYz> queryInfo, PageResult<D1Yz> result) throws Exception {
-		QueryInfo<SwYz> dataQueryInfo = new QueryInfo<SwYz>();
-		SwYz condition = new SwYz();
-		condition.setYear(queryInfo.getObject().getYear());
-		condition.setPhase(queryInfo.getObject().getPhase());
-		dataQueryInfo.setObject(condition);
-		dataQueryInfo.setPageInfo(queryInfo.getPageInfo());
-		dataQueryInfo.setToReverse(queryInfo.isToReverse());
-		PageResult<SwYz> dataResult = repositories.swYzDao.query(dataQueryInfo);
-		if (dataResult != null && dataResult.getTotal() > 0) {
-			List<D1Yz> list = result.getList();
-			int i = 0;
-			Integer lastMax = null;
-			for (SwYz data : dataResult.getList()) {
-				D1Yz yz = list.get(i++);
-				int max = 0;
-				for (String fd : SwNums.FDS) {
-					Method m = ReflectionUtils.findMethod(SwYz.class, "get" + fd);
-					Integer value = (Integer) m.invoke(data);
-					if (value != null && value > max) {
-						max = value;
+	@Async
+	public Future<Exception> calSwForD1(QueryInfo<SxYz> queryInfo, PageResult<D1Yz> result) throws Exception {
+		try {
+			QueryInfo<SwYz> dataQueryInfo = new QueryInfo<SwYz>();
+			SwYz condition = new SwYz();
+			condition.setYear(queryInfo.getObject().getYear());
+			condition.setPhase(queryInfo.getObject().getPhase());
+			dataQueryInfo.setObject(condition);
+			dataQueryInfo.setPageInfo(queryInfo.getPageInfo());
+			dataQueryInfo.setToReverse(queryInfo.isToReverse());
+			PageResult<SwYz> dataResult = repositories.swYzDao.query(dataQueryInfo);
+			if (dataResult != null && dataResult.getTotal() > 0) {
+				List<D1Yz> list = result.getList();
+				int i = 0;
+				Integer lastMax = null;
+				for (SwYz data : dataResult.getList()) {
+					D1Yz yz = list.get(i++);
+					int max = 0;
+					for (String fd : SwNums.FDS) {
+						Method m = ReflectionUtils.findMethod(SwYz.class, "get" + fd);
+						Integer value = (Integer) m.invoke(data);
+						if (value != null && value > max) {
+							max = value;
+						}
 					}
+					if (lastMax != null && lastMax >= max) {
+						yz.setRedForswd1(true);
+					}
+					lastMax = max;
+					yz.setSwd1(max);
 				}
-				if (lastMax != null && lastMax >= max) {
-					yz.setRedForswd1(true);
-				}
-				lastMax = max;
-				yz.setSwd1(max);
 			}
+			return new AsyncResult<Exception>(null);
+		} catch (Exception e) {
+			logger.error(e.getMessage(), e);
+			return new AsyncResult<Exception>(e);
 		}
 	}
 
-	private void calSwZfForD1(QueryInfo<SxYz> queryInfo, PageResult<D1Yz> result) throws Exception {
-		QueryInfo<SwZfYz> dataQueryInfo = new QueryInfo<SwZfYz>();
-		SwZfYz condition = new SwZfYz();
-		condition.setYear(queryInfo.getObject().getYear());
-		condition.setPhase(queryInfo.getObject().getPhase());
-		dataQueryInfo.setObject(condition);
-		dataQueryInfo.setPageInfo(queryInfo.getPageInfo());
-		dataQueryInfo.setToReverse(queryInfo.isToReverse());
-		PageResult<SwZfYz> dataResult = repositories.swZfYzDao.query(dataQueryInfo);
-		if (dataResult != null && dataResult.getTotal() > 0) {
-			List<D1Yz> list = result.getList();
-			int i = 0;
-			Integer lastMax = null;
-			for (SwZfYz data : dataResult.getList()) {
-				D1Yz yz = list.get(i++);
-				int max = 0;
-				for (int j = 0; j < SwNums.FDS.length; j++) {
-					Method m = ReflectionUtils.findMethod(SwZfYz.class, "getZf" + j);
-					Integer value = (Integer) m.invoke(data);
-					if (value != null && value > max) {
-						max = value;
+	@Async
+	public Future<Exception> calSwZfForD1(QueryInfo<SxYz> queryInfo, PageResult<D1Yz> result) throws Exception {
+		try {
+			QueryInfo<SwZfYz> dataQueryInfo = new QueryInfo<SwZfYz>();
+			SwZfYz condition = new SwZfYz();
+			condition.setYear(queryInfo.getObject().getYear());
+			condition.setPhase(queryInfo.getObject().getPhase());
+			dataQueryInfo.setObject(condition);
+			dataQueryInfo.setPageInfo(queryInfo.getPageInfo());
+			dataQueryInfo.setToReverse(queryInfo.isToReverse());
+			PageResult<SwZfYz> dataResult = repositories.swZfYzDao.query(dataQueryInfo);
+			if (dataResult != null && dataResult.getTotal() > 0) {
+				List<D1Yz> list = result.getList();
+				int i = 0;
+				Integer lastMax = null;
+				for (SwZfYz data : dataResult.getList()) {
+					D1Yz yz = list.get(i++);
+					int max = 0;
+					for (int j = 0; j < SwNums.FDS.length; j++) {
+						Method m = ReflectionUtils.findMethod(SwZfYz.class, "getZf" + j);
+						Integer value = (Integer) m.invoke(data);
+						if (value != null && value > max) {
+							max = value;
+						}
 					}
+					if (lastMax != null && lastMax >= max) {
+						yz.setRedForswzfd1(true);
+					}
+					lastMax = max;
+					yz.setSwzfd1(max);
 				}
-				if (lastMax != null && lastMax >= max) {
-					yz.setRedForswzfd1(true);
-				}
-				lastMax = max;
-				yz.setSwzfd1(max);
 			}
+			return new AsyncResult<Exception>(null);
+		} catch (Exception e) {
+			logger.error(e.getMessage(), e);
+			return new AsyncResult<Exception>(e);
 		}
 	}
 
-	private void calMwForD1(QueryInfo<SxYz> queryInfo, PageResult<D1Yz> result) throws Exception {
-		QueryInfo<MwYz> dataQueryInfo = new QueryInfo<MwYz>();
-		MwYz condition = new MwYz();
-		condition.setYear(queryInfo.getObject().getYear());
-		condition.setPhase(queryInfo.getObject().getPhase());
-		dataQueryInfo.setObject(condition);
-		dataQueryInfo.setPageInfo(queryInfo.getPageInfo());
-		dataQueryInfo.setToReverse(queryInfo.isToReverse());
-		PageResult<MwYz> dataResult = repositories.mwYzDao.query(dataQueryInfo);
-		if (dataResult != null && dataResult.getTotal() > 0) {
-			List<D1Yz> list = result.getList();
-			int i = 0;
-			Integer lastMax = null;
-			for (MwYz data : dataResult.getList()) {
-				D1Yz yz = list.get(i++);
-				int max = 0;
-				for (String fd : MwNums.FDS) {
-					Method m = ReflectionUtils.findMethod(MwYz.class, "get" + fd);
-					Integer value = (Integer) m.invoke(data);
-					if (value != null && value > max) {
-						max = value;
+	@Async
+	public Future<Exception> calMwForD1(QueryInfo<SxYz> queryInfo, PageResult<D1Yz> result) throws Exception {
+		try {
+			QueryInfo<MwYz> dataQueryInfo = new QueryInfo<MwYz>();
+			MwYz condition = new MwYz();
+			condition.setYear(queryInfo.getObject().getYear());
+			condition.setPhase(queryInfo.getObject().getPhase());
+			dataQueryInfo.setObject(condition);
+			dataQueryInfo.setPageInfo(queryInfo.getPageInfo());
+			dataQueryInfo.setToReverse(queryInfo.isToReverse());
+			PageResult<MwYz> dataResult = repositories.mwYzDao.query(dataQueryInfo);
+			if (dataResult != null && dataResult.getTotal() > 0) {
+				List<D1Yz> list = result.getList();
+				int i = 0;
+				Integer lastMax = null;
+				for (MwYz data : dataResult.getList()) {
+					D1Yz yz = list.get(i++);
+					int max = 0;
+					for (String fd : MwNums.FDS) {
+						Method m = ReflectionUtils.findMethod(MwYz.class, "get" + fd);
+						Integer value = (Integer) m.invoke(data);
+						if (value != null && value > max) {
+							max = value;
+						}
 					}
+					if (lastMax != null && lastMax >= max) {
+						yz.setRedFormwd1(true);
+					}
+					lastMax = max;
+					yz.setMwd1(max);
 				}
-				if (lastMax != null && lastMax >= max) {
-					yz.setRedFormwd1(true);
-				}
-				lastMax = max;
-				yz.setMwd1(max);
 			}
+			return new AsyncResult<Exception>(null);
+		} catch (Exception e) {
+			logger.error(e.getMessage(), e);
+			return new AsyncResult<Exception>(e);
 		}
 	}
 
-	private void calMwZfForD1(QueryInfo<SxYz> queryInfo, PageResult<D1Yz> result) throws Exception {
-		QueryInfo<MwZfYz> dataQueryInfo = new QueryInfo<MwZfYz>();
-		MwZfYz condition = new MwZfYz();
-		condition.setYear(queryInfo.getObject().getYear());
-		condition.setPhase(queryInfo.getObject().getPhase());
-		dataQueryInfo.setObject(condition);
-		dataQueryInfo.setPageInfo(queryInfo.getPageInfo());
-		dataQueryInfo.setToReverse(queryInfo.isToReverse());
-		PageResult<MwZfYz> dataResult = repositories.mwZfYzDao.query(dataQueryInfo);
-		if (dataResult != null && dataResult.getTotal() > 0) {
-			List<D1Yz> list = result.getList();
-			int i = 0;
-			Integer lastMax = null;
-			for (MwZfYz data : dataResult.getList()) {
-				D1Yz yz = list.get(i++);
-				int max = 0;
-				for (int j = 0; j < MwNums.FDS.length; j++) {
-					Method m = ReflectionUtils.findMethod(MwZfYz.class, "getZf" + j);
-					Integer value = (Integer) m.invoke(data);
-					if (value != null && value > max) {
-						max = value;
+	@Async
+	public Future<Exception> calMwZfForD1(QueryInfo<SxYz> queryInfo, PageResult<D1Yz> result) throws Exception {
+		try {
+			QueryInfo<MwZfYz> dataQueryInfo = new QueryInfo<MwZfYz>();
+			MwZfYz condition = new MwZfYz();
+			condition.setYear(queryInfo.getObject().getYear());
+			condition.setPhase(queryInfo.getObject().getPhase());
+			dataQueryInfo.setObject(condition);
+			dataQueryInfo.setPageInfo(queryInfo.getPageInfo());
+			dataQueryInfo.setToReverse(queryInfo.isToReverse());
+			PageResult<MwZfYz> dataResult = repositories.mwZfYzDao.query(dataQueryInfo);
+			if (dataResult != null && dataResult.getTotal() > 0) {
+				List<D1Yz> list = result.getList();
+				int i = 0;
+				Integer lastMax = null;
+				for (MwZfYz data : dataResult.getList()) {
+					D1Yz yz = list.get(i++);
+					int max = 0;
+					for (int j = 0; j < MwNums.FDS.length; j++) {
+						Method m = ReflectionUtils.findMethod(MwZfYz.class, "getZf" + j);
+						Integer value = (Integer) m.invoke(data);
+						if (value != null && value > max) {
+							max = value;
+						}
 					}
+					if (lastMax != null && lastMax >= max) {
+						yz.setRedFormwzfd1(true);
+					}
+					lastMax = max;
+					yz.setMwzfd1(max);
 				}
-				if (lastMax != null && lastMax >= max) {
-					yz.setRedFormwzfd1(true);
-				}
-				lastMax = max;
-				yz.setMwzfd1(max);
 			}
+			return new AsyncResult<Exception>(null);
+		} catch (Exception e) {
+			logger.error(e.getMessage(), e);
+			return new AsyncResult<Exception>(e);
 		}
 	}
 
-	private void calLhForD1(QueryInfo<SxYz> queryInfo, PageResult<D1Yz> result) throws Exception {
-		QueryInfo<LhYz> dataQueryInfo = new QueryInfo<LhYz>();
-		LhYz condition = new LhYz();
-		condition.setYear(queryInfo.getObject().getYear());
-		condition.setPhase(queryInfo.getObject().getPhase());
-		dataQueryInfo.setObject(condition);
-		dataQueryInfo.setPageInfo(queryInfo.getPageInfo());
-		dataQueryInfo.setToReverse(queryInfo.isToReverse());
-		PageResult<LhYz> dataResult = repositories.lhYzDao.query(dataQueryInfo);
-		if (dataResult != null && dataResult.getTotal() > 0) {
-			List<D1Yz> list = result.getList();
-			int i = 0;
-			Integer lastMax = null;
-			for (LhYz data : dataResult.getList()) {
-				D1Yz yz = list.get(i++);
-				int max = 0;
-				for (String fd : LhNums.FDS) {
-					Method m = ReflectionUtils.findMethod(LhYz.class, "get" + fd);
-					Integer value = (Integer) m.invoke(data);
-					if (value != null && value > max) {
-						max = value;
+	@Async
+	public Future<Exception> calLhForD1(QueryInfo<SxYz> queryInfo, PageResult<D1Yz> result) throws Exception {
+		try {
+			QueryInfo<LhYz> dataQueryInfo = new QueryInfo<LhYz>();
+			LhYz condition = new LhYz();
+			condition.setYear(queryInfo.getObject().getYear());
+			condition.setPhase(queryInfo.getObject().getPhase());
+			dataQueryInfo.setObject(condition);
+			dataQueryInfo.setPageInfo(queryInfo.getPageInfo());
+			dataQueryInfo.setToReverse(queryInfo.isToReverse());
+			PageResult<LhYz> dataResult = repositories.lhYzDao.query(dataQueryInfo);
+			if (dataResult != null && dataResult.getTotal() > 0) {
+				List<D1Yz> list = result.getList();
+				int i = 0;
+				Integer lastMax = null;
+				for (LhYz data : dataResult.getList()) {
+					D1Yz yz = list.get(i++);
+					int max = 0;
+					for (String fd : LhNums.FDS) {
+						Method m = ReflectionUtils.findMethod(LhYz.class, "get" + fd);
+						Integer value = (Integer) m.invoke(data);
+						if (value != null && value > max) {
+							max = value;
+						}
 					}
+					if (lastMax != null && lastMax >= max) {
+						yz.setRedForlhd1(true);
+					}
+					lastMax = max;
+					yz.setLhd1(max);
 				}
-				if (lastMax != null && lastMax >= max) {
-					yz.setRedForlhd1(true);
-				}
-				lastMax = max;
-				yz.setLhd1(max);
 			}
+			return new AsyncResult<Exception>(null);
+		} catch (Exception e) {
+			logger.error(e.getMessage(), e);
+			return new AsyncResult<Exception>(e);
 		}
 	}
 
-	private void calLhZfForD1(QueryInfo<SxYz> queryInfo, PageResult<D1Yz> result) throws Exception {
-		QueryInfo<LhZfYz> dataQueryInfo = new QueryInfo<LhZfYz>();
-		LhZfYz condition = new LhZfYz();
-		condition.setYear(queryInfo.getObject().getYear());
-		condition.setPhase(queryInfo.getObject().getPhase());
-		dataQueryInfo.setObject(condition);
-		dataQueryInfo.setPageInfo(queryInfo.getPageInfo());
-		dataQueryInfo.setToReverse(queryInfo.isToReverse());
-		PageResult<LhZfYz> dataResult = repositories.lhZfYzDao.query(dataQueryInfo);
-		if (dataResult != null && dataResult.getTotal() > 0) {
-			List<D1Yz> list = result.getList();
-			int i = 0;
-			Integer lastMax = null;
-			for (LhZfYz data : dataResult.getList()) {
-				D1Yz yz = list.get(i++);
-				int max = 0;
-				for (int j = 0; j < LhNums.FDS.length; j++) {
-					Method m = ReflectionUtils.findMethod(LhZfYz.class, "getZf" + j);
-					Integer value = (Integer) m.invoke(data);
-					if (value != null && value > max) {
-						max = value;
+	@Async
+	public Future<Exception> calLhZfForD1(QueryInfo<SxYz> queryInfo, PageResult<D1Yz> result) throws Exception {
+		try {
+			QueryInfo<LhZfYz> dataQueryInfo = new QueryInfo<LhZfYz>();
+			LhZfYz condition = new LhZfYz();
+			condition.setYear(queryInfo.getObject().getYear());
+			condition.setPhase(queryInfo.getObject().getPhase());
+			dataQueryInfo.setObject(condition);
+			dataQueryInfo.setPageInfo(queryInfo.getPageInfo());
+			dataQueryInfo.setToReverse(queryInfo.isToReverse());
+			PageResult<LhZfYz> dataResult = repositories.lhZfYzDao.query(dataQueryInfo);
+			if (dataResult != null && dataResult.getTotal() > 0) {
+				List<D1Yz> list = result.getList();
+				int i = 0;
+				Integer lastMax = null;
+				for (LhZfYz data : dataResult.getList()) {
+					D1Yz yz = list.get(i++);
+					int max = 0;
+					for (int j = 0; j < LhNums.FDS.length; j++) {
+						Method m = ReflectionUtils.findMethod(LhZfYz.class, "getZf" + j);
+						Integer value = (Integer) m.invoke(data);
+						if (value != null && value > max) {
+							max = value;
+						}
 					}
+					if (lastMax != null && lastMax >= max) {
+						yz.setRedForlhzfd1(true);
+					}
+					lastMax = max;
+					yz.setLhzfd1(max);
 				}
-				if (lastMax != null && lastMax >= max) {
-					yz.setRedForlhzfd1(true);
-				}
-				lastMax = max;
-				yz.setLhzfd1(max);
 			}
+			return new AsyncResult<Exception>(null);
+		} catch (Exception e) {
+			logger.error(e.getMessage(), e);
+			return new AsyncResult<Exception>(e);
 		}
 	}
 
-	private void calBsForD1(QueryInfo<SxYz> queryInfo, PageResult<D1Yz> result) throws Exception {
-		QueryInfo<Bs9qYz> dataQueryInfo = new QueryInfo<Bs9qYz>();
-		Bs9qYz condition = new Bs9qYz();
-		condition.setYear(queryInfo.getObject().getYear());
-		condition.setPhase(queryInfo.getObject().getPhase());
-		dataQueryInfo.setObject(condition);
-		dataQueryInfo.setPageInfo(queryInfo.getPageInfo());
-		dataQueryInfo.setToReverse(queryInfo.isToReverse());
-		PageResult<Bs9qYz> dataResult = repositories.bs9qYzDao.query(dataQueryInfo);
-		if (dataResult != null && dataResult.getTotal() > 0) {
-			List<D1Yz> list = result.getList();
-			int i = 0;
-			Integer lastMax = null;
-			for (Bs9qYz data : dataResult.getList()) {
-				D1Yz yz = list.get(i++);
-				int max = 0;
-				for (String fd : Bs9qNums.FDS) {
-					Method m = ReflectionUtils.findMethod(Bs9qYz.class, "get" + fd);
-					Integer value = (Integer) m.invoke(data);
-					if (value != null && value > max) {
-						max = value;
+	@Async
+	public Future<Exception> calBsForD1(QueryInfo<SxYz> queryInfo, PageResult<D1Yz> result) throws Exception {
+		try {
+			QueryInfo<Bs9qYz> dataQueryInfo = new QueryInfo<Bs9qYz>();
+			Bs9qYz condition = new Bs9qYz();
+			condition.setYear(queryInfo.getObject().getYear());
+			condition.setPhase(queryInfo.getObject().getPhase());
+			dataQueryInfo.setObject(condition);
+			dataQueryInfo.setPageInfo(queryInfo.getPageInfo());
+			dataQueryInfo.setToReverse(queryInfo.isToReverse());
+			PageResult<Bs9qYz> dataResult = repositories.bs9qYzDao.query(dataQueryInfo);
+			if (dataResult != null && dataResult.getTotal() > 0) {
+				List<D1Yz> list = result.getList();
+				int i = 0;
+				Integer lastMax = null;
+				for (Bs9qYz data : dataResult.getList()) {
+					D1Yz yz = list.get(i++);
+					int max = 0;
+					for (String fd : Bs9qNums.FDS) {
+						Method m = ReflectionUtils.findMethod(Bs9qYz.class, "get" + fd);
+						Integer value = (Integer) m.invoke(data);
+						if (value != null && value > max) {
+							max = value;
+						}
 					}
+					if (lastMax != null && lastMax >= max) {
+						yz.setRedForbsd1(true);
+					}
+					lastMax = max;
+					yz.setBsd1(max);
 				}
-				if (lastMax != null && lastMax >= max) {
-					yz.setRedForbsd1(true);
-				}
-				lastMax = max;
-				yz.setBsd1(max);
 			}
+			return new AsyncResult<Exception>(null);
+		} catch (Exception e) {
+			logger.error(e.getMessage(), e);
+			return new AsyncResult<Exception>(e);
 		}
 	}
 
-	private void calBsZfForD1(QueryInfo<SxYz> queryInfo, PageResult<D1Yz> result) throws Exception {
-		QueryInfo<Bs9qZfYz> dataQueryInfo = new QueryInfo<Bs9qZfYz>();
-		Bs9qZfYz condition = new Bs9qZfYz();
-		condition.setYear(queryInfo.getObject().getYear());
-		condition.setPhase(queryInfo.getObject().getPhase());
-		dataQueryInfo.setObject(condition);
-		dataQueryInfo.setPageInfo(queryInfo.getPageInfo());
-		dataQueryInfo.setToReverse(queryInfo.isToReverse());
-		PageResult<Bs9qZfYz> dataResult = repositories.bs9qZfYzDao.query(dataQueryInfo);
-		if (dataResult != null && dataResult.getTotal() > 0) {
-			List<D1Yz> list = result.getList();
-			int i = 0;
-			Integer lastMax = null;
-			for (Bs9qZfYz data : dataResult.getList()) {
-				D1Yz yz = list.get(i++);
-				int max = 0;
-				for (int j = 0; j < Bs9qNums.FDS.length; j++) {
-					Method m = ReflectionUtils.findMethod(Bs9qZfYz.class, "getZf" + j);
-					Integer value = (Integer) m.invoke(data);
-					if (value != null && value > max) {
-						max = value;
+	@Async
+	public Future<Exception> calBsZfForD1(QueryInfo<SxYz> queryInfo, PageResult<D1Yz> result) throws Exception {
+		try {
+			QueryInfo<Bs9qZfYz> dataQueryInfo = new QueryInfo<Bs9qZfYz>();
+			Bs9qZfYz condition = new Bs9qZfYz();
+			condition.setYear(queryInfo.getObject().getYear());
+			condition.setPhase(queryInfo.getObject().getPhase());
+			dataQueryInfo.setObject(condition);
+			dataQueryInfo.setPageInfo(queryInfo.getPageInfo());
+			dataQueryInfo.setToReverse(queryInfo.isToReverse());
+			PageResult<Bs9qZfYz> dataResult = repositories.bs9qZfYzDao.query(dataQueryInfo);
+			if (dataResult != null && dataResult.getTotal() > 0) {
+				List<D1Yz> list = result.getList();
+				int i = 0;
+				Integer lastMax = null;
+				for (Bs9qZfYz data : dataResult.getList()) {
+					D1Yz yz = list.get(i++);
+					int max = 0;
+					for (int j = 0; j < Bs9qNums.FDS.length; j++) {
+						Method m = ReflectionUtils.findMethod(Bs9qZfYz.class, "getZf" + j);
+						Integer value = (Integer) m.invoke(data);
+						if (value != null && value > max) {
+							max = value;
+						}
 					}
+					if (lastMax != null && lastMax >= max) {
+						yz.setRedForbszfd1(true);
+					}
+					lastMax = max;
+					yz.setBszfd1(max);
 				}
-				if (lastMax != null && lastMax >= max) {
-					yz.setRedForbszfd1(true);
-				}
-				lastMax = max;
-				yz.setBszfd1(max);
 			}
+			return new AsyncResult<Exception>(null);
+		} catch (Exception e) {
+			logger.error(e.getMessage(), e);
+			return new AsyncResult<Exception>(e);
 		}
 	}
 
-	private void calZsForD1(QueryInfo<SxYz> queryInfo, PageResult<D1Yz> result) throws Exception {
-		QueryInfo<ZsYz> dataQueryInfo = new QueryInfo<ZsYz>();
-		ZsYz condition = new ZsYz();
-		condition.setYear(queryInfo.getObject().getYear());
-		condition.setPhase(queryInfo.getObject().getPhase());
-		dataQueryInfo.setObject(condition);
-		dataQueryInfo.setPageInfo(queryInfo.getPageInfo());
-		dataQueryInfo.setToReverse(queryInfo.isToReverse());
-		PageResult<ZsYz> dataResult = repositories.zsYzDao.query(dataQueryInfo);
-		if (dataResult != null && dataResult.getTotal() > 0) {
-			List<D1Yz> list = result.getList();
-			int i = 0;
-			Integer lastMax = null;
-			for (ZsYz data : dataResult.getList()) {
-				D1Yz yz = list.get(i++);
-				int max = 0;
-				for (String fd : ZsNums.FDS) {
-					Method m = ReflectionUtils.findMethod(ZsYz.class, "get" + fd);
-					Integer value = (Integer) m.invoke(data);
-					if (value != null && value > max) {
-						max = value;
+	@Async
+	public Future<Exception> calZsForD1(QueryInfo<SxYz> queryInfo, PageResult<D1Yz> result) throws Exception {
+		try {
+			QueryInfo<ZsYz> dataQueryInfo = new QueryInfo<ZsYz>();
+			ZsYz condition = new ZsYz();
+			condition.setYear(queryInfo.getObject().getYear());
+			condition.setPhase(queryInfo.getObject().getPhase());
+			dataQueryInfo.setObject(condition);
+			dataQueryInfo.setPageInfo(queryInfo.getPageInfo());
+			dataQueryInfo.setToReverse(queryInfo.isToReverse());
+			PageResult<ZsYz> dataResult = repositories.zsYzDao.query(dataQueryInfo);
+			if (dataResult != null && dataResult.getTotal() > 0) {
+				List<D1Yz> list = result.getList();
+				int i = 0;
+				Integer lastMax = null;
+				for (ZsYz data : dataResult.getList()) {
+					D1Yz yz = list.get(i++);
+					int max = 0;
+					for (String fd : ZsNums.FDS) {
+						Method m = ReflectionUtils.findMethod(ZsYz.class, "get" + fd);
+						Integer value = (Integer) m.invoke(data);
+						if (value != null && value > max) {
+							max = value;
+						}
 					}
+					if (lastMax != null && lastMax >= max) {
+						yz.setRedForzsd1(true);
+					}
+					lastMax = max;
+					yz.setZsd1(max);
 				}
-				if (lastMax != null && lastMax >= max) {
-					yz.setRedForzsd1(true);
-				}
-				lastMax = max;
-				yz.setZsd1(max);
 			}
+			return new AsyncResult<Exception>(null);
+		} catch (Exception e) {
+			logger.error(e.getMessage(), e);
+			return new AsyncResult<Exception>(e);
 		}
 	}
 
-	private void calZsZfForD1(QueryInfo<SxYz> queryInfo, PageResult<D1Yz> result) throws Exception {
-		QueryInfo<ZsZfYz> dataQueryInfo = new QueryInfo<ZsZfYz>();
-		ZsZfYz condition = new ZsZfYz();
-		condition.setYear(queryInfo.getObject().getYear());
-		condition.setPhase(queryInfo.getObject().getPhase());
-		dataQueryInfo.setObject(condition);
-		dataQueryInfo.setPageInfo(queryInfo.getPageInfo());
-		dataQueryInfo.setToReverse(queryInfo.isToReverse());
-		PageResult<ZsZfYz> dataResult = repositories.zszfYzDao.query(dataQueryInfo);
-		if (dataResult != null && dataResult.getTotal() > 0) {
-			List<D1Yz> list = result.getList();
-			int i = 0;
-			Integer lastMax = null;
-			for (ZsZfYz data : dataResult.getList()) {
-				D1Yz yz = list.get(i++);
-				int max = 0;
-				for (int j = 0; j < ZsNums.FDS.length; j++) {
-					Method m = ReflectionUtils.findMethod(ZsZfYz.class, "getZf" + j);
-					Integer value = (Integer) m.invoke(data);
-					if (value != null && value > max) {
-						max = value;
+	@Async
+	public Future<Exception> calZsZfForD1(QueryInfo<SxYz> queryInfo, PageResult<D1Yz> result) throws Exception {
+		try {
+			QueryInfo<ZsZfYz> dataQueryInfo = new QueryInfo<ZsZfYz>();
+			ZsZfYz condition = new ZsZfYz();
+			condition.setYear(queryInfo.getObject().getYear());
+			condition.setPhase(queryInfo.getObject().getPhase());
+			dataQueryInfo.setObject(condition);
+			dataQueryInfo.setPageInfo(queryInfo.getPageInfo());
+			dataQueryInfo.setToReverse(queryInfo.isToReverse());
+			PageResult<ZsZfYz> dataResult = repositories.zszfYzDao.query(dataQueryInfo);
+			if (dataResult != null && dataResult.getTotal() > 0) {
+				List<D1Yz> list = result.getList();
+				int i = 0;
+				Integer lastMax = null;
+				for (ZsZfYz data : dataResult.getList()) {
+					D1Yz yz = list.get(i++);
+					int max = 0;
+					for (int j = 0; j < ZsNums.FDS.length; j++) {
+						Method m = ReflectionUtils.findMethod(ZsZfYz.class, "getZf" + j);
+						Integer value = (Integer) m.invoke(data);
+						if (value != null && value > max) {
+							max = value;
+						}
 					}
+					if (lastMax != null && lastMax >= max) {
+						yz.setRedForzszfd1(true);
+					}
+					lastMax = max;
+					yz.setZszfd1(max);
 				}
-				if (lastMax != null && lastMax >= max) {
-					yz.setRedForzszfd1(true);
-				}
-				lastMax = max;
-				yz.setZszfd1(max);
 			}
+			return new AsyncResult<Exception>(null);
+		} catch (Exception e) {
+			logger.error(e.getMessage(), e);
+			return new AsyncResult<Exception>(e);
 		}
 	}
 
-	private void calWxForD1(QueryInfo<SxYz> queryInfo, PageResult<D1Yz> result) throws Exception {
-		QueryInfo<WxYz> dataQueryInfo = new QueryInfo<WxYz>();
-		WxYz condition = new WxYz();
-		condition.setYear(queryInfo.getObject().getYear());
-		condition.setPhase(queryInfo.getObject().getPhase());
-		dataQueryInfo.setObject(condition);
-		dataQueryInfo.setPageInfo(queryInfo.getPageInfo());
-		dataQueryInfo.setToReverse(queryInfo.isToReverse());
-		PageResult<WxYz> dataResult = repositories.wxYzDao.query(dataQueryInfo);
-		if (dataResult != null && dataResult.getTotal() > 0) {
-			List<D1Yz> list = result.getList();
-			int i = 0;
-			Integer lastMax = null;
-			for (WxYz data : dataResult.getList()) {
-				D1Yz yz = list.get(i++);
-				int max = 0;
-				for (String fd : WxNums.FDS) {
-					Method m = ReflectionUtils.findMethod(WxYz.class, "get" + fd);
-					Integer value = (Integer) m.invoke(data);
-					if (value != null && value > max) {
-						max = value;
+	@Async
+	public Future<Exception> calWxForD1(QueryInfo<SxYz> queryInfo, PageResult<D1Yz> result) throws Exception {
+		try {
+			QueryInfo<WxYz> dataQueryInfo = new QueryInfo<WxYz>();
+			WxYz condition = new WxYz();
+			condition.setYear(queryInfo.getObject().getYear());
+			condition.setPhase(queryInfo.getObject().getPhase());
+			dataQueryInfo.setObject(condition);
+			dataQueryInfo.setPageInfo(queryInfo.getPageInfo());
+			dataQueryInfo.setToReverse(queryInfo.isToReverse());
+			PageResult<WxYz> dataResult = repositories.wxYzDao.query(dataQueryInfo);
+			if (dataResult != null && dataResult.getTotal() > 0) {
+				List<D1Yz> list = result.getList();
+				int i = 0;
+				Integer lastMax = null;
+				for (WxYz data : dataResult.getList()) {
+					D1Yz yz = list.get(i++);
+					int max = 0;
+					for (String fd : WxNums.FDS) {
+						Method m = ReflectionUtils.findMethod(WxYz.class, "get" + fd);
+						Integer value = (Integer) m.invoke(data);
+						if (value != null && value > max) {
+							max = value;
+						}
 					}
+					if (lastMax != null && lastMax >= max) {
+						yz.setRedForwxd1(true);
+					}
+					lastMax = max;
+					yz.setWxd1(max);
 				}
-				if (lastMax != null && lastMax >= max) {
-					yz.setRedForwxd1(true);
-				}
-				lastMax = max;
-				yz.setWxd1(max);
 			}
+			return new AsyncResult<Exception>(null);
+		} catch (Exception e) {
+			logger.error(e.getMessage(), e);
+			return new AsyncResult<Exception>(e);
 		}
 	}
 
-	private void calWxZfForD1(QueryInfo<SxYz> queryInfo, PageResult<D1Yz> result) throws Exception {
-		QueryInfo<WxZfYz> dataQueryInfo = new QueryInfo<WxZfYz>();
-		WxZfYz condition = new WxZfYz();
-		condition.setYear(queryInfo.getObject().getYear());
-		condition.setPhase(queryInfo.getObject().getPhase());
-		dataQueryInfo.setObject(condition);
-		dataQueryInfo.setPageInfo(queryInfo.getPageInfo());
-		dataQueryInfo.setToReverse(queryInfo.isToReverse());
-		PageResult<WxZfYz> dataResult = repositories.wxzfYzDao.query(dataQueryInfo);
-		if (dataResult != null && dataResult.getTotal() > 0) {
-			List<D1Yz> list = result.getList();
-			int i = 0;
-			Integer lastMax = null;
-			for (WxZfYz data : dataResult.getList()) {
-				D1Yz yz = list.get(i++);
-				int max = 0;
-				for (int j = 0; j < WxNums.FDS.length; j++) {
-					Method m = ReflectionUtils.findMethod(WxZfYz.class, "getZf" + j);
-					Integer value = (Integer) m.invoke(data);
-					if (value != null && value > max) {
-						max = value;
+	@Async
+	public Future<Exception> calWxZfForD1(QueryInfo<SxYz> queryInfo, PageResult<D1Yz> result) throws Exception {
+		try {
+			QueryInfo<WxZfYz> dataQueryInfo = new QueryInfo<WxZfYz>();
+			WxZfYz condition = new WxZfYz();
+			condition.setYear(queryInfo.getObject().getYear());
+			condition.setPhase(queryInfo.getObject().getPhase());
+			dataQueryInfo.setObject(condition);
+			dataQueryInfo.setPageInfo(queryInfo.getPageInfo());
+			dataQueryInfo.setToReverse(queryInfo.isToReverse());
+			PageResult<WxZfYz> dataResult = repositories.wxzfYzDao.query(dataQueryInfo);
+			if (dataResult != null && dataResult.getTotal() > 0) {
+				List<D1Yz> list = result.getList();
+				int i = 0;
+				Integer lastMax = null;
+				for (WxZfYz data : dataResult.getList()) {
+					D1Yz yz = list.get(i++);
+					int max = 0;
+					for (int j = 0; j < WxNums.FDS.length; j++) {
+						Method m = ReflectionUtils.findMethod(WxZfYz.class, "getZf" + j);
+						Integer value = (Integer) m.invoke(data);
+						if (value != null && value > max) {
+							max = value;
+						}
 					}
+					if (lastMax != null && lastMax >= max) {
+						yz.setRedForwxzfd1(true);
+					}
+					lastMax = max;
+					yz.setWxzfd1(max);
 				}
-				if (lastMax != null && lastMax >= max) {
-					yz.setRedForwxzfd1(true);
-				}
-				lastMax = max;
-				yz.setWxzfd1(max);
 			}
+			return new AsyncResult<Exception>(null);
+		} catch (Exception e) {
+			logger.error(e.getMessage(), e);
+			return new AsyncResult<Exception>(e);
 		}
 	}
 
-	private void calWxdsForD1(QueryInfo<SxYz> queryInfo, PageResult<D1Yz> result) throws Exception {
-		QueryInfo<WxdsYz> dataQueryInfo = new QueryInfo<WxdsYz>();
-		WxdsYz condition = new WxdsYz();
-		condition.setYear(queryInfo.getObject().getYear());
-		condition.setPhase(queryInfo.getObject().getPhase());
-		dataQueryInfo.setObject(condition);
-		dataQueryInfo.setPageInfo(queryInfo.getPageInfo());
-		dataQueryInfo.setToReverse(queryInfo.isToReverse());
-		PageResult<WxdsYz> dataResult = repositories.wxdsYzDao.query(dataQueryInfo);
-		if (dataResult != null && dataResult.getTotal() > 0) {
-			List<D1Yz> list = result.getList();
-			int i = 0;
-			Integer lastMax = null;
-			for (WxdsYz data : dataResult.getList()) {
-				D1Yz yz = list.get(i++);
-				int max = 0;
-				for (String fd : WxDsNums.FDS) {
-					Method m = ReflectionUtils.findMethod(WxdsYz.class, "get" + fd);
-					Integer value = (Integer) m.invoke(data);
-					if (value != null && value > max) {
-						max = value;
+	@Async
+	public Future<Exception> calWxdsForD1(QueryInfo<SxYz> queryInfo, PageResult<D1Yz> result) throws Exception {
+		try {
+			QueryInfo<WxdsYz> dataQueryInfo = new QueryInfo<WxdsYz>();
+			WxdsYz condition = new WxdsYz();
+			condition.setYear(queryInfo.getObject().getYear());
+			condition.setPhase(queryInfo.getObject().getPhase());
+			dataQueryInfo.setObject(condition);
+			dataQueryInfo.setPageInfo(queryInfo.getPageInfo());
+			dataQueryInfo.setToReverse(queryInfo.isToReverse());
+			PageResult<WxdsYz> dataResult = repositories.wxdsYzDao.query(dataQueryInfo);
+			if (dataResult != null && dataResult.getTotal() > 0) {
+				List<D1Yz> list = result.getList();
+				int i = 0;
+				Integer lastMax = null;
+				for (WxdsYz data : dataResult.getList()) {
+					D1Yz yz = list.get(i++);
+					int max = 0;
+					for (String fd : WxDsNums.FDS) {
+						Method m = ReflectionUtils.findMethod(WxdsYz.class, "get" + fd);
+						Integer value = (Integer) m.invoke(data);
+						if (value != null && value > max) {
+							max = value;
+						}
 					}
+					if (lastMax != null && lastMax >= max) {
+						yz.setRedForwxdsd1(true);
+					}
+					lastMax = max;
+					yz.setWxdsd1(max);
 				}
-				if (lastMax != null && lastMax >= max) {
-					yz.setRedForwxdsd1(true);
-				}
-				lastMax = max;
-				yz.setWxdsd1(max);
 			}
+			return new AsyncResult<Exception>(null);
+		} catch (Exception e) {
+			logger.error(e.getMessage(), e);
+			return new AsyncResult<Exception>(e);
 		}
 	}
 
-	private void calWxdsZfForD1(QueryInfo<SxYz> queryInfo, PageResult<D1Yz> result) throws Exception {
-		QueryInfo<WxdsZfYz> dataQueryInfo = new QueryInfo<WxdsZfYz>();
-		WxdsZfYz condition = new WxdsZfYz();
-		condition.setYear(queryInfo.getObject().getYear());
-		condition.setPhase(queryInfo.getObject().getPhase());
-		dataQueryInfo.setObject(condition);
-		dataQueryInfo.setPageInfo(queryInfo.getPageInfo());
-		dataQueryInfo.setToReverse(queryInfo.isToReverse());
-		PageResult<WxdsZfYz> dataResult = repositories.wxdsZfYzDao.query(dataQueryInfo);
-		if (dataResult != null && dataResult.getTotal() > 0) {
-			List<D1Yz> list = result.getList();
-			int i = 0;
-			Integer lastMax = null;
-			for (WxdsZfYz data : dataResult.getList()) {
-				D1Yz yz = list.get(i++);
-				int max = 0;
-				for (int j = 0; j < WxDsNums.FDS.length; j++) {
-					Method m = ReflectionUtils.findMethod(WxdsZfYz.class, "getZf" + j);
-					Integer value = (Integer) m.invoke(data);
-					if (value != null && value > max) {
-						max = value;
+	@Async
+	public Future<Exception> calWxdsZfForD1(QueryInfo<SxYz> queryInfo, PageResult<D1Yz> result) throws Exception {
+		try {
+			QueryInfo<WxdsZfYz> dataQueryInfo = new QueryInfo<WxdsZfYz>();
+			WxdsZfYz condition = new WxdsZfYz();
+			condition.setYear(queryInfo.getObject().getYear());
+			condition.setPhase(queryInfo.getObject().getPhase());
+			dataQueryInfo.setObject(condition);
+			dataQueryInfo.setPageInfo(queryInfo.getPageInfo());
+			dataQueryInfo.setToReverse(queryInfo.isToReverse());
+			PageResult<WxdsZfYz> dataResult = repositories.wxdsZfYzDao.query(dataQueryInfo);
+			if (dataResult != null && dataResult.getTotal() > 0) {
+				List<D1Yz> list = result.getList();
+				int i = 0;
+				Integer lastMax = null;
+				for (WxdsZfYz data : dataResult.getList()) {
+					D1Yz yz = list.get(i++);
+					int max = 0;
+					for (int j = 0; j < WxDsNums.FDS.length; j++) {
+						Method m = ReflectionUtils.findMethod(WxdsZfYz.class, "getZf" + j);
+						Integer value = (Integer) m.invoke(data);
+						if (value != null && value > max) {
+							max = value;
+						}
 					}
+					if (lastMax != null && lastMax >= max) {
+						yz.setRedForwxdszfd1(true);
+					}
+					lastMax = max;
+					yz.setWxdszfd1(max);
 				}
-				if (lastMax != null && lastMax >= max) {
-					yz.setRedForwxdszfd1(true);
-				}
-				lastMax = max;
-				yz.setWxdszfd1(max);
 			}
+			return new AsyncResult<Exception>(null);
+		} catch (Exception e) {
+			logger.error(e.getMessage(), e);
+			return new AsyncResult<Exception>(e);
 		}
 	}
 
-	private void calPdForD1(QueryInfo<SxYz> queryInfo, PageResult<D1Yz> result) throws Exception {
-		QueryInfo<PdYz> dataQueryInfo = new QueryInfo<PdYz>();
-		PdYz condition = new PdYz();
-		condition.setYear(queryInfo.getObject().getYear());
-		condition.setPhase(queryInfo.getObject().getPhase());
-		dataQueryInfo.setObject(condition);
-		dataQueryInfo.setPageInfo(queryInfo.getPageInfo());
-		dataQueryInfo.setToReverse(queryInfo.isToReverse());
-		PageResult<PdYz> dataResult = repositories.pdYzDao.query(dataQueryInfo);
-		if (dataResult != null && dataResult.getTotal() > 0) {
-			List<D1Yz> list = result.getList();
-			int i = 0;
-			Integer lastMax = null;
-			for (PdYz data : dataResult.getList()) {
-				D1Yz yz = list.get(i++);
-				int max = 0;
-				for (String fd : PdNums.FDS) {
-					Method m = ReflectionUtils.findMethod(PdYz.class, "get" + fd);
-					Integer value = (Integer) m.invoke(data);
-					if (value != null && value > max) {
-						max = value;
+	@Async
+	public Future<Exception> calPdForD1(QueryInfo<SxYz> queryInfo, PageResult<D1Yz> result) throws Exception {
+		try {
+			QueryInfo<PdYz> dataQueryInfo = new QueryInfo<PdYz>();
+			PdYz condition = new PdYz();
+			condition.setYear(queryInfo.getObject().getYear());
+			condition.setPhase(queryInfo.getObject().getPhase());
+			dataQueryInfo.setObject(condition);
+			dataQueryInfo.setPageInfo(queryInfo.getPageInfo());
+			dataQueryInfo.setToReverse(queryInfo.isToReverse());
+			PageResult<PdYz> dataResult = repositories.pdYzDao.query(dataQueryInfo);
+			if (dataResult != null && dataResult.getTotal() > 0) {
+				List<D1Yz> list = result.getList();
+				int i = 0;
+				Integer lastMax = null;
+				for (PdYz data : dataResult.getList()) {
+					D1Yz yz = list.get(i++);
+					int max = 0;
+					for (String fd : PdNums.FDS) {
+						Method m = ReflectionUtils.findMethod(PdYz.class, "get" + fd);
+						Integer value = (Integer) m.invoke(data);
+						if (value != null && value > max) {
+							max = value;
+						}
 					}
+					if (lastMax != null && lastMax >= max) {
+						yz.setRedForpdd1(true);
+					}
+					lastMax = max;
+					yz.setPdd1(max);
 				}
-				if (lastMax != null && lastMax >= max) {
-					yz.setRedForpdd1(true);
-				}
-				lastMax = max;
-				yz.setPdd1(max);
 			}
+			return new AsyncResult<Exception>(null);
+		} catch (Exception e) {
+			logger.error(e.getMessage(), e);
+			return new AsyncResult<Exception>(e);
 		}
 	}
 
-	private void calPdZfForD1(QueryInfo<SxYz> queryInfo, PageResult<D1Yz> result) throws Exception {
-		QueryInfo<PdZfYz> dataQueryInfo = new QueryInfo<PdZfYz>();
-		PdZfYz condition = new PdZfYz();
-		condition.setYear(queryInfo.getObject().getYear());
-		condition.setPhase(queryInfo.getObject().getPhase());
-		dataQueryInfo.setObject(condition);
-		dataQueryInfo.setPageInfo(queryInfo.getPageInfo());
-		dataQueryInfo.setToReverse(queryInfo.isToReverse());
-		PageResult<PdZfYz> dataResult = repositories.pdzfYzDao.query(dataQueryInfo);
-		if (dataResult != null && dataResult.getTotal() > 0) {
-			List<D1Yz> list = result.getList();
-			int i = 0;
-			Integer lastMax = null;
-			for (PdZfYz data : dataResult.getList()) {
-				D1Yz yz = list.get(i++);
-				int max = 0;
-				for (int j = 0; j < PdNums.FDS.length; j++) {
-					Method m = ReflectionUtils.findMethod(PdZfYz.class, "getZf" + j);
-					Integer value = (Integer) m.invoke(data);
-					if (value != null && value > max) {
-						max = value;
+	@Async
+	public Future<Exception> calPdZfForD1(QueryInfo<SxYz> queryInfo, PageResult<D1Yz> result) throws Exception {
+		try {
+			QueryInfo<PdZfYz> dataQueryInfo = new QueryInfo<PdZfYz>();
+			PdZfYz condition = new PdZfYz();
+			condition.setYear(queryInfo.getObject().getYear());
+			condition.setPhase(queryInfo.getObject().getPhase());
+			dataQueryInfo.setObject(condition);
+			dataQueryInfo.setPageInfo(queryInfo.getPageInfo());
+			dataQueryInfo.setToReverse(queryInfo.isToReverse());
+			PageResult<PdZfYz> dataResult = repositories.pdzfYzDao.query(dataQueryInfo);
+			if (dataResult != null && dataResult.getTotal() > 0) {
+				List<D1Yz> list = result.getList();
+				int i = 0;
+				Integer lastMax = null;
+				for (PdZfYz data : dataResult.getList()) {
+					D1Yz yz = list.get(i++);
+					int max = 0;
+					for (int j = 0; j < PdNums.FDS.length; j++) {
+						Method m = ReflectionUtils.findMethod(PdZfYz.class, "getZf" + j);
+						Integer value = (Integer) m.invoke(data);
+						if (value != null && value > max) {
+							max = value;
+						}
 					}
+					if (lastMax != null && lastMax >= max) {
+						yz.setRedForpdzfd1(true);
+					}
+					lastMax = max;
+					yz.setPdzfd1(max);
 				}
-				if (lastMax != null && lastMax >= max) {
-					yz.setRedForpdzfd1(true);
-				}
-				lastMax = max;
-				yz.setPdzfd1(max);
 			}
+			return new AsyncResult<Exception>(null);
+		} catch (Exception e) {
+			logger.error(e.getMessage(), e);
+			return new AsyncResult<Exception>(e);
 		}
 	}
 
-	private void calFdForD1(QueryInfo<SxYz> queryInfo, PageResult<D1Yz> result) throws Exception {
-		QueryInfo<Tm12FdYz> dataQueryInfo = new QueryInfo<Tm12FdYz>();
-		Tm12FdYz condition = new Tm12FdYz();
-		condition.setYear(queryInfo.getObject().getYear());
-		condition.setPhase(queryInfo.getObject().getPhase());
-		dataQueryInfo.setObject(condition);
-		dataQueryInfo.setPageInfo(queryInfo.getPageInfo());
-		dataQueryInfo.setToReverse(queryInfo.isToReverse());
-		PageResult<Tm12FdYz> dataResult = repositories.tm12fdYzDao.query(dataQueryInfo);
-		if (dataResult != null && dataResult.getTotal() > 0) {
-			List<D1Yz> list = result.getList();
-			int i = 0;
-			Integer lastMax = null;
-			for (Tm12FdYz data : dataResult.getList()) {
-				D1Yz yz = list.get(i++);
-				int max = 0;
-				for (int j = 1; j < 13; j++) {
-					Method m = ReflectionUtils.findMethod(Tm12FdYz.class, "getW" + j);
-					Integer value = (Integer) m.invoke(data);
-					if (value != null && value > max) {
-						max = value;
+	@Async
+	public Future<Exception> calFdForD1(QueryInfo<SxYz> queryInfo, PageResult<D1Yz> result) throws Exception {
+		try {
+			QueryInfo<Tm12FdYz> dataQueryInfo = new QueryInfo<Tm12FdYz>();
+			Tm12FdYz condition = new Tm12FdYz();
+			condition.setYear(queryInfo.getObject().getYear());
+			condition.setPhase(queryInfo.getObject().getPhase());
+			dataQueryInfo.setObject(condition);
+			dataQueryInfo.setPageInfo(queryInfo.getPageInfo());
+			dataQueryInfo.setToReverse(queryInfo.isToReverse());
+			PageResult<Tm12FdYz> dataResult = repositories.tm12fdYzDao.query(dataQueryInfo);
+			if (dataResult != null && dataResult.getTotal() > 0) {
+				List<D1Yz> list = result.getList();
+				int i = 0;
+				Integer lastMax = null;
+				for (Tm12FdYz data : dataResult.getList()) {
+					D1Yz yz = list.get(i++);
+					int max = 0;
+					for (int j = 1; j < 13; j++) {
+						Method m = ReflectionUtils.findMethod(Tm12FdYz.class, "getW" + j);
+						Integer value = (Integer) m.invoke(data);
+						if (value != null && value > max) {
+							max = value;
+						}
 					}
+					if (lastMax != null && lastMax >= max) {
+						yz.setRedForfdd1(true);
+					}
+					lastMax = max;
+					yz.setFdd1(max);
 				}
-				if (lastMax != null && lastMax >= max) {
-					yz.setRedForfdd1(true);
-				}
-				lastMax = max;
-				yz.setFdd1(max);
 			}
+			return new AsyncResult<Exception>(null);
+		} catch (Exception e) {
+			logger.error(e.getMessage(), e);
+			return new AsyncResult<Exception>(e);
 		}
 	}
 
-	private void calFdZfForD1(QueryInfo<SxYz> queryInfo, PageResult<D1Yz> result) throws Exception {
-		QueryInfo<Tm12FdZfYz> dataQueryInfo = new QueryInfo<Tm12FdZfYz>();
-		Tm12FdZfYz condition = new Tm12FdZfYz();
-		condition.setYear(queryInfo.getObject().getYear());
-		condition.setPhase(queryInfo.getObject().getPhase());
-		dataQueryInfo.setObject(condition);
-		dataQueryInfo.setPageInfo(queryInfo.getPageInfo());
-		dataQueryInfo.setToReverse(queryInfo.isToReverse());
-		PageResult<Tm12FdZfYz> dataResult = repositories.tm12fdzfYzDao.query(dataQueryInfo);
-		if (dataResult != null && dataResult.getTotal() > 0) {
-			List<D1Yz> list = result.getList();
-			int i = 0;
-			Integer lastMax = null;
-			for (Tm12FdZfYz data : dataResult.getList()) {
-				D1Yz yz = list.get(i++);
-				int max = 0;
-				for (int j = 0; j < 12; j++) {
-					Method m = ReflectionUtils.findMethod(Tm12FdZfYz.class, "getZf" + j);
-					Integer value = (Integer) m.invoke(data);
-					if (value != null && value > max) {
-						max = value;
+	@Async
+	public Future<Exception> calFdZfForD1(QueryInfo<SxYz> queryInfo, PageResult<D1Yz> result) throws Exception {
+		try {
+			QueryInfo<Tm12FdZfYz> dataQueryInfo = new QueryInfo<Tm12FdZfYz>();
+			Tm12FdZfYz condition = new Tm12FdZfYz();
+			condition.setYear(queryInfo.getObject().getYear());
+			condition.setPhase(queryInfo.getObject().getPhase());
+			dataQueryInfo.setObject(condition);
+			dataQueryInfo.setPageInfo(queryInfo.getPageInfo());
+			dataQueryInfo.setToReverse(queryInfo.isToReverse());
+			PageResult<Tm12FdZfYz> dataResult = repositories.tm12fdzfYzDao.query(dataQueryInfo);
+			if (dataResult != null && dataResult.getTotal() > 0) {
+				List<D1Yz> list = result.getList();
+				int i = 0;
+				Integer lastMax = null;
+				for (Tm12FdZfYz data : dataResult.getList()) {
+					D1Yz yz = list.get(i++);
+					int max = 0;
+					for (int j = 0; j < 12; j++) {
+						Method m = ReflectionUtils.findMethod(Tm12FdZfYz.class, "getZf" + j);
+						Integer value = (Integer) m.invoke(data);
+						if (value != null && value > max) {
+							max = value;
+						}
 					}
+					if (lastMax != null && lastMax >= max) {
+						yz.setRedForfdzfd1(true);
+					}
+					lastMax = max;
+					yz.setFdzfd1(max);
 				}
-				if (lastMax != null && lastMax >= max) {
-					yz.setRedForfdzfd1(true);
-				}
-				lastMax = max;
-				yz.setFdzfd1(max);
 			}
+			return new AsyncResult<Exception>(null);
+		} catch (Exception e) {
+			logger.error(e.getMessage(), e);
+			return new AsyncResult<Exception>(e);
 		}
 	}
 
-	private void calQqForD1(QueryInfo<SxYz> queryInfo, PageResult<D1Yz> result) throws Exception {
-		QueryInfo<QqYz> dataQueryInfo = new QueryInfo<QqYz>();
-		QqYz condition = new QqYz();
-		condition.setYear(queryInfo.getObject().getYear());
-		condition.setPhase(queryInfo.getObject().getPhase());
-		dataQueryInfo.setObject(condition);
-		dataQueryInfo.setPageInfo(queryInfo.getPageInfo());
-		dataQueryInfo.setToReverse(queryInfo.isToReverse());
-		PageResult<QqYz> dataResult = repositories.qqYzDao.query(dataQueryInfo);
-		if (dataResult != null && dataResult.getTotal() > 0) {
-			List<D1Yz> list = result.getList();
-			int i = 0;
-			Integer lastMax = null;
-			for (QqYz data : dataResult.getList()) {
-				D1Yz yz = list.get(i++);
-				int max = 0;
-				for (String fd : QqNums.FDS) {
-					Method m = ReflectionUtils.findMethod(QqYz.class, "get" + fd);
-					Integer value = (Integer) m.invoke(data);
-					if (value != null && value > max) {
-						max = value;
+	@Async
+	public Future<Exception> calQqForD1(QueryInfo<SxYz> queryInfo, PageResult<D1Yz> result) throws Exception {
+		try {
+			QueryInfo<QqYz> dataQueryInfo = new QueryInfo<QqYz>();
+			QqYz condition = new QqYz();
+			condition.setYear(queryInfo.getObject().getYear());
+			condition.setPhase(queryInfo.getObject().getPhase());
+			dataQueryInfo.setObject(condition);
+			dataQueryInfo.setPageInfo(queryInfo.getPageInfo());
+			dataQueryInfo.setToReverse(queryInfo.isToReverse());
+			PageResult<QqYz> dataResult = repositories.qqYzDao.query(dataQueryInfo);
+			if (dataResult != null && dataResult.getTotal() > 0) {
+				List<D1Yz> list = result.getList();
+				int i = 0;
+				Integer lastMax = null;
+				for (QqYz data : dataResult.getList()) {
+					D1Yz yz = list.get(i++);
+					int max = 0;
+					for (String fd : QqNums.FDS) {
+						Method m = ReflectionUtils.findMethod(QqYz.class, "get" + fd);
+						Integer value = (Integer) m.invoke(data);
+						if (value != null && value > max) {
+							max = value;
+						}
 					}
+					if (lastMax != null && lastMax >= max) {
+						yz.setRedForqqd1(true);
+					}
+					lastMax = max;
+					yz.setQqd1(max);
 				}
-				if (lastMax != null && lastMax >= max) {
-					yz.setRedForqqd1(true);
-				}
-				lastMax = max;
-				yz.setQqd1(max);
 			}
+			return new AsyncResult<Exception>(null);
+		} catch (Exception e) {
+			logger.error(e.getMessage(), e);
+			return new AsyncResult<Exception>(e);
 		}
 	}
 
-	private void calQqZfForD1(QueryInfo<SxYz> queryInfo, PageResult<D1Yz> result) throws Exception {
-		QueryInfo<QqZfYz> dataQueryInfo = new QueryInfo<QqZfYz>();
-		QqZfYz condition = new QqZfYz();
-		condition.setYear(queryInfo.getObject().getYear());
-		condition.setPhase(queryInfo.getObject().getPhase());
-		dataQueryInfo.setObject(condition);
-		dataQueryInfo.setPageInfo(queryInfo.getPageInfo());
-		dataQueryInfo.setToReverse(queryInfo.isToReverse());
-		PageResult<QqZfYz> dataResult = repositories.qqZfYzDao.query(dataQueryInfo);
-		if (dataResult != null && dataResult.getTotal() > 0) {
-			List<D1Yz> list = result.getList();
-			int i = 0;
-			Integer lastMax = null;
-			for (QqZfYz data : dataResult.getList()) {
-				D1Yz yz = list.get(i++);
-				int max = 0;
-				for (int j = 0; j < QqNums.FDS.length; j++) {
-					Method m = ReflectionUtils.findMethod(QqZfYz.class, "getZf" + j);
-					Integer value = (Integer) m.invoke(data);
-					if (value != null && value > max) {
-						max = value;
+	@Async
+	public Future<Exception> calQqZfForD1(QueryInfo<SxYz> queryInfo, PageResult<D1Yz> result) throws Exception {
+		try {
+			QueryInfo<QqZfYz> dataQueryInfo = new QueryInfo<QqZfYz>();
+			QqZfYz condition = new QqZfYz();
+			condition.setYear(queryInfo.getObject().getYear());
+			condition.setPhase(queryInfo.getObject().getPhase());
+			dataQueryInfo.setObject(condition);
+			dataQueryInfo.setPageInfo(queryInfo.getPageInfo());
+			dataQueryInfo.setToReverse(queryInfo.isToReverse());
+			PageResult<QqZfYz> dataResult = repositories.qqZfYzDao.query(dataQueryInfo);
+			if (dataResult != null && dataResult.getTotal() > 0) {
+				List<D1Yz> list = result.getList();
+				int i = 0;
+				Integer lastMax = null;
+				for (QqZfYz data : dataResult.getList()) {
+					D1Yz yz = list.get(i++);
+					int max = 0;
+					for (int j = 0; j < QqNums.FDS.length; j++) {
+						Method m = ReflectionUtils.findMethod(QqZfYz.class, "getZf" + j);
+						Integer value = (Integer) m.invoke(data);
+						if (value != null && value > max) {
+							max = value;
+						}
 					}
+					if (lastMax != null && lastMax >= max) {
+						yz.setRedForqqzfd1(true);
+					}
+					lastMax = max;
+					yz.setQqzfd1(max);
 				}
-				if (lastMax != null && lastMax >= max) {
-					yz.setRedForqqzfd1(true);
-				}
-				lastMax = max;
-				yz.setQqzfd1(max);
 			}
+			return new AsyncResult<Exception>(null);
+		} catch (Exception e) {
+			logger.error(e.getMessage(), e);
+			return new AsyncResult<Exception>(e);
 		}
 	}
 
-	private void calQiwForD1(QueryInfo<SxYz> queryInfo, PageResult<D1Yz> result) throws Exception {
-		QueryInfo<QiwYz> dataQueryInfo = new QueryInfo<QiwYz>();
-		QiwYz condition = new QiwYz();
-		condition.setYear(queryInfo.getObject().getYear());
-		condition.setPhase(queryInfo.getObject().getPhase());
-		dataQueryInfo.setObject(condition);
-		dataQueryInfo.setPageInfo(queryInfo.getPageInfo());
-		dataQueryInfo.setToReverse(queryInfo.isToReverse());
-		PageResult<QiwYz> dataResult = repositories.qiwYzDao.query(dataQueryInfo);
-		if (dataResult != null && dataResult.getTotal() > 0) {
-			List<D1Yz> list = result.getList();
-			int i = 0;
-			Integer lastMax = null;
-			for (QiwYz data : dataResult.getList()) {
-				D1Yz yz = list.get(i++);
-				int max = 0;
-				for (String fd : QiwNums.FDS) {
-					Method m = ReflectionUtils.findMethod(QiwYz.class, "get" + fd);
-					Integer value = (Integer) m.invoke(data);
-					if (value != null && value > max) {
-						max = value;
+	@Async
+	public Future<Exception> calQiwForD1(QueryInfo<SxYz> queryInfo, PageResult<D1Yz> result) throws Exception {
+		try {
+			QueryInfo<QiwYz> dataQueryInfo = new QueryInfo<QiwYz>();
+			QiwYz condition = new QiwYz();
+			condition.setYear(queryInfo.getObject().getYear());
+			condition.setPhase(queryInfo.getObject().getPhase());
+			dataQueryInfo.setObject(condition);
+			dataQueryInfo.setPageInfo(queryInfo.getPageInfo());
+			dataQueryInfo.setToReverse(queryInfo.isToReverse());
+			PageResult<QiwYz> dataResult = repositories.qiwYzDao.query(dataQueryInfo);
+			if (dataResult != null && dataResult.getTotal() > 0) {
+				List<D1Yz> list = result.getList();
+				int i = 0;
+				Integer lastMax = null;
+				for (QiwYz data : dataResult.getList()) {
+					D1Yz yz = list.get(i++);
+					int max = 0;
+					for (String fd : QiwNums.FDS) {
+						Method m = ReflectionUtils.findMethod(QiwYz.class, "get" + fd);
+						Integer value = (Integer) m.invoke(data);
+						if (value != null && value > max) {
+							max = value;
+						}
 					}
+					if (lastMax != null && lastMax >= max) {
+						yz.setRedForqiwd1(true);
+					}
+					lastMax = max;
+					yz.setQiwd1(max);
 				}
-				if (lastMax != null && lastMax >= max) {
-					yz.setRedForqiwd1(true);
-				}
-				lastMax = max;
-				yz.setQiwd1(max);
 			}
+			return new AsyncResult<Exception>(null);
+		} catch (Exception e) {
+			logger.error(e.getMessage(), e);
+			return new AsyncResult<Exception>(e);
 		}
 	}
 
-	private void calQiwZfForD1(QueryInfo<SxYz> queryInfo, PageResult<D1Yz> result) throws Exception {
-		QueryInfo<QiwZfYz> dataQueryInfo = new QueryInfo<QiwZfYz>();
-		QiwZfYz condition = new QiwZfYz();
-		condition.setYear(queryInfo.getObject().getYear());
-		condition.setPhase(queryInfo.getObject().getPhase());
-		dataQueryInfo.setObject(condition);
-		dataQueryInfo.setPageInfo(queryInfo.getPageInfo());
-		dataQueryInfo.setToReverse(queryInfo.isToReverse());
-		PageResult<QiwZfYz> dataResult = repositories.qiwzfYzDao.query(dataQueryInfo);
-		if (dataResult != null && dataResult.getTotal() > 0) {
-			List<D1Yz> list = result.getList();
-			int i = 0;
-			Integer lastMax = null;
-			for (QiwZfYz data : dataResult.getList()) {
-				D1Yz yz = list.get(i++);
-				int max = 0;
-				for (int j = 0; j < QiwNums.FDS.length; j++) {
-					Method m = ReflectionUtils.findMethod(QiwZfYz.class, "getZf" + j);
-					Integer value = (Integer) m.invoke(data);
-					if (value != null && value > max) {
-						max = value;
+	@Async
+	public Future<Exception> calQiwZfForD1(QueryInfo<SxYz> queryInfo, PageResult<D1Yz> result) throws Exception {
+		try {
+			QueryInfo<QiwZfYz> dataQueryInfo = new QueryInfo<QiwZfYz>();
+			QiwZfYz condition = new QiwZfYz();
+			condition.setYear(queryInfo.getObject().getYear());
+			condition.setPhase(queryInfo.getObject().getPhase());
+			dataQueryInfo.setObject(condition);
+			dataQueryInfo.setPageInfo(queryInfo.getPageInfo());
+			dataQueryInfo.setToReverse(queryInfo.isToReverse());
+			PageResult<QiwZfYz> dataResult = repositories.qiwzfYzDao.query(dataQueryInfo);
+			if (dataResult != null && dataResult.getTotal() > 0) {
+				List<D1Yz> list = result.getList();
+				int i = 0;
+				Integer lastMax = null;
+				for (QiwZfYz data : dataResult.getList()) {
+					D1Yz yz = list.get(i++);
+					int max = 0;
+					for (int j = 0; j < QiwNums.FDS.length; j++) {
+						Method m = ReflectionUtils.findMethod(QiwZfYz.class, "getZf" + j);
+						Integer value = (Integer) m.invoke(data);
+						if (value != null && value > max) {
+							max = value;
+						}
 					}
+					if (lastMax != null && lastMax >= max) {
+						yz.setRedForqiwzfd1(true);
+					}
+					lastMax = max;
+					yz.setQiwzfd1(max);
 				}
-				if (lastMax != null && lastMax >= max) {
-					yz.setRedForqiwzfd1(true);
-				}
-				lastMax = max;
-				yz.setQiwzfd1(max);
 			}
+			return new AsyncResult<Exception>(null);
+		} catch (Exception e) {
+			logger.error(e.getMessage(), e);
+			return new AsyncResult<Exception>(e);
 		}
 	}
 
-	private void calTwelveForD1(QueryInfo<SxYz> queryInfo, PageResult<D1Yz> result) throws Exception {
-		QueryInfo<TwelveYz> dataQueryInfo = new QueryInfo<TwelveYz>();
-		TwelveYz condition = new TwelveYz();
-		condition.setYear(queryInfo.getObject().getYear());
-		condition.setPhase(queryInfo.getObject().getPhase());
-		dataQueryInfo.setObject(condition);
-		dataQueryInfo.setPageInfo(queryInfo.getPageInfo());
-		dataQueryInfo.setToReverse(queryInfo.isToReverse());
-		PageResult<TwelveYz> dataResult = repositories.twelveYzDao.query(dataQueryInfo);
-		if (dataResult != null && dataResult.getTotal() > 0) {
-			List<D1Yz> list = result.getList();
-			int i = 0;
-			Integer lastMax = null;
-			for (TwelveYz data : dataResult.getList()) {
-				D1Yz yz = list.get(i++);
-				int max = 0;
-				for (String fd : TwelveNums.FDS) {
-					Method m = ReflectionUtils.findMethod(TwelveYz.class, "get" + fd);
-					Integer value = (Integer) m.invoke(data);
-					if (value != null && value > max) {
-						max = value;
+	@Async
+	public Future<Exception> calTwelveForD1(QueryInfo<SxYz> queryInfo, PageResult<D1Yz> result) throws Exception {
+		try {
+			QueryInfo<TwelveYz> dataQueryInfo = new QueryInfo<TwelveYz>();
+			TwelveYz condition = new TwelveYz();
+			condition.setYear(queryInfo.getObject().getYear());
+			condition.setPhase(queryInfo.getObject().getPhase());
+			dataQueryInfo.setObject(condition);
+			dataQueryInfo.setPageInfo(queryInfo.getPageInfo());
+			dataQueryInfo.setToReverse(queryInfo.isToReverse());
+			PageResult<TwelveYz> dataResult = repositories.twelveYzDao.query(dataQueryInfo);
+			if (dataResult != null && dataResult.getTotal() > 0) {
+				List<D1Yz> list = result.getList();
+				int i = 0;
+				Integer lastMax = null;
+				for (TwelveYz data : dataResult.getList()) {
+					D1Yz yz = list.get(i++);
+					int max = 0;
+					for (String fd : TwelveNums.FDS) {
+						Method m = ReflectionUtils.findMethod(TwelveYz.class, "get" + fd);
+						Integer value = (Integer) m.invoke(data);
+						if (value != null && value > max) {
+							max = value;
+						}
 					}
+					if (lastMax != null && lastMax >= max) {
+						yz.setRedFortwelved1(true);
+					}
+					lastMax = max;
+					yz.setTwelved1(max);
 				}
-				if (lastMax != null && lastMax >= max) {
-					yz.setRedFortwelved1(true);
-				}
-				lastMax = max;
-				yz.setTwelved1(max);
 			}
+			return new AsyncResult<Exception>(null);
+		} catch (Exception e) {
+			logger.error(e.getMessage(), e);
+			return new AsyncResult<Exception>(e);
 		}
 	}
 
-	private void calTwelveZfForD1(QueryInfo<SxYz> queryInfo, PageResult<D1Yz> result) throws Exception {
-		QueryInfo<TwelveZfYz> dataQueryInfo = new QueryInfo<TwelveZfYz>();
-		TwelveZfYz condition = new TwelveZfYz();
-		condition.setYear(queryInfo.getObject().getYear());
-		condition.setPhase(queryInfo.getObject().getPhase());
-		dataQueryInfo.setObject(condition);
-		dataQueryInfo.setPageInfo(queryInfo.getPageInfo());
-		dataQueryInfo.setToReverse(queryInfo.isToReverse());
-		PageResult<TwelveZfYz> dataResult = repositories.twelvezfYzDao.query(dataQueryInfo);
-		if (dataResult != null && dataResult.getTotal() > 0) {
-			List<D1Yz> list = result.getList();
-			int i = 0;
-			Integer lastMax = null;
-			for (TwelveZfYz data : dataResult.getList()) {
-				D1Yz yz = list.get(i++);
-				int max = 0;
-				for (int j = 0; j < TwelveNums.FDS.length; j++) {
-					Method m = ReflectionUtils.findMethod(TwelveZfYz.class, "getZf" + j);
-					Integer value = (Integer) m.invoke(data);
-					if (value != null && value > max) {
-						max = value;
+	@Async
+	public Future<Exception> calTwelveZfForD1(QueryInfo<SxYz> queryInfo, PageResult<D1Yz> result) throws Exception {
+		try {
+			QueryInfo<TwelveZfYz> dataQueryInfo = new QueryInfo<TwelveZfYz>();
+			TwelveZfYz condition = new TwelveZfYz();
+			condition.setYear(queryInfo.getObject().getYear());
+			condition.setPhase(queryInfo.getObject().getPhase());
+			dataQueryInfo.setObject(condition);
+			dataQueryInfo.setPageInfo(queryInfo.getPageInfo());
+			dataQueryInfo.setToReverse(queryInfo.isToReverse());
+			PageResult<TwelveZfYz> dataResult = repositories.twelvezfYzDao.query(dataQueryInfo);
+			if (dataResult != null && dataResult.getTotal() > 0) {
+				List<D1Yz> list = result.getList();
+				int i = 0;
+				Integer lastMax = null;
+				for (TwelveZfYz data : dataResult.getList()) {
+					D1Yz yz = list.get(i++);
+					int max = 0;
+					for (int j = 0; j < TwelveNums.FDS.length; j++) {
+						Method m = ReflectionUtils.findMethod(TwelveZfYz.class, "getZf" + j);
+						Integer value = (Integer) m.invoke(data);
+						if (value != null && value > max) {
+							max = value;
+						}
 					}
+					if (lastMax != null && lastMax >= max) {
+						yz.setRedFortwelvezfd1(true);
+					}
+					lastMax = max;
+					yz.setTwelvezfd1(max);
 				}
-				if (lastMax != null && lastMax >= max) {
-					yz.setRedFortwelvezfd1(true);
-				}
-				lastMax = max;
-				yz.setTwelvezfd1(max);
 			}
+			return new AsyncResult<Exception>(null);
+		} catch (Exception e) {
+			logger.error(e.getMessage(), e);
+			return new AsyncResult<Exception>(e);
 		}
 	}
 
-	private void calSlqForD1(QueryInfo<SxYz> queryInfo, PageResult<D1Yz> result) throws Exception {
-		QueryInfo<SlqYz> dataQueryInfo = new QueryInfo<SlqYz>();
-		SlqYz condition = new SlqYz();
-		condition.setYear(queryInfo.getObject().getYear());
-		condition.setPhase(queryInfo.getObject().getPhase());
-		dataQueryInfo.setObject(condition);
-		dataQueryInfo.setPageInfo(queryInfo.getPageInfo());
-		dataQueryInfo.setToReverse(queryInfo.isToReverse());
-		PageResult<SlqYz> dataResult = repositories.slqYzDao.query(dataQueryInfo);
-		if (dataResult != null && dataResult.getTotal() > 0) {
-			List<D1Yz> list = result.getList();
-			int i = 0;
-			Integer lastMax = null;
-			for (SlqYz data : dataResult.getList()) {
-				D1Yz yz = list.get(i++);
-				int max = 0;
-				for (String fd : SlqNums.FDS) {
-					Method m = ReflectionUtils.findMethod(SlqYz.class, "get" + fd);
-					Integer value = (Integer) m.invoke(data);
-					if (value != null && value > max) {
-						max = value;
+	@Async
+	public Future<Exception> calSlqForD1(QueryInfo<SxYz> queryInfo, PageResult<D1Yz> result) throws Exception {
+		try {
+			QueryInfo<SlqYz> dataQueryInfo = new QueryInfo<SlqYz>();
+			SlqYz condition = new SlqYz();
+			condition.setYear(queryInfo.getObject().getYear());
+			condition.setPhase(queryInfo.getObject().getPhase());
+			dataQueryInfo.setObject(condition);
+			dataQueryInfo.setPageInfo(queryInfo.getPageInfo());
+			dataQueryInfo.setToReverse(queryInfo.isToReverse());
+			PageResult<SlqYz> dataResult = repositories.slqYzDao.query(dataQueryInfo);
+			if (dataResult != null && dataResult.getTotal() > 0) {
+				List<D1Yz> list = result.getList();
+				int i = 0;
+				Integer lastMax = null;
+				for (SlqYz data : dataResult.getList()) {
+					D1Yz yz = list.get(i++);
+					int max = 0;
+					for (String fd : SlqNums.FDS) {
+						Method m = ReflectionUtils.findMethod(SlqYz.class, "get" + fd);
+						Integer value = (Integer) m.invoke(data);
+						if (value != null && value > max) {
+							max = value;
+						}
 					}
+					if (lastMax != null && lastMax >= max) {
+						yz.setRedForslqd1(true);
+					}
+					lastMax = max;
+					yz.setSlqd1(max);
 				}
-				if (lastMax != null && lastMax >= max) {
-					yz.setRedForslqd1(true);
-				}
-				lastMax = max;
-				yz.setSlqd1(max);
 			}
+			return new AsyncResult<Exception>(null);
+		} catch (Exception e) {
+			logger.error(e.getMessage(), e);
+			return new AsyncResult<Exception>(e);
 		}
 	}
 
-	private void calSlqZfForD1(QueryInfo<SxYz> queryInfo, PageResult<D1Yz> result) throws Exception {
-		QueryInfo<SlqZfYz> dataQueryInfo = new QueryInfo<SlqZfYz>();
-		SlqZfYz condition = new SlqZfYz();
-		condition.setYear(queryInfo.getObject().getYear());
-		condition.setPhase(queryInfo.getObject().getPhase());
-		dataQueryInfo.setObject(condition);
-		dataQueryInfo.setPageInfo(queryInfo.getPageInfo());
-		dataQueryInfo.setToReverse(queryInfo.isToReverse());
-		PageResult<SlqZfYz> dataResult = repositories.slqzfYzDao.query(dataQueryInfo);
-		if (dataResult != null && dataResult.getTotal() > 0) {
-			List<D1Yz> list = result.getList();
-			int i = 0;
-			Integer lastMax = null;
-			for (SlqZfYz data : dataResult.getList()) {
-				D1Yz yz = list.get(i++);
-				int max = 0;
-				for (int j = 0; j < SlqNums.FDS.length; j++) {
-					Method m = ReflectionUtils.findMethod(SlqZfYz.class, "getZf" + j);
-					Integer value = (Integer) m.invoke(data);
-					if (value != null && value > max) {
-						max = value;
+	@Async
+	public Future<Exception> calSlqZfForD1(QueryInfo<SxYz> queryInfo, PageResult<D1Yz> result) throws Exception {
+		try {
+			QueryInfo<SlqZfYz> dataQueryInfo = new QueryInfo<SlqZfYz>();
+			SlqZfYz condition = new SlqZfYz();
+			condition.setYear(queryInfo.getObject().getYear());
+			condition.setPhase(queryInfo.getObject().getPhase());
+			dataQueryInfo.setObject(condition);
+			dataQueryInfo.setPageInfo(queryInfo.getPageInfo());
+			dataQueryInfo.setToReverse(queryInfo.isToReverse());
+			PageResult<SlqZfYz> dataResult = repositories.slqzfYzDao.query(dataQueryInfo);
+			if (dataResult != null && dataResult.getTotal() > 0) {
+				List<D1Yz> list = result.getList();
+				int i = 0;
+				Integer lastMax = null;
+				for (SlqZfYz data : dataResult.getList()) {
+					D1Yz yz = list.get(i++);
+					int max = 0;
+					for (int j = 0; j < SlqNums.FDS.length; j++) {
+						Method m = ReflectionUtils.findMethod(SlqZfYz.class, "getZf" + j);
+						Integer value = (Integer) m.invoke(data);
+						if (value != null && value > max) {
+							max = value;
+						}
 					}
+					if (lastMax != null && lastMax >= max) {
+						yz.setRedForslqzfd1(true);
+					}
+					lastMax = max;
+					yz.setSlqzfd1(max);
 				}
-				if (lastMax != null && lastMax >= max) {
-					yz.setRedForslqzfd1(true);
-				}
-				lastMax = max;
-				yz.setSlqzfd1(max);
 			}
+			return new AsyncResult<Exception>(null);
+		} catch (Exception e) {
+			logger.error(e.getMessage(), e);
+			return new AsyncResult<Exception>(e);
 		}
 	}
 
 	public PageResult<J0Yz> getJ0List(QueryInfo<J0Yz> queryInfo) throws Exception {
 		PageResult<J0Yz> result = repositories.commonDao.getTop0List(queryInfo);
+		List<Future<Exception>> futures = new ArrayList<Future<Exception>>();
 		for (J0Yz yz : result.getList()) {
+			futures.add(repositories.yzService.calForJ0(yz));
+		}
+		sleep(futures, 100);
+		return result;
+	}
+
+	public void sleep(List<Future<Exception>> futures, long time) throws Exception {
+		while (true) {
+			int count = 0;
+			for (Future<Exception> f : futures) {
+				if (f.isDone()) {
+					if (f.get() != null) {
+						throw f.get();
+					}
+					count++;
+				}
+			}
+			if (count == futures.size()) {
+				break;
+			}
+			if (time > 0) {
+				Thread.sleep(time);
+			}
+		}
+	}
+
+	@Async
+	public Future<Exception> calForJ0(J0Yz yz) {
+		try {
 			calSxForJ0(yz);
 			calDsForJ0(yz);
 			calSwForJ0(yz);
@@ -3471,8 +3706,11 @@ public class YZService {
 			calQiwForJ0(yz);
 			calTwelveForJ0(yz);
 			calSlqForJ0(yz);
+			return new AsyncResult<Exception>(null);
+		} catch (Exception e) {
+			logger.error(e.getMessage(), e);
+			return new AsyncResult<Exception>(e);
 		}
-		return result;
 	}
 
 	private void calSxForJ0(J0Yz yz) throws Exception {
@@ -3859,7 +4097,7 @@ public class YZService {
 			return new AsyncResult<Exception>(e);
 		}
 	}
-
+	
 }
 
 class LrInfo {

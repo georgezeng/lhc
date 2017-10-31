@@ -98,7 +98,6 @@ import lhc.enums.SX;
 import lhc.repository.jpa.BaseYzDao;
 import lhc.repository.jpa.Repositories;
 import lhc.service.ParallelYzServiceWrapper;
-import lhc.service.YZService;
 
 @RestController
 @RequestMapping("/mvc/yz")
@@ -107,13 +106,10 @@ public class YZController {
 	private Logger logger = LoggerFactory.getLogger(getClass());
 
 	@Autowired
-	private YZService yzService;
-
-	@Autowired
 	private Repositories repositories;
 
 	@Autowired
-	private ParallelYzServiceWrapper parallelYzService;
+	private ParallelYzServiceWrapper parallelYzServiceWrapper;
 
 	@RequestMapping("/years")
 	public BaseResult years() {
@@ -147,141 +143,121 @@ public class YZController {
 
 	public void calYZ(boolean sleep) throws Exception {
 		List<Future<Exception>> futures = new ArrayList<Future<Exception>>();
-		futures.add(yzService.calSX());
-		futures.add(yzService.calHMQWYZ());
-		futures.add(yzService.calSWYZ());
-		futures.add(yzService.calMWYZ());
-		futures.add(yzService.calLHYZ());
-		futures.add(yzService.calQQYZ());
-		futures.add(yzService.calQIWYZ());
-		futures.add(yzService.calBSYZ());
-		futures.add(yzService.calSQYZ());
-		futures.add(yzService.calDSYZ());
-		futures.add(yzService.calTMYZ());
-		futures.add(yzService.calZSYZ());
-		futures.add(yzService.calWXYZ());
-		futures.add(yzService.calPTYZ());
-		futures.add(yzService.calTwelveYZ());
-		futures.add(yzService.calSLQYZ());
-		futures.add(yzService.calPDYZ());
-		futures.add(yzService.calBS9QYZ());
-		futures.add(yzService.calWXDSYZ());
-		futures.add(yzService.calSXDSYZ());
-		futures.add(yzService.calHMDSYZ());
+		futures.add(repositories.yzService.calSX());
+		futures.add(repositories.yzService.calHMQWYZ());
+		futures.add(repositories.yzService.calSWYZ());
+		futures.add(repositories.yzService.calMWYZ());
+		futures.add(repositories.yzService.calLHYZ());
+		futures.add(repositories.yzService.calQQYZ());
+		futures.add(repositories.yzService.calQIWYZ());
+		futures.add(repositories.yzService.calBSYZ());
+		futures.add(repositories.yzService.calSQYZ());
+		futures.add(repositories.yzService.calDSYZ());
+		futures.add(repositories.yzService.calTMYZ());
+		futures.add(repositories.yzService.calZSYZ());
+		futures.add(repositories.yzService.calWXYZ());
+		futures.add(repositories.yzService.calPTYZ());
+		futures.add(repositories.yzService.calTwelveYZ());
+		futures.add(repositories.yzService.calSLQYZ());
+		futures.add(repositories.yzService.calPDYZ());
+		futures.add(repositories.yzService.calBS9QYZ());
+		futures.add(repositories.yzService.calWXDSYZ());
+		futures.add(repositories.yzService.calSXDSYZ());
+		futures.add(repositories.yzService.calHMDSYZ());
 		if (sleep) {
-			sleep(futures, 1000);
+			repositories.yzService.sleep(futures, 1000);
 		} else {
-			sleep(futures, 0);
+			repositories.yzService.sleep(futures, 0);
 		}
 		logger.info("End of calYZ stage1...");
 
 		futures.clear();
-		futures.add(yzService.calSXCSYZ());
-		futures.add(yzService.calTM12FDYZ());
-		futures.add(parallelYzService.calAvg(repositories.sxyzRepository, "calSxyzAvg"));
-		futures.add(parallelYzService.calAvg(repositories.sxzfyz2Repository, "calSxzfAvg"));
-		futures.add(parallelYzService.calAvg(repositories.bsyzRepository, "calBsyzAvg"));
-		futures.add(parallelYzService.calAvg(repositories.bszfyzRepository, "calBszfAvg"));
-		futures.add(parallelYzService.calAvg(repositories.swyzRepository, "calSwyzAvg"));
-		futures.add(parallelYzService.calAvg(repositories.swzfyzRepository, "calSwzfAvg"));
-		futures.add(parallelYzService.calAvg(repositories.zsyzRepository, "calZsyzAvg"));
-		futures.add(parallelYzService.calAvg(repositories.zszfyzRepository, "calZszfAvg"));
-		futures.add(parallelYzService.calAvg(repositories.dsyzRepository, "calDsyzAvg"));
-		futures.add(parallelYzService.calAvg(repositories.dszfyzRepository, "calDszfAvg"));
-		futures.add(parallelYzService.calAvg(repositories.mwyzRepository, "calMwyzAvg"));
-		futures.add(parallelYzService.calAvg(repositories.mwzfyzRepository, "calMwzfAvg"));
-		futures.add(parallelYzService.calAvg(repositories.lhyzRepository, "calLhyzAvg"));
-		futures.add(parallelYzService.calAvg(repositories.lhzfyzRepository, "calLhzfAvg"));
-		futures.add(parallelYzService.calAvg(repositories.wxyzRepository, "calWxyzAvg"));
-		futures.add(parallelYzService.calAvg(repositories.wxzfyzRepository, "calWxzfAvg"));
-		futures.add(parallelYzService.calAvg(repositories.qqyzRepository, "calQqyzAvg"));
-		futures.add(parallelYzService.calAvg(repositories.qqzfyzRepository, "calQqzfAvg"));
-		futures.add(parallelYzService.calAvg(repositories.qiwYzRepository, "calQiwyzAvg"));
-		futures.add(parallelYzService.calAvg(repositories.qiwzfYzRepository, "calQiwzfAvg"));
-		futures.add(parallelYzService.calAvg(repositories.twelveyzRepository, "calTwelveyzAvg"));
-		futures.add(parallelYzService.calAvg(repositories.twelvezfyzRepository, "calTwelvezfAvg"));
-		futures.add(parallelYzService.calAvg(repositories.slqyzRepository, "calSlqyzAvg"));
-		futures.add(parallelYzService.calAvg(repositories.slqzfyzRepository, "calSlqzfAvg"));
-		futures.add(parallelYzService.calAvg(repositories.pdyzRepository, "calPdyzAvg"));
-		futures.add(parallelYzService.calAvg(repositories.pdzfyzRepository, "calPdzfAvg"));
-		futures.add(parallelYzService.calAvg(repositories.bs9qyzRepository, "calBs9qyzAvg"));
-		futures.add(parallelYzService.calAvg(repositories.bs9qzfyzRepository, "calBs9qzfAvg"));
-		futures.add(parallelYzService.calAvg(repositories.wxdsyzRepository, "calWxdsyzAvg"));
-		futures.add(parallelYzService.calAvg(repositories.wxdszfyzRepository, "calWxdszfAvg"));
+		futures.add(repositories.yzService.calSXCSYZ());
+		futures.add(repositories.yzService.calTM12FDYZ());
+		futures.add(parallelYzServiceWrapper.calAvg(repositories.sxyzRepository, "calSxyzAvg"));
+		futures.add(parallelYzServiceWrapper.calAvg(repositories.sxzfyz2Repository, "calSxzfAvg"));
+		futures.add(parallelYzServiceWrapper.calAvg(repositories.bsyzRepository, "calBsyzAvg"));
+		futures.add(parallelYzServiceWrapper.calAvg(repositories.bszfyzRepository, "calBszfAvg"));
+		futures.add(parallelYzServiceWrapper.calAvg(repositories.swyzRepository, "calSwyzAvg"));
+		futures.add(parallelYzServiceWrapper.calAvg(repositories.swzfyzRepository, "calSwzfAvg"));
+		futures.add(parallelYzServiceWrapper.calAvg(repositories.zsyzRepository, "calZsyzAvg"));
+		futures.add(parallelYzServiceWrapper.calAvg(repositories.zszfyzRepository, "calZszfAvg"));
+		futures.add(parallelYzServiceWrapper.calAvg(repositories.dsyzRepository, "calDsyzAvg"));
+		futures.add(parallelYzServiceWrapper.calAvg(repositories.dszfyzRepository, "calDszfAvg"));
+		futures.add(parallelYzServiceWrapper.calAvg(repositories.mwyzRepository, "calMwyzAvg"));
+		futures.add(parallelYzServiceWrapper.calAvg(repositories.mwzfyzRepository, "calMwzfAvg"));
+		futures.add(parallelYzServiceWrapper.calAvg(repositories.lhyzRepository, "calLhyzAvg"));
+		futures.add(parallelYzServiceWrapper.calAvg(repositories.lhzfyzRepository, "calLhzfAvg"));
+		futures.add(parallelYzServiceWrapper.calAvg(repositories.wxyzRepository, "calWxyzAvg"));
+		futures.add(parallelYzServiceWrapper.calAvg(repositories.wxzfyzRepository, "calWxzfAvg"));
+		futures.add(parallelYzServiceWrapper.calAvg(repositories.qqyzRepository, "calQqyzAvg"));
+		futures.add(parallelYzServiceWrapper.calAvg(repositories.qqzfyzRepository, "calQqzfAvg"));
+		futures.add(parallelYzServiceWrapper.calAvg(repositories.qiwYzRepository, "calQiwyzAvg"));
+		futures.add(parallelYzServiceWrapper.calAvg(repositories.qiwzfYzRepository, "calQiwzfAvg"));
+		futures.add(parallelYzServiceWrapper.calAvg(repositories.twelveyzRepository, "calTwelveyzAvg"));
+		futures.add(parallelYzServiceWrapper.calAvg(repositories.twelvezfyzRepository, "calTwelvezfAvg"));
+		futures.add(parallelYzServiceWrapper.calAvg(repositories.slqyzRepository, "calSlqyzAvg"));
+		futures.add(parallelYzServiceWrapper.calAvg(repositories.slqzfyzRepository, "calSlqzfAvg"));
+		futures.add(parallelYzServiceWrapper.calAvg(repositories.pdyzRepository, "calPdyzAvg"));
+		futures.add(parallelYzServiceWrapper.calAvg(repositories.pdzfyzRepository, "calPdzfAvg"));
+		futures.add(parallelYzServiceWrapper.calAvg(repositories.bs9qyzRepository, "calBs9qyzAvg"));
+		futures.add(parallelYzServiceWrapper.calAvg(repositories.bs9qzfyzRepository, "calBs9qzfAvg"));
+		futures.add(parallelYzServiceWrapper.calAvg(repositories.wxdsyzRepository, "calWxdsyzAvg"));
+		futures.add(parallelYzServiceWrapper.calAvg(repositories.wxdszfyzRepository, "calWxdszfAvg"));
 		if (sleep) {
-			sleep(futures, 1000);
+			repositories.yzService.sleep(futures, 1000);
 		} else {
-			sleep(futures, 0);
+			repositories.yzService.sleep(futures, 0);
 		}
 		logger.info("End of calYZ stage2...");
 
 		futures.clear();
-		futures.add(yzService.calSXLRYZ());
-		futures.add(yzService.calDSLRYZ());
-		futures.add(yzService.calMWLRYZ());
-		futures.add(yzService.calLHLRYZ());
-		futures.add(yzService.calTwelveLRYZ());
-		futures.add(yzService.calSLQLRYZ());
-		futures.add(yzService.calPDLRYZ());
-		futures.add(yzService.calZSLRYZ());
-		futures.add(yzService.calBS9QLRYZ());
-		futures.add(yzService.calWXDSLRYZ());
-		futures.add(parallelYzService.calAvg(repositories.tm12fdyzRepository, "calTm12fdyzAvg"));
-		futures.add(parallelYzService.calAvg(repositories.tm12fdzfyzRepository, "calTm12fdzfAvg"));
+		futures.add(repositories.yzService.calSXLRYZ());
+		futures.add(repositories.yzService.calDSLRYZ());
+		futures.add(repositories.yzService.calMWLRYZ());
+		futures.add(repositories.yzService.calLHLRYZ());
+		futures.add(repositories.yzService.calTwelveLRYZ());
+		futures.add(repositories.yzService.calSLQLRYZ());
+		futures.add(repositories.yzService.calPDLRYZ());
+		futures.add(repositories.yzService.calZSLRYZ());
+		futures.add(repositories.yzService.calBS9QLRYZ());
+		futures.add(repositories.yzService.calWXDSLRYZ());
+		futures.add(parallelYzServiceWrapper.calAvg(repositories.tm12fdyzRepository, "calTm12fdyzAvg"));
+		futures.add(parallelYzServiceWrapper.calAvg(repositories.tm12fdzfyzRepository, "calTm12fdzfAvg"));
 		if (sleep) {
-			sleep(futures, 1000);
+			repositories.yzService.sleep(futures, 1000);
 		} else {
-			sleep(futures, 0);
+			repositories.yzService.sleep(futures, 0);
 		}
 		logger.info("End of calYZ stage3...");
 
 		futures.clear();
-		futures.add(yzService.calTM12FDLRYZ());
-		futures.add(parallelYzService.calAvg(repositories.sxlryzRepository, "calSxlrAvg"));
-		futures.add(parallelYzService.calAvg(repositories.dslrYzRepository, "calDslrAvg"));
-		futures.add(parallelYzService.calAvg(repositories.mwlryzRepository, "calMwlrAvg"));
-		futures.add(parallelYzService.calAvg(repositories.twelvelryzRepository, "calTwelvelrAvg"));
-		futures.add(parallelYzService.calAvg(repositories.slqlryzRepository, "calSlqlrAvg"));
-		futures.add(parallelYzService.calAvg(repositories.pdlryzRepository, "calPdlrAvg"));
-		futures.add(parallelYzService.calAvg(repositories.lhlryzRepository, "calLhlrAvg"));
-		futures.add(parallelYzService.calAvg(repositories.zslryzRepository, "calZslrAvg"));
-		futures.add(parallelYzService.calAvg(repositories.bs9qlryzRepository, "calBs9qlrAvg"));
-		futures.add(parallelYzService.calAvg(repositories.wxdslryzRepository, "calWxdslrAvg"));
+		futures.add(repositories.yzService.calTM12FDLRYZ());
+		futures.add(parallelYzServiceWrapper.calAvg(repositories.sxlryzRepository, "calSxlrAvg"));
+		futures.add(parallelYzServiceWrapper.calAvg(repositories.dslrYzRepository, "calDslrAvg"));
+		futures.add(parallelYzServiceWrapper.calAvg(repositories.mwlryzRepository, "calMwlrAvg"));
+		futures.add(parallelYzServiceWrapper.calAvg(repositories.twelvelryzRepository, "calTwelvelrAvg"));
+		futures.add(parallelYzServiceWrapper.calAvg(repositories.slqlryzRepository, "calSlqlrAvg"));
+		futures.add(parallelYzServiceWrapper.calAvg(repositories.pdlryzRepository, "calPdlrAvg"));
+		futures.add(parallelYzServiceWrapper.calAvg(repositories.lhlryzRepository, "calLhlrAvg"));
+		futures.add(parallelYzServiceWrapper.calAvg(repositories.zslryzRepository, "calZslrAvg"));
+		futures.add(parallelYzServiceWrapper.calAvg(repositories.bs9qlryzRepository, "calBs9qlrAvg"));
+		futures.add(parallelYzServiceWrapper.calAvg(repositories.wxdslryzRepository, "calWxdslrAvg"));
 		if (sleep) {
-			sleep(futures, 1000);
+			repositories.yzService.sleep(futures, 1000);
 		} else {
-			sleep(futures, 0);
+			repositories.yzService.sleep(futures, 0);
 		}
 		logger.info("End of calYZ stage4...");
 
 		futures.clear();
-		futures.add(parallelYzService.calAvg(repositories.tm12fdlryzRepository, "calTm12fdlrAvg"));
+		futures.add(parallelYzServiceWrapper.calAvg(repositories.tm12fdlryzRepository, "calTm12fdlrAvg"));
 		if (sleep) {
-			sleep(futures, 1000);
+			repositories.yzService.sleep(futures, 1000);
 		} else {
-			sleep(futures, 0);
+			repositories.yzService.sleep(futures, 0);
 		}
 		logger.info("Done calYZ...");
-	}
-
-	private void sleep(List<Future<Exception>> futures, long time) throws Exception {
-		while (true) {
-			int count = 0;
-			for (Future<Exception> f : futures) {
-				if (f.isDone()) {
-					if (f.get() != null) {
-						throw f.get();
-					}
-					count++;
-				}
-			}
-			if (count == futures.size()) {
-				break;
-			}
-			if (time > 0) {
-				Thread.sleep(time);
-			}
-		}
 	}
 
 	@RequestMapping("/listSX")
@@ -627,7 +603,7 @@ public class YZController {
 			Tm12FdYz queryObj = queryInfo.getObject();
 			TmYz tmResult = repositories.tmyzRepository.findByYearAndPhase(queryObj.getYear(), queryObj.getPhase());
 			if (tmResult != null) {
-				List<TmYzInfo> fdList = yzService.getTMFDList(tmResult, false);
+				List<TmYzInfo> fdList = repositories.yzService.getTMFDList(tmResult, false);
 				if (result != null && result.getTotal() > 0) {
 					Tm12FdYz data = new Tm12FdYz();
 					data.setList(fdList);
@@ -650,7 +626,7 @@ public class YZController {
 		int year = years.get(0);
 		List<Integer> phases = (List<Integer>) phases(year).getData();
 		TmYz tmResult = repositories.tmyzRepository.findByYearAndPhase(year, phases.get(0));
-		return new BaseResult(yzService.getTMFDList(tmResult, false));
+		return new BaseResult(repositories.yzService.getTMFDList(tmResult, false));
 	}
 
 	@RequestMapping("/listSLQZF")
@@ -894,7 +870,7 @@ public class YZController {
 	@RequestMapping("/listSXCSYZ")
 	public BaseResult listSXCSYZ(@RequestBody QueryInfo<SxYz> queryInfo) throws Exception {
 		PageResult<SxYz> sxResult = repositories.sxYzDao.query(queryInfo);
-		Map<String, Object> map = yzService.calSXCSYZ(queryInfo.getPageInfo(), sxResult, null, null);
+		Map<String, Object> map = repositories.yzService.calSXCSYZ(queryInfo.getPageInfo(), sxResult, null, null);
 		PageResult<SxCsYz> result = (PageResult<SxCsYz>) map.get("result");
 		SX[] sxlist = SX.seq();
 		if (result != null && result.getTotal() > 0) {
@@ -936,10 +912,10 @@ public class YZController {
 				subQueryInfo.setObject(condition);
 				subQueryInfo.setToReverse(queryInfo.isToReverse());
 				subQueryInfo.setPageInfo(queryInfo.getPageInfo());
-				fList.add(yzService.calSXCSYZForMax(subQueryInfo, data));
+				fList.add(repositories.yzService.calSXCSYZForMax(subQueryInfo, data));
 			}
 			result.getList().add(new SxCsYz());
-			sleep(fList, 500);
+			repositories.yzService.sleep(fList, 500);
 		}
 
 		return new BaseResult(result);
@@ -948,7 +924,7 @@ public class YZController {
 	@RequestMapping("/listMWCSYZ")
 	public BaseResult listMWCSYZ(@RequestBody QueryInfo<MwYz> queryInfo) throws Exception {
 		PageResult<MwYz> sxResult = repositories.mwYzDao.query(queryInfo);
-		Map<String, Object> map = yzService.calMWCSYZ(queryInfo.getPageInfo(), sxResult, null, null);
+		Map<String, Object> map = repositories.yzService.calMWCSYZ(queryInfo.getPageInfo(), sxResult, null, null);
 		PageResult<MwCsYz> result = (PageResult<MwCsYz>) map.get("result");
 		if (result != null && result.getTotal() > 0) {
 			result.getList().add(new MwCsYz());
@@ -958,7 +934,7 @@ public class YZController {
 
 	@RequestMapping("/listAllJ0")
 	public BaseResult listAllJ0(@RequestBody QueryInfo<J0Yz> queryInfo) throws Exception {
-		PageResult<J0Yz> result = yzService.getJ0List(queryInfo);
+		PageResult<J0Yz> result = repositories.yzService.getJ0List(queryInfo);
 		if (result != null && result.getTotal() > 0) {
 			result.getList().add(new J0Yz());
 		}
@@ -967,7 +943,7 @@ public class YZController {
 
 	@RequestMapping("/listAllD1")
 	public BaseResult listAllD1(@RequestBody QueryInfo<SxYz> queryInfo) throws Exception {
-		PageResult<D1Yz> result = yzService.getD1List(queryInfo);
+		PageResult<D1Yz> result = repositories.yzService.getD1List(queryInfo);
 		if (result != null && result.getTotal() > 0) {
 			result.getList().add(new D1Yz());
 		}
@@ -1595,7 +1571,7 @@ public class YZController {
 			TmFdYz queryObj = queryInfo.getObject();
 			TmYz tmResult = repositories.tmyzRepository.findByYearAndPhase(queryObj.getYear(), queryObj.getPhase());
 			if (tmResult != null) {
-				List<TmYzInfo> fdList = yzService.getTMFDList(tmResult, false);
+				List<TmYzInfo> fdList = repositories.yzService.getTMFDList(tmResult, false);
 				if (result != null && result.getTotal() > 0) {
 					TmFdYz data = new TmFdYz();
 					data.setList(fdList);
@@ -1669,6 +1645,152 @@ public class YZController {
 				}
 			}
 
+		}
+		return null;
+	}
+
+	@RequestMapping("/downloadAllTop0YZ")
+	public String downloadAllTop0YZ(HttpServletRequest request, HttpServletResponse response) throws Exception {
+		response.setContentType("text/csv;charset=gbk;");
+		response.addHeader("Content-Disposition", "attachment;filename=allj0.csv");
+		Writer writer = response.getWriter();
+		writer.append("年份").append(", ");
+		writer.append("期数").append(",");
+		writer.append("生肖").append(", ");
+		writer.append("生肖振幅").append(",");
+		writer.append("单双").append(", ");
+		writer.append("单双振幅").append(", ");
+		writer.append("首位").append(", ");
+		writer.append("首位振幅").append(", ");
+		writer.append("末位").append(", ");
+		writer.append("末位振幅").append(", ");
+		writer.append("合数").append(", ");
+		writer.append("合数振幅").append(", ");
+		writer.append("波色").append(", ");
+		writer.append("波色振幅").append(", ");
+		writer.append("质数").append(", ");
+		writer.append("质数振幅").append(", ");
+		writer.append("五行").append(", ");
+		writer.append("五行振幅").append(", ");
+		writer.append("五行单双").append(", ");
+		writer.append("五行单双振幅").append(", ");
+		writer.append("配对").append(", ");
+		writer.append("配对振幅").append(", ");
+		writer.append("分段").append(", ");
+		writer.append("分段振幅").append(", ");
+		writer.append("七区").append(", ");
+		writer.append("七区振幅").append(", ");
+		writer.append("七位").append(", ");
+		writer.append("七位振幅").append(", ");
+		writer.append("十二区").append(", ");
+		writer.append("十二区振幅").append(", ");
+		writer.append("十六区").append(", ");
+		writer.append("十六区振幅").append("\n");
+		QueryInfo<J0Yz> queryInfo = new QueryInfo<J0Yz>();
+		J0Yz condition = new J0Yz();
+		condition.setYear(Integer.valueOf(request.getParameter("year")));
+		condition.setPhase(Integer.valueOf(request.getParameter("phase")));
+		queryInfo.setObject(condition);
+		queryInfo.setPageInfo(new PageInfo(1, Integer.valueOf(request.getParameter("size"))));
+		PageResult<J0Yz> result = repositories.yzService.getJ0List(queryInfo);
+		if (result != null && result.getTotal() > 0) {
+			String[] fds = new String[] { "Sx", "Sxzf", "Ds", "Dszf", "Sw", "Swzf", "Mw", "Mwzf", "Lh", "Lhzf", "Bs", "Bszf",
+					"Zs", "Zszf", "Wx", "Wxzf", "Wxds", "Wxdszf", "Pd", "Pdzf", "Fd", "Fdzf", "Qq", "Qqzf", "Qiw", "Qiwzf",
+					"Twelve", "Twelvezf", "Slq", "Slqzf" };
+			for (J0Yz yz : result.getList()) {
+				writer.append(yz.getYear() + "").append(", ");
+				writer.append(yz.getPhase() + "").append(", ");
+				int i = 0;
+				for (String fd : fds) {
+					Method m = ReflectionUtils.findMethod(J0Yz.class, "get" + fd + "Nums");
+					List<Integer> nums = (List<Integer>) m.invoke(yz);
+					writer.append("[");
+					if (nums != null && !nums.isEmpty()) {
+						int j = 0;
+						for (Integer num : nums) {
+							writer.append(num + "");
+							if (j < nums.size() - 1) {
+								writer.append(" ");
+							}
+						}
+						j++;
+					}
+					if (i < fds.length - 1) {
+						writer.append("], ");
+					} else {
+						writer.append("\n");
+					}
+					i++;
+				}
+			}
+		}
+		return null;
+	}
+
+	@RequestMapping("/downloadAllD1YZ")
+	public String downloadAllD1YZ(HttpServletRequest request, HttpServletResponse response) throws Exception {
+		response.setContentType("text/csv;charset=gbk;");
+		response.addHeader("Content-Disposition", "attachment;filename=alld1.csv");
+		Writer writer = response.getWriter();
+		writer.append("年份").append(", ");
+		writer.append("期数").append(",");
+		writer.append("生肖").append(", ");
+		writer.append("生肖振幅").append(",");
+		writer.append("单双").append(", ");
+		writer.append("单双振幅").append(", ");
+		writer.append("首位").append(", ");
+		writer.append("首位振幅").append(", ");
+		writer.append("末位").append(", ");
+		writer.append("末位振幅").append(", ");
+		writer.append("合数").append(", ");
+		writer.append("合数振幅").append(", ");
+		writer.append("波色").append(", ");
+		writer.append("波色振幅").append(", ");
+		writer.append("质数").append(", ");
+		writer.append("质数振幅").append(", ");
+		writer.append("五行").append(", ");
+		writer.append("五行振幅").append(", ");
+		writer.append("五行单双").append(", ");
+		writer.append("五行单双振幅").append(", ");
+		writer.append("配对").append(", ");
+		writer.append("配对振幅").append(", ");
+		writer.append("分段").append(", ");
+		writer.append("分段振幅").append(", ");
+		writer.append("七区").append(", ");
+		writer.append("七区振幅").append(", ");
+		writer.append("七位").append(", ");
+		writer.append("七位振幅").append(", ");
+		writer.append("十二区").append(", ");
+		writer.append("十二区振幅").append(", ");
+		writer.append("十六区").append(", ");
+		writer.append("十六区振幅").append("\n");
+		QueryInfo<SxYz> queryInfo = new QueryInfo<SxYz>();
+		SxYz condition = new SxYz();
+		condition.setYear(Integer.valueOf(request.getParameter("year")));
+		condition.setPhase(Integer.valueOf(request.getParameter("phase")));
+		queryInfo.setObject(condition);
+		queryInfo.setPageInfo(new PageInfo(1, Integer.valueOf(request.getParameter("size"))));
+		PageResult<D1Yz> result = repositories.yzService.getD1List(queryInfo);
+		if (result != null && result.getTotal() > 0) {
+			String[] fds = new String[] { "Sx", "Ds", "Sw", "Mw", "Lh", "Bs", "Zs", "Wx", "Wxds", "Pd", "Fd", "Qq", "Qiw",
+					"Twelve", "Slq" };
+			for (D1Yz yz : result.getList()) {
+				writer.append(yz.getYear() + "").append(", ");
+				writer.append(yz.getPhase() + "").append(", ");
+				int i = 0;
+				for (String fd : fds) {
+					Method m = ReflectionUtils.findMethod(D1Yz.class, "get" + fd + "d1");
+					writer.append(m.invoke(yz).toString()).append(", ");
+					m = ReflectionUtils.findMethod(D1Yz.class, "get" + fd + "zfd1");
+					writer.append(m.invoke(yz).toString());
+					if (i < fds.length - 1) {
+						writer.append(", ");
+					} else {
+						writer.append("\n");
+					}
+					i++;
+				}
+			}
 		}
 		return null;
 	}

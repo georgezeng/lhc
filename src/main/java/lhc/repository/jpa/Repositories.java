@@ -110,6 +110,7 @@ import lhc.repository.jpa.dao.WxdsZfYzDao;
 import lhc.repository.jpa.dao.ZsLrYzDao;
 import lhc.repository.jpa.dao.ZsYzDao;
 import lhc.repository.jpa.dao.ZsZfYzDao;
+import lhc.service.YZService;
 
 @Service
 public class Repositories {
@@ -119,22 +120,22 @@ public class Repositories {
 
 	@Autowired
 	public SxLrYzDao sxlrYzDao;
-	
+
 	@Autowired
 	public DsLrYzDao dslrYzDao;
-	
+
 	@Autowired
 	public DsLrYzRepository dslrYzRepository;
-	
+
 	@Autowired
 	public QiwYzRepository qiwYzRepository;
-	
+
 	@Autowired
 	public QiwZfYzRepository qiwzfYzRepository;
-	
+
 	@Autowired
 	public QiwYzDao qiwYzDao;
-	
+
 	@Autowired
 	public QiwZfYzDao qiwzfYzDao;
 
@@ -194,7 +195,7 @@ public class Repositories {
 
 	@Autowired
 	public QwYzDao qwYzDao;
-	
+
 	@Autowired
 	public HmDsYzDao hmdsYzDao;
 
@@ -386,7 +387,7 @@ public class Repositories {
 
 	@Autowired
 	public SxDsYzRepository sxdsyzRepository;
-	
+
 	@Autowired
 	public HmDsYzRepository hmdsyzRepository;
 
@@ -431,7 +432,10 @@ public class Repositories {
 
 	@Autowired
 	public Tm12FdLrYzRepository tm12fdlryzRepository;
-	
+
 	@Autowired
 	public CommonDao commonDao;
+
+	@Autowired
+	public YZService yzService;
 }
