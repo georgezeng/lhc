@@ -1,5 +1,9 @@
 package lhc.dto;
 
+import java.util.List;
+
+import javax.persistence.Transient;
+
 public class D1Yz {
 
 	private String date;
@@ -65,6 +69,306 @@ public class D1Yz {
 	private boolean isRedForslqd1;
 	private Integer slqzfd1;
 	private boolean isRedForslqzfd1;
+	@Transient
+	private List<Integer> sxNums;
+	@Transient
+	private List<Integer> sxzfNums;
+	@Transient
+	private List<Integer> dsNums;
+	@Transient
+	private List<Integer> dszfNums;
+	@Transient
+	private List<Integer> swNums;
+	@Transient
+	private List<Integer> swzfNums;
+	@Transient
+	private List<Integer> mwNums;
+	@Transient
+	private List<Integer> mwzfNums;
+	@Transient
+	private List<Integer> lhNums;
+	@Transient
+	private List<Integer> lhzfNums;
+	@Transient
+	private List<Integer> bsNums;
+	@Transient
+	private List<Integer> bszfNums;
+	@Transient
+	private List<Integer> zsNums;
+	@Transient
+	private List<Integer> zszfNums;
+	@Transient
+	private List<Integer> wxNums;
+	@Transient
+	private List<Integer> wxzfNums;
+	@Transient
+	private List<Integer> wxdsNums;
+	@Transient
+	private List<Integer> wxdszfNums;
+	@Transient
+	private List<Integer> pdNums;
+	@Transient
+	private List<Integer> pdzfNums;
+	@Transient
+	private List<Integer> fdNums;
+	@Transient
+	private List<Integer> fdzfNums;
+	@Transient
+	private List<Integer> qqNums;
+	@Transient
+	private List<Integer> qqzfNums;
+	@Transient
+	private List<Integer> qiwNums;
+	@Transient
+	private List<Integer> qiwzfNums;
+	@Transient
+	private List<Integer> twelveNums;
+	@Transient
+	private List<Integer> twelvezfNums;
+	@Transient
+	private List<Integer> slqNums;
+	@Transient
+	private List<Integer> slqzfNums;
+
+	public List<Integer> getSxNums() {
+		return sxNums;
+	}
+
+	public void setSxNums(List<Integer> sxNums) {
+		this.sxNums = sxNums;
+	}
+
+	public List<Integer> getSxzfNums() {
+		return sxzfNums;
+	}
+
+	public void setSxzfNums(List<Integer> sxzfNums) {
+		this.sxzfNums = sxzfNums;
+	}
+
+	public List<Integer> getDsNums() {
+		return dsNums;
+	}
+
+	public void setDsNums(List<Integer> dsNums) {
+		this.dsNums = dsNums;
+	}
+
+	public List<Integer> getDszfNums() {
+		return dszfNums;
+	}
+
+	public void setDszfNums(List<Integer> dszfNums) {
+		this.dszfNums = dszfNums;
+	}
+
+	public List<Integer> getSwNums() {
+		return swNums;
+	}
+
+	public void setSwNums(List<Integer> swNums) {
+		this.swNums = swNums;
+	}
+
+	public List<Integer> getSwzfNums() {
+		return swzfNums;
+	}
+
+	public void setSwzfNums(List<Integer> swzfNums) {
+		this.swzfNums = swzfNums;
+	}
+
+	public List<Integer> getMwNums() {
+		return mwNums;
+	}
+
+	public void setMwNums(List<Integer> mwNums) {
+		this.mwNums = mwNums;
+	}
+
+	public List<Integer> getMwzfNums() {
+		return mwzfNums;
+	}
+
+	public void setMwzfNums(List<Integer> mwzfNums) {
+		this.mwzfNums = mwzfNums;
+	}
+
+	public List<Integer> getLhNums() {
+		return lhNums;
+	}
+
+	public void setLhNums(List<Integer> lhNums) {
+		this.lhNums = lhNums;
+	}
+
+	public List<Integer> getLhzfNums() {
+		return lhzfNums;
+	}
+
+	public void setLhzfNums(List<Integer> lhzfNums) {
+		this.lhzfNums = lhzfNums;
+	}
+
+	public List<Integer> getBsNums() {
+		return bsNums;
+	}
+
+	public void setBsNums(List<Integer> bsNums) {
+		this.bsNums = bsNums;
+	}
+
+	public List<Integer> getBszfNums() {
+		return bszfNums;
+	}
+
+	public void setBszfNums(List<Integer> bszfNums) {
+		this.bszfNums = bszfNums;
+	}
+
+	public List<Integer> getZsNums() {
+		return zsNums;
+	}
+
+	public void setZsNums(List<Integer> zsNums) {
+		this.zsNums = zsNums;
+	}
+
+	public List<Integer> getZszfNums() {
+		return zszfNums;
+	}
+
+	public void setZszfNums(List<Integer> zszfNums) {
+		this.zszfNums = zszfNums;
+	}
+
+	public List<Integer> getWxNums() {
+		return wxNums;
+	}
+
+	public void setWxNums(List<Integer> wxNums) {
+		this.wxNums = wxNums;
+	}
+
+	public List<Integer> getWxzfNums() {
+		return wxzfNums;
+	}
+
+	public void setWxzfNums(List<Integer> wxzfNums) {
+		this.wxzfNums = wxzfNums;
+	}
+
+	public List<Integer> getWxdsNums() {
+		return wxdsNums;
+	}
+
+	public void setWxdsNums(List<Integer> wxdsNums) {
+		this.wxdsNums = wxdsNums;
+	}
+
+	public List<Integer> getWxdszfNums() {
+		return wxdszfNums;
+	}
+
+	public void setWxdszfNums(List<Integer> wxdszfNums) {
+		this.wxdszfNums = wxdszfNums;
+	}
+
+	public List<Integer> getPdNums() {
+		return pdNums;
+	}
+
+	public void setPdNums(List<Integer> pdNums) {
+		this.pdNums = pdNums;
+	}
+
+	public List<Integer> getPdzfNums() {
+		return pdzfNums;
+	}
+
+	public void setPdzfNums(List<Integer> pdzfNums) {
+		this.pdzfNums = pdzfNums;
+	}
+
+	public List<Integer> getFdNums() {
+		return fdNums;
+	}
+
+	public void setFdNums(List<Integer> fdNums) {
+		this.fdNums = fdNums;
+	}
+
+	public List<Integer> getFdzfNums() {
+		return fdzfNums;
+	}
+
+	public void setFdzfNums(List<Integer> fdzfNums) {
+		this.fdzfNums = fdzfNums;
+	}
+
+	public List<Integer> getQqNums() {
+		return qqNums;
+	}
+
+	public void setQqNums(List<Integer> qqNums) {
+		this.qqNums = qqNums;
+	}
+
+	public List<Integer> getQqzfNums() {
+		return qqzfNums;
+	}
+
+	public void setQqzfNums(List<Integer> qqzfNums) {
+		this.qqzfNums = qqzfNums;
+	}
+
+	public List<Integer> getQiwNums() {
+		return qiwNums;
+	}
+
+	public void setQiwNums(List<Integer> qiwNums) {
+		this.qiwNums = qiwNums;
+	}
+
+	public List<Integer> getQiwzfNums() {
+		return qiwzfNums;
+	}
+
+	public void setQiwzfNums(List<Integer> qiwzfNums) {
+		this.qiwzfNums = qiwzfNums;
+	}
+
+	public List<Integer> getTwelveNums() {
+		return twelveNums;
+	}
+
+	public void setTwelveNums(List<Integer> twelveNums) {
+		this.twelveNums = twelveNums;
+	}
+
+	public List<Integer> getTwelvezfNums() {
+		return twelvezfNums;
+	}
+
+	public void setTwelvezfNums(List<Integer> twelvezfNums) {
+		this.twelvezfNums = twelvezfNums;
+	}
+
+	public List<Integer> getSlqNums() {
+		return slqNums;
+	}
+
+	public void setSlqNums(List<Integer> slqNums) {
+		this.slqNums = slqNums;
+	}
+
+	public List<Integer> getSlqzfNums() {
+		return slqzfNums;
+	}
+
+	public void setSlqzfNums(List<Integer> slqzfNums) {
+		this.slqzfNums = slqzfNums;
+	}
 
 	public Integer getQiwd1() {
 		return qiwd1;

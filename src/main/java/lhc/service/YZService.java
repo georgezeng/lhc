@@ -10,8 +10,10 @@ import java.util.Calendar;
 import java.util.Collections;
 import java.util.Comparator;
 import java.util.HashMap;
+import java.util.HashSet;
 import java.util.List;
 import java.util.Map;
+import java.util.Set;
 import java.util.concurrent.Future;
 
 import org.slf4j.Logger;
@@ -106,6 +108,9 @@ import lhc.domain.ZsZfYz;
 import lhc.dto.D1Yz;
 import lhc.dto.J0Yz;
 import lhc.dto.TmYzInfo;
+import lhc.dto.XbwJY;
+import lhc.dto.XbwJYCondition;
+import lhc.dto.XbwJYSub;
 import lhc.dto.query.PageInfo;
 import lhc.dto.query.PageResult;
 import lhc.dto.query.QueryInfo;
@@ -2500,21 +2505,39 @@ public class YZService {
 		if (dataResult != null && dataResult.getTotal() > 0) {
 			List<D1Yz> list = new ArrayList<D1Yz>();
 			Integer lastMax = null;
+			SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd");
+			Calendar c = Calendar.getInstance();
 			for (SxYz data : dataResult.getList()) {
 				D1Yz yz = new D1Yz();
 				yz.setDate(data.getDate());
 				yz.setYear(data.getYear());
 				yz.setPhase(data.getPhase());
 				int max = 0;
+				SX maxSX = null;
 				for (SX sx : SX.seq()) {
 					Method m = ReflectionUtils.findMethod(SxYz.class, "get" + sx.name());
 					Integer value = (Integer) m.invoke(data);
 					if (value != null && value > max) {
 						max = value;
+						maxSX = sx;
 					}
+				}
+				if (maxSX != null) {
+					calSxForD1(yz, maxSX);
 				}
 				if (lastMax != null && lastMax >= max) {
 					yz.setRedForsxd1(true);
+					c.setTime(sdf.parse(data.getDate()));
+					SX bmnSX = DateUtil.getSxByYear(c.get(Calendar.YEAR));
+					yz.setSxNums(getSxNums(bmnSX, data.getCurrentSx()));
+
+					int pos = data.getCurrentSx().getPos()
+							+ repositories.sxzfyz2Repository.findByYearAndPhase(data.getYear(), data.getPhase()).getCurrentPos();
+					if (pos >= SX.values().length) {
+						pos = pos - SX.values().length;
+					}
+					SX nextSX = SX.seq()[pos];
+					yz.setSxzfNums(getSxNums(bmnSX, nextSX));
 				}
 				lastMax = max;
 				yz.setSxd1(max);
@@ -2525,6 +2548,14 @@ public class YZService {
 			result.setList(new ArrayList<D1Yz>());
 		}
 		return result;
+	}
+
+	private void calSxForD1(D1Yz yz, SX maxSX) throws Exception {
+		SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd");
+		Calendar c = Calendar.getInstance();
+		c.setTime(sdf.parse(yz.getDate()));
+		SX bmnSX = DateUtil.getSxByYear(c.get(Calendar.YEAR));
+		yz.setSxNums(getSxNums(bmnSX, maxSX));
 	}
 
 	@Async
@@ -2545,12 +2576,17 @@ public class YZService {
 				for (SxZfYz2 data : dataResult.getList()) {
 					D1Yz yz = list.get(i++);
 					int max = 0;
+					SX maxSX = null;
 					for (int j = 0; j < SX.seq().length; j++) {
 						Method m = ReflectionUtils.findMethod(SxZfYz2.class, "getZf" + j);
 						Integer value = (Integer) m.invoke(data);
 						if (value != null && value > max) {
 							max = value;
+							maxSX = SX.seq()[j];
 						}
+					}
+					if (maxSX != null) {
+						calSxForD1(yz, maxSX, data);
 					}
 					if (lastMax != null && lastMax >= max) {
 						yz.setRedForsxzfd1(true);
@@ -2564,6 +2600,15 @@ public class YZService {
 			logger.error(e.getMessage(), e);
 			return new AsyncResult<Exception>(e);
 		}
+	}
+
+	private void calSxForD1(D1Yz yz, SX maxSX, SxZfYz2 sxzfYz) throws Exception {
+		int pos = maxSX.getPos() + sxzfYz.getCurrentPos();
+		if (pos >= SX.values().length) {
+			pos = pos - SX.values().length;
+		}
+		SX nextSX = SX.seq()[pos];
+		yz.setSxzfNums(getSxNums(maxSX, nextSX));
 	}
 
 	@Async
@@ -2584,12 +2629,19 @@ public class YZService {
 				for (DsYz data : dataResult.getList()) {
 					D1Yz yz = list.get(i++);
 					int max = 0;
+					Integer maxPos = null;
+					int j = 0;
 					for (String fd : DsNums.FDS) {
 						Method m = ReflectionUtils.findMethod(DsYz.class, "get" + fd);
 						Integer value = (Integer) m.invoke(data);
 						if (value != null && value > max) {
 							max = value;
+							maxPos = j;
 						}
+						j++;
+					}
+					if (maxPos != null) {
+						yz.setDsNums(DsNums.NUMS[maxPos]);
 					}
 					if (lastMax != null && lastMax >= max) {
 						yz.setRedFordsd1(true);
@@ -2623,12 +2675,17 @@ public class YZService {
 				for (DsZfYz data : dataResult.getList()) {
 					D1Yz yz = list.get(i++);
 					int max = 0;
+					Integer maxPos = null;
 					for (int j = 0; j < DsNums.FDS.length; j++) {
 						Method m = ReflectionUtils.findMethod(DsZfYz.class, "getZf" + j);
 						Integer value = (Integer) m.invoke(data);
 						if (value != null && value > max) {
 							max = value;
+							maxPos = j;
 						}
+					}
+					if (maxPos != null) {
+						calDsForD1(yz, maxPos, data);
 					}
 					if (lastMax != null && lastMax >= max) {
 						yz.setRedFordszfd1(true);
@@ -2642,6 +2699,14 @@ public class YZService {
 			logger.error(e.getMessage(), e);
 			return new AsyncResult<Exception>(e);
 		}
+	}
+
+	private void calDsForD1(D1Yz yz, Integer currentPos, DsZfYz data) throws Exception {
+		int pos = currentPos + data.getCurrentPos();
+		if (pos >= DsNums.FDS.length) {
+			pos = pos - DsNums.FDS.length;
+		}
+		yz.setDszfNums(DsNums.NUMS[pos]);
 	}
 
 	@Async
@@ -2662,12 +2727,19 @@ public class YZService {
 				for (SwYz data : dataResult.getList()) {
 					D1Yz yz = list.get(i++);
 					int max = 0;
+					Integer maxPos = null;
+					int j = 0;
 					for (String fd : SwNums.FDS) {
 						Method m = ReflectionUtils.findMethod(SwYz.class, "get" + fd);
 						Integer value = (Integer) m.invoke(data);
 						if (value != null && value > max) {
 							max = value;
+							maxPos = j;
 						}
+						j++;
+					}
+					if (maxPos != null) {
+						yz.setSwNums(SwNums.NUMS[maxPos]);
 					}
 					if (lastMax != null && lastMax >= max) {
 						yz.setRedForswd1(true);
@@ -2701,12 +2773,17 @@ public class YZService {
 				for (SwZfYz data : dataResult.getList()) {
 					D1Yz yz = list.get(i++);
 					int max = 0;
+					Integer maxPos = null;
 					for (int j = 0; j < SwNums.FDS.length; j++) {
 						Method m = ReflectionUtils.findMethod(SwZfYz.class, "getZf" + j);
 						Integer value = (Integer) m.invoke(data);
 						if (value != null && value > max) {
 							max = value;
+							maxPos = j;
 						}
+					}
+					if (maxPos != null) {
+						calSwForD1(yz, maxPos, data);
 					}
 					if (lastMax != null && lastMax >= max) {
 						yz.setRedForswzfd1(true);
@@ -2720,6 +2797,14 @@ public class YZService {
 			logger.error(e.getMessage(), e);
 			return new AsyncResult<Exception>(e);
 		}
+	}
+
+	private void calSwForD1(D1Yz yz, Integer currentPos, SwZfYz data) throws Exception {
+		int pos = currentPos + data.getCurrentPos();
+		if (pos >= SwNums.FDS.length) {
+			pos = pos - SwNums.FDS.length;
+		}
+		yz.setSwzfNums(SwNums.NUMS[pos]);
 	}
 
 	@Async
@@ -2740,12 +2825,19 @@ public class YZService {
 				for (MwYz data : dataResult.getList()) {
 					D1Yz yz = list.get(i++);
 					int max = 0;
+					int j = 0;
+					Integer maxPos = null;
 					for (String fd : MwNums.FDS) {
 						Method m = ReflectionUtils.findMethod(MwYz.class, "get" + fd);
 						Integer value = (Integer) m.invoke(data);
 						if (value != null && value > max) {
 							max = value;
+							maxPos = j;
 						}
+						j++;
+					}
+					if (maxPos != null) {
+						yz.setMwNums(MwNums.NUMS[maxPos]);
 					}
 					if (lastMax != null && lastMax >= max) {
 						yz.setRedFormwd1(true);
@@ -2779,12 +2871,17 @@ public class YZService {
 				for (MwZfYz data : dataResult.getList()) {
 					D1Yz yz = list.get(i++);
 					int max = 0;
+					Integer maxPos = null;
 					for (int j = 0; j < MwNums.FDS.length; j++) {
 						Method m = ReflectionUtils.findMethod(MwZfYz.class, "getZf" + j);
 						Integer value = (Integer) m.invoke(data);
 						if (value != null && value > max) {
 							max = value;
+							maxPos = j;
 						}
+					}
+					if (maxPos != null) {
+						calMwForD1(yz, maxPos, data);
 					}
 					if (lastMax != null && lastMax >= max) {
 						yz.setRedFormwzfd1(true);
@@ -2798,6 +2895,14 @@ public class YZService {
 			logger.error(e.getMessage(), e);
 			return new AsyncResult<Exception>(e);
 		}
+	}
+
+	private void calMwForD1(D1Yz yz, Integer currentPos, MwZfYz data) throws Exception {
+		int pos = currentPos + data.getCurrentPos();
+		if (pos >= MwNums.FDS.length) {
+			pos = pos - MwNums.FDS.length;
+		}
+		yz.setMwzfNums(MwNums.NUMS[pos]);
 	}
 
 	@Async
@@ -2818,12 +2923,19 @@ public class YZService {
 				for (LhYz data : dataResult.getList()) {
 					D1Yz yz = list.get(i++);
 					int max = 0;
+					Integer maxPos = null;
+					int j = 0;
 					for (String fd : LhNums.FDS) {
 						Method m = ReflectionUtils.findMethod(LhYz.class, "get" + fd);
 						Integer value = (Integer) m.invoke(data);
 						if (value != null && value > max) {
 							max = value;
+							maxPos = j;
 						}
+						j++;
+					}
+					if (maxPos != null) {
+						yz.setLhNums(LhNums.NUMS[maxPos]);
 					}
 					if (lastMax != null && lastMax >= max) {
 						yz.setRedForlhd1(true);
@@ -2857,12 +2969,17 @@ public class YZService {
 				for (LhZfYz data : dataResult.getList()) {
 					D1Yz yz = list.get(i++);
 					int max = 0;
+					Integer maxPos = null;
 					for (int j = 0; j < LhNums.FDS.length; j++) {
 						Method m = ReflectionUtils.findMethod(LhZfYz.class, "getZf" + j);
 						Integer value = (Integer) m.invoke(data);
 						if (value != null && value > max) {
 							max = value;
+							maxPos = j;
 						}
+					}
+					if (maxPos != null) {
+						calLhForD1(yz, maxPos, data);
 					}
 					if (lastMax != null && lastMax >= max) {
 						yz.setRedForlhzfd1(true);
@@ -2876,6 +2993,14 @@ public class YZService {
 			logger.error(e.getMessage(), e);
 			return new AsyncResult<Exception>(e);
 		}
+	}
+
+	private void calLhForD1(D1Yz yz, Integer currentPos, LhZfYz data) throws Exception {
+		int pos = currentPos + data.getCurrentPos();
+		if (pos >= LhNums.FDS.length) {
+			pos = pos - LhNums.FDS.length;
+		}
+		yz.setLhzfNums(LhNums.NUMS[pos]);
 	}
 
 	@Async
@@ -2896,12 +3021,19 @@ public class YZService {
 				for (Bs9qYz data : dataResult.getList()) {
 					D1Yz yz = list.get(i++);
 					int max = 0;
+					Integer maxPos = null;
+					int j = 0;
 					for (String fd : Bs9qNums.FDS) {
 						Method m = ReflectionUtils.findMethod(Bs9qYz.class, "get" + fd);
 						Integer value = (Integer) m.invoke(data);
 						if (value != null && value > max) {
 							max = value;
+							maxPos = j;
 						}
+						j++;
+					}
+					if (maxPos != null) {
+						yz.setBsNums(Bs9qNums.NUMS[maxPos]);
 					}
 					if (lastMax != null && lastMax >= max) {
 						yz.setRedForbsd1(true);
@@ -2935,12 +3067,17 @@ public class YZService {
 				for (Bs9qZfYz data : dataResult.getList()) {
 					D1Yz yz = list.get(i++);
 					int max = 0;
+					Integer maxPos = null;
 					for (int j = 0; j < Bs9qNums.FDS.length; j++) {
 						Method m = ReflectionUtils.findMethod(Bs9qZfYz.class, "getZf" + j);
 						Integer value = (Integer) m.invoke(data);
 						if (value != null && value > max) {
 							max = value;
+							maxPos = j;
 						}
+					}
+					if (maxPos != null) {
+						calBsForD1(yz, maxPos, data);
 					}
 					if (lastMax != null && lastMax >= max) {
 						yz.setRedForbszfd1(true);
@@ -2954,6 +3091,14 @@ public class YZService {
 			logger.error(e.getMessage(), e);
 			return new AsyncResult<Exception>(e);
 		}
+	}
+
+	private void calBsForD1(D1Yz yz, Integer currentPos, Bs9qZfYz data) throws Exception {
+		int pos = currentPos + data.getCurrentPos();
+		if (pos >= Bs9qNums.FDS.length) {
+			pos = pos - Bs9qNums.FDS.length;
+		}
+		yz.setBszfNums(Bs9qNums.NUMS[pos]);
 	}
 
 	@Async
@@ -2974,12 +3119,19 @@ public class YZService {
 				for (ZsYz data : dataResult.getList()) {
 					D1Yz yz = list.get(i++);
 					int max = 0;
+					Integer maxPos = null;
+					int j = 0;
 					for (String fd : ZsNums.FDS) {
 						Method m = ReflectionUtils.findMethod(ZsYz.class, "get" + fd);
 						Integer value = (Integer) m.invoke(data);
 						if (value != null && value > max) {
 							max = value;
+							maxPos = j;
 						}
+						j++;
+					}
+					if (maxPos != null) {
+						yz.setZsNums(ZsNums.NUMS[maxPos]);
 					}
 					if (lastMax != null && lastMax >= max) {
 						yz.setRedForzsd1(true);
@@ -3013,12 +3165,17 @@ public class YZService {
 				for (ZsZfYz data : dataResult.getList()) {
 					D1Yz yz = list.get(i++);
 					int max = 0;
+					Integer maxPos = null;
 					for (int j = 0; j < ZsNums.FDS.length; j++) {
 						Method m = ReflectionUtils.findMethod(ZsZfYz.class, "getZf" + j);
 						Integer value = (Integer) m.invoke(data);
 						if (value != null && value > max) {
 							max = value;
+							maxPos = j;
 						}
+					}
+					if (maxPos != null) {
+						calZsForD1(yz, maxPos, data);
 					}
 					if (lastMax != null && lastMax >= max) {
 						yz.setRedForzszfd1(true);
@@ -3032,6 +3189,14 @@ public class YZService {
 			logger.error(e.getMessage(), e);
 			return new AsyncResult<Exception>(e);
 		}
+	}
+
+	private void calZsForD1(D1Yz yz, Integer currentPos, ZsZfYz data) throws Exception {
+		int pos = currentPos + data.getCurrentPos();
+		if (pos >= ZsNums.FDS.length) {
+			pos = pos - ZsNums.FDS.length;
+		}
+		yz.setZszfNums(ZsNums.NUMS[pos]);
 	}
 
 	@Async
@@ -3052,12 +3217,19 @@ public class YZService {
 				for (WxYz data : dataResult.getList()) {
 					D1Yz yz = list.get(i++);
 					int max = 0;
+					Integer maxPos = null;
+					int j = 0;
 					for (String fd : WxNums.FDS) {
 						Method m = ReflectionUtils.findMethod(WxYz.class, "get" + fd);
 						Integer value = (Integer) m.invoke(data);
 						if (value != null && value > max) {
 							max = value;
+							maxPos = j;
 						}
+						j++;
+					}
+					if (maxPos != null) {
+						yz.setWxNums(WxNums.NUMS[maxPos]);
 					}
 					if (lastMax != null && lastMax >= max) {
 						yz.setRedForwxd1(true);
@@ -3091,12 +3263,17 @@ public class YZService {
 				for (WxZfYz data : dataResult.getList()) {
 					D1Yz yz = list.get(i++);
 					int max = 0;
+					Integer maxPos = null;
 					for (int j = 0; j < WxNums.FDS.length; j++) {
 						Method m = ReflectionUtils.findMethod(WxZfYz.class, "getZf" + j);
 						Integer value = (Integer) m.invoke(data);
 						if (value != null && value > max) {
 							max = value;
+							maxPos = j;
 						}
+					}
+					if (maxPos != null) {
+						calWxForD1(yz, maxPos, data);
 					}
 					if (lastMax != null && lastMax >= max) {
 						yz.setRedForwxzfd1(true);
@@ -3110,6 +3287,14 @@ public class YZService {
 			logger.error(e.getMessage(), e);
 			return new AsyncResult<Exception>(e);
 		}
+	}
+
+	private void calWxForD1(D1Yz yz, Integer currentPos, WxZfYz data) throws Exception {
+		int pos = currentPos + data.getCurrentPos();
+		if (pos >= WxNums.FDS.length) {
+			pos = pos - WxNums.FDS.length;
+		}
+		yz.setWxzfNums(WxNums.NUMS[pos]);
 	}
 
 	@Async
@@ -3130,12 +3315,19 @@ public class YZService {
 				for (WxdsYz data : dataResult.getList()) {
 					D1Yz yz = list.get(i++);
 					int max = 0;
+					Integer maxPos = null;
+					int j = 0;
 					for (String fd : WxDsNums.FDS) {
 						Method m = ReflectionUtils.findMethod(WxdsYz.class, "get" + fd);
 						Integer value = (Integer) m.invoke(data);
 						if (value != null && value > max) {
 							max = value;
+							maxPos = j;
 						}
+						j++;
+					}
+					if (maxPos != null) {
+						yz.setWxdsNums(WxDsNums.NUMS[maxPos]);
 					}
 					if (lastMax != null && lastMax >= max) {
 						yz.setRedForwxdsd1(true);
@@ -3169,12 +3361,17 @@ public class YZService {
 				for (WxdsZfYz data : dataResult.getList()) {
 					D1Yz yz = list.get(i++);
 					int max = 0;
+					Integer maxPos = null;
 					for (int j = 0; j < WxDsNums.FDS.length; j++) {
 						Method m = ReflectionUtils.findMethod(WxdsZfYz.class, "getZf" + j);
 						Integer value = (Integer) m.invoke(data);
 						if (value != null && value > max) {
 							max = value;
+							maxPos = j;
 						}
+					}
+					if (maxPos != null) {
+						calWxdsForD1(yz, maxPos, data);
 					}
 					if (lastMax != null && lastMax >= max) {
 						yz.setRedForwxdszfd1(true);
@@ -3188,6 +3385,14 @@ public class YZService {
 			logger.error(e.getMessage(), e);
 			return new AsyncResult<Exception>(e);
 		}
+	}
+
+	private void calWxdsForD1(D1Yz yz, Integer currentPos, WxdsZfYz data) throws Exception {
+		int pos = currentPos + data.getCurrentPos();
+		if (pos >= WxDsNums.FDS.length) {
+			pos = pos - WxDsNums.FDS.length;
+		}
+		yz.setWxdszfNums(WxDsNums.NUMS[pos]);
 	}
 
 	@Async
@@ -3208,12 +3413,19 @@ public class YZService {
 				for (PdYz data : dataResult.getList()) {
 					D1Yz yz = list.get(i++);
 					int max = 0;
+					Integer maxPos = null;
+					int j = 0;
 					for (String fd : PdNums.FDS) {
 						Method m = ReflectionUtils.findMethod(PdYz.class, "get" + fd);
 						Integer value = (Integer) m.invoke(data);
 						if (value != null && value > max) {
 							max = value;
+							maxPos = j;
 						}
+						j++;
+					}
+					if (maxPos != null) {
+						yz.setPdNums(PdNums.NUMS[maxPos]);
 					}
 					if (lastMax != null && lastMax >= max) {
 						yz.setRedForpdd1(true);
@@ -3247,12 +3459,17 @@ public class YZService {
 				for (PdZfYz data : dataResult.getList()) {
 					D1Yz yz = list.get(i++);
 					int max = 0;
+					Integer maxPos = null;
 					for (int j = 0; j < PdNums.FDS.length; j++) {
 						Method m = ReflectionUtils.findMethod(PdZfYz.class, "getZf" + j);
 						Integer value = (Integer) m.invoke(data);
 						if (value != null && value > max) {
 							max = value;
+							maxPos = j;
 						}
+					}
+					if (maxPos != null) {
+						calPdForD1(yz, maxPos, data);
 					}
 					if (lastMax != null && lastMax >= max) {
 						yz.setRedForpdzfd1(true);
@@ -3266,6 +3483,14 @@ public class YZService {
 			logger.error(e.getMessage(), e);
 			return new AsyncResult<Exception>(e);
 		}
+	}
+
+	private void calPdForD1(D1Yz yz, Integer currentPos, PdZfYz data) throws Exception {
+		int pos = currentPos + data.getCurrentPos();
+		if (pos >= PdNums.FDS.length) {
+			pos = pos - PdNums.FDS.length;
+		}
+		yz.setPdzfNums(PdNums.NUMS[pos]);
 	}
 
 	@Async
@@ -3298,6 +3523,7 @@ public class YZService {
 					}
 					lastMax = max;
 					yz.setFdd1(max);
+					calFdForD1(yz);
 				}
 			}
 			return new AsyncResult<Exception>(null);
@@ -3305,6 +3531,31 @@ public class YZService {
 			logger.error(e.getMessage(), e);
 			return new AsyncResult<Exception>(e);
 		}
+	}
+
+	private void calFdForD1(D1Yz yz) throws Exception {
+		TmYz tmData = repositories.tmyzRepository.findByYearAndPhase(yz.getYear(), yz.getPhase());
+		List<TmYzInfo> infos = getTMFDList(tmData, false);
+		int currentPos = infos.size() - 1;
+		int range = 4;
+		int length = 12;
+		if (currentPos % range == 0) {
+			currentPos = currentPos / range;
+		} else {
+			currentPos = currentPos / range + 1;
+		}
+		int maxLength = 4;
+		if (currentPos >= length) {
+			currentPos = length;
+			maxLength = 5;
+		}
+		currentPos = currentPos - 1;
+		int startPos = currentPos * range;
+		List<Integer> nums = new ArrayList<Integer>();
+		for (int i = startPos; i < startPos + maxLength; i++) {
+			nums.add(infos.get(i).getNum());
+		}
+		yz.setFdNums(nums);
 	}
 
 	@Async
@@ -3337,6 +3588,7 @@ public class YZService {
 					}
 					lastMax = max;
 					yz.setFdzfd1(max);
+					calFdForD1(yz, data);
 				}
 			}
 			return new AsyncResult<Exception>(null);
@@ -3344,6 +3596,40 @@ public class YZService {
 			logger.error(e.getMessage(), e);
 			return new AsyncResult<Exception>(e);
 		}
+	}
+
+	private void calFdForD1(D1Yz yz, Tm12FdZfYz zfData) throws Exception {
+		TmYz tmData = repositories.tmyzRepository.findByYearAndPhase(yz.getYear(), yz.getPhase());
+		List<TmYzInfo> infos = getTMFDList(tmData, false);
+		int currentPos = infos.size() - 1;
+		int range = 4;
+		int length = 12;
+		if (currentPos % range == 0) {
+			currentPos = currentPos / range;
+		} else {
+			currentPos = currentPos / range + 1;
+		}
+		int maxLength = 4;
+		if (currentPos >= length) {
+			currentPos = length;
+			maxLength = 5;
+		}
+		currentPos = currentPos - 1;
+
+		int pos = currentPos + zfData.getCurrentPos();
+		if (pos >= 12) {
+			pos = pos - 12;
+		}
+		maxLength = 4;
+		if (pos == 11) {
+			maxLength = 5;
+		}
+		int startPos = pos * range;
+		List<Integer> nums = new ArrayList<Integer>();
+		for (int i = startPos; i < startPos + maxLength; i++) {
+			nums.add(infos.get(i).getNum());
+		}
+		yz.setFdzfNums(nums);
 	}
 
 	@Async
@@ -3364,12 +3650,19 @@ public class YZService {
 				for (QqYz data : dataResult.getList()) {
 					D1Yz yz = list.get(i++);
 					int max = 0;
+					Integer maxPos = null;
+					int j = 0;
 					for (String fd : QqNums.FDS) {
 						Method m = ReflectionUtils.findMethod(QqYz.class, "get" + fd);
 						Integer value = (Integer) m.invoke(data);
 						if (value != null && value > max) {
 							max = value;
+							maxPos = j;
 						}
+						j++;
+					}
+					if (maxPos != null) {
+						yz.setQqNums(QqNums.NUMS[maxPos]);
 					}
 					if (lastMax != null && lastMax >= max) {
 						yz.setRedForqqd1(true);
@@ -3403,12 +3696,17 @@ public class YZService {
 				for (QqZfYz data : dataResult.getList()) {
 					D1Yz yz = list.get(i++);
 					int max = 0;
+					Integer maxPos = null;
 					for (int j = 0; j < QqNums.FDS.length; j++) {
 						Method m = ReflectionUtils.findMethod(QqZfYz.class, "getZf" + j);
 						Integer value = (Integer) m.invoke(data);
 						if (value != null && value > max) {
 							max = value;
+							maxPos = j;
 						}
+					}
+					if (maxPos != null) {
+						calQqForD1(yz, maxPos, data);
 					}
 					if (lastMax != null && lastMax >= max) {
 						yz.setRedForqqzfd1(true);
@@ -3422,6 +3720,14 @@ public class YZService {
 			logger.error(e.getMessage(), e);
 			return new AsyncResult<Exception>(e);
 		}
+	}
+
+	private void calQqForD1(D1Yz yz, Integer currentPos, QqZfYz data) throws Exception {
+		int pos = currentPos + data.getCurrentPos();
+		if (pos >= QqNums.FDS.length) {
+			pos = pos - QqNums.FDS.length;
+		}
+		yz.setQqzfNums(QqNums.NUMS[pos]);
 	}
 
 	@Async
@@ -3442,12 +3748,19 @@ public class YZService {
 				for (QiwYz data : dataResult.getList()) {
 					D1Yz yz = list.get(i++);
 					int max = 0;
+					Integer maxPos = null;
+					int j = 0;
 					for (String fd : QiwNums.FDS) {
 						Method m = ReflectionUtils.findMethod(QiwYz.class, "get" + fd);
 						Integer value = (Integer) m.invoke(data);
 						if (value != null && value > max) {
 							max = value;
+							maxPos = j;
 						}
+						j++;
+					}
+					if (maxPos != null) {
+						yz.setQiwNums(QiwNums.NUMS[maxPos]);
 					}
 					if (lastMax != null && lastMax >= max) {
 						yz.setRedForqiwd1(true);
@@ -3481,12 +3794,17 @@ public class YZService {
 				for (QiwZfYz data : dataResult.getList()) {
 					D1Yz yz = list.get(i++);
 					int max = 0;
+					Integer maxPos = null;
 					for (int j = 0; j < QiwNums.FDS.length; j++) {
 						Method m = ReflectionUtils.findMethod(QiwZfYz.class, "getZf" + j);
 						Integer value = (Integer) m.invoke(data);
 						if (value != null && value > max) {
 							max = value;
+							maxPos = j;
 						}
+					}
+					if (maxPos != null) {
+						calQiwForD1(yz, maxPos, data);
 					}
 					if (lastMax != null && lastMax >= max) {
 						yz.setRedForqiwzfd1(true);
@@ -3500,6 +3818,14 @@ public class YZService {
 			logger.error(e.getMessage(), e);
 			return new AsyncResult<Exception>(e);
 		}
+	}
+
+	private void calQiwForD1(D1Yz yz, Integer currentPos, QiwZfYz data) throws Exception {
+		int pos = currentPos + data.getCurrentPos();
+		if (pos >= QiwNums.FDS.length) {
+			pos = pos - QiwNums.FDS.length;
+		}
+		yz.setQiwzfNums(QiwNums.NUMS[pos]);
 	}
 
 	@Async
@@ -3520,12 +3846,19 @@ public class YZService {
 				for (TwelveYz data : dataResult.getList()) {
 					D1Yz yz = list.get(i++);
 					int max = 0;
+					Integer maxPos = null;
+					int j = 0;
 					for (String fd : TwelveNums.FDS) {
 						Method m = ReflectionUtils.findMethod(TwelveYz.class, "get" + fd);
 						Integer value = (Integer) m.invoke(data);
 						if (value != null && value > max) {
 							max = value;
+							maxPos = j;
 						}
+						j++;
+					}
+					if (maxPos != null) {
+						yz.setTwelveNums(TwelveNums.NUMS[maxPos]);
 					}
 					if (lastMax != null && lastMax >= max) {
 						yz.setRedFortwelved1(true);
@@ -3559,12 +3892,17 @@ public class YZService {
 				for (TwelveZfYz data : dataResult.getList()) {
 					D1Yz yz = list.get(i++);
 					int max = 0;
+					Integer maxPos = null;
 					for (int j = 0; j < TwelveNums.FDS.length; j++) {
 						Method m = ReflectionUtils.findMethod(TwelveZfYz.class, "getZf" + j);
 						Integer value = (Integer) m.invoke(data);
 						if (value != null && value > max) {
 							max = value;
+							maxPos = j;
 						}
+					}
+					if (maxPos != null) {
+						calTwelveForD1(yz, maxPos, data);
 					}
 					if (lastMax != null && lastMax >= max) {
 						yz.setRedFortwelvezfd1(true);
@@ -3578,6 +3916,14 @@ public class YZService {
 			logger.error(e.getMessage(), e);
 			return new AsyncResult<Exception>(e);
 		}
+	}
+
+	private void calTwelveForD1(D1Yz yz, Integer currentPos, TwelveZfYz data) throws Exception {
+		int pos = currentPos + data.getCurrentPos();
+		if (pos >= TwelveNums.FDS.length) {
+			pos = pos - TwelveNums.FDS.length;
+		}
+		yz.setTwelvezfNums(TwelveNums.NUMS[pos]);
 	}
 
 	@Async
@@ -3598,12 +3944,19 @@ public class YZService {
 				for (SlqYz data : dataResult.getList()) {
 					D1Yz yz = list.get(i++);
 					int max = 0;
+					Integer maxPos = null;
+					int j = 0;
 					for (String fd : SlqNums.FDS) {
 						Method m = ReflectionUtils.findMethod(SlqYz.class, "get" + fd);
 						Integer value = (Integer) m.invoke(data);
 						if (value != null && value > max) {
 							max = value;
+							maxPos = j;
 						}
+						j++;
+					}
+					if (maxPos != null) {
+						yz.setSlqNums(SlqNums.NUMS[maxPos]);
 					}
 					if (lastMax != null && lastMax >= max) {
 						yz.setRedForslqd1(true);
@@ -3637,12 +3990,17 @@ public class YZService {
 				for (SlqZfYz data : dataResult.getList()) {
 					D1Yz yz = list.get(i++);
 					int max = 0;
+					Integer maxPos = null;
 					for (int j = 0; j < SlqNums.FDS.length; j++) {
 						Method m = ReflectionUtils.findMethod(SlqZfYz.class, "getZf" + j);
 						Integer value = (Integer) m.invoke(data);
 						if (value != null && value > max) {
 							max = value;
+							maxPos = j;
 						}
+					}
+					if (maxPos != null) {
+						calSlqForD1(yz, maxPos, data);
 					}
 					if (lastMax != null && lastMax >= max) {
 						yz.setRedForslqzfd1(true);
@@ -3656,6 +4014,14 @@ public class YZService {
 			logger.error(e.getMessage(), e);
 			return new AsyncResult<Exception>(e);
 		}
+	}
+
+	private void calSlqForD1(D1Yz yz, Integer currentPos, SlqZfYz data) throws Exception {
+		int pos = currentPos + data.getCurrentPos();
+		if (pos >= SlqNums.FDS.length) {
+			pos = pos - SlqNums.FDS.length;
+		}
+		yz.setSlqzfNums(SlqNums.NUMS[pos]);
 	}
 
 	public PageResult<J0Yz> getJ0List(QueryInfo<J0Yz> queryInfo) throws Exception {
@@ -3714,11 +4080,11 @@ public class YZService {
 	}
 
 	private void calSxForJ0(J0Yz yz) throws Exception {
+		SxYz sxYz = repositories.sxyzRepository.findByYearAndPhase(yz.getYear(), yz.getPhase());
 		SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd");
 		Calendar c = Calendar.getInstance();
-		SxYz sxYz = repositories.sxyzRepository.findByYearAndPhase(yz.getYear(), yz.getPhase());
 		c.setTime(sdf.parse(sxYz.getDate()));
-		SX bmnSX = DateUtil.getYear(c.get(Calendar.YEAR));
+		SX bmnSX = DateUtil.getSxByYear(c.get(Calendar.YEAR));
 		yz.setSxNums(getSxNums(bmnSX, sxYz.getCurrentSx()));
 
 		SxZfYz2 sxzfYz = repositories.sxzfyz2Repository.findByYearAndPhase(yz.getYear(), yz.getPhase());
@@ -4097,7 +4463,444 @@ public class YZService {
 			return new AsyncResult<Exception>(e);
 		}
 	}
-	
+
+	public PageResult<XbwJY> calXBWJY(QueryInfo<XbwJYCondition> queryInfo) throws Exception {
+		Method m = ReflectionUtils.findMethod(YZService.class, "calXBWJY" + queryInfo.getObject().getType(),
+				QueryInfo.class);
+		if (m != null) {
+			return (PageResult<XbwJY>) m.invoke(this, queryInfo);
+		}
+		return new PageResult<XbwJY>(new ArrayList<XbwJY>(), 0, queryInfo.getPageInfo());
+	}
+
+	public PageResult<XbwJY> calXBWJY0(QueryInfo<XbwJYCondition> queryInfo) throws Exception {
+		QueryInfo<J0Yz> j0QueryInfo = new QueryInfo<J0Yz>();
+		J0Yz j0Condition = new J0Yz();
+		j0Condition.setYear(queryInfo.getObject().getYear());
+		j0Condition.setPhase(queryInfo.getObject().getPhase());
+		j0QueryInfo.setObject(j0Condition);
+		j0QueryInfo.setPageInfo(queryInfo.getPageInfo());
+		PageResult<J0Yz> result = getJ0List(j0QueryInfo);
+		List<XbwJY> list = new ArrayList<XbwJY>();
+		if (result != null && result.getTotal() > 0) {
+			List<Future<Exception>> futures = new ArrayList<Future<Exception>>();
+			for (J0Yz yz : result.getList()) {
+				futures.add(calXbwJY0(yz, list));
+			}
+			sleep(futures, 10);
+		}
+		return new PageResult<XbwJY>(list, list.size(), queryInfo.getPageInfo());
+	}
+
+	public PageResult<XbwJY> calXBWJY1(QueryInfo<XbwJYCondition> queryInfo) throws Exception {
+		QueryInfo<SxYz> d1QueryInfo = new QueryInfo<SxYz>();
+		SxYz d1Condition = new SxYz();
+		d1Condition.setYear(queryInfo.getObject().getYear());
+		d1Condition.setPhase(queryInfo.getObject().getPhase());
+		d1QueryInfo.setObject(d1Condition);
+		d1QueryInfo.setPageInfo(queryInfo.getPageInfo());
+		PageResult<D1Yz> d1Result = getD1List(d1QueryInfo);
+
+		List<XbwJY> list = new ArrayList<XbwJY>();
+		if (d1Result != null && d1Result.getTotal() > 0) {
+			List<Future<Exception>> futures = new ArrayList<Future<Exception>>();
+			for (int i = 0; i < d1Result.getList().size(); i++) {
+				futures.add(calXbwJY1(d1Result.getList().get(i), list));
+			}
+			sleep(futures, 10);
+		}
+		return new PageResult<XbwJY>(list, list.size(), d1QueryInfo.getPageInfo());
+	}
+
+	public PageResult<XbwJY> calXBWJY2(QueryInfo<XbwJYCondition> queryInfo) throws Exception {
+		QueryInfo<J0Yz> j0QueryInfo = new QueryInfo<J0Yz>();
+		J0Yz j0Condition = new J0Yz();
+		j0Condition.setYear(queryInfo.getObject().getYear());
+		j0Condition.setPhase(queryInfo.getObject().getPhase());
+		j0QueryInfo.setObject(j0Condition);
+		j0QueryInfo.setPageInfo(queryInfo.getPageInfo());
+		PageResult<J0Yz> j0Result = getJ0List(j0QueryInfo);
+
+		QueryInfo<SxYz> d1QueryInfo = new QueryInfo<SxYz>();
+		SxYz d1Condition = new SxYz();
+		d1Condition.setYear(queryInfo.getObject().getYear());
+		d1Condition.setPhase(queryInfo.getObject().getPhase());
+		d1QueryInfo.setObject(d1Condition);
+		d1QueryInfo.setPageInfo(queryInfo.getPageInfo());
+		PageResult<D1Yz> d1Result = getD1List(d1QueryInfo);
+
+		List<XbwJY> list = new ArrayList<XbwJY>();
+		if (j0Result != null && d1Result != null && j0Result.getTotal() > 0 && d1Result.getTotal() > 0) {
+			List<Future<Exception>> futures = new ArrayList<Future<Exception>>();
+			for (int i = 0; i < j0Result.getList().size(); i++) {
+				futures.add(calXbwJY2(j0Result.getList().get(i), d1Result.getList().get(i), list));
+			}
+			sleep(futures, 10);
+		}
+		return new PageResult<XbwJY>(list, list.size(), j0QueryInfo.getPageInfo());
+	}
+
+	public PageResult<XbwJY> calXBWJY3(QueryInfo<XbwJYCondition> queryInfo) throws Exception {
+		QueryInfo<J0Yz> j0QueryInfo = new QueryInfo<J0Yz>();
+		J0Yz j0Condition = new J0Yz();
+		j0Condition.setYear(queryInfo.getObject().getYear());
+		j0Condition.setPhase(queryInfo.getObject().getPhase());
+		j0QueryInfo.setObject(j0Condition);
+		j0QueryInfo.setPageInfo(queryInfo.getPageInfo());
+		PageResult<J0Yz> j0Result = getJ0List(j0QueryInfo);
+
+		QueryInfo<SxYz> d1QueryInfo = new QueryInfo<SxYz>();
+		SxYz d1Condition = new SxYz();
+		d1Condition.setYear(queryInfo.getObject().getYear());
+		d1Condition.setPhase(queryInfo.getObject().getPhase());
+		d1QueryInfo.setObject(d1Condition);
+		d1QueryInfo.setPageInfo(queryInfo.getPageInfo());
+		PageResult<D1Yz> d1Result = getD1List(d1QueryInfo);
+
+		List<XbwJY> list = new ArrayList<XbwJY>();
+		if (j0Result != null && d1Result != null && j0Result.getTotal() > 0 && d1Result.getTotal() > 0) {
+			List<Future<Exception>> futures = new ArrayList<Future<Exception>>();
+			for (int i = 0; i < j0Result.getList().size(); i++) {
+				futures.add(calXbwJY3(j0Result.getList().get(i), d1Result.getList().get(i), list));
+			}
+			sleep(futures, 10);
+		}
+		return new PageResult<XbwJY>(list, list.size(), j0QueryInfo.getPageInfo());
+	}
+
+	@Async
+	public Future<Exception> calXbwJY0(J0Yz yz, List<XbwJY> list) {
+		try {
+			Set<Integer> A = new HashSet<Integer>();
+			addNumsToConditionList(A, yz.getSxNums());
+			addNumsToConditionList(A, yz.getTwelveNums());
+			addNumsToConditionList(A, yz.getSlqNums());
+			addNumsToConditionList(A, yz.getDsNums());
+
+			Set<Integer> B = new HashSet<Integer>();
+			addNumsToConditionList(B, yz.getLhNums());
+			addNumsToConditionList(B, yz.getMwNums());
+			addNumsToConditionList(B, yz.getFdNums());
+			addNumsToConditionList(B, yz.getPdNums());
+
+			Set<Integer> C = new HashSet<Integer>();
+			addNumsToConditionList(C, yz.getZsNums());
+			addNumsToConditionList(C, yz.getWxdsNums());
+			addNumsToConditionList(C, yz.getBsNums());
+
+			Set<Integer> D = new HashSet<Integer>();
+			addNumsToConditionList(D, yz.getSwNums());
+			addNumsToConditionList(D, yz.getQiwNums());
+
+			Set<Integer> E = new HashSet<Integer>();
+			addNumsToConditionList(E, yz.getSxzfNums());
+			addNumsToConditionList(E, yz.getTwelvezfNums());
+			addNumsToConditionList(E, yz.getSlqzfNums());
+			addNumsToConditionList(E, yz.getDszfNums());
+
+			Set<Integer> F = new HashSet<Integer>();
+			addNumsToConditionList(F, yz.getLhzfNums());
+			addNumsToConditionList(F, yz.getMwzfNums());
+			addNumsToConditionList(F, yz.getFdzfNums());
+			addNumsToConditionList(F, yz.getPdzfNums());
+
+			Set<Integer> G = new HashSet<Integer>();
+			addNumsToConditionList(G, yz.getZszfNums());
+			addNumsToConditionList(G, yz.getWxdszfNums());
+			addNumsToConditionList(G, yz.getBszfNums());
+
+			Set<Integer> H = new HashSet<Integer>();
+			addNumsToConditionList(H, yz.getSwzfNums());
+			addNumsToConditionList(H, yz.getQiwzfNums());
+
+			XbwJY data = new XbwJY();
+			data.setYear(yz.getYear());
+			data.setPhase(yz.getPhase());
+			appendXbwJY(data, list, A, B, C, D, E, F, G, H);
+			return new AsyncResult<Exception>(null);
+		} catch (Exception e) {
+			logger.error(e.getMessage(), e);
+			return new AsyncResult<Exception>(e);
+		}
+	}
+
+	private void appendXbwJY(XbwJY data, List<XbwJY> list, Set<Integer> A, Set<Integer> B, Set<Integer> C, Set<Integer> D,
+			Set<Integer> E, Set<Integer> F, Set<Integer> G, Set<Integer> H) throws Exception {
+		Set<Integer>[] AE = combineConditionList(A, E);
+		Set<Integer>[] BF = combineConditionList(B, F);
+		Set<Integer>[] CG = combineConditionList(C, G);
+		Set<Integer>[] DH = combineConditionList(D, H);
+
+		KaiJiang kj = repositories.kaiJiangRepository.findByYearAndPhase(data.getYear(), data.getPhase());
+		data.setSpecialNum(kj.getSpecialNum());
+
+		Set<Integer> ABCD = combineConditionList(A, B, C, D);
+		Set<Integer> EFGH = combineConditionList(E, F, G, H);
+
+		Set<Integer> EBCD = combineConditionList(AE[1], B, C, D);
+		Set<Integer> AFCD = combineConditionList(A, BF[1], C, D);
+		Set<Integer> ABGD = combineConditionList(A, B, CG[1], D);
+		Set<Integer> ABCH = combineConditionList(A, B, C, DH[1]);
+
+		Set<Integer> AFGH = combineConditionList(AE[0], F, G, H);
+		Set<Integer> EBGH = combineConditionList(E, BF[0], G, H);
+		Set<Integer> EFCH = combineConditionList(E, F, CG[0], H);
+		Set<Integer> EFGD = combineConditionList(E, F, G, DH[0]);
+
+		Set<Integer>[] arr = new Set[] { ABCD, EFGH, EBCD, AFCD, ABGD, ABCH, AFGH, EBGH, EFCH, EFGD };
+		List<XbwJYSub> all = new ArrayList<XbwJYSub>();
+		for (int i = 0; i < arr.length; i++) {
+			for (int num : arr[i]) {
+				boolean found = false;
+				for (XbwJYSub sub : all) {
+					if (num == sub.getNum()) {
+						sub.setCount(sub.getCount() + 1);
+						found = true;
+						break;
+					}
+				}
+				if (!found) {
+					XbwJYSub sub = new XbwJYSub();
+					sub.setNum(num);
+					sub.setCount(1);
+					all.add(sub);
+				}
+			}
+		}
+//		XbwJY lastData = null;
+//		if (!list.isEmpty()) {
+//			lastData = list.get(list.size() - 1);
+//		}
+		for (XbwJYSub sub : all) {
+			Method m = ReflectionUtils.findMethod(XbwJY.class, "getC" + sub.getCount());
+			List<Integer> values = (List<Integer>) m.invoke(data);
+			values.add(sub.getNum());
+//			if (sub.getNum() == data.getSpecialNum()) {
+//				ReflectionUtils.findMethod(XbwJY.class, "setW" + sub.getCount(), Integer.class).invoke(data, 0);
+//			} else {
+//				if (lastData != null) {
+//					m = ReflectionUtils.findMethod(XbwJY.class, "getW" + sub.getCount());
+//					Integer value = (Integer) m.invoke(lastData);
+//					if (value != null) {
+//						value++;
+//						ReflectionUtils.findMethod(XbwJY.class, "setW" + sub.getCount(), Integer.class).invoke(data, value);
+//					}
+//				}
+//			}
+		}
+
+		list.add(data);
+	}
+
+	@Async
+	public Future<Exception> calXbwJY1(D1Yz d1yz, List<XbwJY> list) {
+		try {
+			Set<Integer> A = new HashSet<Integer>();
+			addNumsToConditionList(A, d1yz.getSxNums());
+			addNumsToConditionList(A, d1yz.getTwelveNums());
+			addNumsToConditionList(A, d1yz.getSlqNums());
+			addNumsToConditionList(A, d1yz.getDsNums());
+
+			Set<Integer> B = new HashSet<Integer>();
+			addNumsToConditionList(B, d1yz.getLhNums());
+			addNumsToConditionList(B, d1yz.getMwNums());
+			addNumsToConditionList(B, d1yz.getFdNums());
+			addNumsToConditionList(B, d1yz.getPdNums());
+
+			Set<Integer> C = new HashSet<Integer>();
+			addNumsToConditionList(C, d1yz.getZsNums());
+			addNumsToConditionList(C, d1yz.getWxdsNums());
+			addNumsToConditionList(C, d1yz.getBsNums());
+
+			Set<Integer> D = new HashSet<Integer>();
+			addNumsToConditionList(D, d1yz.getSwNums());
+			addNumsToConditionList(D, d1yz.getQiwNums());
+
+			Set<Integer> E = new HashSet<Integer>();
+			addNumsToConditionList(E, d1yz.getSxzfNums());
+			addNumsToConditionList(E, d1yz.getTwelvezfNums());
+			addNumsToConditionList(E, d1yz.getSlqzfNums());
+			addNumsToConditionList(E, d1yz.getDszfNums());
+
+			Set<Integer> F = new HashSet<Integer>();
+			addNumsToConditionList(F, d1yz.getLhzfNums());
+			addNumsToConditionList(F, d1yz.getMwzfNums());
+			addNumsToConditionList(F, d1yz.getFdzfNums());
+			addNumsToConditionList(F, d1yz.getPdzfNums());
+
+			Set<Integer> G = new HashSet<Integer>();
+			addNumsToConditionList(G, d1yz.getZszfNums());
+			addNumsToConditionList(G, d1yz.getWxdszfNums());
+			addNumsToConditionList(G, d1yz.getBszfNums());
+
+			Set<Integer> H = new HashSet<Integer>();
+			addNumsToConditionList(H, d1yz.getSwzfNums());
+			addNumsToConditionList(H, d1yz.getQiwzfNums());
+
+			XbwJY data = new XbwJY();
+			data.setYear(d1yz.getYear());
+			data.setPhase(d1yz.getPhase());
+			appendXbwJY(data, list, A, B, C, D, E, F, G, H);
+			return new AsyncResult<Exception>(null);
+		} catch (Exception e) {
+			logger.error(e.getMessage(), e);
+			return new AsyncResult<Exception>(e);
+		}
+	}
+
+	@Async
+	public Future<Exception> calXbwJY2(J0Yz j0yz, D1Yz d1yz, List<XbwJY> list) {
+		try {
+			Set<Integer> A = new HashSet<Integer>();
+			addNumsToConditionList(A, j0yz.getSxNums());
+			addNumsToConditionList(A, j0yz.getTwelveNums());
+			addNumsToConditionList(A, j0yz.getSlqNums());
+			addNumsToConditionList(A, j0yz.getDsNums());
+
+			Set<Integer> B = new HashSet<Integer>();
+			addNumsToConditionList(B, j0yz.getLhNums());
+			addNumsToConditionList(B, j0yz.getMwNums());
+			addNumsToConditionList(B, j0yz.getFdNums());
+			addNumsToConditionList(B, j0yz.getPdNums());
+
+			Set<Integer> C = new HashSet<Integer>();
+			addNumsToConditionList(C, j0yz.getZsNums());
+			addNumsToConditionList(C, j0yz.getWxdsNums());
+			addNumsToConditionList(C, j0yz.getBsNums());
+
+			Set<Integer> D = new HashSet<Integer>();
+			addNumsToConditionList(D, j0yz.getSwNums());
+			addNumsToConditionList(D, j0yz.getQiwNums());
+
+			Set<Integer> E = new HashSet<Integer>();
+			addNumsToConditionList(E, d1yz.getSxNums());
+			addNumsToConditionList(E, d1yz.getTwelveNums());
+			addNumsToConditionList(E, d1yz.getSlqNums());
+			addNumsToConditionList(E, d1yz.getDsNums());
+
+			Set<Integer> F = new HashSet<Integer>();
+			addNumsToConditionList(F, d1yz.getLhNums());
+			addNumsToConditionList(F, d1yz.getMwNums());
+			addNumsToConditionList(F, d1yz.getFdNums());
+			addNumsToConditionList(F, d1yz.getPdNums());
+
+			Set<Integer> G = new HashSet<Integer>();
+			addNumsToConditionList(G, d1yz.getZsNums());
+			addNumsToConditionList(G, d1yz.getWxdsNums());
+			addNumsToConditionList(G, d1yz.getBsNums());
+
+			Set<Integer> H = new HashSet<Integer>();
+			addNumsToConditionList(H, d1yz.getSwNums());
+			addNumsToConditionList(H, d1yz.getQiwNums());
+
+			XbwJY data = new XbwJY();
+			data.setYear(j0yz.getYear());
+			data.setPhase(j0yz.getPhase());
+			appendXbwJY(data, list, A, B, C, D, E, F, G, H);
+			return new AsyncResult<Exception>(null);
+		} catch (Exception e) {
+			logger.error(e.getMessage(), e);
+			return new AsyncResult<Exception>(e);
+		}
+	}
+
+	@Async
+	public Future<Exception> calXbwJY3(J0Yz j0yz, D1Yz d1yz, List<XbwJY> list) {
+		try {
+			Set<Integer> A = new HashSet<Integer>();
+			addNumsToConditionList(A, j0yz.getSxNums());
+			addNumsToConditionList(A, j0yz.getTwelveNums());
+			addNumsToConditionList(A, j0yz.getSlqNums());
+			addNumsToConditionList(A, j0yz.getDsNums());
+
+			Set<Integer> B = new HashSet<Integer>();
+			addNumsToConditionList(B, j0yz.getLhNums());
+			addNumsToConditionList(B, j0yz.getMwNums());
+			addNumsToConditionList(B, j0yz.getFdNums());
+			addNumsToConditionList(B, j0yz.getPdNums());
+
+			Set<Integer> C = new HashSet<Integer>();
+			addNumsToConditionList(C, j0yz.getZsNums());
+			addNumsToConditionList(C, j0yz.getWxdsNums());
+			addNumsToConditionList(C, j0yz.getBsNums());
+
+			Set<Integer> D = new HashSet<Integer>();
+			addNumsToConditionList(D, j0yz.getSwNums());
+			addNumsToConditionList(D, j0yz.getQiwNums());
+
+			Set<Integer> E = new HashSet<Integer>();
+			addNumsToConditionList(E, d1yz.getSxzfNums());
+			addNumsToConditionList(E, d1yz.getTwelvezfNums());
+			addNumsToConditionList(E, d1yz.getSlqzfNums());
+			addNumsToConditionList(E, d1yz.getDszfNums());
+
+			Set<Integer> F = new HashSet<Integer>();
+			addNumsToConditionList(F, d1yz.getLhzfNums());
+			addNumsToConditionList(F, d1yz.getMwzfNums());
+			addNumsToConditionList(F, d1yz.getFdzfNums());
+			addNumsToConditionList(F, d1yz.getPdzfNums());
+
+			Set<Integer> G = new HashSet<Integer>();
+			addNumsToConditionList(G, d1yz.getZszfNums());
+			addNumsToConditionList(G, d1yz.getWxdszfNums());
+			addNumsToConditionList(G, d1yz.getBszfNums());
+
+			Set<Integer> H = new HashSet<Integer>();
+			addNumsToConditionList(H, d1yz.getSwzfNums());
+			addNumsToConditionList(H, d1yz.getQiwzfNums());
+
+			XbwJY data = new XbwJY();
+			data.setYear(j0yz.getYear());
+			data.setPhase(j0yz.getPhase());
+			appendXbwJY(data, list, A, B, C, D, E, F, G, H);
+			return new AsyncResult<Exception>(null);
+		} catch (Exception e) {
+			logger.error(e.getMessage(), e);
+			return new AsyncResult<Exception>(e);
+		}
+	}
+
+	private void addNumsToConditionList(Set<Integer> conditionSet, List<Integer> nums) {
+		if (nums != null && !nums.isEmpty()) {
+			for (Integer num : nums) {
+				conditionSet.add(num);
+			}
+		}
+	}
+
+	private void addNumsToConditionList(Set<Integer> conditionSet, Set<Integer> nums) {
+		addNumsToConditionList(conditionSet, new ArrayList<Integer>(nums));
+	}
+
+	private Set<Integer> combineConditionList(Set<Integer> a1, Set<Integer> a2, Set<Integer> a3, Set<Integer> a4) {
+		Set<Integer> arr = new HashSet<Integer>(a1);
+		addNumsToConditionList(arr, a2);
+		addNumsToConditionList(arr, a3);
+		addNumsToConditionList(arr, a4);
+		Set<Integer> reversed = new HashSet<Integer>();
+		for (int i = 1; i < 50; i++) {
+			if (!arr.contains(i)) {
+				reversed.add(i);
+			}
+		}
+		return reversed;
+	}
+
+	private Set<Integer>[] combineConditionList(Set<Integer> a1, Set<Integer> a2) {
+		Set<Integer> a1Excluded = new HashSet<Integer>();
+		Set<Integer> a2Excluded = new HashSet<Integer>();
+		for (Integer num : a1) {
+			if (!a2.contains(num)) {
+				a1Excluded.add(num);
+			}
+		}
+		for (Integer num : a2) {
+			if (!a1.contains(num)) {
+				a2Excluded.add(num);
+			}
+		}
+		return new Set[] { a1Excluded, a2Excluded };
+	}
 }
 
 class LrInfo {

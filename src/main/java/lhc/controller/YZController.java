@@ -91,6 +91,8 @@ import lhc.dto.PmDTO;
 import lhc.dto.PmNum;
 import lhc.dto.SpecialNum;
 import lhc.dto.TmYzInfo;
+import lhc.dto.XbwJY;
+import lhc.dto.XbwJYCondition;
 import lhc.dto.query.PageInfo;
 import lhc.dto.query.PageResult;
 import lhc.dto.query.QueryInfo;
@@ -2354,4 +2356,12 @@ public class YZController {
 		}
 		return null;
 	}
+
+	@RequestMapping("/listXBWJY")
+	public BaseResult listXBWJY(@RequestBody QueryInfo<XbwJYCondition> queryInfo) throws Exception {
+		PageResult<XbwJY> result = repositories.yzService.calXBWJY(queryInfo);
+		result.getList().add(new XbwJY());
+		return new BaseResult(result);
+	}
+
 }

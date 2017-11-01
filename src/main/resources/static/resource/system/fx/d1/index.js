@@ -1,6 +1,7 @@
 $(document).ready(function() {
 	var count = 0;
 	var totalCount = 0;
+	var lastHms = null;
 	
 	$("#columns").combobox();
 	
@@ -20,6 +21,16 @@ $(document).ready(function() {
 					td.hide();
 				}
 			});
+			
+			table.find("tbody").find("tr").each(function() {
+				var td = $(this).children().eq(34);
+				if(td.text() != "反转") {
+					if(lastHms) {
+						td.text(lastHms);
+					}
+					lastHms = countReverseNums(td);
+				}
+			});
 		} else {
 			table.find("tr").each(function() {
 				var td = $(this).children().eq(parseInt(value));
@@ -29,6 +40,14 @@ $(document).ready(function() {
 				} else {
 					td.attr("status", "hide");
 					td.hide();
+				}
+				
+				td = $(this).children().eq(34);
+				if(td.text() != "反转") {
+					if(lastHms) {
+						td.text(lastHms);
+					}
+					lastHms = countReverseNums(td);
 				}
 			});
 		}
@@ -71,6 +90,40 @@ $(document).ready(function() {
 		$("#totalCounter").text(totalCount);
 	}
 	
+	function countReverseNums(nTd) {
+		var allHms = [];
+		nTd.parent("tr").find("td[status='show']").each(function() {
+			if($(this).attr("hms")) {
+				allHms = allHms.concat($(this).attr("hms").split(/,\s*/));
+			}
+		});
+		var reverseNums = [];
+		for(var i = 1; i < 50; i++) {
+			if(!isInArr(allHms, i)) {
+				reverseNums.push(i);
+			}
+		}
+		return reverseNums.join(", ");
+	}
+	
+	var numlist = [
+		"sxNums", "sxzfNums",
+		"dsNums", "dszfNums",
+		"swNums", "swzfNums",
+		"mwNums", "mwzfNums",
+		"lhNums", "lhzfNums",
+		"bsNums", "bszfNums",
+		"zsNums", "zszfNums",
+		"wxNums", "wxzfNums",
+		"wxdsNums", "wxdszfNums",
+		"pdNums", "pdzfNums",
+		"fdNums", "fdzfNums",
+		"qqNums", "qqzfNums",
+		"qiwNums", "qiwzfNums",
+		"twelveNums", "twelvezfNums",
+		"slqNums", "slqzfNums",
+	];
+	
 	var sxlist = [
 		"sxd1", "sxzfd1",
 		"dsd1", "dszfd1",
@@ -92,6 +145,7 @@ $(document).ready(function() {
 	for(var i in sxlist) {
 		cols.push(sxlist[i]);
 	}
+	cols.push("phase");
 	cols.push("phase");
 	cols.push("phase");
 	var columns = [];
@@ -129,6 +183,7 @@ $(document).ready(function() {
 						} else {
 							$(nTd).css("backgroundColor", "#ffc")
 						}
+						$(nTd).attr("hms", item[numlist[index-2]].join(","));
 					} 
 					var th = $("#dataTable").find("th").eq(index);
 					if(th.attr("status") == "hide") {
@@ -184,6 +239,21 @@ $(document).ready(function() {
 			}
 		}
 	});
+	columnDefs.push({
+		aTargets: [34],
+		fnCreatedCell: function(nTd, sData, item, iRow, iCol) {
+			if(lastHms) {
+				$(nTd).text(lastHms);
+			} else {
+				$(nTd).text("");
+			}
+			if(item.date) {
+				lastHms = countReverseNums($(nTd));
+			} else {
+				lastHms = null;
+			}
+		}
+	});
 	datatables.push(createDataTable({
 		id : "dataTable",
 		url : "/mvc/yz/listAllD1",
@@ -191,6 +261,7 @@ $(document).ready(function() {
 		data : function(queryInfo, infoSettings) {
 			count = 0;
 			totalCount = 0;
+			lastHms = null;
 			queryInfo.object = {};
 			queryInfo.object.year = parseInt($("#years").val());
 			queryInfo.object.phase = parseInt($("#phases").val());

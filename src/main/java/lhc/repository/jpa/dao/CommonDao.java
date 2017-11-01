@@ -26,6 +26,74 @@ public class CommonDao {
 	@Autowired
 	private EntityManager em;
 
+	public PageResult<J0Yz> findSxJ0List(QueryInfo<J0Yz> queryInfo) {
+		PageRequest pageRequest = null;
+		if (queryInfo.getPageInfo() != null) {
+			if (!queryInfo.getPageInfo().isToSort()) {
+				List<SortInfo> sorts = new ArrayList<SortInfo>();
+				sorts.add(new SortInfo("sx.date", SortOrder.DESC));
+				queryInfo.getPageInfo().setSorts(sorts);
+			}
+			pageRequest = queryInfo.getPageInfo().toPageRequest();
+		}
+		List<Object> args = new ArrayList<Object>();
+		StringBuilder condition = new StringBuilder();
+		condition.append("from").append("\n");
+		if (queryInfo.getObject() != null) {
+			condition.append("(select yp.date from sx_yz yp").append("\n");
+			condition.append("where yp.year = ?").append("\n");
+			condition.append("and yp.phase = ?) t,").append("\n");
+			J0Yz yz = queryInfo.getObject();
+			args.add(yz.getYear());
+			args.add(yz.getPhase());
+		}
+		condition.append("sx_yz sx").append("\n");
+		condition.append("left join sx_zf_yz2 sxzf on sx.date=sxzf.date").append("\n");
+		if (queryInfo.getObject() != null) {
+			condition.append("and sx.date<=t.date").append("\n");
+		}
+		StringBuilder countSql = new StringBuilder("select count(sx.date)");
+		countSql.append("\n").append(condition);
+		Query countQuery = em.createNativeQuery(countSql.toString());
+		QueryUtil.setArgs(args, countQuery);
+		long count = DatabaseUtil.getCount(countQuery.getSingleResult());
+		if (count > 0) {
+			StringBuilder sql = new StringBuilder("select sx.date, sx.year, sx.phase,").append("\n");
+			sql.append("sx.min0 as sxj0, sxzf.min0 as sxzfj0,").append("\n");
+			sql.append("ds.min0 as 0, dszf.min0 as 0,").append("\n");
+			sql.append("sw.min0 as 0, swzf.min0 as 0,").append("\n");
+			sql.append("mw.min0 as 0, mwzf.min0 as 0,").append("\n");
+			sql.append("lh.min0 as 0, lhzf.min0 as 0,").append("\n");
+			sql.append("bs.min0 as 0, bszf.min0 as 0,").append("\n");
+			sql.append("zs.min0 as 0, zszf.min0 as 0,").append("\n");
+			sql.append("wx.min0 as 0, wxzf.min0 as 0,").append("\n");
+			sql.append("wxds.min0 as 0, wxdszf.min0 as 0,").append("\n");
+			sql.append("pd.min0 as 0, pdzf.min0 as 0,").append("\n");
+			sql.append("tm12fd.min0 as 0, tm12fdzf.min0 as 0,").append("\n");
+			sql.append("qq.min0 as 0, qqzf.min0 as 0,").append("\n");
+			sql.append("qiw.min0 as 0, qiwzf.min0 as 0,").append("\n");
+			sql.append("twelve.min0 as 0, twelvezf.min0 as 0,").append("\n");
+			sql.append("slq.min0 as 0, slqzf.min0 as 0").append("\n");
+			sql.append(condition).append("\n");
+			if (pageRequest != null) {
+				QueryUtil.setOrder(sql, pageRequest);
+			}
+			Query query = em.createNativeQuery(sql.toString(), "J0Yz");
+			QueryUtil.setArgs(args, query);
+			if (pageRequest != null) {
+				QueryUtil.setPage(pageRequest, query);
+			} else {
+				queryInfo.setPageInfo(new PageInfo(1, 1));
+			}
+			List<J0Yz> list = query.getResultList();
+			if (queryInfo.isToReverse()) {
+				Collections.reverse(list);
+			}
+			return new PageResult<J0Yz>(list, count, queryInfo.getPageInfo());
+		}
+		return new PageResult<J0Yz>(new ArrayList<J0Yz>(), 0, queryInfo.getPageInfo());
+	}
+
 	public PageResult<J0Yz> getTop0List(QueryInfo<J0Yz> queryInfo) {
 		PageRequest pageRequest = null;
 		if (queryInfo.getPageInfo() != null) {

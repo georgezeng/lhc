@@ -3,7 +3,7 @@ package lhc.util;
 import lhc.enums.SX;
 
 public class DateUtil {
-	public static SX getYear(Integer year) {
+	public static SX getSxByYear(Integer year) {
 		if (year < 1900) {
 			return null;
 		}
