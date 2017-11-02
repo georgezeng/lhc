@@ -944,10 +944,12 @@ public class YZController {
 	}
 
 	@RequestMapping("/listAllD1")
-	public BaseResult listAllD1(@RequestBody QueryInfo<SxYz> queryInfo) throws Exception {
+	public BaseResult listAllD1(@RequestBody QueryInfo<SxYz> queryInfo, String mode) throws Exception {
 		PageResult<D1Yz> result = repositories.yzService.getD1List(queryInfo);
-		if (result != null && result.getTotal() > 0) {
-			result.getList().add(new D1Yz());
+		if ("1".equals(mode)) {
+			if (result != null && result.getTotal() > 0) {
+				result.getList().add(new D1Yz());
+			}
 		}
 		return new BaseResult(result);
 	}

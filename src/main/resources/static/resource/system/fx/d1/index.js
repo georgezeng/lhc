@@ -256,7 +256,7 @@ $(document).ready(function() {
 	});
 	datatables.push(createDataTable({
 		id : "dataTable",
-		url : "/mvc/yz/listAllD1",
+		url : "/mvc/yz/listAllD1?mode=1",
 		bFilter: false,
 		data : function(queryInfo, infoSettings) {
 			count = 0;

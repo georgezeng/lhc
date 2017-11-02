@@ -9,65 +9,115 @@ public class D1Yz {
 	private String date;
 	private Integer year;
 	private Integer phase;
+	private Integer specialNum;
 	private Integer sxd1;
+	private Integer sxTotal;
 	private boolean isRedForsxd1;
 	private Integer sxzfd1;
+	private Integer sxzfTotal;
+	private Integer sxlrTotal;
+	private Integer sxlrPos;
+	private Integer sxlrd1;
 	private boolean isRedForsxzfd1;
 	private Integer dsd1;
+	private Integer dsTotal;
 	private boolean isRedFordsd1;
 	private Integer dszfd1;
+	private Integer dszfTotal;
 	private boolean isRedFordszfd1;
 	private Integer swd1;
+	private Integer swTotal;
+	private Integer swPos;
 	private boolean isRedForswd1;
 	private Integer swzfd1;
+	private Integer swzfTotal;
 	private boolean isRedForswzfd1;
 	private Integer mwd1;
+	private Integer mwTotal;
 	private boolean isRedFormwd1;
 	private Integer mwzfd1;
+	private Integer mwzfTotal;
 	private boolean isRedFormwzfd1;
 	private Integer lhd1;
+	private Integer lhTotal;
 	private boolean isRedForlhd1;
 	private Integer lhzfd1;
+	private Integer lhzfTotal;
 	private boolean isRedForlhzfd1;
 	private Integer bsd1;
+	private Integer bsd3;
+	private Integer bsd4;
+	private Integer bsd5;
+	private Integer bsTotal;
 	private boolean isRedForbsd1;
 	private Integer bszfd1;
+	private Integer bszfd3;
+	private Integer bszfd4;
+	private Integer bszfd5;
+	private Integer bszfTotal;
 	private boolean isRedForbszfd1;
 	private Integer zsd1;
+	private Integer zsTotal;
 	private boolean isRedForzsd1;
 	private Integer zszfd1;
+	private Integer zszfTotal;
 	private boolean isRedForzszfd1;
 	private Integer wxd1;
+	private Integer wxd3;
+	private Integer wxd4;
+	private Integer wxd5;
+	private Integer wxTotal;
 	private boolean isRedForwxd1;
 	private Integer wxzfd1;
+	private Integer wxzfd3;
+	private Integer wxzfd4;
+	private Integer wxzfd5;
+	private Integer wxzfTotal;
 	private boolean isRedForwxzfd1;
 	private Integer wxdsd1;
+	private Integer wxdsTotal;
 	private boolean isRedForwxdsd1;
 	private Integer wxdszfd1;
+	private Integer wxdszfTotal;
 	private boolean isRedForwxdszfd1;
 	private Integer pdd1;
+	private Integer pdTotal;
 	private boolean isRedForpdd1;
 	private Integer pdzfd1;
+	private Integer pdzfTotal;
 	private boolean isRedForpdzfd1;
 	private Integer fdd1;
+	private Integer fdTotal;
 	private boolean isRedForfdd1;
 	private Integer fdzfd1;
+	private Integer fdzfTotal;
 	private boolean isRedForfdzfd1;
 	private Integer qqd1;
+	private Integer qqTotal;
+	private Integer qqPos;
 	private boolean isRedForqqd1;
 	private Integer qqzfd1;
+	private Integer qqzfTotal;
 	private boolean isRedForqqzfd1;
 	private Integer qiwd1;
+	private Integer qiwTotal;
+	private Integer qiwPos;
 	private boolean isRedForqiwd1;
 	private Integer qiwzfd1;
+	private Integer qiwzfTotal;
 	private boolean isRedForqiwzfd1;
 	private Integer twelved1;
+	private Integer twelveTotal;
+	private Integer twelvePos;
 	private boolean isRedFortwelved1;
 	private Integer twelvezfd1;
+	private Integer twelvezfTotal;
 	private boolean isRedFortwelvezfd1;
 	private Integer slqd1;
+	private Integer slqTotal;
 	private boolean isRedForslqd1;
 	private Integer slqzfd1;
+	private Integer slqzfTotal;
 	private boolean isRedForslqzfd1;
 	@Transient
 	private List<Integer> sxNums;
@@ -129,6 +179,406 @@ public class D1Yz {
 	private List<Integer> slqNums;
 	@Transient
 	private List<Integer> slqzfNums;
+
+	public Integer getSxlrTotal() {
+		return sxlrTotal;
+	}
+
+	public void setSxlrTotal(Integer sxlrTotal) {
+		this.sxlrTotal = sxlrTotal;
+	}
+
+	public Integer getSxlrPos() {
+		return sxlrPos;
+	}
+
+	public void setSxlrPos(Integer sxlrPos) {
+		this.sxlrPos = sxlrPos;
+	}
+
+	public Integer getSxlrd1() {
+		return sxlrd1;
+	}
+
+	public void setSxlrd1(Integer sxlrd1) {
+		this.sxlrd1 = sxlrd1;
+	}
+
+	public Integer getSpecialNum() {
+		return specialNum;
+	}
+
+	public void setSpecialNum(Integer specialNum) {
+		this.specialNum = specialNum;
+	}
+
+	public Integer getBszfd3() {
+		return bszfd3;
+	}
+
+	public void setBszfd3(Integer bszfd3) {
+		this.bszfd3 = bszfd3;
+	}
+
+	public Integer getBszfd4() {
+		return bszfd4;
+	}
+
+	public void setBszfd4(Integer bszfd4) {
+		this.bszfd4 = bszfd4;
+	}
+
+	public Integer getBszfd5() {
+		return bszfd5;
+	}
+
+	public void setBszfd5(Integer bszfd5) {
+		this.bszfd5 = bszfd5;
+	}
+
+	public Integer getWxzfd3() {
+		return wxzfd3;
+	}
+
+	public void setWxzfd3(Integer wxzfd3) {
+		this.wxzfd3 = wxzfd3;
+	}
+
+	public Integer getWxzfd4() {
+		return wxzfd4;
+	}
+
+	public void setWxzfd4(Integer wxzfd4) {
+		this.wxzfd4 = wxzfd4;
+	}
+
+	public Integer getWxzfd5() {
+		return wxzfd5;
+	}
+
+	public void setWxzfd5(Integer wxzfd5) {
+		this.wxzfd5 = wxzfd5;
+	}
+
+	public Integer getBsd3() {
+		return bsd3;
+	}
+
+	public void setBsd3(Integer bsd3) {
+		this.bsd3 = bsd3;
+	}
+
+	public Integer getBsd4() {
+		return bsd4;
+	}
+
+	public void setBsd4(Integer bsd4) {
+		this.bsd4 = bsd4;
+	}
+
+	public Integer getBsd5() {
+		return bsd5;
+	}
+
+	public void setBsd5(Integer bsd5) {
+		this.bsd5 = bsd5;
+	}
+
+	public Integer getWxd3() {
+		return wxd3;
+	}
+
+	public void setWxd3(Integer wxd3) {
+		this.wxd3 = wxd3;
+	}
+
+	public Integer getWxd4() {
+		return wxd4;
+	}
+
+	public void setWxd4(Integer wxd4) {
+		this.wxd4 = wxd4;
+	}
+
+	public Integer getWxd5() {
+		return wxd5;
+	}
+
+	public void setWxd5(Integer wxd5) {
+		this.wxd5 = wxd5;
+	}
+
+	public Integer getSwPos() {
+		return swPos;
+	}
+
+	public void setSwPos(Integer swPos) {
+		this.swPos = swPos;
+	}
+
+	public Integer getQqPos() {
+		return qqPos;
+	}
+
+	public void setQqPos(Integer qqPos) {
+		this.qqPos = qqPos;
+	}
+
+	public Integer getQiwPos() {
+		return qiwPos;
+	}
+
+	public void setQiwPos(Integer qiwPos) {
+		this.qiwPos = qiwPos;
+	}
+
+	public Integer getTwelvePos() {
+		return twelvePos;
+	}
+
+	public void setTwelvePos(Integer twelvePos) {
+		this.twelvePos = twelvePos;
+	}
+
+	public Integer getSxTotal() {
+		return sxTotal;
+	}
+
+	public void setSxTotal(Integer sxTotal) {
+		this.sxTotal = sxTotal;
+	}
+
+	public Integer getSxzfTotal() {
+		return sxzfTotal;
+	}
+
+	public void setSxzfTotal(Integer sxzfTotal) {
+		this.sxzfTotal = sxzfTotal;
+	}
+
+	public Integer getDsTotal() {
+		return dsTotal;
+	}
+
+	public void setDsTotal(Integer dsTotal) {
+		this.dsTotal = dsTotal;
+	}
+
+	public Integer getDszfTotal() {
+		return dszfTotal;
+	}
+
+	public void setDszfTotal(Integer dszfTotal) {
+		this.dszfTotal = dszfTotal;
+	}
+
+	public Integer getSwTotal() {
+		return swTotal;
+	}
+
+	public void setSwTotal(Integer swTotal) {
+		this.swTotal = swTotal;
+	}
+
+	public Integer getSwzfTotal() {
+		return swzfTotal;
+	}
+
+	public void setSwzfTotal(Integer swzfTotal) {
+		this.swzfTotal = swzfTotal;
+	}
+
+	public Integer getMwTotal() {
+		return mwTotal;
+	}
+
+	public void setMwTotal(Integer mwTotal) {
+		this.mwTotal = mwTotal;
+	}
+
+	public Integer getMwzfTotal() {
+		return mwzfTotal;
+	}
+
+	public void setMwzfTotal(Integer mwzfTotal) {
+		this.mwzfTotal = mwzfTotal;
+	}
+
+	public Integer getLhTotal() {
+		return lhTotal;
+	}
+
+	public void setLhTotal(Integer lhTotal) {
+		this.lhTotal = lhTotal;
+	}
+
+	public Integer getLhzfTotal() {
+		return lhzfTotal;
+	}
+
+	public void setLhzfTotal(Integer lhzfTotal) {
+		this.lhzfTotal = lhzfTotal;
+	}
+
+	public Integer getBsTotal() {
+		return bsTotal;
+	}
+
+	public void setBsTotal(Integer bsTotal) {
+		this.bsTotal = bsTotal;
+	}
+
+	public Integer getBszfTotal() {
+		return bszfTotal;
+	}
+
+	public void setBszfTotal(Integer bszfTotal) {
+		this.bszfTotal = bszfTotal;
+	}
+
+	public Integer getZsTotal() {
+		return zsTotal;
+	}
+
+	public void setZsTotal(Integer zsTotal) {
+		this.zsTotal = zsTotal;
+	}
+
+	public Integer getZszfTotal() {
+		return zszfTotal;
+	}
+
+	public void setZszfTotal(Integer zszfTotal) {
+		this.zszfTotal = zszfTotal;
+	}
+
+	public Integer getWxTotal() {
+		return wxTotal;
+	}
+
+	public void setWxTotal(Integer wxTotal) {
+		this.wxTotal = wxTotal;
+	}
+
+	public Integer getWxzfTotal() {
+		return wxzfTotal;
+	}
+
+	public void setWxzfTotal(Integer wxzfTotal) {
+		this.wxzfTotal = wxzfTotal;
+	}
+
+	public Integer getWxdsTotal() {
+		return wxdsTotal;
+	}
+
+	public void setWxdsTotal(Integer wxdsTotal) {
+		this.wxdsTotal = wxdsTotal;
+	}
+
+	public Integer getWxdszfTotal() {
+		return wxdszfTotal;
+	}
+
+	public void setWxdszfTotal(Integer wxdszfTotal) {
+		this.wxdszfTotal = wxdszfTotal;
+	}
+
+	public Integer getPdTotal() {
+		return pdTotal;
+	}
+
+	public void setPdTotal(Integer pdTotal) {
+		this.pdTotal = pdTotal;
+	}
+
+	public Integer getPdzfTotal() {
+		return pdzfTotal;
+	}
+
+	public void setPdzfTotal(Integer pdzfTotal) {
+		this.pdzfTotal = pdzfTotal;
+	}
+
+	public Integer getFdTotal() {
+		return fdTotal;
+	}
+
+	public void setFdTotal(Integer fdTotal) {
+		this.fdTotal = fdTotal;
+	}
+
+	public Integer getFdzfTotal() {
+		return fdzfTotal;
+	}
+
+	public void setFdzfTotal(Integer fdzfTotal) {
+		this.fdzfTotal = fdzfTotal;
+	}
+
+	public Integer getQqTotal() {
+		return qqTotal;
+	}
+
+	public void setQqTotal(Integer qqTotal) {
+		this.qqTotal = qqTotal;
+	}
+
+	public Integer getQqzfTotal() {
+		return qqzfTotal;
+	}
+
+	public void setQqzfTotal(Integer qqzfTotal) {
+		this.qqzfTotal = qqzfTotal;
+	}
+
+	public Integer getQiwTotal() {
+		return qiwTotal;
+	}
+
+	public void setQiwTotal(Integer qiwTotal) {
+		this.qiwTotal = qiwTotal;
+	}
+
+	public Integer getQiwzfTotal() {
+		return qiwzfTotal;
+	}
+
+	public void setQiwzfTotal(Integer qiwzfTotal) {
+		this.qiwzfTotal = qiwzfTotal;
+	}
+
+	public Integer getTwelveTotal() {
+		return twelveTotal;
+	}
+
+	public void setTwelveTotal(Integer twelveTotal) {
+		this.twelveTotal = twelveTotal;
+	}
+
+	public Integer getTwelvezfTotal() {
+		return twelvezfTotal;
+	}
+
+	public void setTwelvezfTotal(Integer twelvezfTotal) {
+		this.twelvezfTotal = twelvezfTotal;
+	}
+
+	public Integer getSlqTotal() {
+		return slqTotal;
+	}
+
+	public void setSlqTotal(Integer slqTotal) {
+		this.slqTotal = slqTotal;
+	}
+
+	public Integer getSlqzfTotal() {
+		return slqzfTotal;
+	}
+
+	public void setSlqzfTotal(Integer slqzfTotal) {
+		this.slqzfTotal = slqzfTotal;
+	}
 
 	public List<Integer> getSxNums() {
 		return sxNums;

@@ -2467,6 +2467,7 @@ public class YZService {
 		PageResult<D1Yz> result = calSxForD1(queryInfo);
 		List<Future<Exception>> futures = new ArrayList<Future<Exception>>();
 		futures.add(calSxZfForD1(queryInfo, result));
+		futures.add(calSxlrForD1(queryInfo, result));
 		futures.add(calDsForD1(queryInfo, result));
 		futures.add(calDsZfForD1(queryInfo, result));
 		futures.add(calSwForD1(queryInfo, result));
@@ -2512,16 +2513,23 @@ public class YZService {
 				yz.setDate(data.getDate());
 				yz.setYear(data.getYear());
 				yz.setPhase(data.getPhase());
+				KaiJiang kj = repositories.kaiJiangRepository.findByYearAndPhase(data.getYear(), data.getPhase());
+				yz.setSpecialNum(kj.getSpecialNum());
 				int max = 0;
 				SX maxSX = null;
+				int total = 0;
 				for (SX sx : SX.seq()) {
 					Method m = ReflectionUtils.findMethod(SxYz.class, "get" + sx.name());
 					Integer value = (Integer) m.invoke(data);
-					if (value != null && value > max) {
-						max = value;
-						maxSX = sx;
+					if (value != null) {
+						total += value;
+						if (value > max) {
+							max = value;
+							maxSX = sx;
+						}
 					}
 				}
+				yz.setSxTotal(total);
 				if (maxSX != null) {
 					calSxForD1(yz, maxSX);
 				}
@@ -2559,6 +2567,34 @@ public class YZService {
 	}
 
 	@Async
+	public Future<Exception> calSxlrForD1(QueryInfo<SxYz> queryInfo, PageResult<D1Yz> result) throws Exception {
+		try {
+			QueryInfo<SxLrYz> dataQueryInfo = new QueryInfo<SxLrYz>();
+			SxLrYz condition = new SxLrYz();
+			condition.setYear(queryInfo.getObject().getYear());
+			condition.setPhase(queryInfo.getObject().getPhase());
+			dataQueryInfo.setObject(condition);
+			dataQueryInfo.setPageInfo(queryInfo.getPageInfo());
+			dataQueryInfo.setToReverse(queryInfo.isToReverse());
+			PageResult<SxLrYz> dataResult = repositories.sxlrYzDao.query(dataQueryInfo);
+			if (dataResult != null && dataResult.getTotal() > 0) {
+				List<D1Yz> list = result.getList();
+				int i = 0;
+				for (SxLrYz data : dataResult.getList()) {
+					D1Yz yz = list.get(i++);
+					yz.setSxlrTotal(data.getTotal());
+					yz.setSxlrd1(data.getTop0());
+					yz.setSxlrPos(data.getPos());
+				}
+			}
+			return new AsyncResult<Exception>(null);
+		} catch (Exception e) {
+			logger.error(e.getMessage(), e);
+			return new AsyncResult<Exception>(e);
+		}
+	}
+
+	@Async
 	public Future<Exception> calSxZfForD1(QueryInfo<SxYz> queryInfo, PageResult<D1Yz> result) throws Exception {
 		try {
 			QueryInfo<SxZfYz2> dataQueryInfo = new QueryInfo<SxZfYz2>();
@@ -2577,14 +2613,19 @@ public class YZService {
 					D1Yz yz = list.get(i++);
 					int max = 0;
 					SX maxSX = null;
+					int total = 0;
 					for (int j = 0; j < SX.seq().length; j++) {
 						Method m = ReflectionUtils.findMethod(SxZfYz2.class, "getZf" + j);
 						Integer value = (Integer) m.invoke(data);
-						if (value != null && value > max) {
-							max = value;
-							maxSX = SX.seq()[j];
+						if (value != null) {
+							total += value;
+							if (value > max) {
+								max = value;
+								maxSX = SX.seq()[j];
+							}
 						}
 					}
+					yz.setSxzfTotal(total);
 					if (maxSX != null) {
 						calSxForD1(yz, maxSX, data);
 					}
@@ -2631,15 +2672,20 @@ public class YZService {
 					int max = 0;
 					Integer maxPos = null;
 					int j = 0;
+					int total = 0;
 					for (String fd : DsNums.FDS) {
 						Method m = ReflectionUtils.findMethod(DsYz.class, "get" + fd);
 						Integer value = (Integer) m.invoke(data);
-						if (value != null && value > max) {
-							max = value;
-							maxPos = j;
+						if (value != null) {
+							total += value;
+							if (value > max) {
+								max = value;
+								maxPos = j;
+							}
 						}
 						j++;
 					}
+					yz.setDsTotal(total);
 					if (maxPos != null) {
 						yz.setDsNums(DsNums.NUMS[maxPos]);
 					}
@@ -2676,14 +2722,19 @@ public class YZService {
 					D1Yz yz = list.get(i++);
 					int max = 0;
 					Integer maxPos = null;
+					int total = 0;
 					for (int j = 0; j < DsNums.FDS.length; j++) {
 						Method m = ReflectionUtils.findMethod(DsZfYz.class, "getZf" + j);
 						Integer value = (Integer) m.invoke(data);
-						if (value != null && value > max) {
-							max = value;
-							maxPos = j;
+						if (value != null) {
+							total += value;
+							if (value > max) {
+								max = value;
+								maxPos = j;
+							}
 						}
 					}
+					yz.setDszfTotal(total);
 					if (maxPos != null) {
 						calDsForD1(yz, maxPos, data);
 					}
@@ -2729,15 +2780,21 @@ public class YZService {
 					int max = 0;
 					Integer maxPos = null;
 					int j = 0;
+					int total = 0;
 					for (String fd : SwNums.FDS) {
 						Method m = ReflectionUtils.findMethod(SwYz.class, "get" + fd);
 						Integer value = (Integer) m.invoke(data);
-						if (value != null && value > max) {
-							max = value;
-							maxPos = j;
+						if (value != null) {
+							total += value;
+							if (value > max) {
+								max = value;
+								maxPos = j;
+							}
 						}
 						j++;
 					}
+					yz.setSwTotal(total);
+					yz.setSwPos(data.getPos());
 					if (maxPos != null) {
 						yz.setSwNums(SwNums.NUMS[maxPos]);
 					}
@@ -2774,14 +2831,19 @@ public class YZService {
 					D1Yz yz = list.get(i++);
 					int max = 0;
 					Integer maxPos = null;
+					int total = 0;
 					for (int j = 0; j < SwNums.FDS.length; j++) {
 						Method m = ReflectionUtils.findMethod(SwZfYz.class, "getZf" + j);
 						Integer value = (Integer) m.invoke(data);
-						if (value != null && value > max) {
-							max = value;
-							maxPos = j;
+						if (value != null) {
+							total += value;
+							if (value > max) {
+								max = value;
+								maxPos = j;
+							}
 						}
 					}
+					yz.setSwzfTotal(total);
 					if (maxPos != null) {
 						calSwForD1(yz, maxPos, data);
 					}
@@ -2826,16 +2888,21 @@ public class YZService {
 					D1Yz yz = list.get(i++);
 					int max = 0;
 					int j = 0;
+					int total = 0;
 					Integer maxPos = null;
 					for (String fd : MwNums.FDS) {
 						Method m = ReflectionUtils.findMethod(MwYz.class, "get" + fd);
 						Integer value = (Integer) m.invoke(data);
-						if (value != null && value > max) {
-							max = value;
-							maxPos = j;
+						if (value != null) {
+							total += value;
+							if (value > max) {
+								max = value;
+								maxPos = j;
+							}
 						}
 						j++;
 					}
+					yz.setMwTotal(total);
 					if (maxPos != null) {
 						yz.setMwNums(MwNums.NUMS[maxPos]);
 					}
@@ -2872,14 +2939,19 @@ public class YZService {
 					D1Yz yz = list.get(i++);
 					int max = 0;
 					Integer maxPos = null;
+					int total = 0;
 					for (int j = 0; j < MwNums.FDS.length; j++) {
 						Method m = ReflectionUtils.findMethod(MwZfYz.class, "getZf" + j);
 						Integer value = (Integer) m.invoke(data);
-						if (value != null && value > max) {
-							max = value;
-							maxPos = j;
+						if (value != null) {
+							total += value;
+							if (value > max) {
+								max = value;
+								maxPos = j;
+							}
 						}
 					}
+					yz.setMwzfTotal(total);
 					if (maxPos != null) {
 						calMwForD1(yz, maxPos, data);
 					}
@@ -2925,15 +2997,20 @@ public class YZService {
 					int max = 0;
 					Integer maxPos = null;
 					int j = 0;
+					int total = 0;
 					for (String fd : LhNums.FDS) {
 						Method m = ReflectionUtils.findMethod(LhYz.class, "get" + fd);
 						Integer value = (Integer) m.invoke(data);
-						if (value != null && value > max) {
-							max = value;
-							maxPos = j;
+						if (value != null) {
+							total += value;
+							if (value > max) {
+								max = value;
+								maxPos = j;
+							}
 						}
 						j++;
 					}
+					yz.setLhTotal(total);
 					if (maxPos != null) {
 						yz.setLhNums(LhNums.NUMS[maxPos]);
 					}
@@ -2970,14 +3047,19 @@ public class YZService {
 					D1Yz yz = list.get(i++);
 					int max = 0;
 					Integer maxPos = null;
+					int total = 0;
 					for (int j = 0; j < LhNums.FDS.length; j++) {
 						Method m = ReflectionUtils.findMethod(LhZfYz.class, "getZf" + j);
 						Integer value = (Integer) m.invoke(data);
-						if (value != null && value > max) {
-							max = value;
-							maxPos = j;
+						if (value != null) {
+							total += value;
+							if (value > max) {
+								max = value;
+								maxPos = j;
+							}
 						}
 					}
+					yz.setLhzfTotal(total);
 					if (maxPos != null) {
 						calLhForD1(yz, maxPos, data);
 					}
@@ -3023,15 +3105,23 @@ public class YZService {
 					int max = 0;
 					Integer maxPos = null;
 					int j = 0;
+					int total = 0;
 					for (String fd : Bs9qNums.FDS) {
 						Method m = ReflectionUtils.findMethod(Bs9qYz.class, "get" + fd);
 						Integer value = (Integer) m.invoke(data);
-						if (value != null && value > max) {
-							max = value;
-							maxPos = j;
+						if (value != null) {
+							total += value;
+							if (value > max) {
+								max = value;
+								maxPos = j;
+							}
 						}
 						j++;
 					}
+					yz.setBsTotal(total);
+					yz.setBsd3(data.getTop2());
+					yz.setBsd4(data.getTop3());
+					yz.setBsd5(data.getTop4());
 					if (maxPos != null) {
 						yz.setBsNums(Bs9qNums.NUMS[maxPos]);
 					}
@@ -3068,14 +3158,22 @@ public class YZService {
 					D1Yz yz = list.get(i++);
 					int max = 0;
 					Integer maxPos = null;
+					int total = 0;
 					for (int j = 0; j < Bs9qNums.FDS.length; j++) {
 						Method m = ReflectionUtils.findMethod(Bs9qZfYz.class, "getZf" + j);
 						Integer value = (Integer) m.invoke(data);
-						if (value != null && value > max) {
-							max = value;
-							maxPos = j;
+						if (value != null) {
+							total += value;
+							if (value > max) {
+								max = value;
+								maxPos = j;
+							}
 						}
 					}
+					yz.setBszfTotal(total);
+					yz.setBszfd3(data.getTop2());
+					yz.setBszfd4(data.getTop3());
+					yz.setBszfd5(data.getTop4());
 					if (maxPos != null) {
 						calBsForD1(yz, maxPos, data);
 					}
@@ -3121,15 +3219,20 @@ public class YZService {
 					int max = 0;
 					Integer maxPos = null;
 					int j = 0;
+					int total = 0;
 					for (String fd : ZsNums.FDS) {
 						Method m = ReflectionUtils.findMethod(ZsYz.class, "get" + fd);
 						Integer value = (Integer) m.invoke(data);
-						if (value != null && value > max) {
-							max = value;
-							maxPos = j;
+						if (value != null) {
+							total += value;
+							if (value > max) {
+								max = value;
+								maxPos = j;
+							}
 						}
 						j++;
 					}
+					yz.setZsTotal(total);
 					if (maxPos != null) {
 						yz.setZsNums(ZsNums.NUMS[maxPos]);
 					}
@@ -3166,14 +3269,19 @@ public class YZService {
 					D1Yz yz = list.get(i++);
 					int max = 0;
 					Integer maxPos = null;
+					int total = 0;
 					for (int j = 0; j < ZsNums.FDS.length; j++) {
 						Method m = ReflectionUtils.findMethod(ZsZfYz.class, "getZf" + j);
 						Integer value = (Integer) m.invoke(data);
-						if (value != null && value > max) {
-							max = value;
-							maxPos = j;
+						if (value != null) {
+							total += value;
+							if (value > max) {
+								max = value;
+								maxPos = j;
+							}
 						}
 					}
+					yz.setZszfTotal(total);
 					if (maxPos != null) {
 						calZsForD1(yz, maxPos, data);
 					}
@@ -3219,15 +3327,23 @@ public class YZService {
 					int max = 0;
 					Integer maxPos = null;
 					int j = 0;
+					int total = 0;
 					for (String fd : WxNums.FDS) {
 						Method m = ReflectionUtils.findMethod(WxYz.class, "get" + fd);
 						Integer value = (Integer) m.invoke(data);
-						if (value != null && value > max) {
-							max = value;
-							maxPos = j;
+						if (value != null) {
+							total += value;
+							if (value > max) {
+								max = value;
+								maxPos = j;
+							}
 						}
 						j++;
 					}
+					yz.setWxTotal(total);
+					yz.setWxd3(data.getTop2());
+					yz.setWxd4(data.getTop3());
+					yz.setWxd5(data.getTop4());
 					if (maxPos != null) {
 						yz.setWxNums(WxNums.NUMS[maxPos]);
 					}
@@ -3264,14 +3380,22 @@ public class YZService {
 					D1Yz yz = list.get(i++);
 					int max = 0;
 					Integer maxPos = null;
+					int total = 0;
 					for (int j = 0; j < WxNums.FDS.length; j++) {
 						Method m = ReflectionUtils.findMethod(WxZfYz.class, "getZf" + j);
 						Integer value = (Integer) m.invoke(data);
-						if (value != null && value > max) {
-							max = value;
-							maxPos = j;
+						if (value != null) {
+							total += value;
+							if (value > max) {
+								max = value;
+								maxPos = j;
+							}
 						}
 					}
+					yz.setWxzfTotal(total);
+					yz.setWxzfd3(data.getTop2());
+					yz.setWxzfd4(data.getTop3());
+					yz.setWxzfd5(data.getTop4());
 					if (maxPos != null) {
 						calWxForD1(yz, maxPos, data);
 					}
@@ -3317,15 +3441,20 @@ public class YZService {
 					int max = 0;
 					Integer maxPos = null;
 					int j = 0;
+					int total = 0;
 					for (String fd : WxDsNums.FDS) {
 						Method m = ReflectionUtils.findMethod(WxdsYz.class, "get" + fd);
 						Integer value = (Integer) m.invoke(data);
-						if (value != null && value > max) {
-							max = value;
-							maxPos = j;
+						if (value != null) {
+							total += value;
+							if (value > max) {
+								max = value;
+								maxPos = j;
+							}
 						}
 						j++;
 					}
+					yz.setWxdsTotal(total);
 					if (maxPos != null) {
 						yz.setWxdsNums(WxDsNums.NUMS[maxPos]);
 					}
@@ -3362,14 +3491,19 @@ public class YZService {
 					D1Yz yz = list.get(i++);
 					int max = 0;
 					Integer maxPos = null;
+					int total = 0;
 					for (int j = 0; j < WxDsNums.FDS.length; j++) {
 						Method m = ReflectionUtils.findMethod(WxdsZfYz.class, "getZf" + j);
 						Integer value = (Integer) m.invoke(data);
-						if (value != null && value > max) {
-							max = value;
-							maxPos = j;
+						if (value != null) {
+							total += value;
+							if (value > max) {
+								max = value;
+								maxPos = j;
+							}
 						}
 					}
+					yz.setWxdszfTotal(total);
 					if (maxPos != null) {
 						calWxdsForD1(yz, maxPos, data);
 					}
@@ -3415,15 +3549,20 @@ public class YZService {
 					int max = 0;
 					Integer maxPos = null;
 					int j = 0;
+					int total = 0;
 					for (String fd : PdNums.FDS) {
 						Method m = ReflectionUtils.findMethod(PdYz.class, "get" + fd);
 						Integer value = (Integer) m.invoke(data);
-						if (value != null && value > max) {
-							max = value;
-							maxPos = j;
+						if (value != null) {
+							total += value;
+							if (value > max) {
+								max = value;
+								maxPos = j;
+							}
 						}
 						j++;
 					}
+					yz.setPdTotal(total);
 					if (maxPos != null) {
 						yz.setPdNums(PdNums.NUMS[maxPos]);
 					}
@@ -3460,14 +3599,19 @@ public class YZService {
 					D1Yz yz = list.get(i++);
 					int max = 0;
 					Integer maxPos = null;
+					int total = 0;
 					for (int j = 0; j < PdNums.FDS.length; j++) {
 						Method m = ReflectionUtils.findMethod(PdZfYz.class, "getZf" + j);
 						Integer value = (Integer) m.invoke(data);
-						if (value != null && value > max) {
-							max = value;
-							maxPos = j;
+						if (value != null) {
+							total += value;
+							if (value > max) {
+								max = value;
+								maxPos = j;
+							}
 						}
 					}
+					yz.setPdzfTotal(total);
 					if (maxPos != null) {
 						calPdForD1(yz, maxPos, data);
 					}
@@ -3511,13 +3655,18 @@ public class YZService {
 				for (Tm12FdYz data : dataResult.getList()) {
 					D1Yz yz = list.get(i++);
 					int max = 0;
+					int total = 0;
 					for (int j = 1; j < 13; j++) {
 						Method m = ReflectionUtils.findMethod(Tm12FdYz.class, "getW" + j);
 						Integer value = (Integer) m.invoke(data);
-						if (value != null && value > max) {
-							max = value;
+						if (value != null) {
+							total += value;
+							if (value > max) {
+								max = value;
+							}
 						}
 					}
+					yz.setFdTotal(total);
 					if (lastMax != null && lastMax >= max) {
 						yz.setRedForfdd1(true);
 					}
@@ -3576,13 +3725,18 @@ public class YZService {
 				for (Tm12FdZfYz data : dataResult.getList()) {
 					D1Yz yz = list.get(i++);
 					int max = 0;
+					int total = 0;
 					for (int j = 0; j < 12; j++) {
 						Method m = ReflectionUtils.findMethod(Tm12FdZfYz.class, "getZf" + j);
 						Integer value = (Integer) m.invoke(data);
-						if (value != null && value > max) {
-							max = value;
+						if (value != null) {
+							total += value;
+							if (value > max) {
+								max = value;
+							}
 						}
 					}
+					yz.setFdzfTotal(total);
 					if (lastMax != null && lastMax >= max) {
 						yz.setRedForfdzfd1(true);
 					}
@@ -3652,15 +3806,21 @@ public class YZService {
 					int max = 0;
 					Integer maxPos = null;
 					int j = 0;
+					int total = 0;
 					for (String fd : QqNums.FDS) {
 						Method m = ReflectionUtils.findMethod(QqYz.class, "get" + fd);
 						Integer value = (Integer) m.invoke(data);
-						if (value != null && value > max) {
-							max = value;
-							maxPos = j;
+						if (value != null) {
+							total += value;
+							if (value > max) {
+								max = value;
+								maxPos = j;
+							}
 						}
 						j++;
 					}
+					yz.setQqTotal(total);
+					yz.setQqPos(data.getPos());
 					if (maxPos != null) {
 						yz.setQqNums(QqNums.NUMS[maxPos]);
 					}
@@ -3697,14 +3857,19 @@ public class YZService {
 					D1Yz yz = list.get(i++);
 					int max = 0;
 					Integer maxPos = null;
+					int total = 0;
 					for (int j = 0; j < QqNums.FDS.length; j++) {
 						Method m = ReflectionUtils.findMethod(QqZfYz.class, "getZf" + j);
 						Integer value = (Integer) m.invoke(data);
-						if (value != null && value > max) {
-							max = value;
-							maxPos = j;
+						if (value != null) {
+							total += value;
+							if (value > max) {
+								max = value;
+								maxPos = j;
+							}
 						}
 					}
+					yz.setQqzfTotal(total);
 					if (maxPos != null) {
 						calQqForD1(yz, maxPos, data);
 					}
@@ -3750,15 +3915,21 @@ public class YZService {
 					int max = 0;
 					Integer maxPos = null;
 					int j = 0;
+					int total = 0;
 					for (String fd : QiwNums.FDS) {
 						Method m = ReflectionUtils.findMethod(QiwYz.class, "get" + fd);
 						Integer value = (Integer) m.invoke(data);
-						if (value != null && value > max) {
-							max = value;
-							maxPos = j;
+						if (value != null) {
+							total += value;
+							if (value > max) {
+								max = value;
+								maxPos = j;
+							}
 						}
 						j++;
 					}
+					yz.setQiwTotal(total);
+					yz.setQiwPos(data.getPos());
 					if (maxPos != null) {
 						yz.setQiwNums(QiwNums.NUMS[maxPos]);
 					}
@@ -3795,14 +3966,19 @@ public class YZService {
 					D1Yz yz = list.get(i++);
 					int max = 0;
 					Integer maxPos = null;
+					int total = 0;
 					for (int j = 0; j < QiwNums.FDS.length; j++) {
 						Method m = ReflectionUtils.findMethod(QiwZfYz.class, "getZf" + j);
 						Integer value = (Integer) m.invoke(data);
-						if (value != null && value > max) {
-							max = value;
-							maxPos = j;
+						if (value != null) {
+							total += value;
+							if (value > max) {
+								max = value;
+								maxPos = j;
+							}
 						}
 					}
+					yz.setQiwzfTotal(total);
 					if (maxPos != null) {
 						calQiwForD1(yz, maxPos, data);
 					}
@@ -3848,15 +4024,21 @@ public class YZService {
 					int max = 0;
 					Integer maxPos = null;
 					int j = 0;
+					int total = 0;
 					for (String fd : TwelveNums.FDS) {
 						Method m = ReflectionUtils.findMethod(TwelveYz.class, "get" + fd);
 						Integer value = (Integer) m.invoke(data);
-						if (value != null && value > max) {
-							max = value;
-							maxPos = j;
+						if (value != null) {
+							total += value;
+							if (value > max) {
+								max = value;
+								maxPos = j;
+							}
 						}
 						j++;
 					}
+					yz.setTwelveTotal(total);
+					yz.setTwelvePos(data.getPos());
 					if (maxPos != null) {
 						yz.setTwelveNums(TwelveNums.NUMS[maxPos]);
 					}
@@ -3893,14 +4075,19 @@ public class YZService {
 					D1Yz yz = list.get(i++);
 					int max = 0;
 					Integer maxPos = null;
+					int total = 0;
 					for (int j = 0; j < TwelveNums.FDS.length; j++) {
 						Method m = ReflectionUtils.findMethod(TwelveZfYz.class, "getZf" + j);
 						Integer value = (Integer) m.invoke(data);
-						if (value != null && value > max) {
-							max = value;
-							maxPos = j;
+						if (value != null) {
+							total += value;
+							if (value > max) {
+								max = value;
+								maxPos = j;
+							}
 						}
 					}
+					yz.setTwelvezfTotal(total);
 					if (maxPos != null) {
 						calTwelveForD1(yz, maxPos, data);
 					}
@@ -3946,15 +4133,20 @@ public class YZService {
 					int max = 0;
 					Integer maxPos = null;
 					int j = 0;
+					int total = 0;
 					for (String fd : SlqNums.FDS) {
 						Method m = ReflectionUtils.findMethod(SlqYz.class, "get" + fd);
 						Integer value = (Integer) m.invoke(data);
-						if (value != null && value > max) {
-							max = value;
-							maxPos = j;
+						if (value != null) {
+							total += value;
+							if (value > max) {
+								max = value;
+								maxPos = j;
+							}
 						}
 						j++;
 					}
+					yz.setSlqTotal(total);
 					if (maxPos != null) {
 						yz.setSlqNums(SlqNums.NUMS[maxPos]);
 					}
@@ -3991,14 +4183,19 @@ public class YZService {
 					D1Yz yz = list.get(i++);
 					int max = 0;
 					Integer maxPos = null;
+					int total = 0;
 					for (int j = 0; j < SlqNums.FDS.length; j++) {
 						Method m = ReflectionUtils.findMethod(SlqZfYz.class, "getZf" + j);
 						Integer value = (Integer) m.invoke(data);
-						if (value != null && value > max) {
-							max = value;
-							maxPos = j;
+						if (value != null) {
+							total += value;
+							if (value > max) {
+								max = value;
+								maxPos = j;
+							}
 						}
 					}
+					yz.setSlqzfTotal(total);
 					if (maxPos != null) {
 						calSlqForD1(yz, maxPos, data);
 					}
@@ -4885,6 +5082,7 @@ public class YZService {
 		}
 		return new Set[] { a1Excluded, a2Excluded };
 	}
+
 }
 
 class LrInfo {

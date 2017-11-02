@@ -1,0 +1,116 @@
+<!doctype html>
+<html xmlns:th="http://www.thymeleaf.org">
+<body>
+	<div id="page-wrapper" th:fragment="content">
+		<div class="row">
+			<div class="col-lg-12">
+				<h3 class="page-header">参数-振幅参数</h3>
+				<div class="buttonArea">
+					<span class="title">截止年份:</span><select id="years"></select>
+					<span class="title">截止期数:</span><select id="phases"></select>
+					<button id="searchBtn" class="btn btn-primary">搜索</button>
+					<div class="clearfix"></div>
+				</div>
+			</div>
+		</div>
+
+		<div class="row">
+			<div class="col-lg-12">
+				<table width="100%"
+					class="table table-striped table-bordered table-hover"
+					id="dataTable">
+					<thead>
+						<tr>
+							<th>年份</th>
+							<th>期数</th>
+							<th>特码</th>
+							<th>生肖振幅-遗值和</th>
+							<th>生肖振幅-倒1</th>
+							<th>单双振幅-遗值和</th>
+							<th>单双振幅-倒1</th>
+							<th>首位振幅-遗值和</th>
+							<th>首位振幅-区位</th>
+							<th>首位振幅-倒1</th>
+							<th>末位振幅-遗值和</th>
+							<th>末位振幅-倒1</th>
+							<th>合数振幅-遗值和</th>
+							<th>合数振幅-倒1</th>
+							<th>波色振幅-遗值和</th>
+							<th>波色振幅-倒3</th>
+							<th>波色振幅-倒4</th>
+							<th>波色振幅-倒5</th>
+							<th>质数-遗值和</th>
+							<th>质数-倒1</th>
+							<th>五行振幅-遗值和</th>
+							<th>五行振幅-倒3</th>
+							<th>五行振幅-倒4</th>
+							<th>五行单双振幅-遗值和</th>
+							<th>五行单双振幅-倒1</th>
+							<th>配对振幅-遗值和</th>
+							<th>配对振幅-倒1</th>
+							<th>分段振幅-遗值和</th>
+							<th>分段振幅-倒1</th>
+							<th>七区振幅-遗值和</th>
+							<th>七区振幅-区位</th>
+							<th>七区振幅-倒1</th>
+							<th>七位振幅-遗值和</th>
+							<th>七位振幅-区位</th>
+							<th>七位振幅-倒1</th>
+							<th>十二区振幅-遗值和</th>
+							<th>十二区振幅-区位</th>
+							<th>十二区振幅-倒1</th>
+							<th>十六区振幅-遗值和</th>
+							<th>十六区振幅-倒1</th>
+						</tr>
+					</thead>
+					<tfoot>
+						<tr>
+							<td>年份</td>
+							<td>期数</td>
+							<td>特码</td>
+							<td>生肖振幅-遗值和</td>
+							<td>生肖振幅-倒1</td>
+							<td>单双振幅-遗值和</td>
+							<td>单双振幅-倒1</td>
+							<td>首位振幅-遗值和</td>
+							<td>首位振幅-区位</td>
+							<td>首位振幅-倒1</td>
+							<td>末位振幅-遗值和</td>
+							<td>末位振幅-倒1</td>
+							<td>合数振幅-遗值和</td>
+							<td>合数振幅-倒1</td>
+							<td>波色振幅-遗值和</td>
+							<td>波色振幅-倒3</td>
+							<td>波色振幅-倒4</td>
+							<td>波色振幅-倒5</td>
+							<td>质数振幅-遗值和</td>
+							<td>质数振幅-倒1</td>
+							<td>五行振幅-遗值和</td>
+							<td>五行振幅-倒3</td>
+							<td>五行振幅-倒4</td>
+							<td>五行单双振幅-遗值和</td>
+							<td>五行单双振幅-倒1</td>
+							<td>配对振幅-遗值和</td>
+							<td>配对振幅-倒1</td>
+							<td>分段振幅-遗值和</td>
+							<td>分段振幅-倒1</td>
+							<td>七区振幅-遗值和</td>
+							<td>七区振幅-区位</td>
+							<td>七区振幅-倒1</td>
+							<td>七位振幅-遗值和</td>
+							<td>七位振幅-区位</td>
+							<td>七位振幅-倒1</td>
+							<td>十二区振幅-遗值和</td>
+							<td>十二区振幅-区位</td>
+							<td>十二区振幅-倒1</td>
+							<td>十六区振幅-遗值和</td>
+							<td>十六区振幅-倒1</td>
+						</tr>
+					</tfoot>
+				</table>
+			</div>
+		</div>
+		
+	</div>
+</body>
+</html>
