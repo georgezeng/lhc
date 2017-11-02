@@ -4667,26 +4667,10 @@ public class YZService {
 				}
 			}
 		}
-//		XbwJY lastData = null;
-//		if (!list.isEmpty()) {
-//			lastData = list.get(list.size() - 1);
-//		}
 		for (XbwJYSub sub : all) {
 			Method m = ReflectionUtils.findMethod(XbwJY.class, "getC" + sub.getCount());
 			List<Integer> values = (List<Integer>) m.invoke(data);
 			values.add(sub.getNum());
-//			if (sub.getNum() == data.getSpecialNum()) {
-//				ReflectionUtils.findMethod(XbwJY.class, "setW" + sub.getCount(), Integer.class).invoke(data, 0);
-//			} else {
-//				if (lastData != null) {
-//					m = ReflectionUtils.findMethod(XbwJY.class, "getW" + sub.getCount());
-//					Integer value = (Integer) m.invoke(lastData);
-//					if (value != null) {
-//						value++;
-//						ReflectionUtils.findMethod(XbwJY.class, "setW" + sub.getCount(), Integer.class).invoke(data, value);
-//					}
-//				}
-//			}
 		}
 
 		list.add(data);
