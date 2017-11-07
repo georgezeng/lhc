@@ -1659,9 +1659,9 @@ public class YZController {
 		response.addHeader("Content-Disposition", "attachment;filename=allj0.csv");
 		Writer writer = response.getWriter();
 		writer.append("年份").append(", ");
-		writer.append("期数").append(",");
+		writer.append("期数").append(", ");
 		writer.append("生肖").append(", ");
-		writer.append("生肖振幅").append(",");
+		writer.append("生肖振幅").append(", ");
 		writer.append("单双").append(", ");
 		writer.append("单双振幅").append(", ");
 		writer.append("首位").append(", ");
@@ -1737,9 +1737,9 @@ public class YZController {
 		response.addHeader("Content-Disposition", "attachment;filename=alld1.csv");
 		Writer writer = response.getWriter();
 		writer.append("年份").append(", ");
-		writer.append("期数").append(",");
+		writer.append("期数").append(", ");
 		writer.append("生肖").append(", ");
-		writer.append("生肖振幅").append(",");
+		writer.append("生肖振幅").append(", ");
 		writer.append("单双").append(", ");
 		writer.append("单双振幅").append(", ");
 		writer.append("首位").append(", ");
@@ -1794,6 +1794,202 @@ public class YZController {
 					}
 					i++;
 				}
+			}
+		}
+		return null;
+	}
+
+	@RequestMapping("/downloadAllZFParameters")
+	public String downloadAllZFParameters(HttpServletRequest request, HttpServletResponse response) throws Exception {
+		response.setContentType("text/csv;charset=gbk;");
+		response.addHeader("Content-Disposition", "attachment;filename=allZfParameters.csv");
+		Writer writer = response.getWriter();
+		writer.append("年份").append(", ");
+		writer.append("期数").append(", ");
+		writer.append("特码").append(", ");
+		writer.append("生肖振幅-遗值和").append(", ");
+		writer.append("生肖振幅-倒1").append(", ");
+		writer.append("单双振幅-遗值和").append(", ");
+		writer.append("单双振幅-倒1").append(", ");
+		writer.append("首位振幅-遗值和").append(", ");
+		writer.append("首位振幅-倒1").append(", ");
+		writer.append("末位振幅-遗值和").append(", ");
+		writer.append("末位振幅-倒1").append(", ");
+		writer.append("合数振幅-遗值和").append(", ");
+		writer.append("合数振幅-倒1").append(", ");
+		writer.append("波色振幅-遗值和").append(", ");
+		writer.append("波色振幅-倒3").append(", ");
+		writer.append("波色振幅-倒4").append(", ");
+		writer.append("波色振幅-倒5").append(", ");
+		writer.append("质数振幅-遗值和").append(", ");
+		writer.append("质数振幅-倒1").append(", ");
+		writer.append("五行振幅-遗值和").append(", ");
+		writer.append("五行振幅-倒3").append(", ");
+		writer.append("五行振幅-倒4").append(", ");
+		writer.append("五行单双振幅-遗值和").append(", ");
+		writer.append("五行单双振幅-倒1").append(", ");
+		writer.append("配对振幅-遗值和").append(", ");
+		writer.append("配对振幅-倒1").append(", ");
+		writer.append("分段振幅-遗值和").append(", ");
+		writer.append("分段振幅-倒1").append(", ");
+		writer.append("七区振幅-遗值和").append(", ");
+		writer.append("七区振幅-倒1").append(", ");
+		writer.append("七位振幅-遗值和").append(", ");
+		writer.append("七位振幅-倒1").append(", ");
+		writer.append("十二区振幅-遗值和").append(", ");
+		writer.append("十二区振幅-倒1").append(", ");
+		writer.append("十六区振幅-遗值和").append(", ");
+		writer.append("十六区振幅-倒1").append("\n");
+		QueryInfo<SxYz> queryInfo = new QueryInfo<SxYz>();
+		SxYz condition = new SxYz();
+		condition.setYear(Integer.valueOf(request.getParameter("year")));
+		condition.setPhase(Integer.valueOf(request.getParameter("phase")));
+		queryInfo.setObject(condition);
+		queryInfo.setPageInfo(new PageInfo(1, Integer.valueOf(request.getParameter("size"))));
+		PageResult<D1Yz> result = repositories.yzService.getD1List(queryInfo);
+		if (result != null && result.getTotal() > 0) {
+			for (D1Yz yz : result.getList()) {
+				writer.append(yz.getYear() + "").append(", ");
+				writer.append(yz.getPhase() + "").append(", ");
+				writer.append(yz.getSpecialNum() + "").append(", ");
+				writer.append(yz.getSxzfTotal() + "").append(", ");
+				writer.append(yz.getSxzfd1() + "").append(", ");
+				writer.append(yz.getDszfTotal() + "").append(", ");
+				writer.append(yz.getDszfd1() + "").append(", ");
+				writer.append(yz.getSwzfTotal() + "").append(", ");
+				writer.append(yz.getSwzfd1() + "").append(", ");
+				writer.append(yz.getMwzfTotal() + "").append(", ");
+				writer.append(yz.getMwzfd1() + "").append(", ");
+				writer.append(yz.getLhzfTotal() + "").append(", ");
+				writer.append(yz.getLhzfd1() + "").append(", ");
+				writer.append(yz.getBszfTotal() + "").append(", ");
+				writer.append(yz.getBszfd3() + "").append(", ");
+				writer.append(yz.getBszfd4() + "").append(", ");
+				writer.append(yz.getBszfd5() + "").append(", ");
+				writer.append(yz.getZszfTotal() + "").append(", ");
+				writer.append(yz.getZszfd1() + "").append(", ");
+				writer.append(yz.getWxzfTotal() + "").append(", ");
+				writer.append(yz.getWxzfd3() + "").append(", ");
+				writer.append(yz.getWxzfd4() + "").append(", ");
+				writer.append(yz.getWxdszfTotal() + "").append(", ");
+				writer.append(yz.getWxdszfd1() + "").append(", ");
+				writer.append(yz.getPdzfTotal() + "").append(", ");
+				writer.append(yz.getPdzfd1() + "").append(", ");
+				writer.append(yz.getFdzfTotal() + "").append(", ");
+				writer.append(yz.getFdzfd1() + "").append(", ");
+				writer.append(yz.getQqzfTotal() + "").append(", ");
+				writer.append(yz.getQqzfd1() + "").append(", ");
+				writer.append(yz.getQiwzfTotal() + "").append(", ");
+				writer.append(yz.getQiwzfd1() + "").append(", ");
+				writer.append(yz.getTwelvezfTotal() + "").append(", ");
+				writer.append(yz.getTwelvezfd1() + "").append(", ");
+				writer.append(yz.getSlqzfTotal() + "").append(", ");
+				writer.append(yz.getSlqzfd1() + "").append("\n");
+			}
+		}
+		return null;
+	}
+
+	@RequestMapping("/downloadAllYZParameters")
+	public String downloadAllYZParameters(HttpServletRequest request, HttpServletResponse response) throws Exception {
+		response.setContentType("text/csv;charset=gbk;");
+		response.addHeader("Content-Disposition", "attachment;filename=allYZParameters.csv");
+		Writer writer = response.getWriter();
+		writer.append("年份").append(", ");
+		writer.append("期数").append(", ");
+		writer.append("特码").append(", ");
+		writer.append("生肖-遗值和").append(", ");
+		writer.append("生肖-倒1").append(", ");
+		writer.append("生肖冷热-遗值和").append(", ");
+		writer.append("生肖冷热-区位").append(", ");
+		writer.append("生肖冷热-倒1").append(", ");
+		writer.append("单双-遗值和").append(", ");
+		writer.append("单双-倒1").append(", ");
+		writer.append("首位-遗值和").append(", ");
+		writer.append("首位-区位").append(", ");
+		writer.append("首位-倒1").append(", ");
+		writer.append("末位-遗值和").append(", ");
+		writer.append("末位-倒1").append(", ");
+		writer.append("合数-遗值和").append(", ");
+		writer.append("合数-倒1").append(", ");
+		writer.append("波色-遗值和").append(", ");
+		writer.append("波色-倒3").append(", ");
+		writer.append("波色-倒4").append(", ");
+		writer.append("波色-倒5").append(", ");
+		writer.append("质数-遗值和").append(", ");
+		writer.append("质数-倒1").append(", ");
+		writer.append("五行-遗值和").append(", ");
+		writer.append("五行-倒3").append(", ");
+		writer.append("五行-倒4").append(", ");
+		writer.append("五行单双-遗值和").append(", ");
+		writer.append("五行单双-倒1").append(", ");
+		writer.append("配对-遗值和").append(", ");
+		writer.append("配对-倒1").append(", ");
+		writer.append("分段-遗值和").append(", ");
+		writer.append("分段-倒1").append(", ");
+		writer.append("七区-遗值和").append(", ");
+		writer.append("七区-区位").append(", ");
+		writer.append("七区-倒1").append(", ");
+		writer.append("七位-遗值和").append(", ");
+		writer.append("七位-区位").append(", ");
+		writer.append("七位-倒1").append(", ");
+		writer.append("十二区-遗值和").append(", ");
+		writer.append("十二区-区位").append(", ");
+		writer.append("十二区-倒1").append(", ");
+		writer.append("十六区-遗值和").append(", ");
+		writer.append("十六区-倒1").append("\n");
+		QueryInfo<SxYz> queryInfo = new QueryInfo<SxYz>();
+		SxYz condition = new SxYz();
+		condition.setYear(Integer.valueOf(request.getParameter("year")));
+		condition.setPhase(Integer.valueOf(request.getParameter("phase")));
+		queryInfo.setObject(condition);
+		queryInfo.setPageInfo(new PageInfo(1, Integer.valueOf(request.getParameter("size"))));
+		PageResult<D1Yz> result = repositories.yzService.getD1List(queryInfo);
+		if (result != null && result.getTotal() > 0) {
+			for (D1Yz yz : result.getList()) {
+				writer.append(yz.getYear() + "").append(", ");
+				writer.append(yz.getPhase() + "").append(", ");
+				writer.append(yz.getSpecialNum() + "").append(", ");
+				writer.append(yz.getSxTotal() + "").append(", ");
+				writer.append(yz.getSxd1() + "").append(", ");
+				writer.append(yz.getSxlrTotal() + "").append(", ");
+				writer.append(yz.getSxlrPos() + "").append(", ");
+				writer.append(yz.getSxlrd1() + "").append(", ");
+				writer.append(yz.getDsTotal() + "").append(", ");
+				writer.append(yz.getDsd1() + "").append(", ");
+				writer.append(yz.getSwTotal() + "").append(", ");
+				writer.append(yz.getSwPos() + "").append(", ");
+				writer.append(yz.getSwd1() + "").append(", ");
+				writer.append(yz.getMwTotal() + "").append(", ");
+				writer.append(yz.getMwd1() + "").append(", ");
+				writer.append(yz.getLhTotal() + "").append(", ");
+				writer.append(yz.getLhd1() + "").append(", ");
+				writer.append(yz.getBsTotal() + "").append(", ");
+				writer.append(yz.getBsd3() + "").append(", ");
+				writer.append(yz.getBsd4() + "").append(", ");
+				writer.append(yz.getBsd5() + "").append(", ");
+				writer.append(yz.getZsTotal() + "").append(", ");
+				writer.append(yz.getZsd1() + "").append(", ");
+				writer.append(yz.getWxTotal() + "").append(", ");
+				writer.append(yz.getWxd3() + "").append(", ");
+				writer.append(yz.getWxd4() + "").append(", ");
+				writer.append(yz.getWxdsTotal() + "").append(", ");
+				writer.append(yz.getWxdsd1() + "").append(", ");
+				writer.append(yz.getPdTotal() + "").append(", ");
+				writer.append(yz.getPdd1() + "").append(", ");
+				writer.append(yz.getFdTotal() + "").append(", ");
+				writer.append(yz.getFdd1() + "").append(", ");
+				writer.append(yz.getQqTotal() + "").append(", ");
+				writer.append(yz.getQqPos() + "").append(", ");
+				writer.append(yz.getQqd1() + "").append(", ");
+				writer.append(yz.getQiwTotal() + "").append(", ");
+				writer.append(yz.getQiwPos() + "").append(", ");
+				writer.append(yz.getQiwd1() + "").append(", ");
+				writer.append(yz.getTwelveTotal() + "").append(", ");
+				writer.append(yz.getTwelvePos() + "").append(", ");
+				writer.append(yz.getTwelved1() + "").append(", ");
+				writer.append(yz.getSlqTotal() + "").append(", ");
+				writer.append(yz.getSlqd1() + "").append("\n");
 			}
 		}
 		return null;

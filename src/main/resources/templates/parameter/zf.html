@@ -8,7 +8,15 @@
 				<div class="buttonArea">
 					<span class="title">截止年份:</span><select id="years"></select>
 					<span class="title">截止期数:</span><select id="phases"></select>
+					<button id="downloadBtn" class="btn btn-success">导出</button>
+					<button id="calYZBtn" class="btn btn-info">遗值计算</button>
 					<button id="searchBtn" class="btn btn-primary">搜索</button>
+					<div class="clearfix"></div>
+					<form id="download" name="download" action="/mvc/yz/downloadAllZFParameters" class="hidden">
+						<input id="size" type="hidden" name="size" />
+						<input id="endYear" type="hidden" name="year" />
+						<input id="endPhase" type="hidden" name="phase" />
+					</form>
 					<div class="clearfix"></div>
 				</div>
 			</div>
@@ -29,7 +37,6 @@
 							<th>单双振幅-遗值和</th>
 							<th>单双振幅-倒1</th>
 							<th>首位振幅-遗值和</th>
-							<th>首位振幅-区位</th>
 							<th>首位振幅-倒1</th>
 							<th>末位振幅-遗值和</th>
 							<th>末位振幅-倒1</th>
@@ -51,13 +58,10 @@
 							<th>分段振幅-遗值和</th>
 							<th>分段振幅-倒1</th>
 							<th>七区振幅-遗值和</th>
-							<th>七区振幅-区位</th>
 							<th>七区振幅-倒1</th>
 							<th>七位振幅-遗值和</th>
-							<th>七位振幅-区位</th>
 							<th>七位振幅-倒1</th>
 							<th>十二区振幅-遗值和</th>
-							<th>十二区振幅-区位</th>
 							<th>十二区振幅-倒1</th>
 							<th>十六区振幅-遗值和</th>
 							<th>十六区振幅-倒1</th>
@@ -73,7 +77,6 @@
 							<td>单双振幅-遗值和</td>
 							<td>单双振幅-倒1</td>
 							<td>首位振幅-遗值和</td>
-							<td>首位振幅-区位</td>
 							<td>首位振幅-倒1</td>
 							<td>末位振幅-遗值和</td>
 							<td>末位振幅-倒1</td>
@@ -95,13 +98,10 @@
 							<td>分段振幅-遗值和</td>
 							<td>分段振幅-倒1</td>
 							<td>七区振幅-遗值和</td>
-							<td>七区振幅-区位</td>
 							<td>七区振幅-倒1</td>
 							<td>七位振幅-遗值和</td>
-							<td>七位振幅-区位</td>
 							<td>七位振幅-倒1</td>
 							<td>十二区振幅-遗值和</td>
-							<td>十二区振幅-区位</td>
 							<td>十二区振幅-倒1</td>
 							<td>十六区振幅-遗值和</td>
 							<td>十六区振幅-倒1</td>

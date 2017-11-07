@@ -1907,4 +1907,43 @@ function createLoop(url, length, dividen, list) {
 		}));
 		
 	});
+	
+}
+
+function createParameters(cols) {
+	var columns = [];
+	for(var i in cols) {
+		var col = cols[i];
+		columns.push({
+			name : col,
+			data : col,
+			sortable: false
+		});
+	}
+	var columnDefs = [];
+	for(var i = 3; i < cols.length; i++) {
+		(function(index) {
+			columnDefs.push({
+				aTargets: [index],
+				fnCreatedCell: function(nTd, sData, item, iRow, iCol) {
+					var value = item[cols[index]]
+					$(nTd).text(value);
+				}
+			});
+		})(i);
+	}
+	
+	datatables.push(createDataTable({
+		id : "dataTable",
+		url : "/mvc/yz/listAllD1?mode=0",
+		bFilter: false,
+		data : function(queryInfo, infoSettings) {
+			queryInfo.object = {};
+			queryInfo.object.year = parseInt($("#years").val());
+			queryInfo.object.phase = parseInt($("#phases").val());
+		},
+		columns : columns,
+		aoColumnDefs: columnDefs
+	}));
+	
 }
