@@ -33,8 +33,8 @@ public class KaiJiangController {
 	@Autowired
 	private KaiJiangRepository kaiJiangRepository;
 
-	@Autowired
-	private YZController yZController;
+//	@Autowired
+//	private YZController yZController;
 
 	@RequestMapping("/save")
 	public BaseResult save(@RequestBody KaiJiang data) throws Exception {
@@ -56,7 +56,7 @@ public class KaiJiangController {
 	public BaseResult sync(int year, boolean sleep) throws Exception {
 		delete(year);
 		parseService.syncKaiJiang(year);
-		yZController.calYZ(sleep);
+//		yZController.calYZ(sleep);
 		return BaseResult.EMPTY;
 	}
 

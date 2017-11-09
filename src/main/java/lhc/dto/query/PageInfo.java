@@ -12,7 +12,7 @@ public class PageInfo {
 	private int pageNo;
 	private int pageSize;
 	private boolean toSort = false;
-	private List<SortInfo> sorts = new ArrayList<SortInfo>();
+	private List<SortInfo> sorts;
 
 	public PageInfo() {
 
@@ -26,6 +26,7 @@ public class PageInfo {
 	public PageInfo(int pageNo, int pageSize, SortInfo sortInfo) {
 		this.pageNo = pageNo;
 		this.pageSize = pageSize;
+		sorts = new ArrayList<SortInfo>();
 		sorts.add(sortInfo);
 	}
 

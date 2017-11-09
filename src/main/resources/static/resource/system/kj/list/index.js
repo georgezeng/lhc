@@ -35,7 +35,8 @@ $(document).ready(function() {
 			data : "date"
 		}, {
 			name : "phase",
-			data : "phase"
+			data : "phase",
+			sortable: false
 		}, {
 			name : "nums",
 			sortable: false

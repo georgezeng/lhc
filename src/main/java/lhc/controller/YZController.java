@@ -2515,6 +2515,56 @@ public class YZController {
 		return null;
 	}
 
+	@RequestMapping("/downloadTMYZ2")
+	public String downloadTMYZ2(DownloadDTO dto, HttpServletResponse response) throws Exception {
+		response.setContentType("text/csv;charset=gbk;");
+		response.addHeader("Content-Disposition", "attachment;filename=tmyz2.csv");
+		QueryInfo<TmYz> queryInfo = new QueryInfo<TmYz>();
+		TmYz queryObj = new TmYz();
+		queryObj.setYear(dto.getYear());
+		queryObj.setPhase(dto.getPhase());
+		queryInfo.setObject(queryObj);
+		PageInfo pageInfo = new PageInfo();
+		pageInfo.setPageNo(1);
+		pageInfo.setPageSize(dto.getSize());
+		queryInfo.setPageInfo(pageInfo);
+		PageResult<TmYz> result = repositories.tmYzDao.query(queryInfo);
+		if (result != null && result.getList() != null && !result.getList().isEmpty()) {
+			Writer writer = response.getWriter();
+			writer.append("日期, 年份, 期数, 遗值（上期）, ");
+			for (int i = 1; i < 50; i++) {
+				writer.append("号码" + i).append(", ");
+			}
+			writer.append("反转").append("\n");
+			for (TmYz data : result.getList()) {
+				writer.append(data.getDate()).append(", ");
+				writer.append(data.getYear() + "").append(", ");
+				writer.append(data.getPhase() + "").append(", ");
+				writer.append(data.getLastYz() + "").append(", ");
+				List<Integer> arr = new ArrayList<Integer>();
+				for (int i = 1; i < 50; i++) {
+					Method m = ReflectionUtils.findMethod(TmYz.class, "getHm" + i);
+					Integer value = (Integer) m.invoke(data);
+					if (value != null && value > 0 && value < 50) {
+						arr.add(value);
+						writer.append(value.toString()).append(", ");
+					} else {
+						writer.append("").append(", ");
+					}
+				}
+				String reversed = "";
+				for (int i = 1; i < 50; i++) {
+					if (!arr.contains(i)) {
+						reversed += i + " ";
+					}
+				}
+				writer.append(reversed);
+				writer.append("\n");
+			}
+		}
+		return null;
+	}
+
 	@RequestMapping("/downloadPTYZ")
 	public String downloadPTYZ(DownloadDTO dto, HttpServletResponse response) throws Exception {
 		response.setContentType("text/csv;charset=gbk;");

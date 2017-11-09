@@ -115,6 +115,20 @@ $(document).ready(function() {
 		aoColumnDefs: columnDefs
 	}));
 	
+	$("#downloadBtn").unbind().click(function() {
+		$("#size").val($("select[name='dataTable_length']").val());
+		$("#endYear").val($("#years").val());
+		$("#endPhase").val($("#phases").val());
+		$("#download").attr("action", "/mvc/yz/downloadTMYZ");
+		$("#download").submit();
+	});
+	$("#downloadBtn2").click(function() {
+		$("#size").val($("select[name='dataTable_length']").val());
+		$("#endYear").val($("#years").val());
+		$("#endPhase").val($("#phases").val());
+		$("#download").attr("action", "/mvc/yz/downloadTMYZ2");
+		$("#download").submit();
+	});
 });
 
 

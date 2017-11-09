@@ -31,7 +31,7 @@ public class KaiJiangDao {
 	public PageResult<KaiJiang> query(QueryInfo<String> queryInfo) {
 		PageRequest pageRequest = null;
 		if (queryInfo.getPageInfo() != null) {
-			if (!queryInfo.getPageInfo().isToSort()) {
+			if (queryInfo.getPageInfo().getSorts() == null) {
 				List<SortInfo> sorts = new ArrayList<SortInfo>();
 				sorts.add(new SortInfo("date", SortOrder.DESC));
 				queryInfo.getPageInfo().setSorts(sorts);

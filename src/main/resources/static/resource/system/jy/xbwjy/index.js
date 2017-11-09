@@ -9,6 +9,7 @@ $(document).ready(function() {
 	for(var i=1; i < 11; i++) {
 		cols.push("c" + i);
 	}
+	cols.push("phase");
 	var columns = [];
 	for(var i in cols) {
 		var col = cols[i];
@@ -21,6 +22,7 @@ $(document).ready(function() {
 	var lastItem = null;
 	var itemYz = null;
 	var itemCount = null;
+	var hms = null;
 	var columnDefs = [];
 	columnDefs.push({
 		aTargets: [0],
@@ -38,6 +40,7 @@ $(document).ready(function() {
 		aTargets: [1],
 		fnCreatedCell: function(nTd, sData, item, iRow, iCol) {
 			var value = "";
+			hms = [];
 			if(item.phase) {
 				value = item.phase;
 			} 
@@ -59,11 +62,16 @@ $(document).ready(function() {
 			columnDefs.push({
 				aTargets: [index],
 				fnCreatedCell: function(nTd, sData, item, iRow, iCol) {
+					var currentIndex = index - 2;
+					if(currentIndex == 4 || currentIndex == 6 || currentIndex == 7 || currentIndex == 8 || currentIndex == 9) {
+						$(nTd).text("").hide();
+						return ;
+					}
 					if(item.year) {
 						if(lastItem) {
-							var lastNums = lastItem["c" + (index-2)];
-							var yzField = "c" + (index-2) + "_yz";
-							var yzCountField = "c" + (index-2) + "_yz_count";
+							var lastNums = lastItem["c" + currentIndex];
+							var yzField = "c" + currentIndex + "_yz";
+							var yzCountField = "c" + currentIndex + "_yz_count";
 							var restart = false;
 							for(var i in lastNums) {
 								var num = lastNums[i];
@@ -96,7 +104,7 @@ $(document).ready(function() {
 							$(nTd).text("");
 						}
 					} else {
-						var yzCountField = "c" + (index-2) + "_yz_count";
+						var yzCountField = "c" + currentIndex + "_yz_count";
 						$(nTd).text(itemCount[yzCountField]);
 					}
 				}
@@ -108,20 +116,36 @@ $(document).ready(function() {
 			columnDefs.push({
 				aTargets: [index],
 				fnCreatedCell: function(nTd, sData, item, iRow, iCol) {
+					var currentIndex = index - 12;
+					if(currentIndex == 4 || currentIndex == 6 || currentIndex == 7 || currentIndex == 8 || currentIndex == 9) {
+						$(nTd).text("").hide();
+						return ;
+					}
 					if(item.year) {
 						if(lastItem) {
-							var value = lastItem["c" + (index-12)].join(", ");
+							var arr = lastItem["c" + (index-12)];
+							var value = arr.join(", ");
+							for(var i in arr) {
+								var num = arr[i];
+								if(!isInArr(hms, num)) {
+									hms.push(num);
+								}
+							}
 							$(nTd).text(value);
 						} else {
 							$(nTd).text("");
 						}
-						if(index == 22) {
-							lastItem = item;
-						}
 					} else {
 						var value = "";
 						if(lastItem) {
-							value = lastItem["c" + (index-12)].join(", ");
+							var arr = lastItem["c" + (index-12)];
+							var value = arr.join(", ");
+							for(var i in arr) {
+								var num = arr[i];
+								if(!isInArr(hms, num)) {
+									hms.push(num);
+								}
+							}
 						}
 						$(nTd).text(value);
 					}
@@ -129,6 +153,24 @@ $(document).ready(function() {
 			});
 		})(i);
 	}
+	columnDefs.push({
+		aTargets: [23],
+		fnCreatedCell: function(nTd, sData, item, iRow, iCol) {
+			var value = "";
+			if(lastItem) {
+				var arr = [];
+				for(var i = 1; i < 50; i++) {
+					if(!isInArr(hms, i)) {
+						arr.push(i);
+					}
+				}
+				value = arr.join(", ");
+			}
+			lastItem = item;
+			hms = null;
+			$(nTd).text(value);
+		}
+	});
 	datatables.push(createDataTable({
 		id : "dataTable",
 		url : "/mvc/yz/listXBWJY",

@@ -2,7 +2,9 @@ package lhc.service;
 
 import java.lang.reflect.Method;
 import java.util.ArrayList;
+import java.util.HashSet;
 import java.util.List;
+import java.util.Set;
 
 import org.jsoup.Jsoup;
 import org.jsoup.nodes.Document;
@@ -28,6 +30,7 @@ public class ParseService {
 			Document doc = Jsoup.connect(url).get();
 			List<Element> trs = doc.getElementById("main").getElementsByTag("tr");
 			List<KaiJiang> list = new ArrayList<KaiJiang>();
+			Set<String> dates = new HashSet<String>();
 			for (int i = 1; i < trs.size(); i++) {
 				List<Element> tds = trs.get(i).getElementsByTag("td");
 				Element dateEl = tds.get(0);
@@ -38,10 +41,15 @@ public class ParseService {
 				Element specialSxEl = tds.get(3).getElementsByClass("sx").first();
 				Element specialNumEl = tds.get(3).getElementsByClass("hm").first();
 				String date = dateEl.text().trim();
+				date = date.replaceAll("\\/", "-");
+				if (dates.contains(date)) {
+					continue;
+				}
+				dates.add(date);
 				KaiJiang data = kaiJiangRepository.findByDate(date);
 				if (data == null) {
 					data = new KaiJiang();
-					data.setDate(date.replaceAll("\\/", "-"));
+					data.setDate(date);
 				}
 				data.setYear(year);
 				data.setPhase(Integer.valueOf(phaseEl.text().trim().replace("期", "")));
