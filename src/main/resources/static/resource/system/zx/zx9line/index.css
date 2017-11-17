@@ -1,0 +1,21 @@
+.combobox-container {
+	float: left;
+	margin-left: 5px;
+	margin-right: 40px;
+	position: relative; 
+	top: 5px;
+}
+
+.buttonArea span.title {
+	float: left;
+	position: relative; 
+	top: 10px;
+}
+
+div.input-group input {
+	height: 30px;
+}
+
+span.input-group-addon {
+	border-radius: 0px;
+}

@@ -70,7 +70,7 @@ public class QiwNums {
 		W6.add(27);
 		W6.add(34);
 		W6.add(41);
-		W7.add(48);
+		W6.add(48);
 
 		W7.add(7);
 		W7.add(14);

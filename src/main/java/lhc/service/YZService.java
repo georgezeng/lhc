@@ -46,6 +46,16 @@ import lhc.constants.TwelveNums;
 import lhc.constants.WxDsNums;
 import lhc.constants.WxNums;
 import lhc.constants.ZsNums;
+import lhc.constants.Zx10Nums;
+import lhc.constants.Zx1Nums;
+import lhc.constants.Zx2Nums;
+import lhc.constants.Zx3Nums;
+import lhc.constants.Zx5Nums;
+import lhc.constants.Zx4Nums;
+import lhc.constants.Zx6Nums;
+import lhc.constants.Zx7Nums;
+import lhc.constants.Zx8Nums;
+import lhc.constants.Zx9Nums;
 import lhc.domain.Avg;
 import lhc.domain.BaseCsYz;
 import lhc.domain.BaseYz;
@@ -105,6 +115,16 @@ import lhc.domain.WxdsZfYz;
 import lhc.domain.ZsLrYz;
 import lhc.domain.ZsYz;
 import lhc.domain.ZsZfYz;
+import lhc.domain.Zx10Yz;
+import lhc.domain.Zx1Yz;
+import lhc.domain.Zx2Yz;
+import lhc.domain.Zx3Yz;
+import lhc.domain.Zx4Yz;
+import lhc.domain.Zx5Yz;
+import lhc.domain.Zx6Yz;
+import lhc.domain.Zx7Yz;
+import lhc.domain.Zx8Yz;
+import lhc.domain.Zx9Yz;
 import lhc.dto.D1Yz;
 import lhc.dto.J0Yz;
 import lhc.dto.TmYzInfo;
@@ -462,6 +482,126 @@ public class YZService {
 			@Override
 			public int getLarge() {
 				return 5;
+			}
+		});
+
+	}
+
+	@Async
+	public Future<Exception> calZX1YZ() {
+		return calFDYZ(Zx1Yz.class, Zx1Nums.class, repositories.zx1yzRepository, new CommonHandler() {
+
+			@Override
+			public void process() {
+				logger.info("End of calZX1YZ...");
+			}
+		});
+
+	}
+
+	@Async
+	public Future<Exception> calZX2YZ() {
+		return calFDYZ(Zx2Yz.class, Zx2Nums.class, repositories.zx2yzRepository, new CommonHandler() {
+
+			@Override
+			public void process() {
+				logger.info("End of calZX2YZ...");
+			}
+		});
+
+	}
+
+	@Async
+	public Future<Exception> calZX3YZ() {
+		return calFDYZ(Zx3Yz.class, Zx3Nums.class, repositories.zx3yzRepository, new CommonHandler() {
+
+			@Override
+			public void process() {
+				logger.info("End of calZX3YZ...");
+			}
+		});
+
+	}
+
+	@Async
+	public Future<Exception> calZX4YZ() {
+		return calFDYZ(Zx4Yz.class, Zx5Nums.class, repositories.zx4yzRepository, new CommonHandler() {
+
+			@Override
+			public void process() {
+				logger.info("End of calZX4YZ...");
+			}
+		});
+
+	}
+
+	@Async
+	public Future<Exception> calZX5YZ() {
+		return calFDYZ(Zx5Yz.class, Zx4Nums.class, repositories.zx5yzRepository, new CommonHandler() {
+
+			@Override
+			public void process() {
+				logger.info("End of calZX5YZ...");
+			}
+		});
+
+	}
+
+	@Async
+	public Future<Exception> calZX6YZ() {
+		return calFDYZ(Zx6Yz.class, Zx6Nums.class, repositories.zx6yzRepository, new CommonHandler() {
+
+			@Override
+			public void process() {
+				logger.info("End of calZX6YZ...");
+			}
+		});
+
+	}
+
+	@Async
+	public Future<Exception> calZX7YZ() {
+		return calFDYZ(Zx7Yz.class, Zx7Nums.class, repositories.zx7yzRepository, new CommonHandler() {
+
+			@Override
+			public void process() {
+				logger.info("End of calZX7YZ...");
+			}
+		});
+
+	}
+
+	@Async
+	public Future<Exception> calZX8YZ() {
+		return calFDYZ(Zx8Yz.class, Zx8Nums.class, repositories.zx8yzRepository, new CommonHandler() {
+
+			@Override
+			public void process() {
+				logger.info("End of calZX8YZ...");
+			}
+		});
+
+	}
+
+	@Async
+	public Future<Exception> calZX9YZ() {
+		return calFDYZ(Zx9Yz.class, Zx9Nums.class, repositories.zx9yzRepository, new CommonHandler() {
+
+			@Override
+			public void process() {
+				logger.info("End of calZX9YZ...");
+			}
+		});
+
+	}
+
+	@Async
+	public Future<Exception> calZX10YZ() {
+		return calFDYZ(Zx10Yz.class, Zx10Nums.class, repositories.zx10yzRepository, new CommonHandler() {
+
+			@Override
+			public void process() {
+				logger.info("End of calZX10YZ...");
 			}
 		});
 
@@ -1310,8 +1450,10 @@ public class YZService {
 			List<TmYzInfo> infos = new ArrayList<TmYzInfo>();
 			for (int i = 1; i < 50; i++) {
 				Method gm = ReflectionUtils.findMethod(TmYz.class, "getHm" + i);
-				Integer value = (Integer) gm.invoke(data);
-				infos.add(new TmYzInfo(i, value));
+				if (gm != null) {
+					Integer value = (Integer) gm.invoke(data);
+					infos.add(new TmYzInfo(i, value));
+				}
 			}
 			Collections.sort(infos, new Comparator<TmYzInfo>() {
 

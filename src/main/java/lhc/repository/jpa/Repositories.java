@@ -56,6 +56,16 @@ import lhc.repository.jpa.api.WxdsZfYzRepository;
 import lhc.repository.jpa.api.ZsLrYzRepository;
 import lhc.repository.jpa.api.ZsYzRepository;
 import lhc.repository.jpa.api.ZsZfYzRepository;
+import lhc.repository.jpa.api.Zx10YzRepository;
+import lhc.repository.jpa.api.Zx1YzRepository;
+import lhc.repository.jpa.api.Zx2YzRepository;
+import lhc.repository.jpa.api.Zx3YzRepository;
+import lhc.repository.jpa.api.Zx4YzRepository;
+import lhc.repository.jpa.api.Zx5YzRepository;
+import lhc.repository.jpa.api.Zx6YzRepository;
+import lhc.repository.jpa.api.Zx7YzRepository;
+import lhc.repository.jpa.api.Zx8YzRepository;
+import lhc.repository.jpa.api.Zx9YzRepository;
 import lhc.repository.jpa.dao.Bs9qLrYzDao;
 import lhc.repository.jpa.dao.Bs9qYzDao;
 import lhc.repository.jpa.dao.Bs9qZfYzDao;
@@ -110,6 +120,16 @@ import lhc.repository.jpa.dao.WxdsZfYzDao;
 import lhc.repository.jpa.dao.ZsLrYzDao;
 import lhc.repository.jpa.dao.ZsYzDao;
 import lhc.repository.jpa.dao.ZsZfYzDao;
+import lhc.repository.jpa.dao.Zx10YzDao;
+import lhc.repository.jpa.dao.Zx1YzDao;
+import lhc.repository.jpa.dao.Zx2YzDao;
+import lhc.repository.jpa.dao.Zx3YzDao;
+import lhc.repository.jpa.dao.Zx4YzDao;
+import lhc.repository.jpa.dao.Zx5YzDao;
+import lhc.repository.jpa.dao.Zx6YzDao;
+import lhc.repository.jpa.dao.Zx7YzDao;
+import lhc.repository.jpa.dao.Zx8YzDao;
+import lhc.repository.jpa.dao.Zx9YzDao;
 import lhc.service.YZService;
 
 @Service
@@ -324,6 +344,66 @@ public class Repositories {
 
 	@Autowired
 	public MwYzRepository mwyzRepository;
+	
+	@Autowired
+	public Zx1YzRepository zx1yzRepository;
+	
+	@Autowired
+	public Zx2YzRepository zx2yzRepository;
+	
+	@Autowired
+	public Zx3YzRepository zx3yzRepository;
+	
+	@Autowired
+	public Zx4YzRepository zx4yzRepository;
+	
+	@Autowired
+	public Zx5YzRepository zx5yzRepository;
+	
+	@Autowired
+	public Zx6YzRepository zx6yzRepository;
+	
+	@Autowired
+	public Zx7YzRepository zx7yzRepository;
+	
+	@Autowired
+	public Zx8YzRepository zx8yzRepository;
+	
+	@Autowired
+	public Zx9YzRepository zx9yzRepository;
+	
+	@Autowired
+	public Zx10YzRepository zx10yzRepository;
+	
+	@Autowired
+	public Zx1YzDao zx1yzDao;
+	
+	@Autowired
+	public Zx2YzDao zx2yzDao;
+	
+	@Autowired
+	public Zx3YzDao zx3yzDao;
+	
+	@Autowired
+	public Zx4YzDao zx4yzDao;
+	
+	@Autowired
+	public Zx5YzDao zx5yzDao;
+	
+	@Autowired
+	public Zx6YzDao zx6yzDao;
+	
+	@Autowired
+	public Zx7YzDao zx7yzDao;
+	
+	@Autowired
+	public Zx8YzDao zx8yzDao;
+	
+	@Autowired
+	public Zx9YzDao zx9yzDao;
+	
+	@Autowired
+	public Zx10YzDao zx10yzDao;
 
 	@Autowired
 	public Bs9qYzRepository bs9qyzRepository;

@@ -17,6 +17,7 @@ $(document).ready(function() {
 			.css("border", "1px solid #ddd"));
 		$("#download").empty().append($("<input id='totalResult' type='hidden' name='totalResult'></input>"));
 		$("#download").append($("<input id='totalList' type='hidden' name='totalList'></input>"));
+		$("#download").append($("<input id='compositeSize' type='hidden' name='compositeSize'></input>"));
 		lastSZColor = null;
 		lastSz = null;
 		lastResult = 0;
@@ -132,45 +133,125 @@ $(document).ready(function() {
 		var F = collectSZ('F');
 		var G = collectSZ('G');
 		var H = collectSZ('H');
+		var I = collectSZ('I');
+		var J = collectSZ('J');
+		var K = collectSZ('K');
+		var L = collectSZ('L');
 		
-		var AE=[A, E],BF=[B, F],CG=[C, G],DH=[D, H];
-		if(isQc) {
-			function qc(fd1, fd2) {
-				var a = [];
-				for(var i in fd1) {
-					var hm = fd1[i];
-					if(!isInArr(fd2, hm)) {
-						a.push(hm);
-					}
-				}
-				var b = [];
-				for(var i in fd2) {
-					var hm = fd2[i];
-					if(!isInArr(fd1, hm)) {
-						b.push(hm);
-					}
-				}
-				return [a, b];
-			}
-			
-			AE = qc(A, E);
-			BF = qc(B, F);
-			CG = qc(C, G);
-			DH = qc(D, H);
+		var AEI=[A, E],BFJ=[B, F],CGK=[C, G],DHL=[D, H];
+		$("#compositeSize").val(2);
+		if(I.length > 0) {
+			AEI=[A, E, I];
+			BFJ=[B, F, J];
+			CGK=[C, G, K];
+			DHL=[D, H, L];
+			$("#compositeSize").val(3);
 		}
 		
-		var ABCD = collectFD(A, B, C, D);
-		var EFGH = collectFD(E, F, G, H);
-		
-		var EBCD = collectFD(AE[1], B, C, D);
-		var AFCD = collectFD(A, BF[1], C, D);
-		var ABGD = collectFD(A, B, CG[1], D);
-		var ABCH = collectFD(A, B, C, DH[1]);
-		
-		var AFGH = collectFD(AE[0], F, G, H);
-		var EBGH = collectFD(E, BF[0], G, H);
-		var EFCH = collectFD(E, F, CG[0], H);
-		var EFGD = collectFD(E, F, G, DH[0]);
+		if(AEI.length == 2) {
+			if(isQc) {
+				function qc(fd1, fd2) {
+					var a = [];
+					for(var i in fd1) {
+						var hm = fd1[i];
+						if(!isInArr(fd2, hm)) {
+							a.push(hm);
+						}
+					}
+					var b = [];
+					for(var i in fd2) {
+						var hm = fd2[i];
+						if(!isInArr(fd1, hm)) {
+							b.push(hm);
+						}
+					}
+					return [a, b];
+				}
+				AEI 	= qc(A, E);
+				BFJ = qc(B, F);
+				CGK = qc(C, G);
+				DHL = qc(D, H);
+			}
+			
+			var ABCD = collectFD(A, B, C, D);
+			var EFGH = collectFD(E, F, G, H);
+			
+			var EBCD = collectFD(AEI[1], B, C, D);
+			var AFCD = collectFD(A, BFJ[1], C, D);
+			var ABGD = collectFD(A, B, CGK[1], D);
+			var ABCH = collectFD(A, B, C, DHL[1]);
+			
+			var AFGH = collectFD(AEI[0], F, G, H);
+			var EBGH = collectFD(E, BFJ[0], G, H);
+			var EFCH = collectFD(E, F, CGK[0], H);
+			var EFGD = collectFD(E, F, G, DHL[0]);
+		} else {
+			if(isQc) {
+				function qc(fd1, fd2, fd3) {
+					var a = [];
+					for(var i in fd1) {
+						var hm = fd1[i];
+						if(!isInArr(fd2, hm) && !isInArr(fd3, hm)) {
+							a.push(hm);
+						}
+					}
+					var b = [];
+					for(var i in fd2) {
+						var hm = fd2[i];
+						if(!isInArr(fd1, hm) && !isInArr(fd3, hm)) {
+							b.push(hm);
+						}
+					}
+					var c = [];
+					for(var i in fd3) {
+						var hm = fd3[i];
+						if(!isInArr(fd1, hm) && !isInArr(fd2, hm)) {
+							c.push(hm);
+						}
+					}
+					return [a, b, c];
+				}
+				AEI = qc(A, E, I);
+				BFJ = qc(B, F, J);
+				CGK = qc(C, G, K);
+				DHL = qc(D, H, L);
+			}
+			
+			var ABCD = collectFD(A, B, C, D);
+			var EFGH = collectFD(E, F, G, H);
+			var IJKL = collectFD(I, J, K, L);
+			
+			var EBCD = collectFD(AEI[1], B, C, D);
+			var AFCD = collectFD(A, BFJ[1], C, D);
+			var ABGD = collectFD(A, B, CGK[1], D);
+			var ABCH = collectFD(A, B, C, DHL[1]);
+			
+			var EJKL = collectFD(AEI[1], J, K, L);
+			var IFKL = collectFD(I, BFJ[1], K, L);
+			var IJGL = collectFD(I, J, CGK[1], L);
+			var IJKH = collectFD(I, J, K, DHL[1]);
+			
+			var AFGH = collectFD(AEI[0], F, G, H);
+			var EBGH = collectFD(E, BFJ[0], G, H);
+			var EFCH = collectFD(E, F, CGK[0], H);
+			var EFGD = collectFD(E, F, G, DHL[0]);
+			
+			var AJKL = collectFD(AEI[0], J, K, L);
+			var IBKL = collectFD(I, BFJ[0], K, L);
+			var IJCL = collectFD(I, J, CGK[0], L);
+			var IJKD = collectFD(I, J, K, DHL[0]);
+			
+			var IBCD = collectFD(AEI[2], B, C, D);
+			var AJCD = collectFD(A, BFJ[2], C, D);
+			var ABKD = collectFD(A, B, CGK[2], D);
+			var ABCL = collectFD(A, B, C, DHL[2]);
+			
+			var IFGH = collectFD(AEI[2], F, G, H);
+			var EJGH = collectFD(E, BFJ[2], G, H);
+			var EFKH = collectFD(E, F, CGK[2], H);
+			var EFGL = collectFD(E, F, G, DHL[2]);
+				
+		}
 		
 		var datatable = $("#datatable").find("tbody");
 		if(lastResult % 2 == 0) {
@@ -229,18 +310,50 @@ $(document).ready(function() {
 			}
 		}
 		
-		var trs = [
-			"ABCD",
-			"EFGH",
-			"EBCD",
-			"AFCD",
-			"ABGD",
-			"ABCH",
-			"AFGH",
-			"EBGH",
-			"EFCH",
-			"EFGD"
-		];
+		if(AEI.length == 2) {
+			var trs = [
+				"ABCD",
+				"EFGH",
+				"EBCD",
+				"AFCD",
+				"ABGD",
+				"ABCH",
+				"AFGH",
+				"EBGH",
+				"EFCH",
+				"EFGD"
+			];
+		} else {
+			var trs = [
+				"ABCD",
+				"EFGH",
+				"IJKL",
+				"EBCD",
+				"AFCD",
+				"ABGD",
+				"ABCH",
+				"EJKL",
+				"IFKL",
+				"IJGL",
+				"IJKH",
+				"AFGH",
+				"EBGH",
+				"EFCH",
+				"EFGD",
+				"AJKL",
+				"IBKL",
+				"IJCL",
+				"IJKD",
+				"IBCD",
+				"AJCD",
+				"ABKD",
+				"ABCL",
+				"IFGH",
+				"EJGH",
+				"EFKH",
+				"EFGL"
+			];
+		}
 		for(var i in trs) {
 			createTr(trs[i]);
 		}
@@ -273,8 +386,18 @@ $(document).ready(function() {
 		$("#totalResult").val(lastResult);
 		
 		var allHmsHtml = "";
+		allHms.sort(function(a, b) {
+			return a.count < b.count ? -1 : (a.count == b.count ? (a.num < b.num ? -1 : (a.num == b.num ? 0 : 1)) : 1); 
+		});
+		var lastCount = 0;
 		for(var i in allHms) {
 			var hm = allHms[i];
+			if(lastCount != hm.count) {
+				if(lastCount > 0) {
+					allHmsHtml += "<div class='clearfix'></div>";
+				}
+				lastCount = hm.count;
+			} 
 			allHmsHtml += "<div style='float: left; border: 1px solid black; margin-right: 10px; margin-bottom: 10px;'>";
 			allHmsHtml += "<div style='padding: 5px; color: white; background-color: red;'>" + (hm.num > 9 ? hm.num : "&nbsp;" + hm.num + "&nbsp;") + "</div>";
 			allHmsHtml += "<div style='padding: 5px;'>" + (hm.count > 9 ? hm.count : "&nbsp;" + hm.count + "&nbsp;") + "</div>";
@@ -282,8 +405,18 @@ $(document).ready(function() {
 		}
 		
 		var totalHmsHtml = "";
+		totalHms.sort(function(a, b) {
+			return a.count < b.count ? -1 : (a.count == b.count ? (a.num < b.num ? 0 : (a.num == b.num ? 0 : 1)) : 1); 
+		});
+		lastCount = 0;
 		for(var i in totalHms) {
 			var hm = totalHms[i];
+			if(lastCount != hm.count) {
+				if(lastCount > 0) {
+					totalHmsHtml += "<div class='clearfix'></div>";
+				}
+				lastCount = hm.count;
+			} 
 			totalHmsHtml += "<div style='float: left; border: 1px solid black; margin-right: 10px; margin-bottom: 10px;'>";
 			totalHmsHtml += "<div style='padding: 5px; color: white; background-color: red;'>" + (hm.num > 9 ? hm.num : "&nbsp;" + hm.num + "&nbsp;") + "</div>";
 			totalHmsHtml += "<div style='padding: 5px;'>" + (hm.count > 9 ? hm.count : "&nbsp;" + hm.count + "&nbsp;") + "</div>";
