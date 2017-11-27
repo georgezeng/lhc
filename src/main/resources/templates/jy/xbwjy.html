@@ -9,8 +9,8 @@
 					<span class="title">截止年份:</span><select id="years"></select>
 					<span class="title">截止期数:</span><select id="phases"></select>
 					<span class="title">选择条件</span>
-					<select id="columns">
-						<option value="0">间0-振幅间0</option>
+					<select id="columns" multiple="multiple">
+						<option value="0" selected="selected">间0-振幅间0</option>
 						<option value="1">倒1-振幅倒1</option>
 						<option value="2">间0-倒1</option>
 						<option value="3">间0-振幅倒1</option>
@@ -41,17 +41,17 @@
 							<th width="20" style="display: none;">8次</th>
 							<th width="20" style="display: none;">9次</th>
 							<th width="20">10次</th>
-							<th width="500">1次</th>
-							<th width="500">2次</th>
-							<th width="500">3次</th>
+							<th width="500" nums="true">1次</th>
+							<th width="500" nums="true">2次</th>
+							<th width="500" nums="true">3次</th>
 							<th style="display: none;">4次</th>
-							<th width="500">5次</th>
+							<th width="500" nums="true">5次</th>
 							<th style="display: none;">6次</th>
 							<th style="display: none;">7次</th>
 							<th style="display: none;">8次</th>
 							<th style="display: none;">9次</th>
-							<th width="500">10次</th>
-							<th width="500">反转</th>
+							<th width="500" nums="true">10次</th>
+							<th width="500" nums="true">反转</th>
 						</tr>
 					</thead>
 					<tfoot>
@@ -69,17 +69,17 @@
 							<td style="display: none;">8次</td>
 							<td style="display: none;">9次</td>
 							<td>10次</td>
-							<td>1次</td>
-							<td>2次</td>
-							<td>3次</td>
+							<td nums="true">1次</td>
+							<td nums="true">2次</td>
+							<td nums="true">3次</td>
 							<td style="display: none;">4次</td>
-							<td>5次</td>
+							<td nums="true">5次</td>
 							<td style="display: none;">6次</td>
 							<td style="display: none;">7次</td>
 							<td style="display: none;">8次</td>
 							<td style="display: none;">9次</td>
-							<td>10次</td>
-							<td>反转</td>
+							<td nums="true">10次</td>
+							<td nums="true">反转</td>
 						</tr>
 					</tfoot>
 				</table>

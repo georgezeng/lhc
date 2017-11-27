@@ -50,14 +50,15 @@ import lhc.constants.Zx10Nums;
 import lhc.constants.Zx1Nums;
 import lhc.constants.Zx2Nums;
 import lhc.constants.Zx3Nums;
-import lhc.constants.Zx5Nums;
 import lhc.constants.Zx4Nums;
+import lhc.constants.Zx5Nums;
 import lhc.constants.Zx6Nums;
 import lhc.constants.Zx7Nums;
 import lhc.constants.Zx8Nums;
 import lhc.constants.Zx9Nums;
 import lhc.domain.Avg;
 import lhc.domain.BaseCsYz;
+import lhc.domain.BaseDsYz;
 import lhc.domain.BaseYz;
 import lhc.domain.Bs9qLrYz;
 import lhc.domain.Bs9qYz;
@@ -69,6 +70,7 @@ import lhc.domain.DsYz;
 import lhc.domain.DsZfYz;
 import lhc.domain.HmDsYz;
 import lhc.domain.KaiJiang;
+import lhc.domain.LhDsYz;
 import lhc.domain.LhLrYz;
 import lhc.domain.LhYz;
 import lhc.domain.LhZfYz;
@@ -927,101 +929,160 @@ public class YZService {
 
 	@Async
 	public Future<Exception> calSXDSYZ() {
+		return calDSYZ(new DSHandler() {
+
+			@Override
+			public Integer getNumber(KaiJiang data) {
+				return data.getSpecialNum();
+			}
+
+			@Override
+			public boolean isSmall(KaiJiang data, Integer num) {
+				SX sx = data.getSpecialSx();
+				return sx.isSmall();
+			}
+
+			@Override
+			public boolean isOdd(KaiJiang data, Integer num) {
+				SX sx = data.getSpecialSx();
+				return sx.isSingle();
+			}
+		}, SxDsYz.class, repositories.sxdsyzRepository, "calSXDSYZ");
+	}
+
+	@Async
+	public Future<Exception> calLHDSYZ() {
+		return calDSYZ(new DSHandler() {
+
+			@Override
+			public Integer getNumber(KaiJiang data) {
+				Integer num = data.getSpecialNum();
+				if (num > 9) {
+					String numStr = data.getSpecialNum().toString();
+					num = Integer.valueOf(numStr.substring(0, 1)) + Integer.valueOf(numStr.substring(1));
+					if (num > 9) {
+						num = Integer.valueOf(num.toString().substring(1));
+					}
+				}
+				return num;
+			}
+
+			@Override
+			public boolean isSmall(KaiJiang data, Integer num) {
+				return num < 5;
+			}
+
+			@Override
+			public boolean isOdd(KaiJiang data, Integer num) {
+				return num % 2 != 0;
+			}
+		}, LhDsYz.class, repositories.lhdsyzRepository, "calLHDSYZ");
+	}
+
+	private interface DSHandler {
+		Integer getNumber(KaiJiang data);
+
+		boolean isSmall(KaiJiang data, Integer num);
+
+		boolean isOdd(KaiJiang data, Integer num);
+	}
+
+	private <T extends BaseDsYz> Future<Exception> calDSYZ(DSHandler handler, Class<T> clazz,
+			BaseYzRepository<T> repository, String msg) {
 		Exception t = null;
 		try {
 			Pageable request = new PageRequest(0, 200, new Sort(Direction.ASC, "date"));
 			Page<KaiJiang> result = null;
-			SxDsYz lastYz = null;
-			String[] arr = { "SxSmall", "SxLarge", "SxSingle", "SxEven", "HmSmall", "HmLarge", "HmSingle", "HmEven" };
+			T lastYz = null;
+			String[] arr = { "Small", "Large", "Odd", "Even", "SmallOdd", "SmallEven", "LargeOdd", "LargeEven" };
 			do {
 				result = repositories.kaiJiangRepository.findAll(request);
 				Method gm = null;
 				Method sm = null;
 				if (result != null && result.hasContent()) {
 					for (KaiJiang data : result.getContent()) {
-						SxDsYz yz = repositories.sxdsyzRepository.findByYearAndPhase(data.getYear(), data.getPhase());
+						T yz = repository.findByYearAndPhase(data.getYear(), data.getPhase());
 						if (yz == null) {
-							yz = new SxDsYz();
+							yz = clazz.newInstance();
 							yz.setYear(data.getYear());
 							yz.setPhase(data.getPhase());
 						}
 						yz.setDate(data.getDate());
 
-						SX sx = data.getSpecialSx();
-						boolean isSmall = sx.isSmall();
-						boolean isSingle = sx.isSingle();
+						Integer num = handler.getNumber(data);
+						boolean isSmall = handler.isSmall(data, num);
+						boolean isOdd = handler.isOdd(data, num);
 						if (isSmall) {
-							yz.setSxSmall(0);
+							yz.setSmall(0);
 							if (lastYz != null) {
-								yz.setLastSxDxYz(lastYz.getSxSmall());
+								yz.setLastDxYz(lastYz.getSmall());
 							}
 						} else {
-							yz.setSxLarge(0);
+							yz.setLarge(0);
 							if (lastYz != null) {
-								yz.setLastSxDxYz(lastYz.getSxLarge());
+								yz.setLastDxYz(lastYz.getLarge());
 							}
 						}
-						if (isSingle) {
-							yz.setSxSingle(0);
+						if (isOdd) {
+							yz.setOdd(0);
 							if (lastYz != null) {
-								yz.setLastSxDsYz(lastYz.getSxSingle());
+								yz.setLastDsYz(lastYz.getOdd());
 							}
 						} else {
-							yz.setSxEven(0);
+							yz.setEven(0);
 							if (lastYz != null) {
-								yz.setLastSxDsYz(lastYz.getSxEven());
+								yz.setLastDsYz(lastYz.getEven());
 							}
 						}
-						Integer num = data.getSpecialNum();
-						isSmall = num < 26;
-						isSingle = num % 2 != 0;
 						if (isSmall) {
-							yz.setHmSmall(0);
-							if (lastYz != null) {
-								yz.setLastHmDxYz(lastYz.getHmSmall());
+							if (isOdd) {
+								yz.setSmallOdd(0);
+								if (lastYz != null) {
+									yz.setLastDxDsYz(lastYz.getSmallOdd());
+								}
+							} else {
+								yz.setSmallEven(0);
+								if (lastYz != null) {
+									yz.setLastDxDsYz(lastYz.getSmallEven());
+								}
 							}
 						} else {
-							yz.setHmLarge(0);
-							if (lastYz != null) {
-								yz.setLastHmDxYz(lastYz.getHmLarge());
-							}
-						}
-						if (isSingle) {
-							yz.setHmSingle(0);
-							if (lastYz != null) {
-								yz.setLastHmDsYz(lastYz.getHmSingle());
-							}
-						} else {
-							yz.setHmEven(0);
-							if (lastYz != null) {
-								yz.setLastHmDsYz(lastYz.getHmEven());
+							if (isOdd) {
+								yz.setLargeOdd(0);
+								if (lastYz != null) {
+									yz.setLastDxDsYz(lastYz.getLargeOdd());
+								}
+							} else {
+								yz.setLargeEven(0);
+								if (lastYz != null) {
+									yz.setLastDxDsYz(lastYz.getLargeEven());
+								}
 							}
 						}
 
 						if (lastYz != null) {
 							for (int j = 0; j < arr.length; j++) {
 								String suffix = arr[j];
-								gm = ReflectionUtils.findMethod(SxDsYz.class, "get" + suffix);
+								gm = ReflectionUtils.findMethod(clazz, "get" + suffix);
 								Integer lastValue = (Integer) gm.invoke(lastYz);
 								if (lastValue != null) {
 									Integer value = (Integer) gm.invoke(yz);
 									if (value == null || value > 0) {
-										sm = ReflectionUtils.findMethod(SxDsYz.class, "set" + suffix, Integer.class);
+										sm = ReflectionUtils.findMethod(clazz, "set" + suffix, Integer.class);
 										sm.invoke(yz, lastValue + 1);
 									}
 								}
 							}
 						}
 
-						repositories.sxdsyzRepository.save(yz);
+						repository.save(yz);
 						lastYz = yz;
 
 					}
 				}
 				request = result.nextPageable();
 			} while (result != null && result.hasNext());
-
-			logger.info("End of calSXDSYZ...");
+			logger.info("End of " + msg + "...");
 		} catch (Exception e) {
 			if (DataAccessException.class.isAssignableFrom(e.getClass())) {
 				logger.error(e.getMessage(), e);
@@ -1526,112 +1587,23 @@ public class YZService {
 
 	@Async
 	public Future<Exception> calHMDSYZ() {
-		Exception t = null;
-		try {
-			Pageable request = new PageRequest(0, 200, new Sort(Direction.ASC, "date"));
-			Page<KaiJiang> result = null;
-			HmDsYz lastYz = null;
-			String[] arr = { "Small", "Large", "Odd", "Even", "SmallOdd", "SmallEven", "LargeOdd", "LargeEven" };
-			do {
-				result = repositories.kaiJiangRepository.findAll(request);
-				Method gm = null;
-				Method sm = null;
-				if (result != null && result.hasContent()) {
-					for (KaiJiang data : result.getContent()) {
-						HmDsYz yz = repositories.hmdsyzRepository.findByYearAndPhase(data.getYear(), data.getPhase());
-						if (yz == null) {
-							yz = new HmDsYz();
-							yz.setYear(data.getYear());
-							yz.setPhase(data.getPhase());
-						}
-						yz.setDate(data.getDate());
+		return calDSYZ(new DSHandler() {
 
-						Integer num = data.getSpecialNum();
-						boolean isSmallOdd = num < 26 && num % 2 != 0;
-						boolean isSmallEven = num < 26 && num % 2 == 0;
-						boolean isLargeOdd = num > 25 && num % 2 != 0;
-						boolean isLargeEven = num > 25 && num % 2 == 0;
-						boolean isSmall = num < 26;
-						boolean isOdd = num % 2 != 0;
-
-						if (isSmallOdd) {
-							yz.setSmallOdd(0);
-							if (lastYz != null) {
-								yz.setLastSLOEYz(lastYz.getSmallOdd());
-							}
-						}
-						if (isSmallEven) {
-							yz.setSmallEven(0);
-							if (lastYz != null) {
-								yz.setLastSLOEYz(lastYz.getSmallEven());
-							}
-						}
-						if (isLargeOdd) {
-							yz.setLargeOdd(0);
-							if (lastYz != null) {
-								yz.setLastSLOEYz(lastYz.getLargeOdd());
-							}
-						}
-						if (isLargeEven) {
-							yz.setLargeEven(0);
-							if (lastYz != null) {
-								yz.setLastSLOEYz(lastYz.getLargeEven());
-							}
-						}
-						if (isSmall) {
-							yz.setSmall(0);
-							if (lastYz != null) {
-								yz.setLastSLYz(lastYz.getSmall());
-							}
-						} else {
-							yz.setLarge(0);
-							if (lastYz != null) {
-								yz.setLastSLYz(lastYz.getLarge());
-							}
-						}
-						if (isOdd) {
-							yz.setOdd(0);
-							if (lastYz != null) {
-								yz.setLastOEYz(lastYz.getOdd());
-							}
-						} else {
-							yz.setEven(0);
-							if (lastYz != null) {
-								yz.setLastOEYz(lastYz.getEven());
-							}
-						}
-
-						if (lastYz != null) {
-							for (int j = 0; j < arr.length; j++) {
-								String suffix = arr[j];
-								gm = ReflectionUtils.findMethod(HmDsYz.class, "get" + suffix);
-								Integer lastValue = (Integer) gm.invoke(lastYz);
-								if (lastValue != null) {
-									Integer value = (Integer) gm.invoke(yz);
-									if (value == null || value > 0) {
-										sm = ReflectionUtils.findMethod(HmDsYz.class, "set" + suffix, Integer.class);
-										sm.invoke(yz, lastValue + 1);
-									}
-								}
-							}
-						}
-
-						repositories.hmdsyzRepository.save(yz);
-						lastYz = yz;
-
-					}
-				}
-				request = result.nextPageable();
-			} while (result != null && result.hasNext());
-
-			logger.info("End of calHMDSYZ...");
-		} catch (Exception e) {
-			if (DataAccessException.class.isAssignableFrom(e.getClass())) {
-				logger.error(e.getMessage(), e);
+			@Override
+			public Integer getNumber(KaiJiang data) {
+				return data.getSpecialNum();
 			}
-			t = e;
-		}
-		return new AsyncResult<Exception>(t);
+
+			@Override
+			public boolean isSmall(KaiJiang data, Integer num) {
+				return num < 26;
+			}
+
+			@Override
+			public boolean isOdd(KaiJiang data, Integer num) {
+				return num % 2 != 0;
+			}
+		}, HmDsYz.class, repositories.hmdsyzRepository, "calHMDSYZ");
 	}
 
 	@Async

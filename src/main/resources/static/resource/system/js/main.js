@@ -1230,11 +1230,33 @@ function getCompositeArrs(arr, n) {
  
     return resultArrs;
 }
-
+var init = false;
 $(document).ready(function() {
 	setInterval(function() {
 		$.ajax("/ok");
-	}, 1000 * 60 * 5)
+	}, 1000 * 60 * 5);
+	post({
+		url: "/mvc/yz/getSxListInCurrentYear",
+		success: function(list) {
+			for(var j = 0; j < list.length; j++) {
+				var sx = list[j];
+				for(var i = 0; i < categories[1].subs.length; i++) {
+					var item = categories[1].subs[i];
+					if(item.text == sx.text) {
+						var pos = j + 1;
+						item.value = [];
+						while(pos < 50) {
+							item.value.push(pos);
+							pos += 12;
+						}
+						item.value = item.value.join(", ");
+						break;
+					}
+				}
+			}
+			init = true;
+		}
+	});
 });
 
 function addTM12fdCategory(index) {
@@ -2414,6 +2436,279 @@ function createParameters(cols) {
 		url : "/mvc/yz/listAllD1?mode=0",
 		bFilter: false,
 		data : function(queryInfo, infoSettings) {
+			queryInfo.object = {};
+			queryInfo.object.year = parseInt($("#years").val());
+			queryInfo.object.phase = parseInt($("#phases").val());
+		},
+		columns : columns,
+		aoColumnDefs: columnDefs
+	}));
+	
+}
+
+function createDSTable(url, cols) {
+	var sxDsLastGreen = false;
+	var sxDsLastRed = false;
+	var sxDxLastGreen = false;
+	var sxDxLastRed = false;
+	var sxDxDsLastGreen = false;
+	var sxDxDsLastRed = false;
+	var sxDsCount = 0;
+	var sxDxCount = 0;
+	var sxDxDsCount = 0;
+	var csCount = [];
+	for(var i = 0; i < 19; i++) {
+		csCount[i] = 0;
+	}
+	if(!cols) {
+		cols = ["year", "phase", 
+			"small", "large", "lastDxYz", "phase", "phase", 
+			"odd", "even", "lastDsYz", "phase", "phase", 
+			"smallOdd", "smallEven", "largeOdd", "largeEven", "lastDxDsYz", "phase", "phase"];
+	}
+	var columns = [];
+	for(var i in cols) {
+		var col = cols[i];
+		columns.push({
+			name : col,
+			data : col,
+			sortable: false
+		});
+	}
+	var columnDefs = [];
+	for(var i = 0; i < 2; i++) {
+		(function(index) {
+			columnDefs.push({
+				aTargets: [index],
+				fnCreatedCell: function(nTd, sData, item, iRow, iCol) {
+					var value = null;
+					if(index == 0) {
+						value = item.year;
+						if(!item.id) {
+							value = "顺概率";
+							$(nTd).css("color", "blue");
+						} 
+					} else {
+						value = item.phase;
+						if(!item.id) {
+							value = "";
+						}
+					}
+					$(nTd).text(value);
+				}
+			});
+		})(i);
+	}
+	for(var i = 2; i < 16; i++) {
+		(function(index) {
+			if(index != 4 && index != 5 && index != 6 && index != 9 && index != 10 && index != 11) {
+				columnDefs.push({
+					aTargets: [index],
+					fnCreatedCell: function(nTd, sData, item, iRow, iCol) {
+						var value = item[cols[index]];
+						if(item.id) {
+							if(value == 0) {
+								csCount[index]++;
+								$(nTd).css("color", "white").css("backgroundColor", "red");
+							} else {
+								$(nTd).css("backgroundColor", "#ffc");
+							}
+						} else {
+							value = csCount[index];
+						}
+						$(nTd).text(value);
+					}
+				});
+			}
+		})(i);
+	}
+	columnDefs.push({
+		aTargets: [4],
+		fnCreatedCell: function(nTd, sData, item, iRow, iCol) {
+			var value = null;
+			if(item.id) {
+				value = item.lastDxYz;
+				if(value > 3) {
+					if(sxDxLastGreen) {
+						sxDxCount++;
+					}
+					$(nTd).css("color", "white").css("backgroundColor", "green");
+					sxDxLastRed = false;
+					sxDxLastGreen = true;
+				} else {
+					if(sxDxLastRed) {
+						sxDxCount++;
+					}
+					$(nTd).css("color", "white").css("backgroundColor", "red");
+					sxDxLastRed = true;
+					sxDxLastGreen = false;
+				}
+			} else {
+				value = Math.round(sxDxCount / item.total * 10000) / 100 + "%";
+			}
+			$(nTd).text(value);
+		}
+	});
+	columnDefs.push({
+		aTargets: [5],
+		fnCreatedCell: function(nTd, sData, item, iRow, iCol) {
+			var value = null;
+			if(item.id) {
+				value = item.small;
+				if(item.large > item.small) {
+					value = item.large;
+				}
+			} else {
+				value = "";
+			}
+			$(nTd).text(value);
+		}
+	});
+	columnDefs.push({
+		aTargets: [6],
+		fnCreatedCell: function(nTd, sData, item, iRow, iCol) {
+			var value = null;
+			if(item.id) {
+				value = item.small + item.large;
+			} else {
+				value = "";
+			}
+			$(nTd).text(value);
+		}
+	});
+	
+	columnDefs.push({
+		aTargets: [9],
+		fnCreatedCell: function(nTd, sData, item, iRow, iCol) {
+			var value = null;
+			if(item.id) {
+				value = item.lastDsYz;
+				if(value > 3) {
+					if(sxDsLastGreen) {
+						sxDsCount++;
+					}
+					$(nTd).css("color", "white").css("backgroundColor", "green");
+					sxDsLastRed = false;
+					sxDsLastGreen = true;
+				} else {
+					if(sxDsLastRed) {
+						sxDsCount++;
+					}
+					$(nTd).css("color", "white").css("backgroundColor", "red");
+					sxDsLastRed = true;
+					sxDsLastGreen = false;
+				}
+			} else {
+				value = Math.round(sxDsCount / item.total * 10000) / 100 + "%";
+			}
+			$(nTd).text(value);
+		}
+	});
+	columnDefs.push({
+		aTargets: [10],
+		fnCreatedCell: function(nTd, sData, item, iRow, iCol) {
+			var value = null;
+			if(item.id) {
+				value = item.odd;
+				if(item.even > item.odd) {
+					value = item.even;
+				}
+			} else {
+				value = "";
+			}
+			$(nTd).text(value);
+		}
+	});
+	columnDefs.push({
+		aTargets: [11],
+		fnCreatedCell: function(nTd, sData, item, iRow, iCol) {
+			var value = null;
+			if(item.id) {
+				value = item.odd + item.even;
+			} else {
+				value = "";
+			}
+			$(nTd).text(value);
+		}
+	});
+	
+	columnDefs.push({
+		aTargets: [16],
+		fnCreatedCell: function(nTd, sData, item, iRow, iCol) {
+			var value = null;
+			if(item.id) {
+				value = item.lastDxDsYz;
+				if(value > 3) {
+					if(sxDxDsLastGreen) {
+						sxDxDsCount++;
+					}
+					$(nTd).css("color", "white").css("backgroundColor", "green");
+					sxDxDsLastRed = false;
+					sxDxDsLastGreen = true;
+				} else {
+					if(sxDxDsLastRed) {
+						sxDxDsCount++;
+					}
+					$(nTd).css("color", "white").css("backgroundColor", "red");
+					sxDxDsLastRed = true;
+					sxDxDsLastGreen = false;
+				}
+			} else {
+				value = Math.round(sxDxDsCount / item.total * 10000) / 100 + "%";
+			}
+			$(nTd).text(value);
+		}
+	});
+	columnDefs.push({
+		aTargets: [17],
+		fnCreatedCell: function(nTd, sData, item, iRow, iCol) {
+			var value = null;
+			if(item.id) {
+				value = item.smallOdd;
+				if(item.smallEven > value) {
+					value = item.smallEven;
+				}
+				if(item.sxLargeOdd > value) {
+					value = item.largeOdd;
+				}
+				if(item.sxLargeEven > value) {
+					value = item.largeEven;
+				}
+			} else {
+				value = "";
+			}
+			$(nTd).text(value);
+		}
+	});
+	columnDefs.push({
+		aTargets: [18],
+		fnCreatedCell: function(nTd, sData, item, iRow, iCol) {
+			var value = null;
+			if(item.id) {
+				value = item.smallOdd + item.smallEven + item.largeOdd + item.largeEven;
+			} else {
+				value = "";
+			}
+			$(nTd).text(value);
+		}
+	});
+	datatables.push(createDataTable({
+		id : "dataTable",
+		url : url,
+		bFilter: false,
+		data : function(queryInfo, infoSettings) {
+			sxDsLastGreen = false;
+			sxDsLastRed = false;
+			sxDxLastGreen = false;
+			sxDxLastRed = false;
+			sxDxDsLastGreen = false;
+			sxDxDsLastRed = false;
+			sxDsCount = 0;
+			sxDxCount = 0;
+			sxDxDsCount = 0;
+			for(var i = 0; i < 19; i++) {
+				csCount[i] = 0;
+			}
 			queryInfo.object = {};
 			queryInfo.object.year = parseInt($("#years").val());
 			queryInfo.object.phase = parseInt($("#phases").val());

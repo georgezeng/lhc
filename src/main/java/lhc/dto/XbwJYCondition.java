@@ -1,9 +1,24 @@
 package lhc.dto;
 
+import java.util.List;
+
 public class XbwJYCondition {
 	private Integer year;
 	private Integer phase;
+	private List<Integer> types;
 	private Integer type;
+
+	public Integer getType() {
+		return type;
+	}
+
+	public void setType(Integer type) {
+		this.type = type;
+	}
+
+	public void setTypes(List<Integer> types) {
+		this.types = types;
+	}
 
 	public Integer getYear() {
 		return year;
@@ -21,11 +36,8 @@ public class XbwJYCondition {
 		this.phase = phase;
 	}
 
-	public Integer getType() {
-		return type;
+	public List<Integer> getTypes() {
+		return types;
 	}
 
-	public void setType(Integer type) {
-		this.type = type;
-	}
 }

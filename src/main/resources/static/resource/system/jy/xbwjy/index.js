@@ -1,13 +1,13 @@
 $(document).ready(function() {
 	
-	$("#columns").combobox();
-	
 	var cols = ["year", "phase", "specialNum"];
 	for(var i=1; i < 11; i++) {
-		cols.push("w" + i);
+//		cols.push("w" + i);
+		cols.push("phase");
 	}
 	for(var i=1; i < 11; i++) {
-		cols.push("c" + i);
+//		cols.push("c" + i);
+		cols.push("phase");
 	}
 	cols.push("phase");
 	var columns = [];
@@ -67,45 +67,62 @@ $(document).ready(function() {
 						$(nTd).text("").hide();
 						return ;
 					}
-					if(item.year) {
-						if(lastItem) {
-							var lastNums = lastItem["c" + currentIndex];
-							var yzField = "c" + currentIndex + "_yz";
-							var yzCountField = "c" + currentIndex + "_yz_count";
-							var restart = false;
-							for(var i in lastNums) {
-								var num = lastNums[i];
-								if(num == item.specialNum) {
-									itemYz[yzField] = 0;
-									restart = true;
-									if(!itemCount[yzCountField]) {
-										itemCount[yzCountField] = 1;
-									} else {
-										itemCount[yzCountField]++;
-									}
-									$(nTd).css("backgroundColor", "red").css("color", "white");
-									break;
-								}  
-							}
-							if(!restart && itemYz[yzField] >= 0) {
-								itemYz[yzField]++;
-							}
-							if(itemYz[yzField] >= 0) {
-								if(itemYz[yzField] > 0) {
-									$(nTd).css("backgroundColor", "#ffc");
+					var types = $("#columns").val();
+					if(types.length < 2) {
+						if(item.year) {
+							if(lastItem) {
+								var lastNums = lastItem.datas[0]["c" + currentIndex];
+								var yzField = "c" + currentIndex + "_yz";
+								var yzCountField = "c" + currentIndex + "_yz_count";
+								var restart = false;
+								for(var i in lastNums) {
+									var num = lastNums[i];
+									if(num == item.specialNum) {
+										itemYz[yzField] = 0;
+										restart = true;
+										if(!itemCount[yzCountField]) {
+											itemCount[yzCountField] = 1;
+										} else {
+											itemCount[yzCountField]++;
+										}
+										$(nTd).css("backgroundColor", "red").css("color", "white");
+										break;
+									}  
 								}
-								$(nTd).text(itemYz[yzField]);
+								if(!restart && itemYz[yzField] >= 0) {
+									itemYz[yzField]++;
+								}
+								if(itemYz[yzField] >= 0) {
+									if(itemYz[yzField] > 0) {
+										$(nTd).css("backgroundColor", "#ffc");
+									}
+									$(nTd).text(itemYz[yzField]);
+								} else {
+									$(nTd).css("backgroundColor", "#ffc");
+									$(nTd).text("");
+								}
 							} else {
 								$(nTd).css("backgroundColor", "#ffc");
 								$(nTd).text("");
 							}
 						} else {
-							$(nTd).css("backgroundColor", "#ffc");
-							$(nTd).text("");
+							var yzCountField = "c" + currentIndex + "_yz_count";
+							$(nTd).text(itemCount[yzCountField]);
 						}
 					} else {
-						var yzCountField = "c" + currentIndex + "_yz_count";
-						$(nTd).text(itemCount[yzCountField]);
+						if(lastItem) {
+							for(var j = 0; j < types.length; j++) {
+								var lastNums = lastItem.datas[j]["c" + currentIndex];
+								for(var i in lastNums) {
+									var num = lastNums[i];
+									if(num == item.specialNum) {
+										$(nTd).text("").css("backgroundColor", "red");
+										return;
+									}  
+								}
+							}
+						}
+						$(nTd).text("").css("backgroundColor", "#ffc");
 					}
 				}
 			});
@@ -121,33 +138,38 @@ $(document).ready(function() {
 						$(nTd).text("").hide();
 						return ;
 					}
-					if(item.year) {
-						if(lastItem) {
-							var arr = lastItem["c" + (index-12)];
-							var value = arr.join(", ");
-							for(var i in arr) {
-								var num = arr[i];
-								if(!isInArr(hms, num)) {
-									hms.push(num);
+					var types = $("#columns").val();
+					if(types.length < 2) {
+						if(item.year) {
+							if(lastItem) {
+								var arr = lastItem.datas[0]["c" + (index-12)];
+								var value = arr.join(", ");
+								for(var i in arr) {
+									var num = arr[i];
+									if(!isInArr(hms, num)) {
+										hms.push(num);
+									}
+								}
+								$(nTd).text(value);
+							} else {
+								$(nTd).text("");
+							}
+						} else {
+							var value = "";
+							if(lastItem) {
+								var arr = lastItem.datas[0]["c" + (index-12)];
+								var value = arr.join(", ");
+								for(var i in arr) {
+									var num = arr[i];
+									if(!isInArr(hms, num)) {
+										hms.push(num);
+									}
 								}
 							}
 							$(nTd).text(value);
-						} else {
-							$(nTd).text("");
 						}
 					} else {
-						var value = "";
-						if(lastItem) {
-							var arr = lastItem["c" + (index-12)];
-							var value = arr.join(", ");
-							for(var i in arr) {
-								var num = arr[i];
-								if(!isInArr(hms, num)) {
-									hms.push(num);
-								}
-							}
-						}
-						$(nTd).text(value);
+						$(nTd).hide();
 					}
 				}
 			});
@@ -157,18 +179,25 @@ $(document).ready(function() {
 		aTargets: [23],
 		fnCreatedCell: function(nTd, sData, item, iRow, iCol) {
 			var value = "";
-			if(lastItem) {
-				var arr = [];
-				for(var i = 1; i < 50; i++) {
-					if(!isInArr(hms, i)) {
-						arr.push(i);
+			var types = $("#columns").val();
+			if(types.length < 2) {
+				if(lastItem) {
+					var arr = [];
+					for(var i = 1; i < 50; i++) {
+						if(!isInArr(hms, i)) {
+							arr.push(i);
+						}
 					}
+					value = arr.join(", ");
 				}
-				value = arr.join(", ");
+				hms = null;
+				$(nTd).text(value);
+			} else {
+				$(nTd).hide();
+				$("th[nums='true']").add("td[nums='true']").hide();
+				setTimeout(function(){$("#dataTable").width("500px");}, 1000);
 			}
 			lastItem = item;
-			hms = null;
-			$(nTd).text(value);
 		}
 	});
 	datatables.push(createDataTable({
@@ -180,7 +209,9 @@ $(document).ready(function() {
 			itemYz = {};
 			itemCount = {};
 			queryInfo.object = {};
-			queryInfo.object.type = $("#columns").val();
+			$("th[nums='true']").add("td[nums='true']").show();
+			$("#dataTable").width("3000px");
+			queryInfo.object.types = $("#columns").val();
 			queryInfo.object.year = parseInt($("#years").val());
 			queryInfo.object.phase = parseInt($("#phases").val());
 		},

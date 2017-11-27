@@ -5,6 +5,7 @@ import java.lang.reflect.Method;
 import java.math.BigDecimal;
 import java.math.RoundingMode;
 import java.util.ArrayList;
+import java.util.Calendar;
 import java.util.Collections;
 import java.util.HashMap;
 import java.util.List;
@@ -27,6 +28,7 @@ import org.springframework.web.bind.annotation.RestController;
 import lhc.constants.SwNums;
 import lhc.constants.WxNums;
 import lhc.domain.Avg;
+import lhc.domain.BaseDsYz;
 import lhc.domain.BaseYz;
 import lhc.domain.Bs9qLrYz;
 import lhc.domain.Bs9qYz;
@@ -38,6 +40,7 @@ import lhc.domain.DsYz;
 import lhc.domain.DsZfYz;
 import lhc.domain.HmDsYz;
 import lhc.domain.KaiJiang;
+import lhc.domain.LhDsYz;
 import lhc.domain.LhLrYz;
 import lhc.domain.LhYz;
 import lhc.domain.LhZfYz;
@@ -103,6 +106,7 @@ import lhc.dto.SpecialNum;
 import lhc.dto.TmYzInfo;
 import lhc.dto.XbwJY;
 import lhc.dto.XbwJYCondition;
+import lhc.dto.XbwJYResult;
 import lhc.dto.query.PageInfo;
 import lhc.dto.query.PageResult;
 import lhc.dto.query.QueryInfo;
@@ -110,6 +114,7 @@ import lhc.enums.SX;
 import lhc.repository.jpa.BaseYzDao;
 import lhc.repository.jpa.Repositories;
 import lhc.service.ParallelYzServiceWrapper;
+import lhc.util.DateUtil;
 
 @RestController
 @RequestMapping("/mvc/yz")
@@ -176,6 +181,7 @@ public class YZController {
 		futures.add(repositories.yzService.calWXDSYZ());
 		futures.add(repositories.yzService.calSXDSYZ());
 		futures.add(repositories.yzService.calHMDSYZ());
+		futures.add(repositories.yzService.calLHDSYZ());
 		futures.add(repositories.yzService.calZX1YZ());
 		futures.add(repositories.yzService.calZX2YZ());
 		futures.add(repositories.yzService.calZX3YZ());
@@ -389,7 +395,7 @@ public class YZController {
 		PageResult<SwZfYz> result = repositories.swZfYzDao.query(queryInfo);
 		return new BaseResult(result);
 	}
-	
+
 	@RequestMapping("/listZX1YZ")
 	public BaseResult listZX1YZ(@RequestBody QueryInfo<Zx1Yz> queryInfo, @RequestParam String mode) throws Exception {
 		PageResult<Zx1Yz> result = repositories.zx1yzDao.query(queryInfo);
@@ -401,7 +407,7 @@ public class YZController {
 		}
 		return new BaseResult(result);
 	}
-	
+
 	@RequestMapping("/listZX2YZ")
 	public BaseResult listZX2YZ(@RequestBody QueryInfo<Zx2Yz> queryInfo, @RequestParam String mode) throws Exception {
 		PageResult<Zx2Yz> result = repositories.zx2yzDao.query(queryInfo);
@@ -413,7 +419,7 @@ public class YZController {
 		}
 		return new BaseResult(result);
 	}
-	
+
 	@RequestMapping("/listZX3YZ")
 	public BaseResult listZX3YZ(@RequestBody QueryInfo<Zx3Yz> queryInfo, @RequestParam String mode) throws Exception {
 		PageResult<Zx3Yz> result = repositories.zx3yzDao.query(queryInfo);
@@ -425,7 +431,7 @@ public class YZController {
 		}
 		return new BaseResult(result);
 	}
-	
+
 	@RequestMapping("/listZX4YZ")
 	public BaseResult listZX4YZ(@RequestBody QueryInfo<Zx4Yz> queryInfo, @RequestParam String mode) throws Exception {
 		PageResult<Zx4Yz> result = repositories.zx4yzDao.query(queryInfo);
@@ -437,7 +443,7 @@ public class YZController {
 		}
 		return new BaseResult(result);
 	}
-	
+
 	@RequestMapping("/listZX5YZ")
 	public BaseResult listZX5YZ(@RequestBody QueryInfo<Zx5Yz> queryInfo, @RequestParam String mode) throws Exception {
 		PageResult<Zx5Yz> result = repositories.zx5yzDao.query(queryInfo);
@@ -449,7 +455,7 @@ public class YZController {
 		}
 		return new BaseResult(result);
 	}
-	
+
 	@RequestMapping("/listZX6YZ")
 	public BaseResult listZX6YZ(@RequestBody QueryInfo<Zx6Yz> queryInfo, @RequestParam String mode) throws Exception {
 		PageResult<Zx6Yz> result = repositories.zx6yzDao.query(queryInfo);
@@ -461,7 +467,7 @@ public class YZController {
 		}
 		return new BaseResult(result);
 	}
-	
+
 	@RequestMapping("/listZX7YZ")
 	public BaseResult listZX7YZ(@RequestBody QueryInfo<Zx7Yz> queryInfo, @RequestParam String mode) throws Exception {
 		PageResult<Zx7Yz> result = repositories.zx7yzDao.query(queryInfo);
@@ -473,7 +479,7 @@ public class YZController {
 		}
 		return new BaseResult(result);
 	}
-	
+
 	@RequestMapping("/listZX8YZ")
 	public BaseResult listZX8YZ(@RequestBody QueryInfo<Zx8Yz> queryInfo, @RequestParam String mode) throws Exception {
 		PageResult<Zx8Yz> result = repositories.zx8yzDao.query(queryInfo);
@@ -485,7 +491,7 @@ public class YZController {
 		}
 		return new BaseResult(result);
 	}
-	
+
 	@RequestMapping("/listZX9YZ")
 	public BaseResult listZX9YZ(@RequestBody QueryInfo<Zx9Yz> queryInfo, @RequestParam String mode) throws Exception {
 		PageResult<Zx9Yz> result = repositories.zx9yzDao.query(queryInfo);
@@ -497,7 +503,7 @@ public class YZController {
 		}
 		return new BaseResult(result);
 	}
-	
+
 	@RequestMapping("/listZX10YZ")
 	public BaseResult listZX10YZ(@RequestBody QueryInfo<Zx10Yz> queryInfo, @RequestParam String mode) throws Exception {
 		PageResult<Zx10Yz> result = repositories.zx10yzDao.query(queryInfo);
@@ -796,6 +802,17 @@ public class YZController {
 	@RequestMapping("/listTM12FDZF")
 	public BaseResult listTM12FDZF(@RequestBody QueryInfo<Tm12FdZfYz> queryInfo) throws Exception {
 		PageResult<Tm12FdZfYz> result = repositories.tm12fdzfYzDao.query(queryInfo);
+		return new BaseResult(result);
+	}
+
+	@RequestMapping("/listLHDSYZ")
+	public BaseResult listLHDSYZ(@RequestBody QueryInfo<LhDsYz> queryInfo) throws Exception {
+		PageResult<LhDsYz> result = repositories.lhdsYzDao.query(queryInfo);
+		if (result != null && result.getTotal() > 0) {
+			LhDsYz last = new LhDsYz();
+			last.setTotal(result.getList().size());
+			result.getList().add(last);
+		}
 		return new BaseResult(result);
 	}
 
@@ -2153,48 +2170,11 @@ public class YZController {
 		writer.append("组合").append(", ");
 		writer.append("反转号码").append("\n");
 		Integer totalResult = Integer.valueOf(request.getParameter("totalResult"));
-		String[] fds = new String[] { 
-				"ABCD",
-				"EFGH",
-				"EBCD",
-				"AFCD",
-				"ABGD",
-				"ABCH",
-				"AFGH",
-				"EBGH",
-				"EFCH",
-				"EFGD" 
-		};
-		if("3".equals(request.getParameter("compositeSize"))) {
-			fds = new String[] { 
-					"ABCD",
-					"EFGH",
-					"IJKL",
-					"EBCD",
-					"AFCD",
-					"ABGD",
-					"ABCH",
-					"EJKL",
-					"IFKL",
-					"IJGL",
-					"IJKH",
-					"AFGH",
-					"EBGH",
-					"EFCH",
-					"EFGD",
-					"AJKL",
-					"IBKL",
-					"IJCL",
-					"IJKD",
-					"IBCD",
-					"AJCD",
-					"ABKD",
-					"ABCL",
-					"IFGH",
-					"EJGH",
-					"EFKH",
-					"EFGL"
-			};
+		String[] fds = new String[] { "ABCD", "EFGH", "EBCD", "AFCD", "ABGD", "ABCH", "AFGH", "EBGH", "EFCH", "EFGD" };
+		if ("3".equals(request.getParameter("compositeSize"))) {
+			fds = new String[] { "ABCD", "EFGH", "IJKL", "EBCD", "AFCD", "ABGD", "ABCH", "EJKL", "IFKL", "IJGL", "IJKH",
+					"AFGH", "EBGH", "EFCH", "EFGD", "AJKL", "IBKL", "IJCL", "IJKD", "IBCD", "AJCD", "ABKD", "ABCL", "IFGH",
+					"EJGH", "EFKH", "EFGL" };
 		}
 		for (int i = 0; i < totalResult; i++) {
 			for (int j = 0; j < fds.length; j++) {
@@ -2609,10 +2589,25 @@ public class YZController {
 
 	@RequestMapping("/downloadSXDSYZ")
 	public String downloadSXDSYZ(DownloadDTO dto, HttpServletResponse response) throws Exception {
+		return downloadDSYZ(dto, SxDsYz.class, repositories.sxdsYzDao, "sxdsyz", response);
+	}
+
+	@RequestMapping("/downloadHMDSYZ")
+	public String downloadHMDSYZ(DownloadDTO dto, HttpServletResponse response) throws Exception {
+		return downloadDSYZ(dto, HmDsYz.class, repositories.hmdsYzDao, "hmdsyz", response);
+	}
+
+	@RequestMapping("/downloadLHDSYZ")
+	public String downloadLHDSYZ(DownloadDTO dto, HttpServletResponse response) throws Exception {
+		return downloadDSYZ(dto, LhDsYz.class, repositories.lhdsYzDao, "lhdsyz", response);
+	}
+
+	private <T extends BaseDsYz> String downloadDSYZ(DownloadDTO dto, Class<T> clazz, BaseYzDao<T> dao, String filename,
+			HttpServletResponse response) throws Exception {
 		response.setContentType("text/csv;charset=gbk;");
-		response.addHeader("Content-Disposition", "attachment;filename=dsyz.csv");
-		QueryInfo<SxDsYz> queryInfo = new QueryInfo<SxDsYz>();
-		SxDsYz queryObj = new SxDsYz();
+		response.addHeader("Content-Disposition", "attachment;filename=" + filename + ".csv");
+		QueryInfo<T> queryInfo = new QueryInfo<T>();
+		T queryObj = clazz.newInstance();
 		queryObj.setYear(dto.getYear());
 		queryObj.setPhase(dto.getPhase());
 		queryInfo.setObject(queryObj);
@@ -2620,18 +2615,17 @@ public class YZController {
 		pageInfo.setPageNo(1);
 		pageInfo.setPageSize(dto.getSize());
 		queryInfo.setPageInfo(pageInfo);
-		PageResult<SxDsYz> result = repositories.sxdsYzDao.query(queryInfo);
+		PageResult<T> result = dao.query(queryInfo);
 		if (result != null && result.getList() != null && !result.getList().isEmpty()) {
 			Writer writer = response.getWriter();
-			writer.append("日期, 年份, 期数, 遗值（生肖,大小）, 遗值（生肖,单双）, 遗值（号码,大小）, 遗值（号码,单双）").append("\n");
-			for (SxDsYz data : result.getList()) {
+			writer.append("日期, 年份, 期数, 遗值（大小）, 遗值（单双）, 遗值（大小单双）").append("\n");
+			for (T data : result.getList()) {
 				writer.append(data.getDate()).append(", ");
 				writer.append(data.getYear() + "").append(", ");
 				writer.append(data.getPhase() + "").append(", ");
-				writer.append(data.getLastSxDxYz() + "").append(", ");
-				writer.append(data.getLastSxDsYz() + "").append(", ");
-				writer.append(data.getLastHmDxYz() + "").append(", ");
-				writer.append(data.getLastHmDsYz() + "").append("\n");
+				writer.append(data.getLastDxYz() + "").append(", ");
+				writer.append(data.getLastDsYz() + "").append(", ");
+				writer.append(data.getLastDxDsYz() + "").append(", ");
 			}
 		}
 		return null;
@@ -2798,10 +2792,50 @@ public class YZController {
 	}
 
 	@RequestMapping("/listXBWJY")
-	public BaseResult listXBWJY(@RequestBody QueryInfo<XbwJYCondition> queryInfo) throws Exception {
-		PageResult<XbwJY> result = repositories.yzService.calXBWJY(queryInfo);
-		result.getList().add(new XbwJY());
-		return new BaseResult(result);
+	public BaseResult listXBWJY(@RequestBody QueryInfo<XbwJYCondition> queryInfos) throws Exception {
+		Map<String, XbwJYResult> map = new HashMap<String, XbwJYResult>();
+		List<XbwJYResult> list = new ArrayList<XbwJYResult>();
+		for (Integer type : queryInfos.getObject().getTypes()) {
+			QueryInfo<XbwJYCondition> queryInfo = new QueryInfo<XbwJYCondition>();
+			XbwJYCondition condition = new XbwJYCondition();
+			condition.setYear(queryInfos.getObject().getYear());
+			condition.setPhase(queryInfos.getObject().getPhase());
+			condition.setType(type);
+			queryInfo.setObject(condition);
+			queryInfo.setPageInfo(queryInfos.getPageInfo());
+			PageResult<XbwJY> result = repositories.yzService.calXBWJY(queryInfo);
+			for (XbwJY data : result.getList()) {
+				String key = data.getYear() + "_" + data.getPhase();
+				XbwJYResult dataSet = map.get(key);
+				if (dataSet == null) {
+					dataSet = new XbwJYResult();
+					dataSet.setYear(data.getYear());
+					dataSet.setPhase(data.getPhase());
+					dataSet.setSpecialNum(data.getSpecialNum());
+					map.put(key, dataSet);
+					list.add(dataSet);
+				}
+				dataSet.addData(data);
+			}
+		}
+		if (queryInfos.getObject().getTypes().size() == 1) {
+			list.add(new XbwJYResult());
+		}
+		return new BaseResult(new PageResult<>(list, list.size(), queryInfos.getPageInfo()));
+	}
+
+	@RequestMapping("/getSxListInCurrentYear")
+	public BaseResult getSxListInCurrentYear() {
+		SX bmnSx = DateUtil.getSxByYear(Calendar.getInstance().get(Calendar.YEAR));
+		List<SX> list = new ArrayList<SX>();
+		for (int i = bmnSx.getPos() + 12; i > bmnSx.getPos(); i--) {
+			int pos = i;
+			if (i > 12) {
+				pos = i - 12;
+			}
+			list.add(SX.posOf(pos));
+		}
+		return new BaseResult(list);
 	}
 
 }

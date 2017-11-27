@@ -4,7 +4,7 @@ import javax.persistence.Entity;
 import javax.persistence.Table;
 
 @Entity
-@Table(name = "sx_ds_yz")
-public class SxDsYz extends BaseDsYz {
+@Table(name = "lh_ds_yz")
+public class LhDsYz extends BaseDsYz {
 
 }

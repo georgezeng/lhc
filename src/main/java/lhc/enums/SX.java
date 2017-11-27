@@ -76,6 +76,15 @@ public enum SX {
 		}
 		return null;
 	}
+	
+	public static SX posOf(int pos) {
+		for (SX sx : values()) {
+			if (sx.pos == pos) {
+				return sx;
+			}
+		}
+		return null;
+	}
 
 	public boolean isShu() {
 		return Shu.equals(this);
