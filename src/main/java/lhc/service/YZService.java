@@ -527,7 +527,7 @@ public class YZService {
 
 	@Async
 	public Future<Exception> calZX4YZ() {
-		return calFDYZ(Zx4Yz.class, Zx5Nums.class, repositories.zx4yzRepository, new CommonHandler() {
+		return calFDYZ(Zx4Yz.class, Zx4Nums.class, repositories.zx4yzRepository, new CommonHandler() {
 
 			@Override
 			public void process() {
@@ -539,7 +539,7 @@ public class YZService {
 
 	@Async
 	public Future<Exception> calZX5YZ() {
-		return calFDYZ(Zx5Yz.class, Zx4Nums.class, repositories.zx5yzRepository, new CommonHandler() {
+		return calFDYZ(Zx5Yz.class, Zx5Nums.class, repositories.zx5yzRepository, new CommonHandler() {
 
 			@Override
 			public void process() {
