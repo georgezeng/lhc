@@ -114,6 +114,7 @@ import lhc.domain.WxZfYz;
 import lhc.domain.WxdsLrYz;
 import lhc.domain.WxdsYz;
 import lhc.domain.WxdsZfYz;
+import lhc.domain.ZfAvg;
 import lhc.domain.ZsLrYz;
 import lhc.domain.ZsYz;
 import lhc.domain.ZsZfYz;
@@ -131,6 +132,8 @@ import lhc.dto.D1Yz;
 import lhc.dto.J0Yz;
 import lhc.dto.TmYzInfo;
 import lhc.dto.XbwJY;
+import lhc.dto.XbwJY2;
+import lhc.dto.XbwJY2Sub;
 import lhc.dto.XbwJYCondition;
 import lhc.dto.XbwJYSub;
 import lhc.dto.query.PageInfo;
@@ -161,8 +164,28 @@ public class YZService {
 						Method method = ReflectionUtils.findMethod(SxYz.class, "set" + data.getSpecialSx().name(), Integer.class);
 						method.invoke(yz, 0);
 						yz.setCurrentSx(data.getSpecialSx());
-						if (lastYZ != null) {
 
+						QueryInfo<KaiJiang> queryInfo = new QueryInfo<KaiJiang>();
+						queryInfo.setObject(data);
+						queryInfo.setPageInfo(new PageInfo(1, 10));
+						PageResult<KaiJiang> prevDatas = repositories.kaiJiangDao.queryForPM(queryInfo);
+						if (prevDatas != null) {
+							int[] counts = new int[12];
+							for (KaiJiang prevData : prevDatas.getList()) {
+								counts[prevData.getSpecialSx().getPos() - 1]++;
+							}
+							yz.setNonZhCount(0);
+							yz.setZhCount(0);
+							for (int i = 0; i < counts.length; i++) {
+								if (counts[i] == 0) {
+									yz.setNonZhCount(yz.getNonZhCount() + 1);
+								} else if (counts[i] - 1 > 0) {
+									yz.setZhCount(yz.getZhCount() + counts[i] - 1);
+								}
+							}
+						}
+
+						if (lastYZ != null) {
 							Class<SxYz> clazz = SxYz.class;
 							method = ReflectionUtils.findMethod(clazz, "get" + data.getSpecialSx().name());
 							Integer lastValue = (Integer) method.invoke(lastYZ);
@@ -4398,8 +4421,8 @@ public class YZService {
 		SX bmnSX = DateUtil.getSxByYear(c.get(Calendar.YEAR));
 		yz.setSxNums(getSxNums(bmnSX, sxYz.getCurrentSx()));
 
-		SxZfYz2 sxzfYz = repositories.sxzfyz2Repository.findByYearAndPhase(yz.getYear(), yz.getPhase());
-		int pos = sxYz.getCurrentSx().getPos() + sxzfYz.getCurrentPos();
+		SxZfYz2 zfData = repositories.sxzfyz2Repository.findByYearAndPhase(yz.getYear(), yz.getPhase());
+		int pos = sxYz.getCurrentSx().getPos() + zfData.getCurrentPos();
 		if (pos >= SX.values().length) {
 			pos = pos - SX.values().length;
 		}
@@ -4435,8 +4458,8 @@ public class YZService {
 			currentPos++;
 		}
 
-		DsZfYz dszfYz = repositories.dszfyzRepository.findByYearAndPhase(yz.getYear(), yz.getPhase());
-		int pos = currentPos + dszfYz.getCurrentPos();
+		DsZfYz zfData = repositories.dszfyzRepository.findByYearAndPhase(yz.getYear(), yz.getPhase());
+		int pos = currentPos + zfData.getCurrentPos();
 		if (pos >= DsNums.FDS.length) {
 			pos = pos - DsNums.FDS.length;
 		}
@@ -4477,8 +4500,8 @@ public class YZService {
 			}
 		}
 
-		MwZfYz mwzfYz = repositories.mwzfyzRepository.findByYearAndPhase(yz.getYear(), yz.getPhase());
-		int pos = currentPos + mwzfYz.getCurrentPos();
+		MwZfYz zfData = repositories.mwzfyzRepository.findByYearAndPhase(yz.getYear(), yz.getPhase());
+		int pos = currentPos + zfData.getCurrentPos();
 		if (pos >= MwNums.FDS.length) {
 			pos = pos - MwNums.FDS.length;
 		}
@@ -4498,8 +4521,8 @@ public class YZService {
 			}
 		}
 
-		LhZfYz lhzfYz = repositories.lhzfyzRepository.findByYearAndPhase(yz.getYear(), yz.getPhase());
-		int pos = currentPos + lhzfYz.getCurrentPos();
+		LhZfYz zfData = repositories.lhzfyzRepository.findByYearAndPhase(yz.getYear(), yz.getPhase());
+		int pos = currentPos + zfData.getCurrentPos();
 		if (pos >= LhNums.FDS.length) {
 			pos = pos - LhNums.FDS.length;
 		}
@@ -4522,8 +4545,8 @@ public class YZService {
 			}
 		}
 
-		Bs9qZfYz bszfYz = repositories.bs9qzfyzRepository.findByYearAndPhase(yz.getYear(), yz.getPhase());
-		int pos = currentPos + bszfYz.getCurrentPos();
+		Bs9qZfYz zfData = repositories.bs9qzfyzRepository.findByYearAndPhase(yz.getYear(), yz.getPhase());
+		int pos = currentPos + zfData.getCurrentPos();
 		if (pos >= Bs9qNums.FDS.length) {
 			pos = pos - Bs9qNums.FDS.length;
 		}
@@ -4543,8 +4566,8 @@ public class YZService {
 			}
 		}
 
-		ZsZfYz zszfYz = repositories.zszfyzRepository.findByYearAndPhase(yz.getYear(), yz.getPhase());
-		int pos = currentPos + zszfYz.getCurrentPos();
+		ZsZfYz zfData = repositories.zszfyzRepository.findByYearAndPhase(yz.getYear(), yz.getPhase());
+		int pos = currentPos + zfData.getCurrentPos();
 		if (pos >= ZsNums.FDS.length) {
 			pos = pos - ZsNums.FDS.length;
 		}
@@ -4588,8 +4611,8 @@ public class YZService {
 			}
 		}
 
-		WxdsZfYz wxdszfYz = repositories.wxdszfyzRepository.findByYearAndPhase(yz.getYear(), yz.getPhase());
-		int pos = currentPos + wxdszfYz.getCurrentPos();
+		WxdsZfYz zfData = repositories.wxdszfyzRepository.findByYearAndPhase(yz.getYear(), yz.getPhase());
+		int pos = currentPos + zfData.getCurrentPos();
 		if (pos >= WxDsNums.FDS.length) {
 			pos = pos - WxDsNums.FDS.length;
 		}
@@ -5197,9 +5220,1190 @@ public class YZService {
 		return new Set[] { a1Excluded, a2Excluded };
 	}
 
+	public XbwJY2 getXbwJY2(XbwJYCondition condition) throws Exception {
+		XbwJY2 data = new XbwJY2();
+		String[] methodSuffix = new String[] { "A", "B", "C", "D", "E", "F", "G", "H" };
+		for (String suffix : methodSuffix) {
+			String ms = "calXbwOption" + suffix + "ForType" + condition.getType();
+			Method m = ReflectionUtils.findMethod(this.getClass(), ms, XbwJYCondition.class);
+			Object values = m.invoke(this, condition);
+			m = ReflectionUtils.findMethod(XbwJY2.class, "set" + suffix, List.class);
+			m.invoke(data, values);
+		}
+		return data;
+	}
+
+	List<XbwJY2Sub> calXbwOptionAForType0(XbwJYCondition condition) throws Exception {
+		List<XbwJY2Sub> nums = new ArrayList<XbwJY2Sub>();
+		nums.add(calXbwOptionForSxYz("A", condition));
+		nums.add(calXbwOptionForYz("合数", "A", condition, LhYz.class, LhNums.class, repositories.lhyzRepository));
+		nums.add(calXbwOptionForYz("末位", "A", condition, MwYz.class, MwNums.class, repositories.mwyzRepository));
+		nums.add(calXbwOptionForDsYz("A", condition));
+		nums.add(calXbwOptionForTm12FdYz("A", condition));
+		return nums;
+	}
+
+	private XbwJY2Sub calXbwOptionForSxYz(String fdRange, XbwJYCondition condition) throws Exception {
+		return calXbwOptionForYz("生肖", fdRange, condition, SxYz.class, SxNums.class, repositories.sxyzRepository,
+				new XbwOptionYzHandler<SxYz>() {
+
+					@Override
+					protected List<XbwInfo> getInfos(SxYz current, Class<SxYz> clazz, Class<?> numsClass, String textPrefix)
+							throws Exception {
+						List<XbwInfo> infos = new ArrayList<XbwInfo>();
+						for (SX sx : SX.seq()) {
+							Method m = ReflectionUtils.findMethod(SxYz.class, "get" + sx.name());
+							infos.add(new XbwInfo(textPrefix + "-" + sx.getText(), sx, (Integer) m.invoke(current)));
+						}
+						return infos;
+					}
+
+					@Override
+					protected XbwJY2Sub getNums(XbwInfo info, String range) {
+						return new XbwJY2Sub(info.fd, range, getSxNums(DateUtil.getSxByYear(condition.getYear()), (SX) info.obj));
+					}
+				});
+	}
+
+	private XbwJY2Sub calXbwOptionForDsYz(String fdRange, XbwJYCondition condition) throws Exception {
+		return calXbwOptionForYz("单双", fdRange, condition, DsYz.class, DsNums.class, repositories.dsyzRepository,
+				new XbwOptionYzHandler<DsYz>() {
+					@Override
+					protected String getText(String textPrefix, String fd) {
+						if (fd.equalsIgnoreCase("Ds0Odd")) {
+							return textPrefix + "-0单";
+						}
+						if (fd.equalsIgnoreCase("Ds0Even")) {
+							return textPrefix + "-0双";
+						}
+						if (fd.equalsIgnoreCase("Ds1Odd")) {
+							return textPrefix + "-1单";
+						}
+						if (fd.equalsIgnoreCase("Ds1Even")) {
+							return textPrefix + "-1双";
+						}
+						if (fd.equalsIgnoreCase("Ds2Odd")) {
+							return textPrefix + "-2单";
+						}
+						if (fd.equalsIgnoreCase("Ds2Even")) {
+							return textPrefix + "-2双";
+						}
+						if (fd.equalsIgnoreCase("Ds3Odd")) {
+							return textPrefix + "-3单";
+						}
+						if (fd.equalsIgnoreCase("Ds3Even")) {
+							return textPrefix + "-3双";
+						}
+						if (fd.equalsIgnoreCase("Ds4Odd")) {
+							return textPrefix + "-4单";
+						}
+						if (fd.equalsIgnoreCase("Ds4Even")) {
+							return textPrefix + "-4双";
+						}
+						return "";
+					}
+				});
+	}
+
+	private XbwJY2Sub calXbwOptionForTm12FdYz(String fdRange, XbwJYCondition condition) throws Exception {
+		TmYz currentTm = repositories.tmyzRepository.findByYearAndPhase(condition.getYear(), condition.getPhase());
+		List<TmYzInfo> currentTmInfos = getTMFDList(currentTm, false);
+		List<List<Integer>> nums = new ArrayList<List<Integer>>();
+		int length = 12;
+		int range = 4;
+		for (int i = 1; i <= length; i++) {
+			List<Integer> subNums = new ArrayList<Integer>();
+			int num = 0;
+			int pos = 1;
+			for (TmYzInfo info : currentTmInfos) {
+				if (pos % range == 0) {
+					num = pos / range;
+				} else {
+					num = pos / range + 1;
+				}
+				if (num > length) {
+					num = length;
+				}
+				if (num == i) {
+					subNums.add(info.getNum());
+				}
+				pos++;
+			}
+			nums.add(subNums);
+		}
+		return calXbwOptionForYz("分段", fdRange, condition, null, null, repositories.tm12fdyzRepository,
+				new XbwOptionYzHandler<Tm12FdYz>() {
+					@Override
+					protected List<XbwInfo> getInfos(Tm12FdYz current, Class<Tm12FdYz> clazz, Class<?> numsClass,
+							String textPrefix) throws Exception {
+						List<XbwInfo> infos = new ArrayList<XbwInfo>();
+						for (int i = 0; i < nums.size(); i++) {
+							Method m = ReflectionUtils.findMethod(Tm12FdYz.class, "getW" + (i + 1));
+							infos.add(new XbwInfo("分段-位" + (i + 1), nums.get(i), (Integer) m.invoke(current)));
+						}
+						return infos;
+					}
+
+					@Override
+					protected int getLength(Class<?> numsClass) throws Exception {
+						return length;
+					}
+				});
+	}
+
+	List<XbwJY2Sub> calXbwOptionBForType0(XbwJYCondition condition) throws Exception {
+		List<XbwJY2Sub> nums = new ArrayList<XbwJY2Sub>();
+		nums.add(calXbwOptionForYz("质数", "B", condition, ZsYz.class, ZsNums.class, repositories.zsyzRepository));
+		nums.add(calXbwOptionForWxYz("B", condition));
+		nums.add(calXbwOptionForBsYz("B", condition));
+		nums.add(
+				calXbwOptionForYz("十二区", "B", condition, TwelveYz.class, TwelveNums.class, repositories.twelveyzRepository));
+		nums.add(calXbwOptionForYz("十六区", "B", condition, SlqYz.class, SlqNums.class, repositories.slqyzRepository));
+		return nums;
+	}
+
+	private XbwJY2Sub calXbwOptionForWxYz(String fdRange, XbwJYCondition condition) throws Exception {
+		return calXbwOptionForYz("五行单双", fdRange, condition, WxdsYz.class, WxDsNums.class, repositories.wxdsyzRepository,
+				new XbwOptionYzHandler<WxdsYz>() {
+					@Override
+					protected String getText(String textPrefix, String fd) {
+						if (fd.equalsIgnoreCase("JinOdd")) {
+							return textPrefix + "-金单";
+						}
+						if (fd.equalsIgnoreCase("JinEven")) {
+							return textPrefix + "-金双";
+						}
+						if (fd.equalsIgnoreCase("MuOdd")) {
+							return textPrefix + "-木单";
+						}
+						if (fd.equalsIgnoreCase("MuEven")) {
+							return textPrefix + "-木双";
+						}
+						if (fd.equalsIgnoreCase("ShuiOdd")) {
+							return textPrefix + "-水单";
+						}
+						if (fd.equalsIgnoreCase("ShuiEven")) {
+							return textPrefix + "-水双";
+						}
+						if (fd.equalsIgnoreCase("HuoOdd")) {
+							return textPrefix + "-火单";
+						}
+						if (fd.equalsIgnoreCase("HuoEven")) {
+							return textPrefix + "-火双";
+						}
+						if (fd.equalsIgnoreCase("TuOdd")) {
+							return textPrefix + "-土单";
+						}
+						if (fd.equalsIgnoreCase("TuEven")) {
+							return textPrefix + "-土双";
+						}
+						return "";
+					}
+				});
+	}
+
+	private XbwJY2Sub calXbwOptionForBsYz(String fdRange, XbwJYCondition condition) throws Exception {
+		return calXbwOptionForYz("波色", fdRange, condition, Bs9qYz.class, Bs9qNums.class, repositories.bs9qyzRepository,
+				new XbwOptionYzHandler<Bs9qYz>() {
+					@Override
+					protected String getText(String textPrefix, String fd) {
+						if (fd.equalsIgnoreCase("Red1")) {
+							return textPrefix + "-红1";
+						}
+						if (fd.equalsIgnoreCase("Red2")) {
+							return textPrefix + "-红2";
+						}
+						if (fd.equalsIgnoreCase("Red3")) {
+							return textPrefix + "-红3";
+						}
+						if (fd.equalsIgnoreCase("Blue1")) {
+							return textPrefix + "-蓝1";
+						}
+						if (fd.equalsIgnoreCase("Blue2")) {
+							return textPrefix + "-蓝2";
+						}
+						if (fd.equalsIgnoreCase("Blue3")) {
+							return textPrefix + "-蓝3";
+						}
+						if (fd.equalsIgnoreCase("Green1")) {
+							return textPrefix + "-绿1";
+						}
+						if (fd.equalsIgnoreCase("Green2")) {
+							return textPrefix + "-绿2";
+						}
+						if (fd.equalsIgnoreCase("Green3")) {
+							return textPrefix + "-绿3";
+						}
+						return "";
+					}
+				});
+	}
+
+	List<XbwJY2Sub> calXbwOptionCForType0(XbwJYCondition condition) throws Exception {
+		List<XbwJY2Sub> nums = new ArrayList<XbwJY2Sub>();
+		nums.add(calXbwOptionForYz("配对", "C", condition, PdYz.class, PdNums.class, repositories.pdyzRepository));
+		nums.add(calXbwOptionForYz("七位", "C", condition, QiwYz.class, QiwNums.class, repositories.qiwYzRepository));
+		nums.add(calXbwOptionForYz("杂项1", "C", condition, Zx1Yz.class, Zx1Nums.class, repositories.zx1yzRepository));
+		nums.add(calXbwOptionForYz("杂项2", "C", condition, Zx2Yz.class, Zx2Nums.class, repositories.zx2yzRepository));
+		return nums;
+	}
+
+	List<XbwJY2Sub> calXbwOptionDForType0(XbwJYCondition condition) throws Exception {
+		List<XbwJY2Sub> nums = new ArrayList<XbwJY2Sub>();
+		nums.add(calXbwOptionForYz("七区", "D", condition, QqYz.class, QqNums.class, repositories.qqyzRepository));
+		nums.add(calXbwOptionForYz("杂项4", "D", condition, Zx4Yz.class, Zx4Nums.class, repositories.zx4yzRepository));
+		nums.add(calXbwOptionForYz("杂项7", "D", condition, Zx7Yz.class, Zx7Nums.class, repositories.zx7yzRepository));
+		nums.add(calXbwOptionForYz("杂项9", "D", condition, Zx9Yz.class, Zx9Nums.class, repositories.zx9yzRepository));
+		return nums;
+	}
+
+	List<XbwJY2Sub> calXbwOptionEForType0(XbwJYCondition condition) throws Exception {
+		List<XbwJY2Sub> nums = new ArrayList<XbwJY2Sub>();
+		nums.add(calXbwOptionForSxzf("E", condition));
+		nums.add(calXbwOptionForLhzf("E", condition));
+		nums.add(calXbwOptionForMwzf("E", condition));
+		nums.add(calXbwOptionForDszf("E", condition));
+		nums.add(calXbwOptionForFdzf("E", condition));
+		return nums;
+	}
+
+	private XbwJY2Sub calXbwOptionForSxzf(String fdRange, XbwJYCondition condition) throws Exception {
+		return calXbwOptionForZf(condition, SxZfYz2.class, repositories.sxzfyz2Repository,
+				new XbwOptionZfHandler<SxYz, SxZfYz2>() {
+
+					@Override
+					protected XbwJY2Sub getNums(int pos, SxZfYz2 current) throws Exception {
+						int currentPos = pos;
+						SxYz data = repositories.sxyzRepository.findByYearAndPhase(current.getYear(), current.getPhase());
+						pos += data.getCurrentSx().getPos();
+						int len = getLength();
+						if (pos > len) {
+							pos -= len;
+						}
+						SX sx = SX.posOf(pos);
+						return new XbwJY2Sub("生肖-振幅" + currentPos + "-" + sx.getText(), fdRange,
+								getSxNums(DateUtil.getSxByYear(condition.getYear()), sx));
+					}
+
+					@Override
+					protected int getLength() {
+						return 12;
+					}
+
+					@Override
+					protected BaseYzRepository<SxYz> getRepository() {
+						return null;
+					}
+
+					@Override
+					protected String[] getFds() {
+						return null;
+					}
+
+					@Override
+					protected Class<SxYz> getClazz() {
+						return null;
+					}
+
+					@Override
+					protected XbwJY2Sub getNums(int currentPos, int pos) {
+						return null;
+					}
+
+				});
+	}
+
+	private XbwJY2Sub calXbwOptionForLhzf(String fdRange, XbwJYCondition condition) throws Exception {
+		return calXbwOptionForZf(condition, LhZfYz.class, repositories.lhzfyzRepository,
+				new XbwOptionZfHandler<LhYz, LhZfYz>() {
+
+					@Override
+					protected int getLength() {
+						return 10;
+					}
+
+					@Override
+					protected BaseYzRepository<LhYz> getRepository() {
+						return repositories.lhyzRepository;
+					}
+
+					@Override
+					protected String[] getFds() {
+						return LhNums.FDS;
+					}
+
+					@Override
+					protected Class<LhYz> getClazz() {
+						return LhYz.class;
+					}
+
+					@Override
+					protected XbwJY2Sub getNums(int currentPos, int pos) {
+						return new XbwJY2Sub("合数-振幅" + currentPos + "-位" + pos, fdRange, LhNums.NUMS[pos]);
+					}
+
+				});
+	}
+
+	private XbwJY2Sub calXbwOptionForMwzf(String fdRange, XbwJYCondition condition) throws Exception {
+		return calXbwOptionForZf(condition, MwZfYz.class, repositories.mwzfyzRepository,
+				new XbwOptionZfHandler<MwYz, MwZfYz>() {
+
+					@Override
+					protected int getLength() {
+						return 10;
+					}
+
+					@Override
+					protected BaseYzRepository<MwYz> getRepository() {
+						return repositories.mwyzRepository;
+					}
+
+					@Override
+					protected String[] getFds() {
+						return MwNums.FDS;
+					}
+
+					@Override
+					protected Class<MwYz> getClazz() {
+						return MwYz.class;
+					}
+
+					@Override
+					protected XbwJY2Sub getNums(int currentPos, int pos) {
+						return new XbwJY2Sub("末位-振幅" + currentPos + "-位" + pos, fdRange, MwNums.NUMS[pos]);
+					}
+
+				});
+	}
+
+	private XbwJY2Sub calXbwOptionForDszf(String fdRange, XbwJYCondition condition) throws Exception {
+		return calXbwOptionForZf(condition, DsZfYz.class, repositories.dszfyzRepository,
+				new XbwOptionZfHandler<DsYz, DsZfYz>() {
+
+					@Override
+					protected int getLength() {
+						return 10;
+					}
+
+					@Override
+					protected BaseYzRepository<DsYz> getRepository() {
+						return repositories.dsyzRepository;
+					}
+
+					@Override
+					protected String[] getFds() {
+						return DsNums.FDS;
+					}
+
+					@Override
+					protected Class<DsYz> getClazz() {
+						return DsYz.class;
+					}
+
+					@Override
+					protected XbwJY2Sub getNums(int currentPos, int pos) {
+						String text = null;
+						switch (pos) {
+						case 0:
+							text = "0单";
+							break;
+						case 1:
+							text = "0双";
+							break;
+						case 2:
+							text = "1单";
+							break;
+						case 3:
+							text = "1双";
+							break;
+						case 4:
+							text = "2单";
+							break;
+						case 5:
+							text = "2双";
+							break;
+						case 6:
+							text = "3单";
+							break;
+						case 7:
+							text = "3双";
+							break;
+						case 8:
+							text = "4单";
+							break;
+						case 9:
+							text = "4双";
+							break;
+						}
+						return new XbwJY2Sub("单双-振幅" + currentPos + "-" + text, fdRange, DsNums.NUMS[pos]);
+					}
+
+				});
+	}
+
+	private XbwJY2Sub calXbwOptionForFdzf(String fdRange, XbwJYCondition condition) throws Exception {
+		return calXbwOptionForZf(condition, Tm12FdZfYz.class, repositories.tm12fdzfyzRepository,
+				new XbwOptionZfHandler<Tm12FdYz, Tm12FdZfYz>() {
+
+					@Override
+					protected XbwJY2Sub getNums(int pos, Tm12FdZfYz current) throws Exception {
+						TmYz tmData = repositories.tmyzRepository.findByYearAndPhase(current.getYear(), current.getPhase());
+						List<TmYzInfo> infos = getTMFDList(tmData, false);
+						List<List<Integer>> nums = new ArrayList<List<Integer>>();
+						int length = 12;
+						int range = 4;
+						for (int i = 1; i <= length; i++) {
+							List<Integer> subNums = new ArrayList<Integer>();
+							int num = 0;
+							int currentPos = 1;
+							for (TmYzInfo info : infos) {
+								if (currentPos % range == 0) {
+									num = currentPos / range;
+								} else {
+									num = currentPos / range + 1;
+								}
+								if (num > length) {
+									num = length;
+								}
+								if (num == i) {
+									subNums.add(info.getNum());
+								}
+								currentPos++;
+							}
+							nums.add(subNums);
+						}
+						int currentPos = pos;
+						Tm12FdYz data = repositories.tm12fdyzRepository.findByYearAndPhase(current.getYear(), current.getPhase());
+						for (int i = 1; i < 13; i++) {
+							Method m = ReflectionUtils.findMethod(Tm12FdYz.class, "getW" + i);
+							Integer value = (Integer) m.invoke(data);
+							if (value != null && value == 0) {
+								pos += i;
+								break;
+							}
+						}
+						int len = getLength();
+						if (pos > len) {
+							pos -= len;
+						}
+						return new XbwJY2Sub("分段-振幅" + currentPos + "-位" + pos, fdRange, nums.get(pos - 1));
+					}
+
+					@Override
+					protected int getLength() {
+						return 12;
+					}
+
+					@Override
+					protected BaseYzRepository<Tm12FdYz> getRepository() {
+						return null;
+					}
+
+					@Override
+					protected String[] getFds() {
+						return null;
+					}
+
+					@Override
+					protected Class<Tm12FdYz> getClazz() {
+						return null;
+					}
+
+					@Override
+					protected XbwJY2Sub getNums(int currentPos, int pos) {
+						return null;
+					}
+
+				});
+	}
+
+	List<XbwJY2Sub> calXbwOptionFForType0(XbwJYCondition condition) throws Exception {
+		List<XbwJY2Sub> nums = new ArrayList<XbwJY2Sub>();
+		nums.add(calXbwOptionForZszf("F", condition));
+		nums.add(calXbwOptionForWxdszf("F", condition));
+		nums.add(calXbwOptionForBszf("F", condition));
+		nums.add(calXbwOptionForTwelvezf("F", condition));
+		nums.add(calXbwOptionForSlqzf("F", condition));
+		return nums;
+	}
+
+	private XbwJY2Sub calXbwOptionForZszf(String fdRange, XbwJYCondition condition) throws Exception {
+		return calXbwOptionForZf(condition, ZsZfYz.class, repositories.zszfyzRepository,
+				new XbwOptionZfHandler<ZsYz, ZsZfYz>() {
+
+					@Override
+					protected int getLength() {
+						return 9;
+					}
+
+					@Override
+					protected BaseYzRepository<ZsYz> getRepository() {
+						return repositories.zsyzRepository;
+					}
+
+					@Override
+					protected String[] getFds() {
+						return ZsNums.FDS;
+					}
+
+					@Override
+					protected Class<ZsYz> getClazz() {
+						return ZsYz.class;
+					}
+
+					@Override
+					protected XbwJY2Sub getNums(int currentPos, int pos) {
+						return new XbwJY2Sub("质数-振幅" + currentPos + "-位" + (pos + 1), fdRange, ZsNums.NUMS[pos]);
+					}
+
+				});
+	}
+
+	private XbwJY2Sub calXbwOptionForWxdszf(String fdRange, XbwJYCondition condition) throws Exception {
+		return calXbwOptionForZf(condition, WxdsZfYz.class, repositories.wxdszfyzRepository,
+				new XbwOptionZfHandler<WxdsYz, WxdsZfYz>() {
+
+					@Override
+					protected int getLength() {
+						return 9;
+					}
+
+					@Override
+					protected BaseYzRepository<WxdsYz> getRepository() {
+						return repositories.wxdsyzRepository;
+					}
+
+					@Override
+					protected String[] getFds() {
+						return WxDsNums.FDS;
+					}
+
+					@Override
+					protected Class<WxdsYz> getClazz() {
+						return WxdsYz.class;
+					}
+
+					@Override
+					protected XbwJY2Sub getNums(int currentPos, int pos) {
+						String text = null;
+						switch (pos) {
+						case 0:
+							text = "金单";
+							break;
+						case 1:
+							text = "金双";
+							break;
+						case 2:
+							text = "木单";
+							break;
+						case 3:
+							text = "木双";
+							break;
+						case 4:
+							text = "水单";
+							break;
+						case 5:
+							text = "水双";
+							break;
+						case 6:
+							text = "火单";
+							break;
+						case 7:
+							text = "火双";
+							break;
+						case 8:
+							text = "土单";
+							break;
+						case 9:
+							text = "土双";
+							break;
+						}
+						return new XbwJY2Sub("五行单双-振幅" + currentPos + "-" + text, fdRange, WxDsNums.NUMS[pos]);
+					}
+
+				});
+	}
+
+	private XbwJY2Sub calXbwOptionForBszf(String fdRange, XbwJYCondition condition) throws Exception {
+		return calXbwOptionForZf(condition, Bs9qZfYz.class, repositories.bs9qzfyzRepository,
+				new XbwOptionZfHandler<Bs9qYz, Bs9qZfYz>() {
+
+					@Override
+					protected int getLength() {
+						return 9;
+					}
+
+					@Override
+					protected BaseYzRepository<Bs9qYz> getRepository() {
+						return repositories.bs9qyzRepository;
+					}
+
+					@Override
+					protected String[] getFds() {
+						return Bs9qNums.FDS;
+					}
+
+					@Override
+					protected Class<Bs9qYz> getClazz() {
+						return Bs9qYz.class;
+					}
+
+					@Override
+					protected XbwJY2Sub getNums(int currentPos, int pos) {
+						String text = null;
+						switch (pos) {
+						case 0:
+							text = "红1";
+							break;
+						case 1:
+							text = "红2";
+							break;
+						case 2:
+							text = "红3";
+							break;
+						case 3:
+							text = "蓝1";
+							break;
+						case 4:
+							text = "蓝2";
+							break;
+						case 5:
+							text = "蓝3";
+							break;
+						case 6:
+							text = "绿1";
+							break;
+						case 7:
+							text = "绿2";
+							break;
+						case 8:
+							text = "绿3";
+							break;
+						}
+						return new XbwJY2Sub("波色-振幅" + currentPos + "-" + text, fdRange, Bs9qNums.NUMS[pos]);
+					}
+
+				});
+	}
+
+	private XbwJY2Sub calXbwOptionForTwelvezf(String fdRange, XbwJYCondition condition) throws Exception {
+		return calXbwOptionForZf(condition, TwelveZfYz.class, repositories.twelvezfyzRepository,
+				new XbwOptionZfHandler<TwelveYz, TwelveZfYz>() {
+
+					@Override
+					protected int getLength() {
+						return 12;
+					}
+
+					@Override
+					protected BaseYzRepository<TwelveYz> getRepository() {
+						return repositories.twelveyzRepository;
+					}
+
+					@Override
+					protected String[] getFds() {
+						return TwelveNums.FDS;
+					}
+
+					@Override
+					protected Class<TwelveYz> getClazz() {
+						return TwelveYz.class;
+					}
+
+					@Override
+					protected XbwJY2Sub getNums(int currentPos, int pos) {
+						return new XbwJY2Sub("十二区-振幅" + currentPos + "-位" + (pos + 1), fdRange, TwelveNums.NUMS[pos]);
+					}
+
+				});
+	}
+
+	private XbwJY2Sub calXbwOptionForSlqzf(String fdRange, XbwJYCondition condition) throws Exception {
+		return calXbwOptionForZf(condition, SlqZfYz.class, repositories.slqzfyzRepository,
+				new XbwOptionZfHandler<SlqYz, SlqZfYz>() {
+
+					@Override
+					protected int getLength() {
+						return 16;
+					}
+
+					@Override
+					protected BaseYzRepository<SlqYz> getRepository() {
+						return repositories.slqyzRepository;
+					}
+
+					@Override
+					protected String[] getFds() {
+						return SlqNums.FDS;
+					}
+
+					@Override
+					protected Class<SlqYz> getClazz() {
+						return SlqYz.class;
+					}
+
+					@Override
+					protected XbwJY2Sub getNums(int currentPos, int pos) {
+						return new XbwJY2Sub("十六区-振幅" + currentPos + "-位" + pos, fdRange, SlqNums.NUMS[pos]);
+					}
+
+				});
+	}
+
+	List<XbwJY2Sub> calXbwOptionGForType0(XbwJYCondition condition) throws Exception {
+		List<XbwJY2Sub> nums = new ArrayList<XbwJY2Sub>();
+		nums.add(calXbwOptionForPdzf("G", condition));
+		nums.add(calXbwOptionForQiwzf("G", condition));
+		nums.add(calXbwOptionForYz("杂项3", "G", condition, Zx3Yz.class, Zx3Nums.class, repositories.zx3yzRepository));
+		nums.add(calXbwOptionForYz("杂项5", "G", condition, Zx5Yz.class, Zx5Nums.class, repositories.zx5yzRepository));
+		return nums;
+	}
+
+	private XbwJY2Sub calXbwOptionForPdzf(String fdRange, XbwJYCondition condition) throws Exception {
+		return calXbwOptionForZf(condition, PdZfYz.class, repositories.pdzfyzRepository,
+				new XbwOptionZfHandler<PdYz, PdZfYz>() {
+
+					@Override
+					protected int getLength() {
+						return 12;
+					}
+
+					@Override
+					protected BaseYzRepository<PdYz> getRepository() {
+						return repositories.pdyzRepository;
+					}
+
+					@Override
+					protected String[] getFds() {
+						return PdNums.FDS;
+					}
+
+					@Override
+					protected Class<PdYz> getClazz() {
+						return PdYz.class;
+					}
+
+					@Override
+					protected XbwJY2Sub getNums(int currentPos, int pos) {
+						return new XbwJY2Sub("配对-振幅" + currentPos + "-位" + (pos + 1), fdRange, PdNums.NUMS[pos]);
+					}
+
+				});
+	}
+
+	private XbwJY2Sub calXbwOptionForQiwzf(String fdRange, XbwJYCondition condition) throws Exception {
+		return calXbwOptionForZf(condition, QiwZfYz.class, repositories.qiwzfYzRepository,
+				new XbwOptionZfHandler<QiwYz, QiwZfYz>() {
+
+					@Override
+					protected int getLength() {
+						return 7;
+					}
+
+					@Override
+					protected BaseYzRepository<QiwYz> getRepository() {
+						return repositories.qiwYzRepository;
+					}
+
+					@Override
+					protected String[] getFds() {
+						return QiwNums.FDS;
+					}
+
+					@Override
+					protected Class<QiwYz> getClazz() {
+						return QiwYz.class;
+					}
+
+					@Override
+					protected XbwJY2Sub getNums(int currentPos, int pos) {
+						return new XbwJY2Sub("七位-振幅" + currentPos + "-位" + (pos + 1), fdRange, QiwNums.NUMS[pos]);
+					}
+
+				});
+	}
+
+	List<XbwJY2Sub> calXbwOptionHForType0(XbwJYCondition condition) throws Exception {
+		List<XbwJY2Sub> nums = new ArrayList<XbwJY2Sub>();
+		nums.add(calXbwOptionForQqzf("H", condition));
+		nums.add(calXbwOptionForYz("杂项6", "H", condition, Zx6Yz.class, Zx6Nums.class, repositories.zx6yzRepository));
+		nums.add(calXbwOptionForYz("杂项8", "H", condition, Zx8Yz.class, Zx8Nums.class, repositories.zx8yzRepository));
+		nums.add(calXbwOptionForYz("杂项10", "H", condition, Zx10Yz.class, Zx10Nums.class, repositories.zx10yzRepository));
+		return nums;
+	}
+
+	private XbwJY2Sub calXbwOptionForQqzf(String fdRange, XbwJYCondition condition) throws Exception {
+		return calXbwOptionForZf(condition, QqZfYz.class, repositories.qqzfyzRepository,
+				new XbwOptionZfHandler<QqYz, QqZfYz>() {
+
+					@Override
+					protected int getLength() {
+						return 7;
+					}
+
+					@Override
+					protected BaseYzRepository<QqYz> getRepository() {
+						return repositories.qqyzRepository;
+					}
+
+					@Override
+					protected String[] getFds() {
+						return QqNums.FDS;
+					}
+
+					@Override
+					protected Class<QqYz> getClazz() {
+						return QqYz.class;
+					}
+
+					@Override
+					protected XbwJY2Sub getNums(int currentPos, int pos) {
+						return new XbwJY2Sub("七区-振幅" + currentPos + "-位" + (pos + 1), fdRange, QqNums.NUMS[pos]);
+					}
+
+				});
+	}
+
+	private static class XbwOptionYzHandler<T extends Avg> {
+		protected List<XbwInfo> getInfos(T current, Class<T> clazz, Class<?> numsClass, String textPrefix)
+				throws Exception {
+			List<XbwInfo> infos = new ArrayList<XbwInfo>();
+			for (String fd : (String[]) numsClass.getDeclaredField("FDS").get(null)) {
+				Method m = ReflectionUtils.findMethod(clazz, "get" + fd);
+				infos.add(new XbwInfo(getText(textPrefix, fd), ReflectionUtils.findField(numsClass, fd.toUpperCase()).get(null),
+						(Integer) m.invoke(current)));
+			}
+			return infos;
+		}
+
+		protected String getText(String textPrefix, String fd) {
+			return fd.replace("W", textPrefix + "-位").replace("Fd", textPrefix + "-位");
+		}
+
+		protected XbwJY2Sub getNums(XbwInfo info, String range) {
+			return new XbwJY2Sub(info.fd, range, (List<Integer>) info.obj);
+		}
+
+		protected int getLength(Class<?> numsClass) throws Exception {
+			return ((List[]) numsClass.getDeclaredField("NUMS").get(null)).length;
+		}
+	}
+
+	private <T extends Avg> XbwJY2Sub calXbwOptionForYz(String textPrefix, String range, XbwJYCondition condition,
+			Class<T> clazz, Class<?> numsClass, BaseYzRepository<T> repository) throws Exception {
+		return calXbwOptionForYz(textPrefix, range, condition, clazz, numsClass, repository, new XbwOptionYzHandler<T>());
+	}
+
+	private <T extends Avg> XbwJY2Sub calXbwOptionForYz(String textPrefix, String range, XbwJYCondition condition,
+			Class<T> clazz, Class<?> numsClass, BaseYzRepository<T> repository, XbwOptionYzHandler<T> handler)
+			throws Exception {
+		T current = repository.findByYearAndPhase(condition.getYear(), condition.getPhase());
+		T last = repository.findByYearAndPhase(condition.getYear(), condition.getPhase() - 1);
+		List<XbwInfo> currentInfos = handler.getInfos(current, clazz, numsClass, textPrefix);
+		Collections.sort(currentInfos, new Comparator<XbwInfo>() {
+
+			@Override
+			public int compare(XbwInfo o1, XbwInfo o2) {
+				return o1.yz.compareTo(o2.yz);
+			}
+
+		});
+		int len = handler.getLength(numsClass);
+		XbwInfo info = null;
+		if (current.getTotal() >= last.getTotal()) {
+			if (new BigDecimal(current.getTotal()).compareTo(current.getTotalAvg()) >= 0) {
+				info = currentInfos.get(len - 2);
+			} else {
+				info = currentInfos.get(len - 1);
+			}
+		} else {
+			if (new BigDecimal(current.getTotal()).compareTo(current.getTotalAvg()) >= 0) {
+				info = currentInfos.get(0);
+			} else {
+				info = currentInfos.get(1);
+			}
+		}
+		return handler.getNums(info, range);
+	}
+
+	private static abstract class XbwOptionZfHandler<T extends Avg, Z extends Avg> {
+
+		protected abstract BaseYzRepository<T> getRepository();
+
+		protected abstract String[] getFds();
+
+		protected abstract Class<T> getClazz();
+
+		protected abstract XbwJY2Sub getNums(int currentPos, int pos);
+
+		protected XbwJY2Sub getNums(int pos, Z current) throws Exception {
+			int currentPos = pos;
+			int len = getLength();
+			T data = getRepository().findByYearAndPhase(current.getYear(), current.getPhase());
+			int i = 0;
+			for (String fd : getFds()) {
+				Method m = ReflectionUtils.findMethod(getClazz(), "get" + fd);
+				Integer value = (Integer) m.invoke(data);
+				if (value != null && value == 0) {
+					pos += i;
+					break;
+				}
+				i++;
+			}
+			if (pos >= len) {
+				pos -= len;
+			}
+			return getNums(currentPos, pos);
+		}
+
+		protected abstract int getLength();
+
+	}
+
+	private <T extends Avg, Z extends ZfAvg> XbwJY2Sub calXbwOptionForZf(XbwJYCondition condition, Class<Z> clazz,
+			BaseYzRepository<Z> repository, XbwOptionZfHandler<T, Z> handler) throws Exception {
+		Z current = repository.findByYearAndPhase(condition.getYear(), condition.getPhase());
+		Z last = repository.findByYearAndPhase(condition.getYear(), condition.getPhase() - 1);
+		List<XbwInfo> infos = new ArrayList<XbwInfo>();
+		int len = handler.getLength();
+		for (int i = 0; i < len; i++) {
+			Method m = ReflectionUtils.findMethod(clazz, "getZf" + i);
+			infos.add(new XbwInfo(null, i, (Integer) m.invoke(current)));
+		}
+		Collections.sort(infos, new Comparator<XbwInfo>() {
+
+			@Override
+			public int compare(XbwInfo o1, XbwInfo o2) {
+				return o1.yz.compareTo(o2.yz);
+			}
+
+		});
+		Integer pos = null;
+		if (current.getTotal() >= last.getTotal()) {
+			if (new BigDecimal(current.getTotal()).compareTo(current.getTotalAvg()) >= 0) {
+				pos = (Integer) infos.get(len - 2).obj;
+			} else {
+				pos = (Integer) infos.get(len - 1).obj;
+			}
+		} else {
+			if (new BigDecimal(current.getTotal()).compareTo(current.getTotalAvg()) >= 0) {
+				pos = (Integer) infos.get(0).obj;
+			} else {
+				pos = (Integer) infos.get(1).obj;
+			}
+		}
+		return handler.getNums(pos, current);
+	}
+
+	List<XbwJY2Sub> calXbwOptionAForType1(XbwJYCondition condition) throws Exception {
+		List<XbwJY2Sub> nums = new ArrayList<XbwJY2Sub>();
+		nums.add(calXbwOptionForSxYz("A", condition));
+		nums.add(calXbwOptionForYz("合数", "A", condition, LhYz.class, LhNums.class, repositories.lhyzRepository));
+		nums.add(calXbwOptionForYz("末位", "A", condition, MwYz.class, MwNums.class, repositories.mwyzRepository));
+		nums.add(calXbwOptionForYz("杂项1", "A", condition, Zx1Yz.class, Zx1Nums.class, repositories.zx1yzRepository));
+		nums.add(calXbwOptionForTm12FdYz("A", condition));
+		return nums;
+	}
+
+	List<XbwJY2Sub> calXbwOptionAForType2(XbwJYCondition condition) throws Exception {
+		List<XbwJY2Sub> nums = new ArrayList<XbwJY2Sub>();
+		nums.add(calXbwOptionForSxYz("A", condition));
+		nums.add(calXbwOptionForYz("合数", "A", condition, LhYz.class, LhNums.class, repositories.lhyzRepository));
+		nums.add(calXbwOptionForYz("末位", "A", condition, MwYz.class, MwNums.class, repositories.mwyzRepository));
+		nums.add(calXbwOptionForTm12FdYz("A", condition));
+		return nums;
+	}
+
+	List<XbwJY2Sub> calXbwOptionBForType1(XbwJYCondition condition) throws Exception {
+		List<XbwJY2Sub> nums = new ArrayList<XbwJY2Sub>();
+		nums.add(calXbwOptionForYz("质数", "B", condition, ZsYz.class, ZsNums.class, repositories.zsyzRepository));
+		nums.add(calXbwOptionForYz("杂项2", "B", condition, Zx2Yz.class, Zx2Nums.class, repositories.zx2yzRepository));
+		nums.add(calXbwOptionForBsYz("B", condition));
+		nums.add(
+				calXbwOptionForYz("十二区", "B", condition, TwelveYz.class, TwelveNums.class, repositories.twelveyzRepository));
+		nums.add(calXbwOptionForYz("十六区", "B", condition, SlqYz.class, SlqNums.class, repositories.slqyzRepository));
+		return nums;
+	}
+
+	List<XbwJY2Sub> calXbwOptionBForType2(XbwJYCondition condition) throws Exception {
+		List<XbwJY2Sub> nums = new ArrayList<XbwJY2Sub>();
+		nums.add(calXbwOptionForYz("质数", "B", condition, ZsYz.class, ZsNums.class, repositories.zsyzRepository));
+		nums.add(calXbwOptionForBsYz("B", condition));
+		nums.add(
+				calXbwOptionForYz("十二区", "B", condition, TwelveYz.class, TwelveNums.class, repositories.twelveyzRepository));
+		nums.add(calXbwOptionForYz("十六区", "B", condition, SlqYz.class, SlqNums.class, repositories.slqyzRepository));
+		return nums;
+	}
+
+	List<XbwJY2Sub> calXbwOptionCForType1(XbwJYCondition condition) throws Exception {
+		List<XbwJY2Sub> nums = new ArrayList<XbwJY2Sub>();
+		nums.add(calXbwOptionForYz("配对", "C", condition, PdYz.class, PdNums.class, repositories.pdyzRepository));
+		nums.add(calXbwOptionForYz("七区", "C", condition, QqYz.class, QqNums.class, repositories.qqyzRepository));
+		nums.add(calXbwOptionForYz("七位", "C", condition, QiwYz.class, QiwNums.class, repositories.qiwYzRepository));
+		nums.add(calXbwOptionForYz("杂项7", "C", condition, Zx7Yz.class, Zx7Nums.class, repositories.zx7yzRepository));
+		return nums;
+	}
+
+	List<XbwJY2Sub> calXbwOptionCForType2(XbwJYCondition condition) throws Exception {
+		List<XbwJY2Sub> nums = new ArrayList<XbwJY2Sub>();
+		nums.add(calXbwOptionForYz("配对", "C", condition, PdYz.class, PdNums.class, repositories.pdyzRepository));
+		nums.add(calXbwOptionForYz("七区", "C", condition, QqYz.class, QqNums.class, repositories.qqyzRepository));
+		nums.add(calXbwOptionForYz("杂项7", "C", condition, Zx7Yz.class, Zx7Nums.class, repositories.zx7yzRepository));
+		return nums;
+	}
+
+	List<XbwJY2Sub> calXbwOptionDForType1(XbwJYCondition condition) throws Exception {
+		List<XbwJY2Sub> nums = new ArrayList<XbwJY2Sub>();
+		nums.add(calXbwOptionForYz("首位", "D", condition, SwYz.class, SwNums.class, repositories.swyzRepository));
+		nums.add(calXbwOptionForYz("杂项4", "D", condition, Zx4Yz.class, Zx4Nums.class, repositories.zx4yzRepository));
+		nums.add(calXbwOptionForYz("杂项9", "D", condition, Zx9Yz.class, Zx9Nums.class, repositories.zx9yzRepository));
+		return nums;
+	}
+
+	List<XbwJY2Sub> calXbwOptionDForType2(XbwJYCondition condition) throws Exception {
+		List<XbwJY2Sub> nums = new ArrayList<XbwJY2Sub>();
+		nums.add(calXbwOptionForYz("首位", "D", condition, SwYz.class, SwNums.class, repositories.swyzRepository));
+		nums.add(calXbwOptionForYz("杂项1", "D", condition, Zx1Yz.class, Zx1Nums.class, repositories.zx1yzRepository));
+		nums.add(calXbwOptionForYz("杂项9", "D", condition, Zx9Yz.class, Zx9Nums.class, repositories.zx9yzRepository));
+		return nums;
+	}
+
+	List<XbwJY2Sub> calXbwOptionEForType1(XbwJYCondition condition) throws Exception {
+		List<XbwJY2Sub> nums = new ArrayList<XbwJY2Sub>();
+		nums.add(calXbwOptionForSxzf("E", condition));
+		nums.add(calXbwOptionForLhzf("E", condition));
+		nums.add(calXbwOptionForMwzf("E", condition));
+		nums.add(calXbwOptionForYz("杂项3", "E", condition, Zx3Yz.class, Zx3Nums.class, repositories.zx3yzRepository));
+		nums.add(calXbwOptionForFdzf("E", condition));
+		return nums;
+	}
+
+	List<XbwJY2Sub> calXbwOptionEForType2(XbwJYCondition condition) throws Exception {
+		List<XbwJY2Sub> nums = new ArrayList<XbwJY2Sub>();
+		nums.add(calXbwOptionForSxzf("E", condition));
+		nums.add(calXbwOptionForLhzf("E", condition));
+		nums.add(calXbwOptionForMwzf("E", condition));
+		nums.add(calXbwOptionForFdzf("E", condition));
+		return nums;
+	}
+
+	List<XbwJY2Sub> calXbwOptionFForType1(XbwJYCondition condition) throws Exception {
+		List<XbwJY2Sub> nums = new ArrayList<XbwJY2Sub>();
+		nums.add(calXbwOptionForZszf("F", condition));
+		nums.add(calXbwOptionForYz("杂项5", "F", condition, Zx5Yz.class, Zx5Nums.class, repositories.zx5yzRepository));
+		nums.add(calXbwOptionForBszf("F", condition));
+		nums.add(calXbwOptionForTwelvezf("F", condition));
+		nums.add(calXbwOptionForSlqzf("F", condition));
+		return nums;
+	}
+
+	List<XbwJY2Sub> calXbwOptionFForType2(XbwJYCondition condition) throws Exception {
+		List<XbwJY2Sub> nums = new ArrayList<XbwJY2Sub>();
+		nums.add(calXbwOptionForZszf("F", condition));
+		nums.add(calXbwOptionForBszf("F", condition));
+		nums.add(calXbwOptionForTwelvezf("F", condition));
+		nums.add(calXbwOptionForSlqzf("F", condition));
+		return nums;
+	}
+
+	List<XbwJY2Sub> calXbwOptionGForType1(XbwJYCondition condition) throws Exception {
+		List<XbwJY2Sub> nums = new ArrayList<XbwJY2Sub>();
+		nums.add(calXbwOptionForPdzf("G", condition));
+		nums.add(calXbwOptionForQqzf("G", condition));
+		nums.add(calXbwOptionForQiwzf("G", condition));
+		nums.add(calXbwOptionForYz("杂项8", "G", condition, Zx8Yz.class, Zx8Nums.class, repositories.zx8yzRepository));
+		return nums;
+	}
+
+	List<XbwJY2Sub> calXbwOptionGForType2(XbwJYCondition condition) throws Exception {
+		List<XbwJY2Sub> nums = new ArrayList<XbwJY2Sub>();
+		nums.add(calXbwOptionForPdzf("G", condition));
+		nums.add(calXbwOptionForQiwzf("G", condition));
+		nums.add(calXbwOptionForYz("杂项8", "G", condition, Zx8Yz.class, Zx8Nums.class, repositories.zx8yzRepository));
+		return nums;
+	}
+
+	List<XbwJY2Sub> calXbwOptionHForType1(XbwJYCondition condition) throws Exception {
+		List<XbwJY2Sub> nums = new ArrayList<XbwJY2Sub>();
+		nums.add(calXbwOptionForWxzf("H", condition));
+		nums.add(calXbwOptionForYz("杂项6", "H", condition, Zx6Yz.class, Zx6Nums.class, repositories.zx6yzRepository));
+		nums.add(calXbwOptionForYz("杂项10", "H", condition, Zx10Yz.class, Zx10Nums.class, repositories.zx10yzRepository));
+		return nums;
+	}
+
+	List<XbwJY2Sub> calXbwOptionHForType2(XbwJYCondition condition) throws Exception {
+		List<XbwJY2Sub> nums = new ArrayList<XbwJY2Sub>();
+		nums.add(calXbwOptionForWxzf("H", condition));
+		nums.add(calXbwOptionForYz("杂项5", "H", condition, Zx5Yz.class, Zx5Nums.class, repositories.zx5yzRepository));
+		nums.add(calXbwOptionForYz("杂项10", "H", condition, Zx10Yz.class, Zx10Nums.class, repositories.zx10yzRepository));
+		return nums;
+	}
+	
+	private XbwJY2Sub calXbwOptionForWxzf(String fdRange, XbwJYCondition condition) throws Exception {
+		return calXbwOptionForZf(condition, WxZfYz.class, repositories.wxzfyzRepository,
+				new XbwOptionZfHandler<WxYz, WxZfYz>() {
+
+					@Override
+					protected int getLength() {
+						return 9;
+					}
+
+					@Override
+					protected BaseYzRepository<WxYz> getRepository() {
+						return repositories.wxyzRepository;
+					}
+
+					@Override
+					protected String[] getFds() {
+						return WxNums.FDS;
+					}
+
+					@Override
+					protected Class<WxYz> getClazz() {
+						return WxYz.class;
+					}
+
+					@Override
+					protected XbwJY2Sub getNums(int currentPos, int pos) {
+						String text = null;
+						switch (pos) {
+						case 0:
+							text = "金";
+							break;
+						case 1:
+							text = "木";
+							break;
+						case 2:
+							text = "水";
+							break;
+						case 3:
+							text = "火";
+							break;
+						case 4:
+							text = "土";
+							break;
+						}
+						return new XbwJY2Sub("五行-振幅" + currentPos + "-" + text, fdRange, WxNums.NUMS[pos]);
+					}
+
+				});
+	}
 }
 
 class LrInfo {
 	Integer value;
 	boolean special;
+}
+
+class XbwInfo {
+	String fd;
+	Object obj;
+	Integer yz;
+
+	public XbwInfo(String fd, Object obj, Integer yz) {
+		this.fd = fd;
+		this.obj = obj;
+		this.yz = yz;
+	}
 }

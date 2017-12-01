@@ -1,77 +1,80 @@
 $(document).ready(function() {
-	addTM12fdCategory("");
 	
-//	var zhlist = createZHlist(9);
+	$("#columns").combobox();
+	$("#reverse").combobox();
 	
-	$("#clearBtn").click(function() {
+	function reset() {
 		$("#conditionTable").find("tbody").empty();
-		$("#gslist").val("");
-		$("#qlBtn").click();
-	});
-	
-	$("#qlBtn").click(function() {
 		var datatable = $("#datatable").find("tbody").empty();
 		$("<td id='totalTd'></td>").appendTo(
 			$("<tr id='totalTr'><td>总计</td></tr>")
 			.appendTo(datatable).css("backgroundColor", "#f9f9f9")
 			.css("border", "1px solid #ddd"));
-		$("#download").empty().append($("<input id='totalResult' type='hidden' name='totalResult'></input>"));
-		$("#download").append($("<input id='totalList' type='hidden' name='totalList'></input>"));
-		$("#download").append($("<input id='compositeSize' type='hidden' name='compositeSize'></input>"));
 		lastSZColor = null;
 		lastSz = null;
 		lastResult = 0;
 		lastColor = null;
 		totalHms = [];
-	})
+	}
 	
 	var totalHms;
 	var lastSZColor;
 	var lastSz;
-	$("#addBtn").click(function() {
-		var sz = $("#fdlist").val();
-		if(!lastSz) {
-			lastSz = sz;
-			lastSZColor = "#ffc";
-		} else if(lastSz != sz) {
-			lastSz = sz;
-			if(lastSZColor == "#ffc") {
-				lastSZColor = "#ffffff";
-			} else {
-				lastSZColor = "#ffc";
-			}
-		}
-		var input = $("#hmlist");
-		var tbody = $("#conditionTable").find("tbody");
-		var sameSzTr = tbody.find("tr[name='sz"+sz+"']:last-child");
-		var tr = $("<tr name='sz"+sz+"'></tr>").appendTo(tbody);
-		if(sameSzTr.length > 0) {
-			sameSzTr.after(tr);
-		} 
-		tr.css("backgroundColor", lastSZColor).css("border", "1px solid #ddd");
-		$("<td></td>").text(sz).appendTo(tr);
-		$("<td></td>").text(input.attr("text")).appendTo(tr);
-		$("<td name='hm'></td>").text(input.val()).appendTo(tr).attr("txt", input.attr("text")).attr("hm", input.val());
-		$("<a href='javascript:;'>删除</a>").appendTo($("<td></td>").appendTo(tr)).click(function() {
-			$(this).parents("tr").remove();
-			if(tbody.children().length == 0) {
-				lastSZColor = null;
-				lastSz = null;
-			}
-		});
-	});
-	
-	$("#fdlist").combobox();
-	$("#tclist").combobox();
-	
-	$("#qcBtn").click(function() {
-		filter(true);
-	});
-	
 	var lastColor;
 	var lastResult = 0;
 	$("#pickupBtn").click(function() {
-		filter(false);
+		post({
+			url: "/mvc/yz/listXBWJY2",
+			data: {
+				year: $("#years").val(),
+				phase: $("#phases").val(),
+				type: $("#columns").val()
+			},
+			success: function(result) {
+				reset();
+				var xbw = result.data;
+				appendTrs(result.a);
+				appendTrs(result.b);
+				appendTrs(result.c);
+				appendTrs(result.d);
+				appendTrs(result.e);
+				appendTrs(result.f);
+				appendTrs(result.g);
+				appendTrs(result.h);
+				filter(false);
+			}
+		});
+		
+		function appendTrs(list) {
+			for(var i in list) {
+				var item = list[i];
+				appendTr(item.range, item.text, item.nums.join(", "))
+			}
+		}
+		
+		function appendTr(sz, text, hms) {
+			if(!lastSz) {
+				lastSz = sz;
+				lastSZColor = "#ffc";
+			} else if(lastSz != sz) {
+				lastSz = sz;
+				if(lastSZColor == "#ffc") {
+					lastSZColor = "#ffffff";
+				} else {
+					lastSZColor = "#ffc";
+				}
+			}
+			var tbody = $("#conditionTable").find("tbody");
+			var sameSzTr = tbody.find("tr[name='sz"+sz+"']:last-child");
+			var tr = $("<tr name='sz"+sz+"'></tr>").appendTo(tbody);
+			if(sameSzTr.length > 0) {
+				sameSzTr.after(tr);
+			} 
+			tr.css("backgroundColor", lastSZColor).css("border", "1px solid #ddd");
+			$("<td></td>").text(sz).appendTo(tr);
+			$("<td></td>").text(text).appendTo(tr);
+			$("<td name='hm'></td>").text(hms).appendTo(tr).attr("txt", text).attr("hm", hms);
+		}
 	});
 	
 	function filter(isQc) {
@@ -90,17 +93,6 @@ $(document).ready(function() {
 			return sz;
 		}
 		
-		var tempGsHms = $("#gslist").val().split(/,\s*/);
-		var tcHms = $("#tclist").val().trim().split(/,\s*/);
-		function collectGS(fdHms) {
-			for(var i in tempGsHms) {
-				var hm = tempGsHms[i];
-				if(!isInArr(tcHms, hm) && !isInArr(fdHms, hm)) {
-					fdHms.push(hm);
-				}
-			}
-		}
-		
 		function collectFD(fd1, fd2, fd3, fd4) {
 			var sz = [];
 			function collect(fd) {
@@ -115,7 +107,6 @@ $(document).ready(function() {
 			collect(fd2);
 			collect(fd3);
 			collect(fd4);
-			collectGS(sz);
 			var reverse = [];
 			for(var i = 1; i < 50; i++) {
 				if(!isInArr(sz, i)) {
@@ -264,6 +255,16 @@ $(document).ready(function() {
 		var allHms = [];
 		function createTr(fd) {
 			var fdHms = eval(fd);
+			var isReverse = $("#reverse").val() == "1";
+			if(!isReverse) {
+				var arr = [];
+				for(var i = 1; i < 50; i++) {
+					if(!isInArr(fdHms, i)) {
+						arr.push(i);
+					}
+				}
+				fdHms = arr;
+			}
 			$("<td></td>").appendTo(
 					$("<tr><td>"+fd+"</td></tr>")
 						.appendTo(datatable)

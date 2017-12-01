@@ -5,7 +5,7 @@ import java.util.List;
 import javax.persistence.Entity;
 import javax.persistence.Table;
 
-import lhc.constants.Zx4Nums;
+import lhc.constants.Zx5Nums;
 
 @Entity
 @Table(name = "zx5_yz")
@@ -24,7 +24,7 @@ public class Zx5Yz extends Avg {
 	private Integer w11;
 	private Integer w12;
 	public List[] getNums() {
-		return Zx4Nums.NUMS;
+		return Zx5Nums.NUMS;
 	}
 
 	public Integer getW1() {

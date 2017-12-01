@@ -29,6 +29,8 @@ public class SxYz extends Lr {
 	private Integer Zhu;
 	@Enumerated(EnumType.STRING)
 	private SX currentSx;
+	private int zhCount;
+	private int nonZhCount;
 
 	@Transient
 	private SX topSx;
@@ -38,6 +40,22 @@ public class SxYz extends Lr {
 	private BigDecimal avg;
 	@Transient
 	private Integer lastCountYz;
+
+	public int getZhCount() {
+		return zhCount;
+	}
+
+	public void setZhCount(int zhCount) {
+		this.zhCount = zhCount;
+	}
+
+	public int getNonZhCount() {
+		return nonZhCount;
+	}
+
+	public void setNonZhCount(int nonZhCount) {
+		this.nonZhCount = nonZhCount;
+	}
 
 	public Integer getLastCountYz() {
 		return lastCountYz;

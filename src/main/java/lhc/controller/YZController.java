@@ -2837,5 +2837,11 @@ public class YZController {
 		}
 		return new BaseResult(list);
 	}
+	
+
+	@RequestMapping("/listXBWJY2")
+	public BaseResult listXBWJY2(@RequestBody XbwJYCondition queryInfo) throws Exception {
+		return new BaseResult(repositories.yzService.getXbwJY2(queryInfo));
+	}
 
 }
