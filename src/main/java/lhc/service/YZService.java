@@ -6346,7 +6346,7 @@ public class YZService {
 
 					@Override
 					protected int getLength() {
-						return 9;
+						return 5;
 					}
 
 					@Override
