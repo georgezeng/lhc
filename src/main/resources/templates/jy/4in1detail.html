@@ -4,7 +4,7 @@
 	<div id="page-wrapper" th:fragment="content">
 		<div class="row">
 			<div class="col-lg-12">
-				<h3 class="page-header">检验-4选1对比</h3>
+				<h3 class="page-header">检验-4选1对比详情</h3>
 				<div class="buttonArea">
 					<span class="title">截止年份:</span><select id="years"></select>
 					<span class="title">截止期数:</span><select id="phases"></select>
@@ -15,11 +15,18 @@
 					</select>
 					<span class="title">选择条件</span>
 					<select id="columns">
-						<option value="0">条件0</option>
-						<option value="1">条件1</option>
-						<option value="2">条件2</option>
+						<option value="0">条件0-间0，间1，倒1，倒2</option>
+						<option value="1">条件1-间0，间1，倒1，倒2</option>
+						<option value="2">条件2-间0，间1，倒1，倒2</option>
+						<option value="3">条件3-间0</option>
+						<option value="4">条件4-间0</option>
+						<option value="5">条件5-间0</option>
+						<option value="6">条件6-倒1</option>
+						<option value="7">条件7-倒1</option>
+						<option value="8">条件8-倒1</option>
 					</select>
 					<button id="pickupBtn" class="btn btn-primary">校验</button>
+					<button id="xcBtn" class="btn btn-warning">选重</button>
 					<div class="clearfix"></div>
 				</div>
 			</div>

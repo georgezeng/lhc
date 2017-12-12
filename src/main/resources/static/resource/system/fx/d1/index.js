@@ -2,6 +2,7 @@ $(document).ready(function() {
 	var count = 0;
 	var totalCount = 0;
 	var lastHms = null;
+	var redCounts = [];
 	
 	$("#columns").combobox();
 	
@@ -177,14 +178,20 @@ $(document).ready(function() {
 				fnCreatedCell: function(nTd, sData, item, iRow, iCol) {
 					var value = "";
 					if(item.date) {
+						if(!redCounts[index-2]) {
+							redCounts[index-2] = 0;
+						}
 						value = item[sxlist[index-2]];
 						if(item["redFor" + sxlist[index-2]]) {
 							$(nTd).attr("red", "true").css("backgroundColor", "red").css("color", "white");
+							redCounts[index-2]++;
 						} else {
-							$(nTd).css("backgroundColor", "#ffc")
+							$(nTd).css("backgroundColor", "#ffc");
 						}
 						$(nTd).attr("hms", item[numlist[index-2]].join(","));
-					} 
+					} else {
+						value = redCounts[index-2];
+					}
 					var th = $("#dataTable").find("th").eq(index);
 					if(th.attr("status") == "hide") {
 						$(nTd).attr("status", "hide");
@@ -262,6 +269,7 @@ $(document).ready(function() {
 			count = 0;
 			totalCount = 0;
 			lastHms = null;
+			redCounts = [];
 			queryInfo.object = {};
 			queryInfo.object.year = parseInt($("#years").val());
 			queryInfo.object.phase = parseInt($("#phases").val());

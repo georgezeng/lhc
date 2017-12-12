@@ -68,6 +68,65 @@ $(document).ready(function() {
 		filter(true);
 	});
 	
+	$("#xcBtn").click(function() {
+		var totalHms = [];
+		var tbody = $("#conditionTable").find("tbody");
+		
+		function collectSZ(index) {
+			tbody.find("tr[name='sz"+index+"']").each(function() {
+				var hms = $(this).find("td[name='hm']").attr("hm").split(/,\s*/);
+				for(var i in hms) {
+					var hm = hms[i];
+					var found = false;
+					for(var j in totalHms) {
+						var item = totalHms[j];
+						if(item.num == hm) {
+							found = true;
+							item.count++;
+							break;
+						}
+					}
+					if(!found) {
+						totalHms.push({
+							num: hm,
+							count: 1
+						});
+					}
+				}
+			});
+		}
+		
+		collectSZ("A");
+		collectSZ("B");
+		collectSZ("C");
+		collectSZ("D");
+		collectSZ("E");
+		collectSZ("F");
+		collectSZ("G");
+		collectSZ("H");
+		
+		var totalHmsHtml = "";
+		totalHms.sort(function(a, b) {
+			return a.count < b.count ? -1 : (a.count == b.count ? (a.num < b.num ? 0 : (a.num == b.num ? 0 : 1)) : 1); 
+		});
+		lastCount = 0;
+		for(var i in totalHms) {
+			var hm = totalHms[i];
+			if(lastCount != hm.count) {
+				if(lastCount > 0) {
+					totalHmsHtml += "<div class='clearfix'></div>";
+				}
+				lastCount = hm.count;
+			} 
+			totalHmsHtml += "<div style='float: left; border: 1px solid black; margin-right: 10px; margin-bottom: 10px;'>";
+			totalHmsHtml += "<div style='padding: 5px; color: white; background-color: red;'>" + (hm.num > 9 ? hm.num : "&nbsp;" + hm.num + "&nbsp;") + "</div>";
+			totalHmsHtml += "<div style='padding: 5px;'>" + (hm.count > 9 ? hm.count : "&nbsp;" + hm.count + "&nbsp;") + "</div>";
+			totalHmsHtml += "</div>";
+		}
+		$("<tr>").appendTo(datatable).before($("#totalTr"));
+		$("#totalTd").html(totalHmsHtml);
+	});
+	
 	var lastColor;
 	var lastResult = 0;
 	$("#pickupBtn").click(function() {

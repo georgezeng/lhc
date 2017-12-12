@@ -2,7 +2,7 @@ $(document).ready(function() {
 	
 	$("#columns").combobox();
 	$("#reverse").combobox();
-	
+	$("#columns").prev("div.combobox-container").find("input").width(220);
 	function reset() {
 		$("#conditionTable").find("tbody").empty();
 		var datatable = $("#datatable").find("tbody").empty();
@@ -22,6 +22,121 @@ $(document).ready(function() {
 	var lastSz;
 	var lastColor;
 	var lastResult = 0;
+	
+	function appendTrs(list) {
+		for(var i in list) {
+			var item = list[i];
+			appendTr(item.range, item.text, item.nums.join(", "))
+		}
+	}
+	
+	function appendTr(sz, text, hms) {
+		if(!lastSz) {
+			lastSz = sz;
+			lastSZColor = "#ffc";
+		} else if(lastSz != sz) {
+			lastSz = sz;
+			if(lastSZColor == "#ffc") {
+				lastSZColor = "#ffffff";
+			} else {
+				lastSZColor = "#ffc";
+			}
+		}
+		var tbody = $("#conditionTable").find("tbody");
+		var sameSzTr = tbody.find("tr[name='sz"+sz+"']:last-child");
+		var tr = $("<tr name='sz"+sz+"'></tr>").appendTo(tbody);
+		if(sameSzTr.length > 0) {
+			sameSzTr.after(tr);
+		} 
+		tr.css("backgroundColor", lastSZColor).css("border", "1px solid #ddd");
+		$("<td></td>").text(sz).appendTo(tr);
+		$("<td></td>").text(text).appendTo(tr);
+		$("<td name='hm'></td>").text(hms).appendTo(tr).attr("txt", text).attr("hm", hms);
+	}
+	
+	$("#xcBtn").click(function() {
+		post({
+			url: "/mvc/yz/listXBWJY2",
+			data: {
+				year: $("#years").val(),
+				phase: $("#phases").val(),
+				type: $("#columns").val()
+			},
+			success: function(result) {
+				reset();
+				var xbw = result.data;
+				appendTrs(result.a);
+				appendTrs(result.b);
+				appendTrs(result.c);
+				appendTrs(result.d);
+				appendTrs(result.e);
+				appendTrs(result.f);
+				appendTrs(result.g);
+				appendTrs(result.h);
+				
+				var totalHms = [];
+				var tbody = $("#conditionTable").find("tbody");
+				
+				function collectSZ(index) {
+					tbody.find("tr[name='sz"+index+"']").each(function() {
+						var hms = $(this).find("td[name='hm']").attr("hm").split(/,\s*/);
+						for(var i in hms) {
+							var hm = hms[i];
+							var found = false;
+							for(var j in totalHms) {
+								var item = totalHms[j];
+								if(item.num == hm) {
+									found = true;
+									item.count++;
+									break;
+								}
+							}
+							if(!found) {
+								totalHms.push({
+									num: hm,
+									count: 1
+								});
+							}
+						}
+					});
+				}
+				
+				collectSZ("A");
+				collectSZ("B");
+				collectSZ("C");
+				collectSZ("D");
+				collectSZ("E");
+				collectSZ("F");
+				collectSZ("G");
+				collectSZ("H");
+				
+				var totalHmsHtml = "";
+				totalHms.sort(function(a, b) {
+					return a.count < b.count ? -1 : (a.count == b.count ? (a.num < b.num ? 0 : (a.num == b.num ? 0 : 1)) : 1); 
+				});
+				lastCount = 0;
+				for(var i in totalHms) {
+					var hm = totalHms[i];
+					if(lastCount != hm.count) {
+						if(lastCount > 0) {
+							totalHmsHtml += "<div class='clearfix'></div>";
+						}
+						lastCount = hm.count;
+					} 
+					totalHmsHtml += "<div style='float: left; border: 1px solid black; margin-right: 10px; margin-bottom: 10px;'>";
+					totalHmsHtml += "<div style='padding: 5px; color: white; background-color: red;'>" + (hm.num > 9 ? hm.num : "&nbsp;" + hm.num + "&nbsp;") + "</div>";
+					totalHmsHtml += "<div style='padding: 5px;'>" + (hm.count > 9 ? hm.count : "&nbsp;" + hm.count + "&nbsp;") + "</div>";
+					totalHmsHtml += "</div>";
+				}
+				$("<tr>").appendTo(datatable).before($("#totalTr"));
+				$("#totalTd").html(totalHmsHtml);
+			}
+		});
+		
+		
+	});
+	
+	
 	$("#pickupBtn").click(function() {
 		post({
 			url: "/mvc/yz/listXBWJY2",
@@ -41,40 +156,10 @@ $(document).ready(function() {
 				appendTrs(result.f);
 				appendTrs(result.g);
 				appendTrs(result.h);
-				filter(false);
+				filter(true);
 			}
 		});
 		
-		function appendTrs(list) {
-			for(var i in list) {
-				var item = list[i];
-				appendTr(item.range, item.text, item.nums.join(", "))
-			}
-		}
-		
-		function appendTr(sz, text, hms) {
-			if(!lastSz) {
-				lastSz = sz;
-				lastSZColor = "#ffc";
-			} else if(lastSz != sz) {
-				lastSz = sz;
-				if(lastSZColor == "#ffc") {
-					lastSZColor = "#ffffff";
-				} else {
-					lastSZColor = "#ffc";
-				}
-			}
-			var tbody = $("#conditionTable").find("tbody");
-			var sameSzTr = tbody.find("tr[name='sz"+sz+"']:last-child");
-			var tr = $("<tr name='sz"+sz+"'></tr>").appendTo(tbody);
-			if(sameSzTr.length > 0) {
-				sameSzTr.after(tr);
-			} 
-			tr.css("backgroundColor", lastSZColor).css("border", "1px solid #ddd");
-			$("<td></td>").text(sz).appendTo(tr);
-			$("<td></td>").text(text).appendTo(tr);
-			$("<td name='hm'></td>").text(hms).appendTo(tr).attr("txt", text).attr("hm", hms);
-		}
 	});
 	
 	function filter(isQc) {
