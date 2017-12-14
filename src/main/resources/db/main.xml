@@ -4,6 +4,7 @@
 	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
 	xsi:schemaLocation="http://www.liquibase.org/xml/ns/dbchangelog/1.9
          http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-1.9.xsd">
+         <!-- 
 	<include file="/db/v1.sql" />
 	<include file="/db/v2.sql" />
 	<include file="/db/v3.sql" />
@@ -83,4 +84,7 @@
 	<include file="/db/v77.sql" />
 	<include file="/db/v78.sql" />
 	<include file="/db/v79.sql" />
+	-->
+	<include file="/db/v80.sql" />
+	<include file="/db/v81.sql" />
 </databaseChangeLog>

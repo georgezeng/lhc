@@ -61,3 +61,7 @@ TRUNCATE table `zx7_yz`;
 TRUNCATE table `zx8_yz`;
 TRUNCATE table `zx9_yz`;
 TRUNCATE table `zx10_yz`;
+TRUNCATE table `zx11_yz`;
+TRUNCATE table `zx12_yz`;
+TRUNCATE table `zx13_yz`;
+TRUNCATE table `zx14_yz`;

@@ -86,6 +86,10 @@ import lhc.domain.ZsLrYz;
 import lhc.domain.ZsYz;
 import lhc.domain.ZsZfYz;
 import lhc.domain.Zx10Yz;
+import lhc.domain.Zx11Yz;
+import lhc.domain.Zx12Yz;
+import lhc.domain.Zx13Yz;
+import lhc.domain.Zx14Yz;
 import lhc.domain.Zx1Yz;
 import lhc.domain.Zx2Yz;
 import lhc.domain.Zx3Yz;
@@ -192,6 +196,10 @@ public class YZController {
 		futures.add(repositories.yzService.calZX8YZ());
 		futures.add(repositories.yzService.calZX9YZ());
 		futures.add(repositories.yzService.calZX10YZ());
+		futures.add(repositories.yzService.calZX11YZ());
+		futures.add(repositories.yzService.calZX12YZ());
+		futures.add(repositories.yzService.calZX13YZ());
+		futures.add(repositories.yzService.calZX14YZ());
 		if (sleep) {
 			repositories.yzService.sleep(futures, 1000);
 		} else {
@@ -242,6 +250,10 @@ public class YZController {
 		futures.add(parallelYzServiceWrapper.calAvg(repositories.zx8yzRepository, "calZx8yzAvg"));
 		futures.add(parallelYzServiceWrapper.calAvg(repositories.zx9yzRepository, "calZx9yzAvg"));
 		futures.add(parallelYzServiceWrapper.calAvg(repositories.zx10yzRepository, "calZx10yzAvg"));
+		futures.add(parallelYzServiceWrapper.calAvg(repositories.zx11yzRepository, "calZx11yzAvg"));
+		futures.add(parallelYzServiceWrapper.calAvg(repositories.zx12yzRepository, "calZx12yzAvg"));
+		futures.add(parallelYzServiceWrapper.calAvg(repositories.zx13yzRepository, "calZx13yzAvg"));
+		futures.add(parallelYzServiceWrapper.calAvg(repositories.zx14yzRepository, "calZx14yzAvg"));
 		if (sleep) {
 			repositories.yzService.sleep(futures, 1000);
 		} else {
@@ -510,6 +522,54 @@ public class YZController {
 		if ("1".equals(mode)) {
 			if (result != null && result.getTotal() > 0) {
 				Zx10Yz last = new Zx10Yz();
+				result.getList().add(last);
+			}
+		}
+		return new BaseResult(result);
+	}
+
+	@RequestMapping("/listZX11YZ")
+	public BaseResult listZX11YZ(@RequestBody QueryInfo<Zx11Yz> queryInfo, @RequestParam String mode) throws Exception {
+		PageResult<Zx11Yz> result = repositories.zx11yzDao.query(queryInfo);
+		if ("1".equals(mode)) {
+			if (result != null && result.getTotal() > 0) {
+				Zx11Yz last = new Zx11Yz();
+				result.getList().add(last);
+			}
+		}
+		return new BaseResult(result);
+	}
+
+	@RequestMapping("/listZX12YZ")
+	public BaseResult listZX12YZ(@RequestBody QueryInfo<Zx12Yz> queryInfo, @RequestParam String mode) throws Exception {
+		PageResult<Zx12Yz> result = repositories.zx12yzDao.query(queryInfo);
+		if ("1".equals(mode)) {
+			if (result != null && result.getTotal() > 0) {
+				Zx12Yz last = new Zx12Yz();
+				result.getList().add(last);
+			}
+		}
+		return new BaseResult(result);
+	}
+
+	@RequestMapping("/listZX13YZ")
+	public BaseResult listZX13YZ(@RequestBody QueryInfo<Zx13Yz> queryInfo, @RequestParam String mode) throws Exception {
+		PageResult<Zx13Yz> result = repositories.zx13yzDao.query(queryInfo);
+		if ("1".equals(mode)) {
+			if (result != null && result.getTotal() > 0) {
+				Zx13Yz last = new Zx13Yz();
+				result.getList().add(last);
+			}
+		}
+		return new BaseResult(result);
+	}
+
+	@RequestMapping("/listZX14YZ")
+	public BaseResult listZX14YZ(@RequestBody QueryInfo<Zx14Yz> queryInfo, @RequestParam String mode) throws Exception {
+		PageResult<Zx14Yz> result = repositories.zx14yzDao.query(queryInfo);
+		if ("1".equals(mode)) {
+			if (result != null && result.getTotal() > 0) {
+				Zx14Yz last = new Zx14Yz();
 				result.getList().add(last);
 			}
 		}
@@ -2837,7 +2897,6 @@ public class YZController {
 		}
 		return new BaseResult(list);
 	}
-	
 
 	@RequestMapping("/listXBWJY2")
 	public BaseResult listXBWJY2(@RequestBody XbwJYCondition queryInfo) throws Exception {

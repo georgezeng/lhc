@@ -58,6 +58,10 @@ import lhc.repository.jpa.api.ZsLrYzRepository;
 import lhc.repository.jpa.api.ZsYzRepository;
 import lhc.repository.jpa.api.ZsZfYzRepository;
 import lhc.repository.jpa.api.Zx10YzRepository;
+import lhc.repository.jpa.api.Zx11YzRepository;
+import lhc.repository.jpa.api.Zx12YzRepository;
+import lhc.repository.jpa.api.Zx13YzRepository;
+import lhc.repository.jpa.api.Zx14YzRepository;
 import lhc.repository.jpa.api.Zx1YzRepository;
 import lhc.repository.jpa.api.Zx2YzRepository;
 import lhc.repository.jpa.api.Zx3YzRepository;
@@ -123,6 +127,10 @@ import lhc.repository.jpa.dao.ZsLrYzDao;
 import lhc.repository.jpa.dao.ZsYzDao;
 import lhc.repository.jpa.dao.ZsZfYzDao;
 import lhc.repository.jpa.dao.Zx10YzDao;
+import lhc.repository.jpa.dao.Zx11YzDao;
+import lhc.repository.jpa.dao.Zx12YzDao;
+import lhc.repository.jpa.dao.Zx13YzDao;
+import lhc.repository.jpa.dao.Zx14YzDao;
 import lhc.repository.jpa.dao.Zx1YzDao;
 import lhc.repository.jpa.dao.Zx2YzDao;
 import lhc.repository.jpa.dao.Zx3YzDao;
@@ -132,7 +140,7 @@ import lhc.repository.jpa.dao.Zx6YzDao;
 import lhc.repository.jpa.dao.Zx7YzDao;
 import lhc.repository.jpa.dao.Zx8YzDao;
 import lhc.repository.jpa.dao.Zx9YzDao;
-import lhc.service.YZService;
+import lhc.service.YZ2Service;
 
 @Service
 public class Repositories {
@@ -381,6 +389,18 @@ public class Repositories {
 	public Zx10YzRepository zx10yzRepository;
 	
 	@Autowired
+	public Zx11YzRepository zx11yzRepository;
+	
+	@Autowired
+	public Zx12YzRepository zx12yzRepository;
+	
+	@Autowired
+	public Zx13YzRepository zx13yzRepository;
+	
+	@Autowired
+	public Zx14YzRepository zx14yzRepository;
+	
+	@Autowired
 	public Zx1YzDao zx1yzDao;
 	
 	@Autowired
@@ -409,6 +429,18 @@ public class Repositories {
 	
 	@Autowired
 	public Zx10YzDao zx10yzDao;
+	
+	@Autowired
+	public Zx11YzDao zx11yzDao;
+	
+	@Autowired
+	public Zx12YzDao zx12yzDao;
+	
+	@Autowired
+	public Zx13YzDao zx13yzDao;
+	
+	@Autowired
+	public Zx14YzDao zx14yzDao;
 
 	@Autowired
 	public Bs9qYzRepository bs9qyzRepository;
@@ -525,5 +557,5 @@ public class Repositories {
 	public CommonDao commonDao;
 
 	@Autowired
-	public YZService yzService;
+	public YZ2Service yzService;
 }

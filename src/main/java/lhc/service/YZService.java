@@ -145,14 +145,14 @@ import lhc.repository.jpa.BaseYzRepository;
 import lhc.repository.jpa.Repositories;
 import lhc.util.DateUtil;
 
-@Service
+//@Service
 @Transactional
 @SuppressWarnings("unchecked")
 public class YZService {
-	private Logger logger = LoggerFactory.getLogger(getClass());
+	protected Logger logger = LoggerFactory.getLogger(getClass());
 
 	@Autowired
-	private Repositories repositories;
+	protected Repositories repositories;
 
 	@Async
 	public Future<Exception> calSX() {
@@ -1002,7 +1002,7 @@ public class YZService {
 		}, LhDsYz.class, repositories.lhdsyzRepository, "calLHDSYZ");
 	}
 
-	private interface DSHandler {
+	protected interface DSHandler {
 		Integer getNumber(KaiJiang data);
 
 		boolean isSmall(KaiJiang data, Integer num);
@@ -1010,7 +1010,7 @@ public class YZService {
 		boolean isOdd(KaiJiang data, Integer num);
 	}
 
-	private <T extends BaseDsYz> Future<Exception> calDSYZ(DSHandler handler, Class<T> clazz,
+	protected <T extends BaseDsYz> Future<Exception> calDSYZ(DSHandler handler, Class<T> clazz,
 			BaseYzRepository<T> repository, String msg) {
 		Exception t = null;
 		try {
@@ -1321,7 +1321,7 @@ public class YZService {
 		return new AsyncResult<Exception>(t);
 	}
 
-	private <T extends BaseYz> void calTMFDYZ(int range, int length, String prefix, BaseYzRepository<T> repository,
+	protected <T extends BaseYz> void calTMFDYZ(int range, int length, String prefix, BaseYzRepository<T> repository,
 			Class<T> clazz, boolean calTopAndMin, LrHandler lrHandler) throws Exception {
 		Pageable request = new PageRequest(0, 200, new Sort(Direction.ASC, "date"));
 		Page<TmYz> result = null;
@@ -1727,7 +1727,7 @@ public class YZService {
 
 	}
 
-	private static abstract class GetSuffixHandler<T extends Avg, R extends Avg> extends ZFPosHandler<T, R> {
+	protected static abstract class GetSuffixHandler<T extends Avg, R extends Avg> extends ZFPosHandler<T, R> {
 
 		abstract String process(int index) throws Exception;
 
@@ -1765,13 +1765,13 @@ public class YZService {
 		}
 	}
 
-	private static abstract class ZFPosHandler<T extends Avg, R extends Avg> {
+	protected static abstract class ZFPosHandler<T extends Avg, R extends Avg> {
 
 		abstract Integer process(T zfYz, T lastZFYZ, R data, R lastYZ, Class<R> yzClazz, Class<T> yzzfClazz, int zfLength)
 				throws Exception;
 	}
 
-	private <T extends Avg, R extends Avg> void calZF(int zfLength, Class<R> yzClazz, Class<T> yzzfClazz,
+	protected <T extends Avg, R extends Avg> void calZF(int zfLength, Class<R> yzClazz, Class<T> yzzfClazz,
 			BaseYzRepository<R> yzRepository, BaseYzRepository<T> zfRepository, ZFPosHandler<T, R> handler) {
 		try {
 			Pageable request = new PageRequest(0, 200, new Sort(Direction.ASC, "date"));
@@ -1877,22 +1877,22 @@ public class YZService {
 
 	}
 
-	private static interface CommonHandler {
+	protected static interface CommonHandler {
 		void process();
 	}
 
-	private static interface LrHandler {
+	protected static interface LrHandler {
 		int getSmall();
 
 		int getLarge();
 	}
 
-	private <T extends PosAvg> Future<Exception> calPosFDYZ(final Class<T> clazz, final Class<?> numsClass,
+	protected <T extends PosAvg> Future<Exception> calPosFDYZ(final Class<T> clazz, final Class<?> numsClass,
 			final BaseYzRepository<T> repository, final CommonHandler handler, int startPos, int endPos) {
 		return calPosFDYZ(clazz, numsClass, repository, handler, startPos, endPos, null);
 	}
 
-	private <T extends PosAvg> Future<Exception> calPosFDYZ(final Class<T> clazz, final Class<?> numsClass,
+	protected <T extends PosAvg> Future<Exception> calPosFDYZ(final Class<T> clazz, final Class<?> numsClass,
 			final BaseYzRepository<T> repository, final CommonHandler handler, int startPos, int endPos,
 			final LrHandler lrHandler) {
 		try {
@@ -1904,7 +1904,7 @@ public class YZService {
 
 	}
 
-	private static class PosFDYZHandler<T extends PosAvg> extends FDYZHandler<T> {
+	protected static class PosFDYZHandler<T extends PosAvg> extends FDYZHandler<T> {
 
 		final int startPos;
 		final int endPos;
@@ -1946,7 +1946,7 @@ public class YZService {
 
 	}
 
-	private static class FDYZHandler<T extends Avg> implements YzHandler<T, KaiJiang> {
+	protected static class FDYZHandler<T extends Avg> implements YzHandler<T, KaiJiang> {
 		final CommonHandler handler;
 		final LrHandler lrHandler;
 		final String[] fds;
@@ -2072,7 +2072,7 @@ public class YZService {
 
 	}
 
-	private <T extends Avg> Future<Exception> calFDYZ(final Class<T> clazz, final Class<?> numsClass,
+	protected <T extends Avg> Future<Exception> calFDYZ(final Class<T> clazz, final Class<?> numsClass,
 			final BaseYzRepository<T> repository, final CommonHandler handler) {
 		try {
 			return calYZ(clazz, repository, repositories.kaiJiangRepository, new FDYZHandler<T>(clazz, numsClass, handler));
@@ -2081,7 +2081,7 @@ public class YZService {
 		}
 	}
 
-	private <T extends Avg> Future<Exception> calFDYZ(final Class<T> clazz, final Class<?> numsClass,
+	protected <T extends Avg> Future<Exception> calFDYZ(final Class<T> clazz, final Class<?> numsClass,
 			final BaseYzRepository<T> repository, final CommonHandler handler, LrHandler lrHandler) {
 		try {
 			return calYZ(clazz, repository, repositories.kaiJiangRepository,
@@ -2091,7 +2091,7 @@ public class YZService {
 		}
 	}
 
-	private static interface YzHandler<T extends Avg, R extends BaseYz> {
+	protected static interface YzHandler<T extends Avg, R extends BaseYz> {
 
 		List<Integer> process(T yz, T lastYZ, R data, R lastData) throws Exception;
 
@@ -2100,7 +2100,7 @@ public class YZService {
 		void afterProcess() throws Exception;
 	}
 
-	private <T extends Avg, R extends BaseYz> Future<Exception> calYZ(Class<T> clazz, BaseYzRepository<T> repository,
+	protected <T extends Avg, R extends BaseYz> Future<Exception> calYZ(Class<T> clazz, BaseYzRepository<T> repository,
 			BaseYzRepository<R> scanRepository, YzHandler<T, R> yzHandler) {
 		Exception t = null;
 		try {
@@ -2235,7 +2235,7 @@ public class YZService {
 		});
 	}
 
-	private static interface CSHandler<C> {
+	protected static interface CSHandler<C> {
 		void doExtra(C yz, String fd);
 	}
 
@@ -2350,7 +2350,7 @@ public class YZService {
 		return map;
 	}
 
-	private <T extends LrSet, R extends BaseYz> Future<Exception> calLRYZ(final Class<T> lrClazz,
+	protected <T extends LrSet, R extends BaseYz> Future<Exception> calLRYZ(final Class<T> lrClazz,
 			BaseYzRepository<T> lrRepository, BaseYzRepository<R> yzRepository, CommonHandler handler) {
 		return calYZ(lrClazz, lrRepository, yzRepository, new YzHandler<T, R>() {
 
@@ -2637,7 +2637,7 @@ public class YZService {
 		return result;
 	}
 
-	private PageResult<D1Yz> calSxForD1(QueryInfo<SxYz> queryInfo) throws Exception {
+	protected PageResult<D1Yz> calSxForD1(QueryInfo<SxYz> queryInfo) throws Exception {
 		PageResult<SxYz> dataResult = repositories.sxYzDao.query(queryInfo);
 		PageResult<D1Yz> result = new PageResult<D1Yz>();
 		if (dataResult != null && dataResult.getTotal() > 0) {
@@ -2695,7 +2695,7 @@ public class YZService {
 		return result;
 	}
 
-	private void calSxForD1(D1Yz yz, SX maxSX) throws Exception {
+	protected void calSxForD1(D1Yz yz, SX maxSX) throws Exception {
 		SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd");
 		Calendar c = Calendar.getInstance();
 		c.setTime(sdf.parse(yz.getDate()));
@@ -2780,7 +2780,7 @@ public class YZService {
 		}
 	}
 
-	private void calSxForD1(D1Yz yz, SX maxSX, SxZfYz2 sxzfYz) throws Exception {
+	protected void calSxForD1(D1Yz yz, SX maxSX, SxZfYz2 sxzfYz) throws Exception {
 		int pos = maxSX.getPos() + sxzfYz.getCurrentPos();
 		if (pos >= SX.values().length) {
 			pos = pos - SX.values().length;
@@ -2889,7 +2889,7 @@ public class YZService {
 		}
 	}
 
-	private void calDsForD1(D1Yz yz, Integer currentPos, DsZfYz data) throws Exception {
+	protected void calDsForD1(D1Yz yz, Integer currentPos, DsZfYz data) throws Exception {
 		int pos = currentPos + data.getCurrentPos();
 		if (pos >= DsNums.FDS.length) {
 			pos = pos - DsNums.FDS.length;
@@ -2998,7 +2998,7 @@ public class YZService {
 		}
 	}
 
-	private void calSwForD1(D1Yz yz, Integer currentPos, SwZfYz data) throws Exception {
+	protected void calSwForD1(D1Yz yz, Integer currentPos, SwZfYz data) throws Exception {
 		int pos = currentPos + data.getCurrentPos();
 		if (pos >= SwNums.FDS.length) {
 			pos = pos - SwNums.FDS.length;
@@ -3106,7 +3106,7 @@ public class YZService {
 		}
 	}
 
-	private void calMwForD1(D1Yz yz, Integer currentPos, MwZfYz data) throws Exception {
+	protected void calMwForD1(D1Yz yz, Integer currentPos, MwZfYz data) throws Exception {
 		int pos = currentPos + data.getCurrentPos();
 		if (pos >= MwNums.FDS.length) {
 			pos = pos - MwNums.FDS.length;
@@ -3214,7 +3214,7 @@ public class YZService {
 		}
 	}
 
-	private void calLhForD1(D1Yz yz, Integer currentPos, LhZfYz data) throws Exception {
+	protected void calLhForD1(D1Yz yz, Integer currentPos, LhZfYz data) throws Exception {
 		int pos = currentPos + data.getCurrentPos();
 		if (pos >= LhNums.FDS.length) {
 			pos = pos - LhNums.FDS.length;
@@ -3328,7 +3328,7 @@ public class YZService {
 		}
 	}
 
-	private void calBsForD1(D1Yz yz, Integer currentPos, Bs9qZfYz data) throws Exception {
+	protected void calBsForD1(D1Yz yz, Integer currentPos, Bs9qZfYz data) throws Exception {
 		int pos = currentPos + data.getCurrentPos();
 		if (pos >= Bs9qNums.FDS.length) {
 			pos = pos - Bs9qNums.FDS.length;
@@ -3436,7 +3436,7 @@ public class YZService {
 		}
 	}
 
-	private void calZsForD1(D1Yz yz, Integer currentPos, ZsZfYz data) throws Exception {
+	protected void calZsForD1(D1Yz yz, Integer currentPos, ZsZfYz data) throws Exception {
 		int pos = currentPos + data.getCurrentPos();
 		if (pos >= ZsNums.FDS.length) {
 			pos = pos - ZsNums.FDS.length;
@@ -3550,7 +3550,7 @@ public class YZService {
 		}
 	}
 
-	private void calWxForD1(D1Yz yz, Integer currentPos, WxZfYz data) throws Exception {
+	protected void calWxForD1(D1Yz yz, Integer currentPos, WxZfYz data) throws Exception {
 		int pos = currentPos + data.getCurrentPos();
 		if (pos >= WxNums.FDS.length) {
 			pos = pos - WxNums.FDS.length;
@@ -3658,7 +3658,7 @@ public class YZService {
 		}
 	}
 
-	private void calWxdsForD1(D1Yz yz, Integer currentPos, WxdsZfYz data) throws Exception {
+	protected void calWxdsForD1(D1Yz yz, Integer currentPos, WxdsZfYz data) throws Exception {
 		int pos = currentPos + data.getCurrentPos();
 		if (pos >= WxDsNums.FDS.length) {
 			pos = pos - WxDsNums.FDS.length;
@@ -3766,7 +3766,7 @@ public class YZService {
 		}
 	}
 
-	private void calPdForD1(D1Yz yz, Integer currentPos, PdZfYz data) throws Exception {
+	protected void calPdForD1(D1Yz yz, Integer currentPos, PdZfYz data) throws Exception {
 		int pos = currentPos + data.getCurrentPos();
 		if (pos >= PdNums.FDS.length) {
 			pos = pos - PdNums.FDS.length;
@@ -3819,7 +3819,7 @@ public class YZService {
 		}
 	}
 
-	private void calFdForD1(D1Yz yz) throws Exception {
+	protected void calFdForD1(D1Yz yz) throws Exception {
 		TmYz tmData = repositories.tmyzRepository.findByYearAndPhase(yz.getYear(), yz.getPhase());
 		List<TmYzInfo> infos = getTMFDList(tmData, false);
 		int currentPos = infos.size() - 1;
@@ -3889,7 +3889,7 @@ public class YZService {
 		}
 	}
 
-	private void calFdForD1(D1Yz yz, Tm12FdZfYz zfData) throws Exception {
+	protected void calFdForD1(D1Yz yz, Tm12FdZfYz zfData) throws Exception {
 		TmYz tmData = repositories.tmyzRepository.findByYearAndPhase(yz.getYear(), yz.getPhase());
 		List<TmYzInfo> infos = getTMFDList(tmData, false);
 		int currentPos = infos.size() - 1;
@@ -4024,7 +4024,7 @@ public class YZService {
 		}
 	}
 
-	private void calQqForD1(D1Yz yz, Integer currentPos, QqZfYz data) throws Exception {
+	protected void calQqForD1(D1Yz yz, Integer currentPos, QqZfYz data) throws Exception {
 		int pos = currentPos + data.getCurrentPos();
 		if (pos >= QqNums.FDS.length) {
 			pos = pos - QqNums.FDS.length;
@@ -4133,7 +4133,7 @@ public class YZService {
 		}
 	}
 
-	private void calQiwForD1(D1Yz yz, Integer currentPos, QiwZfYz data) throws Exception {
+	protected void calQiwForD1(D1Yz yz, Integer currentPos, QiwZfYz data) throws Exception {
 		int pos = currentPos + data.getCurrentPos();
 		if (pos >= QiwNums.FDS.length) {
 			pos = pos - QiwNums.FDS.length;
@@ -4242,7 +4242,7 @@ public class YZService {
 		}
 	}
 
-	private void calTwelveForD1(D1Yz yz, Integer currentPos, TwelveZfYz data) throws Exception {
+	protected void calTwelveForD1(D1Yz yz, Integer currentPos, TwelveZfYz data) throws Exception {
 		int pos = currentPos + data.getCurrentPos();
 		if (pos >= TwelveNums.FDS.length) {
 			pos = pos - TwelveNums.FDS.length;
@@ -4350,7 +4350,7 @@ public class YZService {
 		}
 	}
 
-	private void calSlqForD1(D1Yz yz, Integer currentPos, SlqZfYz data) throws Exception {
+	protected void calSlqForD1(D1Yz yz, Integer currentPos, SlqZfYz data) throws Exception {
 		int pos = currentPos + data.getCurrentPos();
 		if (pos >= SlqNums.FDS.length) {
 			pos = pos - SlqNums.FDS.length;
@@ -4413,7 +4413,7 @@ public class YZService {
 		}
 	}
 
-	private void calSxForJ0(J0Yz yz) throws Exception {
+	protected void calSxForJ0(J0Yz yz) throws Exception {
 		SxYz sxYz = repositories.sxyzRepository.findByYearAndPhase(yz.getYear(), yz.getPhase());
 		SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd");
 		Calendar c = Calendar.getInstance();
@@ -4430,7 +4430,7 @@ public class YZService {
 		yz.setSxzfNums(getSxNums(bmnSX, nextSX));
 	}
 
-	private List<Integer> getSxNums(SX bmnSX, SX sx) {
+	protected List<Integer> getSxNums(SX bmnSX, SX sx) {
 		int delta = sx.getPos() - bmnSX.getPos();
 		if (delta < 0) {
 			delta = 12 + delta;
@@ -4438,7 +4438,7 @@ public class YZService {
 		return SxNums.NUMS[delta];
 	}
 
-	private void calDsForJ0(J0Yz yz) throws Exception {
+	protected void calDsForJ0(J0Yz yz) throws Exception {
 		DsYz dsYz = repositories.dsyzRepository.findByYearAndPhase(yz.getYear(), yz.getPhase());
 		int currentPos = 0;
 		for (int i = 0; i < 5; i++) {
@@ -4466,7 +4466,7 @@ public class YZService {
 		yz.setDszfNums(DsNums.NUMS[pos]);
 	}
 
-	private void calSwForJ0(J0Yz yz) throws Exception {
+	protected void calSwForJ0(J0Yz yz) throws Exception {
 		SwYz swYz = repositories.swyzRepository.findByYearAndPhase(yz.getYear(), yz.getPhase());
 		int currentPos = 0;
 		for (int i = 0; i < 5; i++) {
@@ -4487,7 +4487,7 @@ public class YZService {
 		yz.setSwzfNums(SwNums.NUMS[pos]);
 	}
 
-	private void calMwForJ0(J0Yz yz) throws Exception {
+	protected void calMwForJ0(J0Yz yz) throws Exception {
 		MwYz mwYz = repositories.mwyzRepository.findByYearAndPhase(yz.getYear(), yz.getPhase());
 		int currentPos = 0;
 		for (int i = 0; i < 10; i++) {
@@ -4508,7 +4508,7 @@ public class YZService {
 		yz.setMwzfNums(MwNums.NUMS[pos]);
 	}
 
-	private void calLhForJ0(J0Yz yz) throws Exception {
+	protected void calLhForJ0(J0Yz yz) throws Exception {
 		LhYz lhYz = repositories.lhyzRepository.findByYearAndPhase(yz.getYear(), yz.getPhase());
 		int currentPos = 0;
 		for (int i = 0; i < 10; i++) {
@@ -4529,7 +4529,7 @@ public class YZService {
 		yz.setLhzfNums(LhNums.NUMS[pos]);
 	}
 
-	private void calBsForJ0(J0Yz yz) throws Exception {
+	protected void calBsForJ0(J0Yz yz) throws Exception {
 		Bs9qYz bsYz = repositories.bs9qyzRepository.findByYearAndPhase(yz.getYear(), yz.getPhase());
 		String[] colors = new String[] { "Red", "Blue", "Green" };
 		int currentPos = 0;
@@ -4553,7 +4553,7 @@ public class YZService {
 		yz.setBszfNums(Bs9qNums.NUMS[pos]);
 	}
 
-	private void calZsForJ0(J0Yz yz) throws Exception {
+	protected void calZsForJ0(J0Yz yz) throws Exception {
 		ZsYz zsYz = repositories.zsyzRepository.findByYearAndPhase(yz.getYear(), yz.getPhase());
 		int currentPos = 0;
 		for (int i = 1; i < 10; i++) {
@@ -4574,7 +4574,7 @@ public class YZService {
 		yz.setZszfNums(ZsNums.NUMS[pos]);
 	}
 
-	private void calWxForJ0(J0Yz yz) throws Exception {
+	protected void calWxForJ0(J0Yz yz) throws Exception {
 		WxYz wxYz = repositories.wxyzRepository.findByYearAndPhase(yz.getYear(), yz.getPhase());
 		int currentPos = 0;
 		String[] arr = new String[] { "Jin", "Mu", "Shui", "Huo", "Tu" };
@@ -4596,7 +4596,7 @@ public class YZService {
 		yz.setWxzfNums(WxNums.NUMS[pos]);
 	}
 
-	private void calWxdsForJ0(J0Yz yz) throws Exception {
+	protected void calWxdsForJ0(J0Yz yz) throws Exception {
 		WxdsYz wxdsYz = repositories.wxdsyzRepository.findByYearAndPhase(yz.getYear(), yz.getPhase());
 		int currentPos = 0;
 		String[] arr = new String[] { "JinOdd", "JinEven", "MuOdd", "MuEven", "ShuiOdd", "ShuiEven", "HuoOdd", "HuoEven",
@@ -4619,7 +4619,7 @@ public class YZService {
 		yz.setWxdszfNums(WxDsNums.NUMS[pos]);
 	}
 
-	private void calPdForJ0(J0Yz yz) throws Exception {
+	protected void calPdForJ0(J0Yz yz) throws Exception {
 		PdYz yzData = repositories.pdyzRepository.findByYearAndPhase(yz.getYear(), yz.getPhase());
 		int currentPos = 0;
 		for (int i = 1; i < 13; i++) {
@@ -4640,7 +4640,7 @@ public class YZService {
 		yz.setPdzfNums(PdNums.NUMS[pos]);
 	}
 
-	private void calFdForJ0(J0Yz yz) throws Exception {
+	protected void calFdForJ0(J0Yz yz) throws Exception {
 		TmYz tmData = repositories.tmyzRepository.findByYearAndPhase(yz.getYear(), yz.getPhase());
 		List<TmYzInfo> infos = getTMFDList(tmData, true);
 		int currentPos = 1;
@@ -4687,7 +4687,7 @@ public class YZService {
 		yz.setFdzfNums(nums);
 	}
 
-	private void calQqForJ0(J0Yz yz) throws Exception {
+	protected void calQqForJ0(J0Yz yz) throws Exception {
 		QqYz yzData = repositories.qqyzRepository.findByYearAndPhase(yz.getYear(), yz.getPhase());
 		int currentPos = 0;
 		for (int i = 1; i < 8; i++) {
@@ -4708,7 +4708,7 @@ public class YZService {
 		yz.setQqzfNums(QqNums.NUMS[pos]);
 	}
 
-	private void calQiwForJ0(J0Yz yz) throws Exception {
+	protected void calQiwForJ0(J0Yz yz) throws Exception {
 		QiwYz yzData = repositories.qiwYzRepository.findByYearAndPhase(yz.getYear(), yz.getPhase());
 		int currentPos = 0;
 		for (int i = 1; i < 8; i++) {
@@ -4729,7 +4729,7 @@ public class YZService {
 		yz.setQiwzfNums(QiwNums.NUMS[pos]);
 	}
 
-	private void calTwelveForJ0(J0Yz yz) throws Exception {
+	protected void calTwelveForJ0(J0Yz yz) throws Exception {
 		TwelveYz yzData = repositories.twelveyzRepository.findByYearAndPhase(yz.getYear(), yz.getPhase());
 		int currentPos = 0;
 		for (int i = 1; i < 13; i++) {
@@ -4750,7 +4750,7 @@ public class YZService {
 		yz.setTwelvezfNums(TwelveNums.NUMS[pos]);
 	}
 
-	private void calSlqForJ0(J0Yz yz) throws Exception {
+	protected void calSlqForJ0(J0Yz yz) throws Exception {
 		SlqYz yzData = repositories.slqyzRepository.findByYearAndPhase(yz.getYear(), yz.getPhase());
 		int currentPos = 0;
 		for (int i = 1; i < 17; i++) {
@@ -4958,7 +4958,7 @@ public class YZService {
 		}
 	}
 
-	private void appendXbwJY(XbwJY data, List<XbwJY> list, Set<Integer> A, Set<Integer> B, Set<Integer> C, Set<Integer> D,
+	protected void appendXbwJY(XbwJY data, List<XbwJY> list, Set<Integer> A, Set<Integer> B, Set<Integer> C, Set<Integer> D,
 			Set<Integer> E, Set<Integer> F, Set<Integer> G, Set<Integer> H) throws Exception {
 		Set<Integer>[] AE = combineConditionList(A, E);
 		Set<Integer>[] BF = combineConditionList(B, F);
@@ -5178,7 +5178,7 @@ public class YZService {
 		}
 	}
 
-	private void addNumsToConditionList(Set<Integer> conditionSet, List<Integer> nums) {
+	protected void addNumsToConditionList(Set<Integer> conditionSet, List<Integer> nums) {
 		if (nums != null && !nums.isEmpty()) {
 			for (Integer num : nums) {
 				conditionSet.add(num);
@@ -5186,11 +5186,11 @@ public class YZService {
 		}
 	}
 
-	private void addNumsToConditionList(Set<Integer> conditionSet, Set<Integer> nums) {
+	protected void addNumsToConditionList(Set<Integer> conditionSet, Set<Integer> nums) {
 		addNumsToConditionList(conditionSet, new ArrayList<Integer>(nums));
 	}
 
-	private Set<Integer> combineConditionList(Set<Integer> a1, Set<Integer> a2, Set<Integer> a3, Set<Integer> a4) {
+	protected Set<Integer> combineConditionList(Set<Integer> a1, Set<Integer> a2, Set<Integer> a3, Set<Integer> a4) {
 		Set<Integer> arr = new HashSet<Integer>(a1);
 		addNumsToConditionList(arr, a2);
 		addNumsToConditionList(arr, a3);
@@ -5204,7 +5204,7 @@ public class YZService {
 		return reversed;
 	}
 
-	private Set<Integer>[] combineConditionList(Set<Integer> a1, Set<Integer> a2) {
+	protected Set<Integer>[] combineConditionList(Set<Integer> a1, Set<Integer> a2) {
 		Set<Integer> a1Excluded = new HashSet<Integer>();
 		Set<Integer> a2Excluded = new HashSet<Integer>();
 		for (Integer num : a1) {
@@ -5243,7 +5243,7 @@ public class YZService {
 		return nums;
 	}
 
-	private XbwJY2Sub calXbwOptionForSxYz(String fdRange, XbwJYCondition condition,
+	protected XbwJY2Sub calXbwOptionForSxYz(String fdRange, XbwJYCondition condition,
 			XbwOptionYzHandlerForGetInfos<SxYz> infoHandler) throws Exception {
 		return calXbwOptionForYz("生肖", fdRange, condition, SxYz.class, SxNums.class, repositories.sxyzRepository,
 				new XbwOptionYzHandler<SxYz>() {
@@ -5266,7 +5266,7 @@ public class YZService {
 				}, infoHandler);
 	}
 
-	private XbwJY2Sub calXbwOptionForDsYz(String fdRange, XbwJYCondition condition,
+	protected XbwJY2Sub calXbwOptionForDsYz(String fdRange, XbwJYCondition condition,
 			XbwOptionYzHandlerForGetInfos<DsYz> infoHandler) throws Exception {
 		return calXbwOptionForYz("单双", fdRange, condition, DsYz.class, DsNums.class, repositories.dsyzRepository,
 				new XbwOptionYzHandler<DsYz>() {
@@ -5307,7 +5307,7 @@ public class YZService {
 				}, infoHandler);
 	}
 
-	private XbwJY2Sub calXbwOptionForTm12FdYz(String fdRange, XbwJYCondition condition,
+	protected XbwJY2Sub calXbwOptionForTm12FdYz(String fdRange, XbwJYCondition condition,
 			XbwOptionYzHandlerForGetInfos<Tm12FdYz> infoHandler) throws Exception {
 		TmYz currentTm = repositories.tmyzRepository.findByYearAndPhase(condition.getYear(), condition.getPhase());
 		List<TmYzInfo> currentTmInfos = getTMFDList(currentTm, false);
@@ -5365,7 +5365,7 @@ public class YZService {
 		return nums;
 	}
 
-	private XbwJY2Sub calXbwOptionForWxYz(String fdRange, XbwJYCondition condition,
+	protected XbwJY2Sub calXbwOptionForWxYz(String fdRange, XbwJYCondition condition,
 			XbwOptionYzHandlerForGetInfos<WxdsYz> infoHandler) throws Exception {
 		return calXbwOptionForYz("五行单双", fdRange, condition, WxdsYz.class, WxDsNums.class, repositories.wxdsyzRepository,
 				new XbwOptionYzHandler<WxdsYz>() {
@@ -5406,7 +5406,7 @@ public class YZService {
 				}, infoHandler);
 	}
 
-	private XbwJY2Sub calXbwOptionForBsYz(String fdRange, XbwJYCondition condition,
+	protected XbwJY2Sub calXbwOptionForBsYz(String fdRange, XbwJYCondition condition,
 			XbwOptionYzHandlerForGetInfos<Bs9qYz> infoHandler) throws Exception {
 		return calXbwOptionForYz("波色", fdRange, condition, Bs9qYz.class, Bs9qNums.class, repositories.bs9qyzRepository,
 				new XbwOptionYzHandler<Bs9qYz>() {
@@ -5472,7 +5472,7 @@ public class YZService {
 		return nums;
 	}
 
-	private XbwJY2Sub calXbwOptionForSxzf(String fdRange, XbwJYCondition condition,
+	protected XbwJY2Sub calXbwOptionForSxzf(String fdRange, XbwJYCondition condition,
 			XbwOptionYzHandlerForGetPos<SxZfYz2> posHandler) throws Exception {
 		return calXbwOptionForZf(condition, SxZfYz2.class, repositories.sxzfyz2Repository,
 				new XbwOptionZfHandler<SxYz, SxZfYz2>() {
@@ -5519,7 +5519,7 @@ public class YZService {
 				}, posHandler);
 	}
 
-	private XbwJY2Sub calXbwOptionForLhzf(String fdRange, XbwJYCondition condition,
+	protected XbwJY2Sub calXbwOptionForLhzf(String fdRange, XbwJYCondition condition,
 			XbwOptionYzHandlerForGetPos<LhZfYz> posHandler) throws Exception {
 		return calXbwOptionForZf(condition, LhZfYz.class, repositories.lhzfyzRepository,
 				new XbwOptionZfHandler<LhYz, LhZfYz>() {
@@ -5552,7 +5552,7 @@ public class YZService {
 				}, posHandler);
 	}
 
-	private XbwJY2Sub calXbwOptionForMwzf(String fdRange, XbwJYCondition condition,
+	protected XbwJY2Sub calXbwOptionForMwzf(String fdRange, XbwJYCondition condition,
 			XbwOptionYzHandlerForGetPos<MwZfYz> posHandler) throws Exception {
 		return calXbwOptionForZf(condition, MwZfYz.class, repositories.mwzfyzRepository,
 				new XbwOptionZfHandler<MwYz, MwZfYz>() {
@@ -5585,7 +5585,7 @@ public class YZService {
 				}, posHandler);
 	}
 
-	private XbwJY2Sub calXbwOptionForDszf(String fdRange, XbwJYCondition condition,
+	protected XbwJY2Sub calXbwOptionForDszf(String fdRange, XbwJYCondition condition,
 			XbwOptionYzHandlerForGetPos<DsZfYz> posHandler) throws Exception {
 		return calXbwOptionForZf(condition, DsZfYz.class, repositories.dszfyzRepository,
 				new XbwOptionZfHandler<DsYz, DsZfYz>() {
@@ -5651,7 +5651,7 @@ public class YZService {
 				}, posHandler);
 	}
 
-	private XbwJY2Sub calXbwOptionForFdzf(String fdRange, XbwJYCondition condition,
+	protected XbwJY2Sub calXbwOptionForFdzf(String fdRange, XbwJYCondition condition,
 			XbwOptionYzHandlerForGetPos<Tm12FdZfYz> posHandler) throws Exception {
 		return calXbwOptionForZf(condition, Tm12FdZfYz.class, repositories.tm12fdzfyzRepository,
 				new XbwOptionZfHandler<Tm12FdYz, Tm12FdZfYz>() {
@@ -5738,7 +5738,7 @@ public class YZService {
 		return nums;
 	}
 
-	private XbwJY2Sub calXbwOptionForZszf(String fdRange, XbwJYCondition condition,
+	protected XbwJY2Sub calXbwOptionForZszf(String fdRange, XbwJYCondition condition,
 			XbwOptionYzHandlerForGetPos<ZsZfYz> posHandler) throws Exception {
 		return calXbwOptionForZf(condition, ZsZfYz.class, repositories.zszfyzRepository,
 				new XbwOptionZfHandler<ZsYz, ZsZfYz>() {
@@ -5771,7 +5771,7 @@ public class YZService {
 				}, posHandler);
 	}
 
-	private XbwJY2Sub calXbwOptionForWxdszf(String fdRange, XbwJYCondition condition,
+	protected XbwJY2Sub calXbwOptionForWxdszf(String fdRange, XbwJYCondition condition,
 			XbwOptionYzHandlerForGetPos<WxdsZfYz> posHandler) throws Exception {
 		return calXbwOptionForZf(condition, WxdsZfYz.class, repositories.wxdszfyzRepository,
 				new XbwOptionZfHandler<WxdsYz, WxdsZfYz>() {
@@ -5837,7 +5837,7 @@ public class YZService {
 				}, posHandler);
 	}
 
-	private XbwJY2Sub calXbwOptionForBszf(String fdRange, XbwJYCondition condition,
+	protected XbwJY2Sub calXbwOptionForBszf(String fdRange, XbwJYCondition condition,
 			XbwOptionYzHandlerForGetPos<Bs9qZfYz> posHandler) throws Exception {
 		return calXbwOptionForZf(condition, Bs9qZfYz.class, repositories.bs9qzfyzRepository,
 				new XbwOptionZfHandler<Bs9qYz, Bs9qZfYz>() {
@@ -5900,7 +5900,7 @@ public class YZService {
 				}, posHandler);
 	}
 
-	private XbwJY2Sub calXbwOptionForTwelvezf(String fdRange, XbwJYCondition condition,
+	protected XbwJY2Sub calXbwOptionForTwelvezf(String fdRange, XbwJYCondition condition,
 			XbwOptionYzHandlerForGetPos<TwelveZfYz> posHandler) throws Exception {
 		return calXbwOptionForZf(condition, TwelveZfYz.class, repositories.twelvezfyzRepository,
 				new XbwOptionZfHandler<TwelveYz, TwelveZfYz>() {
@@ -5933,7 +5933,7 @@ public class YZService {
 				}, posHandler);
 	}
 
-	private XbwJY2Sub calXbwOptionForSlqzf(String fdRange, XbwJYCondition condition,
+	protected XbwJY2Sub calXbwOptionForSlqzf(String fdRange, XbwJYCondition condition,
 			XbwOptionYzHandlerForGetPos<SlqZfYz> posHandler) throws Exception {
 		return calXbwOptionForZf(condition, SlqZfYz.class, repositories.slqzfyzRepository,
 				new XbwOptionZfHandler<SlqYz, SlqZfYz>() {
@@ -5975,7 +5975,7 @@ public class YZService {
 		return nums;
 	}
 
-	private XbwJY2Sub calXbwOptionForPdzf(String fdRange, XbwJYCondition condition,
+	protected XbwJY2Sub calXbwOptionForPdzf(String fdRange, XbwJYCondition condition,
 			XbwOptionYzHandlerForGetPos<PdZfYz> posHandler) throws Exception {
 		return calXbwOptionForZf(condition, PdZfYz.class, repositories.pdzfyzRepository,
 				new XbwOptionZfHandler<PdYz, PdZfYz>() {
@@ -6008,7 +6008,7 @@ public class YZService {
 				}, posHandler);
 	}
 
-	private XbwJY2Sub calXbwOptionForQiwzf(String fdRange, XbwJYCondition condition,
+	protected XbwJY2Sub calXbwOptionForQiwzf(String fdRange, XbwJYCondition condition,
 			XbwOptionYzHandlerForGetPos<QiwZfYz> posHandler) throws Exception {
 		return calXbwOptionForZf(condition, QiwZfYz.class, repositories.qiwzfYzRepository,
 				new XbwOptionZfHandler<QiwYz, QiwZfYz>() {
@@ -6050,7 +6050,7 @@ public class YZService {
 		return nums;
 	}
 
-	private XbwJY2Sub calXbwOptionForQqzf(String fdRange, XbwJYCondition condition,
+	protected XbwJY2Sub calXbwOptionForQqzf(String fdRange, XbwJYCondition condition,
 			XbwOptionYzHandlerForGetPos<QqZfYz> posHandler) throws Exception {
 		return calXbwOptionForZf(condition, QqZfYz.class, repositories.qqzfyzRepository,
 				new XbwOptionZfHandler<QqYz, QqZfYz>() {
@@ -6083,7 +6083,7 @@ public class YZService {
 				}, posHandler);
 	}
 
-	private static class XbwOptionYzHandlerForGetInfos<T extends Avg> {
+	protected static class XbwOptionYzHandlerForGetInfos<T extends Avg> {
 		protected XbwInfo getInfo(T current, T last, Class<T> clazz, Class<?> numsClass, List<XbwInfo> currentInfos,
 				int len) throws Exception {
 			XbwInfo info = null;
@@ -6104,7 +6104,7 @@ public class YZService {
 		}
 	}
 
-	private static class XbwOptionYzHandler<T extends Avg> {
+	protected static class XbwOptionYzHandler<T extends Avg> {
 		protected List<XbwInfo> getInfos(T current, Class<T> clazz, Class<?> numsClass, String textPrefix)
 				throws Exception {
 			List<XbwInfo> infos = new ArrayList<XbwInfo>();
@@ -6129,13 +6129,13 @@ public class YZService {
 		}
 	}
 
-	private <T extends Avg> XbwJY2Sub calXbwOptionForYz(String textPrefix, String range, XbwJYCondition condition,
+	protected <T extends Avg> XbwJY2Sub calXbwOptionForYz(String textPrefix, String range, XbwJYCondition condition,
 			Class<T> clazz, Class<?> numsClass, BaseYzRepository<T> repository) throws Exception {
 		return calXbwOptionForYz(textPrefix, range, condition, clazz, numsClass, repository, new XbwOptionYzHandler<T>(),
 				new XbwOptionYzHandlerForGetInfos<T>());
 	}
 
-	private <T extends Avg> XbwJY2Sub calXbwOptionForYz(String textPrefix, String range, XbwJYCondition condition,
+	protected <T extends Avg> XbwJY2Sub calXbwOptionForYz(String textPrefix, String range, XbwJYCondition condition,
 			Class<T> clazz, Class<?> numsClass, BaseYzRepository<T> repository, XbwOptionYzHandler<T> handler,
 			XbwOptionYzHandlerForGetInfos<T> infoHandler) throws Exception {
 		T current = repository.findByYearAndPhase(condition.getYear(), condition.getPhase());
@@ -6153,7 +6153,7 @@ public class YZService {
 				infoHandler.getInfo(current, last, clazz, numsClass, currentInfos, handler.getLength(numsClass)), range);
 	}
 
-	private static class XbwOptionYzHandlerForGetPos<Z extends Avg> {
+	protected static class XbwOptionYzHandlerForGetPos<Z extends Avg> {
 		protected Integer getPos(Z current, Z last, List<XbwInfo> infos, int len) {
 			Integer pos = null;
 			if (current.getTotal() >= last.getTotal()) {
@@ -6173,7 +6173,7 @@ public class YZService {
 		}
 	}
 
-	private static abstract class XbwOptionZfHandler<T extends Avg, Z extends Avg> {
+	protected static abstract class XbwOptionZfHandler<T extends Avg, Z extends Avg> {
 
 		protected abstract BaseYzRepository<T> getRepository();
 
@@ -6207,7 +6207,7 @@ public class YZService {
 
 	}
 
-	private <T extends Avg, Z extends ZfAvg> XbwJY2Sub calXbwOptionForZf(XbwJYCondition condition, Class<Z> clazz,
+	protected <T extends Avg, Z extends ZfAvg> XbwJY2Sub calXbwOptionForZf(XbwJYCondition condition, Class<Z> clazz,
 			BaseYzRepository<Z> repository, XbwOptionZfHandler<T, Z> handler, XbwOptionYzHandlerForGetPos<Z> posHandler)
 			throws Exception {
 		Z current = repository.findByYearAndPhase(condition.getYear(), condition.getPhase());
@@ -8015,7 +8015,7 @@ public class YZService {
 		return nums;
 	}
 
-	private XbwJY2Sub calXbwOptionForWxzf(String fdRange, XbwJYCondition condition,
+	protected XbwJY2Sub calXbwOptionForWxzf(String fdRange, XbwJYCondition condition,
 			XbwOptionYzHandlerForGetPos<WxZfYz> posHandler) throws Exception {
 		return calXbwOptionForZf(condition, WxZfYz.class, repositories.wxzfyzRepository,
 				new XbwOptionZfHandler<WxYz, WxZfYz>() {
