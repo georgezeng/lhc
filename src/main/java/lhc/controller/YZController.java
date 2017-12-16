@@ -86,19 +86,41 @@ import lhc.domain.ZsLrYz;
 import lhc.domain.ZsYz;
 import lhc.domain.ZsZfYz;
 import lhc.domain.Zx10Yz;
+import lhc.domain.Zx10ZfYz;
 import lhc.domain.Zx11Yz;
+import lhc.domain.Zx11ZfYz;
 import lhc.domain.Zx12Yz;
+import lhc.domain.Zx12ZfYz;
 import lhc.domain.Zx13Yz;
+import lhc.domain.Zx13ZfYz;
 import lhc.domain.Zx14Yz;
+import lhc.domain.Zx14ZfYz;
+import lhc.domain.Zx15Yz;
+import lhc.domain.Zx15ZfYz;
+import lhc.domain.Zx16Yz;
+import lhc.domain.Zx16ZfYz;
+import lhc.domain.Zx17Yz;
+import lhc.domain.Zx17ZfYz;
+import lhc.domain.Zx18Yz;
+import lhc.domain.Zx18ZfYz;
 import lhc.domain.Zx1Yz;
+import lhc.domain.Zx1ZfYz;
 import lhc.domain.Zx2Yz;
+import lhc.domain.Zx2ZfYz;
 import lhc.domain.Zx3Yz;
+import lhc.domain.Zx3ZfYz;
 import lhc.domain.Zx4Yz;
+import lhc.domain.Zx4ZfYz;
 import lhc.domain.Zx5Yz;
+import lhc.domain.Zx5ZfYz;
 import lhc.domain.Zx6Yz;
+import lhc.domain.Zx6ZfYz;
 import lhc.domain.Zx7Yz;
+import lhc.domain.Zx7ZfYz;
 import lhc.domain.Zx8Yz;
+import lhc.domain.Zx8ZfYz;
 import lhc.domain.Zx9Yz;
+import lhc.domain.Zx9ZfYz;
 import lhc.dto.BaseResult;
 import lhc.dto.D1Yz;
 import lhc.dto.DownloadDTO;
@@ -124,13 +146,13 @@ import lhc.util.DateUtil;
 @RequestMapping("/mvc/yz")
 @SuppressWarnings("unchecked")
 public class YZController {
-	private Logger logger = LoggerFactory.getLogger(getClass());
+	protected Logger logger = LoggerFactory.getLogger(getClass());
 
 	@Autowired
-	private Repositories repositories;
+	protected Repositories repositories;
 
 	@Autowired
-	private ParallelYzServiceWrapper parallelYzServiceWrapper;
+	protected ParallelYzServiceWrapper parallelYzServiceWrapper;
 
 	@RequestMapping("/years")
 	public BaseResult years() {
@@ -156,36 +178,244 @@ public class YZController {
 		return new BaseResult(phases);
 	}
 
-	@RequestMapping("/calYZ")
-	public BaseResult calYZ() throws Exception {
-		calYZ(true);
-		return BaseResult.EMPTY;
-	}
-
-	public void calYZ(boolean sleep) throws Exception {
+	public void calSX() throws Exception {
 		List<Future<Exception>> futures = new ArrayList<Future<Exception>>();
 		futures.add(repositories.yzService.calSX());
-		futures.add(repositories.yzService.calHMQWYZ());
-		futures.add(repositories.yzService.calSWYZ());
-		futures.add(repositories.yzService.calMWYZ());
-		futures.add(repositories.yzService.calLHYZ());
-		futures.add(repositories.yzService.calQQYZ());
-		futures.add(repositories.yzService.calQIWYZ());
-		futures.add(repositories.yzService.calBSYZ());
-		futures.add(repositories.yzService.calSQYZ());
-		futures.add(repositories.yzService.calDSYZ());
-		futures.add(repositories.yzService.calTMYZ());
-		futures.add(repositories.yzService.calZSYZ());
-		futures.add(repositories.yzService.calWXYZ());
-		futures.add(repositories.yzService.calPTYZ());
-		futures.add(repositories.yzService.calTwelveYZ());
-		futures.add(repositories.yzService.calSLQYZ());
-		futures.add(repositories.yzService.calPDYZ());
-		futures.add(repositories.yzService.calBS9QYZ());
-		futures.add(repositories.yzService.calWXDSYZ());
 		futures.add(repositories.yzService.calSXDSYZ());
+		futures.add(repositories.yzService.calSQYZ());
+		repositories.yzService.sleep(futures, 100);
+		futures.clear();
+		futures.add(repositories.yzService.calSXCSYZ());
+		futures.add(parallelYzServiceWrapper.calAvg(repositories.sxyzRepository, "calSxyzAvg"));
+		futures.add(parallelYzServiceWrapper.calAvg(repositories.sxzfyz2Repository, "calSxzfAvg"));
+		repositories.yzService.sleep(futures, 100);
+		futures.clear();
+		futures.add(repositories.yzService.calSXLRYZ());
+		repositories.yzService.sleep(futures, 100);
+		futures.clear();
+		futures.add(parallelYzServiceWrapper.calAvg(repositories.sxlryzRepository, "calSxlrAvg"));
+		repositories.yzService.sleep(futures, 100);
+		logger.info("End of calSX stage...");
+	}
+
+	public void calTM() throws Exception {
+		List<Future<Exception>> futures = new ArrayList<Future<Exception>>();
+		futures.add(repositories.yzService.calHMQWYZ());
+		futures.add(repositories.yzService.calTMYZ());
 		futures.add(repositories.yzService.calHMDSYZ());
+		futures.add(repositories.yzService.calPTYZ());
+		repositories.yzService.sleep(futures, 100);
+		futures.clear();
+		futures.add(repositories.yzService.calTM12FDYZ());
+		repositories.yzService.sleep(futures, 100);
+		futures.clear();
+		futures.add(parallelYzServiceWrapper.calAvg(repositories.tm12fdyzRepository, "calTm12fdyzAvg"));
+		futures.add(parallelYzServiceWrapper.calAvg(repositories.tm12fdzfyzRepository, "calTm12fdzfAvg"));
+		repositories.yzService.sleep(futures, 100);
+		futures.clear();
+		futures.add(repositories.yzService.calTM12FDLRYZ());
+		repositories.yzService.sleep(futures, 100);
+		futures.clear();
+		futures.add(parallelYzServiceWrapper.calAvg(repositories.tm12fdlryzRepository, "calTm12fdlrAvg"));
+		repositories.yzService.sleep(futures, 100);
+		logger.info("End of calTM stage...");
+	}
+
+	public void calSW() throws Exception {
+		List<Future<Exception>> futures = new ArrayList<Future<Exception>>();
+		futures.add(repositories.yzService.calSWYZ());
+		repositories.yzService.sleep(futures, 100);
+		futures.clear();
+		futures.add(parallelYzServiceWrapper.calAvg(repositories.swyzRepository, "calSwyzAvg"));
+		futures.add(parallelYzServiceWrapper.calAvg(repositories.swzfyzRepository, "calSwzfAvg"));
+		repositories.yzService.sleep(futures, 100);
+		logger.info("End of calSW stage...");
+	}
+
+	public void calMW() throws Exception {
+		List<Future<Exception>> futures = new ArrayList<Future<Exception>>();
+		futures.add(repositories.yzService.calMWYZ());
+		repositories.yzService.sleep(futures, 100);
+		futures.clear();
+		futures.add(parallelYzServiceWrapper.calAvg(repositories.mwyzRepository, "calMwyzAvg"));
+		futures.add(parallelYzServiceWrapper.calAvg(repositories.mwzfyzRepository, "calMwzfAvg"));
+		repositories.yzService.sleep(futures, 100);
+		futures.clear();
+		futures.add(repositories.yzService.calMWLRYZ());
+		repositories.yzService.sleep(futures, 100);
+		futures.clear();
+		futures.add(parallelYzServiceWrapper.calAvg(repositories.mwlryzRepository, "calMwlrAvg"));
+		repositories.yzService.sleep(futures, 100);
+		logger.info("End of calMW stage...");
+	}
+
+	public void calLH() throws Exception {
+		List<Future<Exception>> futures = new ArrayList<Future<Exception>>();
+		futures.add(repositories.yzService.calLHYZ());
 		futures.add(repositories.yzService.calLHDSYZ());
+		repositories.yzService.sleep(futures, 100);
+		futures.clear();
+		futures.add(parallelYzServiceWrapper.calAvg(repositories.lhyzRepository, "calLhyzAvg"));
+		futures.add(parallelYzServiceWrapper.calAvg(repositories.lhzfyzRepository, "calLhzfAvg"));
+		repositories.yzService.sleep(futures, 100);
+		futures.clear();
+		futures.add(repositories.yzService.calLHLRYZ());
+		repositories.yzService.sleep(futures, 100);
+		futures.clear();
+		futures.add(parallelYzServiceWrapper.calAvg(repositories.lhlryzRepository, "calLhlrAvg"));
+		repositories.yzService.sleep(futures, 100);
+		logger.info("End of calLH stage...");
+	}
+
+	public void calQQ() throws Exception {
+		List<Future<Exception>> futures = new ArrayList<Future<Exception>>();
+		futures.add(repositories.yzService.calQQYZ());
+		repositories.yzService.sleep(futures, 100);
+		futures.clear();
+		futures.add(parallelYzServiceWrapper.calAvg(repositories.qqyzRepository, "calQqyzAvg"));
+		futures.add(parallelYzServiceWrapper.calAvg(repositories.qqzfyzRepository, "calQqzfAvg"));
+		repositories.yzService.sleep(futures, 100);
+		logger.info("End of calQQ stage...");
+	}
+
+	public void calQiw() throws Exception {
+		List<Future<Exception>> futures = new ArrayList<Future<Exception>>();
+		futures.add(repositories.yzService.calQIWYZ());
+		repositories.yzService.sleep(futures, 100);
+		futures.clear();
+		futures.add(parallelYzServiceWrapper.calAvg(repositories.qiwYzRepository, "calQiwyzAvg"));
+		futures.add(parallelYzServiceWrapper.calAvg(repositories.qiwzfYzRepository, "calQiwzfAvg"));
+		repositories.yzService.sleep(futures, 100);
+		logger.info("End of calQiw stage...");
+	}
+
+	public void calBS() throws Exception {
+		List<Future<Exception>> futures = new ArrayList<Future<Exception>>();
+		futures.add(repositories.yzService.calBSYZ());
+		futures.add(repositories.yzService.calBS9QYZ());
+		repositories.yzService.sleep(futures, 100);
+		futures.clear();
+		futures.add(parallelYzServiceWrapper.calAvg(repositories.bsyzRepository, "calBsyzAvg"));
+		futures.add(parallelYzServiceWrapper.calAvg(repositories.bszfyzRepository, "calBszfAvg"));
+		futures.add(parallelYzServiceWrapper.calAvg(repositories.bs9qyzRepository, "calBs9qyzAvg"));
+		futures.add(parallelYzServiceWrapper.calAvg(repositories.bs9qzfyzRepository, "calBs9qzfAvg"));
+		repositories.yzService.sleep(futures, 100);
+		futures.clear();
+		futures.add(repositories.yzService.calBS9QLRYZ());
+		repositories.yzService.sleep(futures, 100);
+		futures.clear();
+		futures.add(parallelYzServiceWrapper.calAvg(repositories.bs9qlryzRepository, "calBs9qlrAvg"));
+		repositories.yzService.sleep(futures, 100);
+		logger.info("End of calBS stage...");
+	}
+
+	public void calDS() throws Exception {
+		List<Future<Exception>> futures = new ArrayList<Future<Exception>>();
+		futures.add(repositories.yzService.calDSYZ());
+		repositories.yzService.sleep(futures, 100);
+		futures.clear();
+		futures.add(parallelYzServiceWrapper.calAvg(repositories.dsyzRepository, "calDsyzAvg"));
+		futures.add(parallelYzServiceWrapper.calAvg(repositories.dszfyzRepository, "calDszfAvg"));
+		repositories.yzService.sleep(futures, 100);
+		futures.clear();
+		futures.add(repositories.yzService.calDSLRYZ());
+		repositories.yzService.sleep(futures, 100);
+		futures.clear();
+		futures.add(parallelYzServiceWrapper.calAvg(repositories.dslrYzRepository, "calDslrAvg"));
+		repositories.yzService.sleep(futures, 100);
+		logger.info("End of calDS stage...");
+	}
+
+	public void calZS() throws Exception {
+		List<Future<Exception>> futures = new ArrayList<Future<Exception>>();
+		futures.add(repositories.yzService.calZSYZ());
+		repositories.yzService.sleep(futures, 100);
+		futures.clear();
+		futures.add(parallelYzServiceWrapper.calAvg(repositories.zsyzRepository, "calZsyzAvg"));
+		futures.add(parallelYzServiceWrapper.calAvg(repositories.zszfyzRepository, "calZszfAvg"));
+		repositories.yzService.sleep(futures, 100);
+		futures.clear();
+		futures.add(repositories.yzService.calZSLRYZ());
+		repositories.yzService.sleep(futures, 100);
+		futures.clear();
+		futures.add(parallelYzServiceWrapper.calAvg(repositories.zslryzRepository, "calZslrAvg"));
+		repositories.yzService.sleep(futures, 100);
+		logger.info("End of calZS stage...");
+	}
+
+	public void calWX() throws Exception {
+		List<Future<Exception>> futures = new ArrayList<Future<Exception>>();
+		futures.add(repositories.yzService.calWXYZ());
+		futures.add(repositories.yzService.calWXDSYZ());
+		repositories.yzService.sleep(futures, 100);
+		futures.clear();
+		futures.add(parallelYzServiceWrapper.calAvg(repositories.wxyzRepository, "calWxyzAvg"));
+		futures.add(parallelYzServiceWrapper.calAvg(repositories.wxzfyzRepository, "calWxzfAvg"));
+		futures.add(parallelYzServiceWrapper.calAvg(repositories.wxdsyzRepository, "calWxdsyzAvg"));
+		futures.add(parallelYzServiceWrapper.calAvg(repositories.wxdszfyzRepository, "calWxdszfAvg"));
+		repositories.yzService.sleep(futures, 100);
+		futures.clear();
+		futures.add(repositories.yzService.calWXDSLRYZ());
+		repositories.yzService.sleep(futures, 100);
+		futures.clear();
+		futures.add(parallelYzServiceWrapper.calAvg(repositories.wxdslryzRepository, "calWxdslrAvg"));
+		repositories.yzService.sleep(futures, 100);
+		logger.info("End of calWX stage...");
+	}
+
+	public void calTwelve() throws Exception {
+		List<Future<Exception>> futures = new ArrayList<Future<Exception>>();
+		futures.add(repositories.yzService.calTwelveYZ());
+		repositories.yzService.sleep(futures, 100);
+		futures.clear();
+		futures.add(parallelYzServiceWrapper.calAvg(repositories.twelveyzRepository, "calTwelveyzAvg"));
+		futures.add(parallelYzServiceWrapper.calAvg(repositories.twelvezfyzRepository, "calTwelvezfAvg"));
+		repositories.yzService.sleep(futures, 100);
+		futures.clear();
+		futures.add(repositories.yzService.calTwelveLRYZ());
+		repositories.yzService.sleep(futures, 100);
+		futures.clear();
+		futures.add(parallelYzServiceWrapper.calAvg(repositories.twelvelryzRepository, "calTwelvelrAvg"));
+		repositories.yzService.sleep(futures, 100);
+		logger.info("End of calTwelve stage...");
+	}
+
+	public void calSLQ() throws Exception {
+		List<Future<Exception>> futures = new ArrayList<Future<Exception>>();
+		futures.add(repositories.yzService.calSLQYZ());
+		repositories.yzService.sleep(futures, 100);
+		futures.clear();
+		futures.add(parallelYzServiceWrapper.calAvg(repositories.slqyzRepository, "calSlqyzAvg"));
+		futures.add(parallelYzServiceWrapper.calAvg(repositories.slqzfyzRepository, "calSlqzfAvg"));
+		repositories.yzService.sleep(futures, 100);
+		futures.clear();
+		futures.add(repositories.yzService.calSLQLRYZ());
+		repositories.yzService.sleep(futures, 100);
+		futures.clear();
+		futures.add(parallelYzServiceWrapper.calAvg(repositories.slqlryzRepository, "calSlqlrAvg"));
+		repositories.yzService.sleep(futures, 100);
+		logger.info("End of calSLQ stage...");
+	}
+
+	public void calPD() throws Exception {
+		List<Future<Exception>> futures = new ArrayList<Future<Exception>>();
+		futures.add(repositories.yzService.calPDYZ());
+		repositories.yzService.sleep(futures, 100);
+		futures.clear();
+		futures.add(parallelYzServiceWrapper.calAvg(repositories.pdyzRepository, "calPdyzAvg"));
+		futures.add(parallelYzServiceWrapper.calAvg(repositories.pdzfyzRepository, "calPdzfAvg"));
+		repositories.yzService.sleep(futures, 100);
+		futures.clear();
+		futures.add(repositories.yzService.calPDLRYZ());
+		repositories.yzService.sleep(futures, 100);
+		futures.clear();
+		futures.add(parallelYzServiceWrapper.calAvg(repositories.pdlryzRepository, "calPdlrAvg"));
+		repositories.yzService.sleep(futures, 100);
+		logger.info("End of calPD stage...");
+	}
+
+	public void calZX() throws Exception {
+		List<Future<Exception>> futures = new ArrayList<Future<Exception>>();
 		futures.add(repositories.yzService.calZX1YZ());
 		futures.add(repositories.yzService.calZX2YZ());
 		futures.add(repositories.yzService.calZX3YZ());
@@ -200,114 +430,71 @@ public class YZController {
 		futures.add(repositories.yzService.calZX12YZ());
 		futures.add(repositories.yzService.calZX13YZ());
 		futures.add(repositories.yzService.calZX14YZ());
-		if (sleep) {
-			repositories.yzService.sleep(futures, 1000);
-		} else {
-			repositories.yzService.sleep(futures, 0);
-		}
-		logger.info("End of calYZ stage1...");
-
+		futures.add(repositories.yzService.calZX15YZ());
+		futures.add(repositories.yzService.calZX16YZ());
+		futures.add(repositories.yzService.calZX17YZ());
+		futures.add(repositories.yzService.calZX18YZ());
+		repositories.yzService.sleep(futures, 100);
 		futures.clear();
-		futures.add(repositories.yzService.calSXCSYZ());
-		futures.add(repositories.yzService.calTM12FDYZ());
-		futures.add(parallelYzServiceWrapper.calAvg(repositories.sxyzRepository, "calSxyzAvg"));
-		futures.add(parallelYzServiceWrapper.calAvg(repositories.sxzfyz2Repository, "calSxzfAvg"));
-		futures.add(parallelYzServiceWrapper.calAvg(repositories.bsyzRepository, "calBsyzAvg"));
-		futures.add(parallelYzServiceWrapper.calAvg(repositories.bszfyzRepository, "calBszfAvg"));
-		futures.add(parallelYzServiceWrapper.calAvg(repositories.swyzRepository, "calSwyzAvg"));
-		futures.add(parallelYzServiceWrapper.calAvg(repositories.swzfyzRepository, "calSwzfAvg"));
-		futures.add(parallelYzServiceWrapper.calAvg(repositories.zsyzRepository, "calZsyzAvg"));
-		futures.add(parallelYzServiceWrapper.calAvg(repositories.zszfyzRepository, "calZszfAvg"));
-		futures.add(parallelYzServiceWrapper.calAvg(repositories.dsyzRepository, "calDsyzAvg"));
-		futures.add(parallelYzServiceWrapper.calAvg(repositories.dszfyzRepository, "calDszfAvg"));
-		futures.add(parallelYzServiceWrapper.calAvg(repositories.mwyzRepository, "calMwyzAvg"));
-		futures.add(parallelYzServiceWrapper.calAvg(repositories.mwzfyzRepository, "calMwzfAvg"));
-		futures.add(parallelYzServiceWrapper.calAvg(repositories.lhyzRepository, "calLhyzAvg"));
-		futures.add(parallelYzServiceWrapper.calAvg(repositories.lhzfyzRepository, "calLhzfAvg"));
-		futures.add(parallelYzServiceWrapper.calAvg(repositories.wxyzRepository, "calWxyzAvg"));
-		futures.add(parallelYzServiceWrapper.calAvg(repositories.wxzfyzRepository, "calWxzfAvg"));
-		futures.add(parallelYzServiceWrapper.calAvg(repositories.qqyzRepository, "calQqyzAvg"));
-		futures.add(parallelYzServiceWrapper.calAvg(repositories.qqzfyzRepository, "calQqzfAvg"));
-		futures.add(parallelYzServiceWrapper.calAvg(repositories.qiwYzRepository, "calQiwyzAvg"));
-		futures.add(parallelYzServiceWrapper.calAvg(repositories.qiwzfYzRepository, "calQiwzfAvg"));
-		futures.add(parallelYzServiceWrapper.calAvg(repositories.twelveyzRepository, "calTwelveyzAvg"));
-		futures.add(parallelYzServiceWrapper.calAvg(repositories.twelvezfyzRepository, "calTwelvezfAvg"));
-		futures.add(parallelYzServiceWrapper.calAvg(repositories.slqyzRepository, "calSlqyzAvg"));
-		futures.add(parallelYzServiceWrapper.calAvg(repositories.slqzfyzRepository, "calSlqzfAvg"));
-		futures.add(parallelYzServiceWrapper.calAvg(repositories.pdyzRepository, "calPdyzAvg"));
-		futures.add(parallelYzServiceWrapper.calAvg(repositories.pdzfyzRepository, "calPdzfAvg"));
-		futures.add(parallelYzServiceWrapper.calAvg(repositories.bs9qyzRepository, "calBs9qyzAvg"));
-		futures.add(parallelYzServiceWrapper.calAvg(repositories.bs9qzfyzRepository, "calBs9qzfAvg"));
-		futures.add(parallelYzServiceWrapper.calAvg(repositories.wxdsyzRepository, "calWxdsyzAvg"));
-		futures.add(parallelYzServiceWrapper.calAvg(repositories.wxdszfyzRepository, "calWxdszfAvg"));
 		futures.add(parallelYzServiceWrapper.calAvg(repositories.zx1yzRepository, "calZx1yzAvg"));
+		futures.add(parallelYzServiceWrapper.calAvg(repositories.zx1zfyzRepository, "calZx1zfAvg"));
 		futures.add(parallelYzServiceWrapper.calAvg(repositories.zx2yzRepository, "calZx2yzAvg"));
+		futures.add(parallelYzServiceWrapper.calAvg(repositories.zx2zfyzRepository, "calZx2zfAvg"));
 		futures.add(parallelYzServiceWrapper.calAvg(repositories.zx3yzRepository, "calZx3yzAvg"));
+		futures.add(parallelYzServiceWrapper.calAvg(repositories.zx3zfyzRepository, "calZx3zfAvg"));
 		futures.add(parallelYzServiceWrapper.calAvg(repositories.zx4yzRepository, "calZx4yzAvg"));
+		futures.add(parallelYzServiceWrapper.calAvg(repositories.zx4zfyzRepository, "calZx4zfAvg"));
 		futures.add(parallelYzServiceWrapper.calAvg(repositories.zx5yzRepository, "calZx5yzAvg"));
+		futures.add(parallelYzServiceWrapper.calAvg(repositories.zx5zfyzRepository, "calZx5zfAvg"));
 		futures.add(parallelYzServiceWrapper.calAvg(repositories.zx6yzRepository, "calZx6yzAvg"));
+		futures.add(parallelYzServiceWrapper.calAvg(repositories.zx6zfyzRepository, "calZx6zfAvg"));
 		futures.add(parallelYzServiceWrapper.calAvg(repositories.zx7yzRepository, "calZx7yzAvg"));
+		futures.add(parallelYzServiceWrapper.calAvg(repositories.zx7zfyzRepository, "calZx7zfAvg"));
 		futures.add(parallelYzServiceWrapper.calAvg(repositories.zx8yzRepository, "calZx8yzAvg"));
+		futures.add(parallelYzServiceWrapper.calAvg(repositories.zx8zfyzRepository, "calZx8zfAvg"));
 		futures.add(parallelYzServiceWrapper.calAvg(repositories.zx9yzRepository, "calZx9yzAvg"));
+		futures.add(parallelYzServiceWrapper.calAvg(repositories.zx9zfyzRepository, "calZx9zfAvg"));
 		futures.add(parallelYzServiceWrapper.calAvg(repositories.zx10yzRepository, "calZx10yzAvg"));
+		futures.add(parallelYzServiceWrapper.calAvg(repositories.zx10zfyzRepository, "calZx10zfAvg"));
 		futures.add(parallelYzServiceWrapper.calAvg(repositories.zx11yzRepository, "calZx11yzAvg"));
+		futures.add(parallelYzServiceWrapper.calAvg(repositories.zx11zfyzRepository, "calZx11zfAvg"));
 		futures.add(parallelYzServiceWrapper.calAvg(repositories.zx12yzRepository, "calZx12yzAvg"));
+		futures.add(parallelYzServiceWrapper.calAvg(repositories.zx12zfyzRepository, "calZx12zfAvg"));
 		futures.add(parallelYzServiceWrapper.calAvg(repositories.zx13yzRepository, "calZx13yzAvg"));
+		futures.add(parallelYzServiceWrapper.calAvg(repositories.zx13zfyzRepository, "calZx13zfAvg"));
 		futures.add(parallelYzServiceWrapper.calAvg(repositories.zx14yzRepository, "calZx14yzAvg"));
-		if (sleep) {
-			repositories.yzService.sleep(futures, 1000);
-		} else {
-			repositories.yzService.sleep(futures, 0);
-		}
-		logger.info("End of calYZ stage2...");
+		futures.add(parallelYzServiceWrapper.calAvg(repositories.zx14zfyzRepository, "calZx14zfAvg"));
+		futures.add(parallelYzServiceWrapper.calAvg(repositories.zx15yzRepository, "calZx15yzAvg"));
+		futures.add(parallelYzServiceWrapper.calAvg(repositories.zx15zfyzRepository, "calZx15zfAvg"));
+		futures.add(parallelYzServiceWrapper.calAvg(repositories.zx16yzRepository, "calZx16yzAvg"));
+		futures.add(parallelYzServiceWrapper.calAvg(repositories.zx16zfyzRepository, "calZx16zfAvg"));
+		futures.add(parallelYzServiceWrapper.calAvg(repositories.zx17yzRepository, "calZx17yzAvg"));
+		futures.add(parallelYzServiceWrapper.calAvg(repositories.zx17zfyzRepository, "calZx17zfAvg"));
+		futures.add(parallelYzServiceWrapper.calAvg(repositories.zx18yzRepository, "calZx18yzAvg"));
+		futures.add(parallelYzServiceWrapper.calAvg(repositories.zx18zfyzRepository, "calZx18zfAvg"));
+		repositories.yzService.sleep(futures, 100);
+		logger.info("End of calZX stage...");
+	}
 
-		futures.clear();
-		futures.add(repositories.yzService.calSXLRYZ());
-		futures.add(repositories.yzService.calDSLRYZ());
-		futures.add(repositories.yzService.calMWLRYZ());
-		futures.add(repositories.yzService.calLHLRYZ());
-		futures.add(repositories.yzService.calTwelveLRYZ());
-		futures.add(repositories.yzService.calSLQLRYZ());
-		futures.add(repositories.yzService.calPDLRYZ());
-		futures.add(repositories.yzService.calZSLRYZ());
-		futures.add(repositories.yzService.calBS9QLRYZ());
-		futures.add(repositories.yzService.calWXDSLRYZ());
-		futures.add(parallelYzServiceWrapper.calAvg(repositories.tm12fdyzRepository, "calTm12fdyzAvg"));
-		futures.add(parallelYzServiceWrapper.calAvg(repositories.tm12fdzfyzRepository, "calTm12fdzfAvg"));
-		if (sleep) {
-			repositories.yzService.sleep(futures, 1000);
-		} else {
-			repositories.yzService.sleep(futures, 0);
-		}
-		logger.info("End of calYZ stage3...");
-
-		futures.clear();
-		futures.add(repositories.yzService.calTM12FDLRYZ());
-		futures.add(parallelYzServiceWrapper.calAvg(repositories.sxlryzRepository, "calSxlrAvg"));
-		futures.add(parallelYzServiceWrapper.calAvg(repositories.dslrYzRepository, "calDslrAvg"));
-		futures.add(parallelYzServiceWrapper.calAvg(repositories.mwlryzRepository, "calMwlrAvg"));
-		futures.add(parallelYzServiceWrapper.calAvg(repositories.twelvelryzRepository, "calTwelvelrAvg"));
-		futures.add(parallelYzServiceWrapper.calAvg(repositories.slqlryzRepository, "calSlqlrAvg"));
-		futures.add(parallelYzServiceWrapper.calAvg(repositories.pdlryzRepository, "calPdlrAvg"));
-		futures.add(parallelYzServiceWrapper.calAvg(repositories.lhlryzRepository, "calLhlrAvg"));
-		futures.add(parallelYzServiceWrapper.calAvg(repositories.zslryzRepository, "calZslrAvg"));
-		futures.add(parallelYzServiceWrapper.calAvg(repositories.bs9qlryzRepository, "calBs9qlrAvg"));
-		futures.add(parallelYzServiceWrapper.calAvg(repositories.wxdslryzRepository, "calWxdslrAvg"));
-		if (sleep) {
-			repositories.yzService.sleep(futures, 1000);
-		} else {
-			repositories.yzService.sleep(futures, 0);
-		}
-		logger.info("End of calYZ stage4...");
-
-		futures.clear();
-		futures.add(parallelYzServiceWrapper.calAvg(repositories.tm12fdlryzRepository, "calTm12fdlrAvg"));
-		if (sleep) {
-			repositories.yzService.sleep(futures, 1000);
-		} else {
-			repositories.yzService.sleep(futures, 0);
-		}
+	@RequestMapping("/calYZ")
+	public BaseResult calYZ() throws Exception {
+		calBS();
+		calDS();
+		calLH();
+		calMW();
+		calPD();
+		calQiw();
+		calQQ();
+		calSLQ();
+		calSX();
+		calSW();
+		calTM();
+		calTwelve();
+		calWX();
+		calZS();
+		calZX();
 		logger.info("Done calYZ...");
+		return BaseResult.EMPTY;
 	}
 
 	@RequestMapping("/listSX")
@@ -417,6 +604,114 @@ public class YZController {
 				result.getList().add(last);
 			}
 		}
+		return new BaseResult(result);
+	}
+
+	@RequestMapping("/listZX1ZF")
+	public BaseResult listZX1ZF(@RequestBody QueryInfo<Zx1ZfYz> queryInfo) throws Exception {
+		PageResult<Zx1ZfYz> result = repositories.zx1zfyzDao.query(queryInfo);
+		return new BaseResult(result);
+	}
+
+	@RequestMapping("/listZX2ZF")
+	public BaseResult listZX2ZF(@RequestBody QueryInfo<Zx2ZfYz> queryInfo) throws Exception {
+		PageResult<Zx2ZfYz> result = repositories.zx2zfyzDao.query(queryInfo);
+		return new BaseResult(result);
+	}
+
+	@RequestMapping("/listZX3ZF")
+	public BaseResult listZX3ZF(@RequestBody QueryInfo<Zx3ZfYz> queryInfo) throws Exception {
+		PageResult<Zx3ZfYz> result = repositories.zx3zfyzDao.query(queryInfo);
+		return new BaseResult(result);
+	}
+
+	@RequestMapping("/listZX4ZF")
+	public BaseResult listZX4ZF(@RequestBody QueryInfo<Zx4ZfYz> queryInfo) throws Exception {
+		PageResult<Zx4ZfYz> result = repositories.zx4zfyzDao.query(queryInfo);
+		return new BaseResult(result);
+	}
+
+	@RequestMapping("/listZX5ZF")
+	public BaseResult listZX5ZF(@RequestBody QueryInfo<Zx5ZfYz> queryInfo) throws Exception {
+		PageResult<Zx5ZfYz> result = repositories.zx5zfyzDao.query(queryInfo);
+		return new BaseResult(result);
+	}
+
+	@RequestMapping("/listZX6ZF")
+	public BaseResult listZX6ZF(@RequestBody QueryInfo<Zx6ZfYz> queryInfo) throws Exception {
+		PageResult<Zx6ZfYz> result = repositories.zx6zfyzDao.query(queryInfo);
+		return new BaseResult(result);
+	}
+
+	@RequestMapping("/listZX7ZF")
+	public BaseResult listZX7ZF(@RequestBody QueryInfo<Zx7ZfYz> queryInfo) throws Exception {
+		PageResult<Zx7ZfYz> result = repositories.zx7zfyzDao.query(queryInfo);
+		return new BaseResult(result);
+	}
+
+	@RequestMapping("/listZX8ZF")
+	public BaseResult listZX8ZF(@RequestBody QueryInfo<Zx8ZfYz> queryInfo) throws Exception {
+		PageResult<Zx8ZfYz> result = repositories.zx8zfyzDao.query(queryInfo);
+		return new BaseResult(result);
+	}
+
+	@RequestMapping("/listZX9ZF")
+	public BaseResult listZX9ZF(@RequestBody QueryInfo<Zx9ZfYz> queryInfo) throws Exception {
+		PageResult<Zx9ZfYz> result = repositories.zx9zfyzDao.query(queryInfo);
+		return new BaseResult(result);
+	}
+
+	@RequestMapping("/listZX10ZF")
+	public BaseResult listZX10ZF(@RequestBody QueryInfo<Zx10ZfYz> queryInfo) throws Exception {
+		PageResult<Zx10ZfYz> result = repositories.zx10zfyzDao.query(queryInfo);
+		return new BaseResult(result);
+	}
+
+	@RequestMapping("/listZX11ZF")
+	public BaseResult listZX11ZF(@RequestBody QueryInfo<Zx11ZfYz> queryInfo) throws Exception {
+		PageResult<Zx11ZfYz> result = repositories.zx11zfyzDao.query(queryInfo);
+		return new BaseResult(result);
+	}
+
+	@RequestMapping("/listZX12ZF")
+	public BaseResult listZX12ZF(@RequestBody QueryInfo<Zx12ZfYz> queryInfo) throws Exception {
+		PageResult<Zx12ZfYz> result = repositories.zx12zfyzDao.query(queryInfo);
+		return new BaseResult(result);
+	}
+
+	@RequestMapping("/listZX13ZF")
+	public BaseResult listZX13ZF(@RequestBody QueryInfo<Zx13ZfYz> queryInfo) throws Exception {
+		PageResult<Zx13ZfYz> result = repositories.zx13zfyzDao.query(queryInfo);
+		return new BaseResult(result);
+	}
+
+	@RequestMapping("/listZX14ZF")
+	public BaseResult listZX14ZF(@RequestBody QueryInfo<Zx14ZfYz> queryInfo) throws Exception {
+		PageResult<Zx14ZfYz> result = repositories.zx14zfyzDao.query(queryInfo);
+		return new BaseResult(result);
+	}
+
+	@RequestMapping("/listZX15ZF")
+	public BaseResult listZX15ZF(@RequestBody QueryInfo<Zx15ZfYz> queryInfo) throws Exception {
+		PageResult<Zx15ZfYz> result = repositories.zx15zfyzDao.query(queryInfo);
+		return new BaseResult(result);
+	}
+
+	@RequestMapping("/listZX16ZF")
+	public BaseResult listZX16ZF(@RequestBody QueryInfo<Zx16ZfYz> queryInfo) throws Exception {
+		PageResult<Zx16ZfYz> result = repositories.zx16zfyzDao.query(queryInfo);
+		return new BaseResult(result);
+	}
+
+	@RequestMapping("/listZX17ZF")
+	public BaseResult listZX17ZF(@RequestBody QueryInfo<Zx17ZfYz> queryInfo) throws Exception {
+		PageResult<Zx17ZfYz> result = repositories.zx17zfyzDao.query(queryInfo);
+		return new BaseResult(result);
+	}
+
+	@RequestMapping("/listZX18ZF")
+	public BaseResult listZX18ZF(@RequestBody QueryInfo<Zx18ZfYz> queryInfo) throws Exception {
+		PageResult<Zx18ZfYz> result = repositories.zx18zfyzDao.query(queryInfo);
 		return new BaseResult(result);
 	}
 
@@ -570,6 +865,54 @@ public class YZController {
 		if ("1".equals(mode)) {
 			if (result != null && result.getTotal() > 0) {
 				Zx14Yz last = new Zx14Yz();
+				result.getList().add(last);
+			}
+		}
+		return new BaseResult(result);
+	}
+
+	@RequestMapping("/listZX15YZ")
+	public BaseResult listZX15YZ(@RequestBody QueryInfo<Zx15Yz> queryInfo, @RequestParam String mode) throws Exception {
+		PageResult<Zx15Yz> result = repositories.zx15yzDao.query(queryInfo);
+		if ("1".equals(mode)) {
+			if (result != null && result.getTotal() > 0) {
+				Zx15Yz last = new Zx15Yz();
+				result.getList().add(last);
+			}
+		}
+		return new BaseResult(result);
+	}
+
+	@RequestMapping("/listZX16YZ")
+	public BaseResult listZX16YZ(@RequestBody QueryInfo<Zx16Yz> queryInfo, @RequestParam String mode) throws Exception {
+		PageResult<Zx16Yz> result = repositories.zx16yzDao.query(queryInfo);
+		if ("1".equals(mode)) {
+			if (result != null && result.getTotal() > 0) {
+				Zx16Yz last = new Zx16Yz();
+				result.getList().add(last);
+			}
+		}
+		return new BaseResult(result);
+	}
+
+	@RequestMapping("/listZX17YZ")
+	public BaseResult listZX17YZ(@RequestBody QueryInfo<Zx17Yz> queryInfo, @RequestParam String mode) throws Exception {
+		PageResult<Zx17Yz> result = repositories.zx17yzDao.query(queryInfo);
+		if ("1".equals(mode)) {
+			if (result != null && result.getTotal() > 0) {
+				Zx17Yz last = new Zx17Yz();
+				result.getList().add(last);
+			}
+		}
+		return new BaseResult(result);
+	}
+
+	@RequestMapping("/listZX18YZ")
+	public BaseResult listZX18YZ(@RequestBody QueryInfo<Zx18Yz> queryInfo, @RequestParam String mode) throws Exception {
+		PageResult<Zx18Yz> result = repositories.zx18yzDao.query(queryInfo);
+		if ("1".equals(mode)) {
+			if (result != null && result.getTotal() > 0) {
+				Zx18Yz last = new Zx18Yz();
 				result.getList().add(last);
 			}
 		}
@@ -2425,6 +2768,186 @@ public class YZController {
 	@RequestMapping("/downloadTwelveYZ")
 	public String downloadTwelveYZ(DownloadDTO dto, HttpServletResponse response) throws Exception {
 		return downloadYZ("twelveyz", TwelveYz.class, dto, response, repositories.twelveYzDao, "位置", "Pos");
+	}
+
+	@RequestMapping("/downloadZX1YZ")
+	public String downloadZX1YZ(DownloadDTO dto, HttpServletResponse response) throws Exception {
+		return downloadYZ("zx1yz", Zx1Yz.class, dto, response, repositories.zx1yzDao);
+	}
+
+	@RequestMapping("/downloadZX1ZF")
+	public String downloadZX1ZF(DownloadDTO dto, HttpServletResponse response) throws Exception {
+		return downloadYZ("zx1zf", Zx1ZfYz.class, dto, response, repositories.zx1zfyzDao);
+	}
+
+	@RequestMapping("/downloadZX2YZ")
+	public String downloadZX2YZ(DownloadDTO dto, HttpServletResponse response) throws Exception {
+		return downloadYZ("zx2yz", Zx2Yz.class, dto, response, repositories.zx2yzDao);
+	}
+
+	@RequestMapping("/downloadZX2ZF")
+	public String downloadZX2ZF(DownloadDTO dto, HttpServletResponse response) throws Exception {
+		return downloadYZ("zx2zf", Zx2ZfYz.class, dto, response, repositories.zx2zfyzDao);
+	}
+
+	@RequestMapping("/downloadZX3YZ")
+	public String downloadZX3YZ(DownloadDTO dto, HttpServletResponse response) throws Exception {
+		return downloadYZ("zx3yz", Zx3Yz.class, dto, response, repositories.zx3yzDao);
+	}
+
+	@RequestMapping("/downloadZX3ZF")
+	public String downloadZX3ZF(DownloadDTO dto, HttpServletResponse response) throws Exception {
+		return downloadYZ("zx3zf", Zx3ZfYz.class, dto, response, repositories.zx3zfyzDao);
+	}
+
+	@RequestMapping("/downloadZX4YZ")
+	public String downloadZX4YZ(DownloadDTO dto, HttpServletResponse response) throws Exception {
+		return downloadYZ("zx4yz", Zx4Yz.class, dto, response, repositories.zx4yzDao);
+	}
+
+	@RequestMapping("/downloadZX4ZF")
+	public String downloadZX4ZF(DownloadDTO dto, HttpServletResponse response) throws Exception {
+		return downloadYZ("zx4zf", Zx4ZfYz.class, dto, response, repositories.zx4zfyzDao);
+	}
+
+	@RequestMapping("/downloadZX5YZ")
+	public String downloadZX5YZ(DownloadDTO dto, HttpServletResponse response) throws Exception {
+		return downloadYZ("zx5yz", Zx5Yz.class, dto, response, repositories.zx5yzDao);
+	}
+
+	@RequestMapping("/downloadZX5ZF")
+	public String downloadZX5ZF(DownloadDTO dto, HttpServletResponse response) throws Exception {
+		return downloadYZ("zx5zf", Zx5ZfYz.class, dto, response, repositories.zx5zfyzDao);
+	}
+
+	@RequestMapping("/downloadZX6YZ")
+	public String downloadZX6YZ(DownloadDTO dto, HttpServletResponse response) throws Exception {
+		return downloadYZ("zx6yz", Zx6Yz.class, dto, response, repositories.zx6yzDao);
+	}
+
+	@RequestMapping("/downloadZX6ZF")
+	public String downloadZX6ZF(DownloadDTO dto, HttpServletResponse response) throws Exception {
+		return downloadYZ("zx6zf", Zx6ZfYz.class, dto, response, repositories.zx6zfyzDao);
+	}
+
+	@RequestMapping("/downloadZX7YZ")
+	public String downloadZX7YZ(DownloadDTO dto, HttpServletResponse response) throws Exception {
+		return downloadYZ("zx7yz", Zx7Yz.class, dto, response, repositories.zx7yzDao);
+	}
+
+	@RequestMapping("/downloadZX7ZF")
+	public String downloadZX7ZF(DownloadDTO dto, HttpServletResponse response) throws Exception {
+		return downloadYZ("zx7zf", Zx7ZfYz.class, dto, response, repositories.zx7zfyzDao);
+	}
+
+	@RequestMapping("/downloadZX8YZ")
+	public String downloadZX8YZ(DownloadDTO dto, HttpServletResponse response) throws Exception {
+		return downloadYZ("zx8yz", Zx8Yz.class, dto, response, repositories.zx8yzDao);
+	}
+
+	@RequestMapping("/downloadZX8ZF")
+	public String downloadZX8ZF(DownloadDTO dto, HttpServletResponse response) throws Exception {
+		return downloadYZ("zx8zf", Zx8ZfYz.class, dto, response, repositories.zx8zfyzDao);
+	}
+
+	@RequestMapping("/downloadZX9YZ")
+	public String downloadZX9YZ(DownloadDTO dto, HttpServletResponse response) throws Exception {
+		return downloadYZ("zx9yz", Zx9Yz.class, dto, response, repositories.zx9yzDao);
+	}
+
+	@RequestMapping("/downloadZX9ZF")
+	public String downloadZX9ZF(DownloadDTO dto, HttpServletResponse response) throws Exception {
+		return downloadYZ("zx9zf", Zx9ZfYz.class, dto, response, repositories.zx9zfyzDao);
+	}
+
+	@RequestMapping("/downloadZX10YZ")
+	public String downloadZX10YZ(DownloadDTO dto, HttpServletResponse response) throws Exception {
+		return downloadYZ("zx10yz", Zx10Yz.class, dto, response, repositories.zx10yzDao);
+	}
+
+	@RequestMapping("/downloadZX10ZF")
+	public String downloadZX10ZF(DownloadDTO dto, HttpServletResponse response) throws Exception {
+		return downloadYZ("zx10zf", Zx10ZfYz.class, dto, response, repositories.zx10zfyzDao);
+	}
+
+	@RequestMapping("/downloadZX11YZ")
+	public String downloadZX11YZ(DownloadDTO dto, HttpServletResponse response) throws Exception {
+		return downloadYZ("zx11yz", Zx11Yz.class, dto, response, repositories.zx11yzDao);
+	}
+
+	@RequestMapping("/downloadZX11ZF")
+	public String downloadZX11ZF(DownloadDTO dto, HttpServletResponse response) throws Exception {
+		return downloadYZ("zx11zf", Zx11ZfYz.class, dto, response, repositories.zx11zfyzDao);
+	}
+
+	@RequestMapping("/downloadZX12YZ")
+	public String downloadZX12YZ(DownloadDTO dto, HttpServletResponse response) throws Exception {
+		return downloadYZ("zx12yz", Zx12Yz.class, dto, response, repositories.zx12yzDao);
+	}
+
+	@RequestMapping("/downloadZX12ZF")
+	public String downloadZX12ZF(DownloadDTO dto, HttpServletResponse response) throws Exception {
+		return downloadYZ("zx12zf", Zx12ZfYz.class, dto, response, repositories.zx12zfyzDao);
+	}
+
+	@RequestMapping("/downloadZX13YZ")
+	public String downloadZX13YZ(DownloadDTO dto, HttpServletResponse response) throws Exception {
+		return downloadYZ("zx13yz", Zx13Yz.class, dto, response, repositories.zx13yzDao);
+	}
+
+	@RequestMapping("/downloadZX13ZF")
+	public String downloadZX13ZF(DownloadDTO dto, HttpServletResponse response) throws Exception {
+		return downloadYZ("zx13zf", Zx13ZfYz.class, dto, response, repositories.zx13zfyzDao);
+	}
+
+	@RequestMapping("/downloadZX14YZ")
+	public String downloadZX14YZ(DownloadDTO dto, HttpServletResponse response) throws Exception {
+		return downloadYZ("zx14yz", Zx14Yz.class, dto, response, repositories.zx14yzDao);
+	}
+
+	@RequestMapping("/downloadZX14ZF")
+	public String downloadZX14ZF(DownloadDTO dto, HttpServletResponse response) throws Exception {
+		return downloadYZ("zx14zf", Zx14ZfYz.class, dto, response, repositories.zx14zfyzDao);
+	}
+
+	@RequestMapping("/downloadZX15YZ")
+	public String downloadZX15YZ(DownloadDTO dto, HttpServletResponse response) throws Exception {
+		return downloadYZ("zx15yz", Zx15Yz.class, dto, response, repositories.zx15yzDao);
+	}
+
+	@RequestMapping("/downloadZX15ZF")
+	public String downloadZX15ZF(DownloadDTO dto, HttpServletResponse response) throws Exception {
+		return downloadYZ("zx15zf", Zx15ZfYz.class, dto, response, repositories.zx15zfyzDao);
+	}
+
+	@RequestMapping("/downloadZX16YZ")
+	public String downloadZX16YZ(DownloadDTO dto, HttpServletResponse response) throws Exception {
+		return downloadYZ("zx16yz", Zx16Yz.class, dto, response, repositories.zx16yzDao);
+	}
+
+	@RequestMapping("/downloadZX16ZF")
+	public String downloadZX16ZF(DownloadDTO dto, HttpServletResponse response) throws Exception {
+		return downloadYZ("zx16zf", Zx16ZfYz.class, dto, response, repositories.zx16zfyzDao);
+	}
+
+	@RequestMapping("/downloadZX17YZ")
+	public String downloadZX17YZ(DownloadDTO dto, HttpServletResponse response) throws Exception {
+		return downloadYZ("zx17yz", Zx17Yz.class, dto, response, repositories.zx17yzDao);
+	}
+
+	@RequestMapping("/downloadZX17ZF")
+	public String downloadZX17ZF(DownloadDTO dto, HttpServletResponse response) throws Exception {
+		return downloadYZ("zx17zf", Zx17ZfYz.class, dto, response, repositories.zx17zfyzDao);
+	}
+
+	@RequestMapping("/downloadZX18YZ")
+	public String downloadZX18YZ(DownloadDTO dto, HttpServletResponse response) throws Exception {
+		return downloadYZ("zx18yz", Zx18Yz.class, dto, response, repositories.zx18yzDao);
+	}
+
+	@RequestMapping("/downloadZX18ZF")
+	public String downloadZX18ZF(DownloadDTO dto, HttpServletResponse response) throws Exception {
+		return downloadYZ("zx18zf", Zx18ZfYz.class, dto, response, repositories.zx18zfyzDao);
 	}
 
 	@RequestMapping("/downloadTwelveZF")

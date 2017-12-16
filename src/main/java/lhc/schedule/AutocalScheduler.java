@@ -26,7 +26,7 @@ public class AutocalScheduler {
 		try {
 			logger.info("Start doing auto sync and calculation schedule...");
 			controller.sync(Calendar.getInstance().get(Calendar.YEAR), false);
-			yzController.calYZ(false);
+			yzController.calYZ();
 			logger.info("End of auto sync and calculation schedule...");
 		} catch (Exception e) {
 			logger.error(e.getMessage(), e);

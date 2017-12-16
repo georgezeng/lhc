@@ -8,9 +8,15 @@
 				<div class="buttonArea">
 					<span class="title">截止年份:</span><select id="years"></select>
 					<span class="title">截止期数:</span><select id="phases"></select>
+					<button id="downloadBtn" class="btn btn-success">导出</button>
 					<button id="calYZBtn" class="btn btn-info">遗值计算</button>
 					<button id="searchBtn" class="btn btn-primary">搜索</button>
 					<div class="clearfix"></div>
+					<form id="download" name="download" action="/mvc/yz/downloadZX6YZ" class="hidden">
+						<input id="size" type="hidden" name="size" />
+						<input id="endYear" type="hidden" name="year" />
+						<input id="endPhase" type="hidden" name="phase" />
+					</form>
 				</div>
 			</div>
 		</div>

@@ -27,7 +27,6 @@ import org.springframework.data.domain.Sort;
 import org.springframework.data.domain.Sort.Direction;
 import org.springframework.scheduling.annotation.Async;
 import org.springframework.scheduling.annotation.AsyncResult;
-import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.util.ReflectionUtils;
 
@@ -119,15 +118,25 @@ import lhc.domain.ZsLrYz;
 import lhc.domain.ZsYz;
 import lhc.domain.ZsZfYz;
 import lhc.domain.Zx10Yz;
+import lhc.domain.Zx10ZfYz;
 import lhc.domain.Zx1Yz;
+import lhc.domain.Zx1ZfYz;
 import lhc.domain.Zx2Yz;
+import lhc.domain.Zx2ZfYz;
 import lhc.domain.Zx3Yz;
+import lhc.domain.Zx3ZfYz;
 import lhc.domain.Zx4Yz;
+import lhc.domain.Zx4ZfYz;
 import lhc.domain.Zx5Yz;
+import lhc.domain.Zx5ZfYz;
 import lhc.domain.Zx6Yz;
+import lhc.domain.Zx6ZfYz;
 import lhc.domain.Zx7Yz;
+import lhc.domain.Zx7ZfYz;
 import lhc.domain.Zx8Yz;
+import lhc.domain.Zx8ZfYz;
 import lhc.domain.Zx9Yz;
+import lhc.domain.Zx9ZfYz;
 import lhc.dto.D1Yz;
 import lhc.dto.J0Yz;
 import lhc.dto.TmYzInfo;
@@ -518,7 +527,16 @@ public class YZService {
 
 			@Override
 			public void process() {
-				logger.info("End of calZX1YZ...");
+				calZF(Zx1Nums.FDS.length, Zx1Yz.class, Zx1ZfYz.class, repositories.zx1yzRepository,
+						repositories.zx1zfyzRepository, new GetSuffixHandler<Zx1ZfYz, Zx1Yz>() {
+
+							@Override
+							public String process(int index) {
+								return Zx1Nums.FDS[index];
+							}
+
+						});
+				logger.info("End of calZX1ZFYZ...");
 			}
 		});
 
@@ -530,6 +548,15 @@ public class YZService {
 
 			@Override
 			public void process() {
+				calZF(Zx2Nums.FDS.length, Zx2Yz.class, Zx2ZfYz.class, repositories.zx2yzRepository,
+						repositories.zx2zfyzRepository, new GetSuffixHandler<Zx2ZfYz, Zx2Yz>() {
+
+							@Override
+							public String process(int index) {
+								return Zx2Nums.FDS[index];
+							}
+
+						});
 				logger.info("End of calZX2YZ...");
 			}
 		});
@@ -542,6 +569,15 @@ public class YZService {
 
 			@Override
 			public void process() {
+				calZF(Zx3Nums.FDS.length, Zx3Yz.class, Zx3ZfYz.class, repositories.zx3yzRepository,
+						repositories.zx3zfyzRepository, new GetSuffixHandler<Zx3ZfYz, Zx3Yz>() {
+
+							@Override
+							public String process(int index) {
+								return Zx3Nums.FDS[index];
+							}
+
+						});
 				logger.info("End of calZX3YZ...");
 			}
 		});
@@ -554,6 +590,15 @@ public class YZService {
 
 			@Override
 			public void process() {
+				calZF(Zx4Nums.FDS.length, Zx4Yz.class, Zx4ZfYz.class, repositories.zx4yzRepository,
+						repositories.zx4zfyzRepository, new GetSuffixHandler<Zx4ZfYz, Zx4Yz>() {
+
+							@Override
+							public String process(int index) {
+								return Zx4Nums.FDS[index];
+							}
+
+						});
 				logger.info("End of calZX4YZ...");
 			}
 		});
@@ -566,6 +611,15 @@ public class YZService {
 
 			@Override
 			public void process() {
+				calZF(Zx5Nums.FDS.length, Zx5Yz.class, Zx5ZfYz.class, repositories.zx5yzRepository,
+						repositories.zx5zfyzRepository, new GetSuffixHandler<Zx5ZfYz, Zx5Yz>() {
+
+							@Override
+							public String process(int index) {
+								return Zx5Nums.FDS[index];
+							}
+
+						});
 				logger.info("End of calZX5YZ...");
 			}
 		});
@@ -578,6 +632,15 @@ public class YZService {
 
 			@Override
 			public void process() {
+				calZF(Zx6Nums.FDS.length, Zx6Yz.class, Zx6ZfYz.class, repositories.zx6yzRepository,
+						repositories.zx6zfyzRepository, new GetSuffixHandler<Zx6ZfYz, Zx6Yz>() {
+
+							@Override
+							public String process(int index) {
+								return Zx6Nums.FDS[index];
+							}
+
+						});
 				logger.info("End of calZX6YZ...");
 			}
 		});
@@ -590,6 +653,15 @@ public class YZService {
 
 			@Override
 			public void process() {
+				calZF(Zx7Nums.FDS.length, Zx7Yz.class, Zx7ZfYz.class, repositories.zx7yzRepository,
+						repositories.zx7zfyzRepository, new GetSuffixHandler<Zx7ZfYz, Zx7Yz>() {
+
+							@Override
+							public String process(int index) {
+								return Zx7Nums.FDS[index];
+							}
+
+						});
 				logger.info("End of calZX7YZ...");
 			}
 		});
@@ -602,6 +674,15 @@ public class YZService {
 
 			@Override
 			public void process() {
+				calZF(Zx8Nums.FDS.length, Zx8Yz.class, Zx8ZfYz.class, repositories.zx8yzRepository,
+						repositories.zx8zfyzRepository, new GetSuffixHandler<Zx8ZfYz, Zx8Yz>() {
+
+							@Override
+							public String process(int index) {
+								return Zx8Nums.FDS[index];
+							}
+
+						});
 				logger.info("End of calZX8YZ...");
 			}
 		});
@@ -614,6 +695,15 @@ public class YZService {
 
 			@Override
 			public void process() {
+				calZF(Zx9Nums.FDS.length, Zx9Yz.class, Zx9ZfYz.class, repositories.zx9yzRepository,
+						repositories.zx9zfyzRepository, new GetSuffixHandler<Zx9ZfYz, Zx9Yz>() {
+
+							@Override
+							public String process(int index) {
+								return Zx9Nums.FDS[index];
+							}
+
+						});
 				logger.info("End of calZX9YZ...");
 			}
 		});
@@ -626,6 +716,15 @@ public class YZService {
 
 			@Override
 			public void process() {
+				calZF(Zx10Nums.FDS.length, Zx10Yz.class, Zx10ZfYz.class, repositories.zx10yzRepository,
+						repositories.zx10zfyzRepository, new GetSuffixHandler<Zx10ZfYz, Zx10Yz>() {
+
+							@Override
+							public String process(int index) {
+								return Zx10Nums.FDS[index];
+							}
+
+						});
 				logger.info("End of calZX10YZ...");
 			}
 		});
@@ -4958,8 +5057,8 @@ public class YZService {
 		}
 	}
 
-	protected void appendXbwJY(XbwJY data, List<XbwJY> list, Set<Integer> A, Set<Integer> B, Set<Integer> C, Set<Integer> D,
-			Set<Integer> E, Set<Integer> F, Set<Integer> G, Set<Integer> H) throws Exception {
+	protected void appendXbwJY(XbwJY data, List<XbwJY> list, Set<Integer> A, Set<Integer> B, Set<Integer> C,
+			Set<Integer> D, Set<Integer> E, Set<Integer> F, Set<Integer> G, Set<Integer> H) throws Exception {
 		Set<Integer>[] AE = combineConditionList(A, E);
 		Set<Integer>[] BF = combineConditionList(B, F);
 		Set<Integer>[] CG = combineConditionList(C, G);
