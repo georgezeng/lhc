@@ -38,6 +38,7 @@ import lhc.domain.BsZfYz;
 import lhc.domain.DsLrYz;
 import lhc.domain.DsYz;
 import lhc.domain.DsZfYz;
+import lhc.domain.FxSw1;
 import lhc.domain.HmDsYz;
 import lhc.domain.KaiJiang;
 import lhc.domain.LhDsYz;
@@ -476,6 +477,13 @@ public class YZController {
 		logger.info("End of calZX stage...");
 	}
 
+	public void calFXSW() throws Exception {
+		List<Future<Exception>> futures = new ArrayList<Future<Exception>>();
+		futures.add(repositories.yzService.calFxSw1());
+		repositories.yzService.sleep(futures, 100);
+		logger.info("End of calFXSW stage...");
+	}
+
 	@RequestMapping("/calYZ")
 	public BaseResult calYZ() throws Exception {
 		calBS();
@@ -493,6 +501,7 @@ public class YZController {
 		calWX();
 		calZS();
 		calZX();
+		calFXSW();
 		logger.info("Done calYZ...");
 		return BaseResult.EMPTY;
 	}
@@ -3424,6 +3433,15 @@ public class YZController {
 	@RequestMapping("/listXBWJY2")
 	public BaseResult listXBWJY2(@RequestBody XbwJYCondition queryInfo) throws Exception {
 		return new BaseResult(repositories.yzService.getXbwJY2(queryInfo));
+	}
+
+	@RequestMapping("/listFXSW1")
+	public BaseResult listFXSW1(@RequestBody QueryInfo<FxSw1> queryInfo) throws Exception {
+		PageResult<FxSw1> result = repositories.fxsw1Dao.query(queryInfo);
+		if (result != null && result.getTotal() > 0) {
+			result.getList().add(new FxSw1());
+		}
+		return new BaseResult(result);
 	}
 
 }

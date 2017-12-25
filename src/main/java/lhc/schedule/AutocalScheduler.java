@@ -21,7 +21,7 @@ public class AutocalScheduler {
 	@Autowired
 	private YZController yzController;
 
-	@Scheduled(cron = "0 0 0-6/2 * * ?")
+	@Scheduled(cron = "0 0 1 * * ?")
 	public void run() {
 		try {
 			logger.info("Start doing auto sync and calculation schedule...");

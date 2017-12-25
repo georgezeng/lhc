@@ -1260,7 +1260,7 @@ var categories = [
 				text: "位3"
 			},
 			{
-				value: "11, 26, v, 43",
+				value: "11, 26, 41, 43",
 				text: "位4"
 			},
 			{

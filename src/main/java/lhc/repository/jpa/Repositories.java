@@ -11,6 +11,7 @@ import lhc.repository.jpa.api.BsZfYzRepository;
 import lhc.repository.jpa.api.DsLrYzRepository;
 import lhc.repository.jpa.api.DsYzRepository;
 import lhc.repository.jpa.api.DsZfYzRepository;
+import lhc.repository.jpa.api.FxSw1Repository;
 import lhc.repository.jpa.api.HmDsYzRepository;
 import lhc.repository.jpa.api.KaiJiangRepository;
 import lhc.repository.jpa.api.LhDsYzRepository;
@@ -102,6 +103,7 @@ import lhc.repository.jpa.dao.CommonDao;
 import lhc.repository.jpa.dao.DsLrYzDao;
 import lhc.repository.jpa.dao.DsYzDao;
 import lhc.repository.jpa.dao.DsZfYzDao;
+import lhc.repository.jpa.dao.FxSw1Dao;
 import lhc.repository.jpa.dao.HmDsYzDao;
 import lhc.repository.jpa.dao.KaiJiangDao;
 import lhc.repository.jpa.dao.LhDsYzDao;
@@ -728,6 +730,12 @@ public class Repositories {
 
 	@Autowired
 	public Tm12FdLrYzRepository tm12fdlryzRepository;
+
+	@Autowired
+	public FxSw1Repository fxsw1Repository;
+
+	@Autowired
+	public FxSw1Dao fxsw1Dao;
 
 	@Autowired
 	public CommonDao commonDao;

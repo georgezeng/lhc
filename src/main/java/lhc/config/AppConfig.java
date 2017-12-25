@@ -20,8 +20,8 @@ public class AppConfig extends AsyncConfigurerSupport {
 	@Override
 	public Executor getAsyncExecutor() {
 		ThreadPoolTaskExecutor executor = new ThreadPoolTaskExecutor();
-		executor.setCorePoolSize(60);
-		executor.setMaxPoolSize(60);
+		executor.setCorePoolSize(500);
+		executor.setMaxPoolSize(500);
 		executor.setQueueCapacity(Integer.MAX_VALUE);
 		executor.setThreadNamePrefix("Async-Executor-");
 		executor.initialize();
