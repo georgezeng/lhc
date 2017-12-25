@@ -10,6 +10,8 @@
 					<span class="title">截止期数:</span><select id="phases"></select>
 					<span class="title">显示/隐藏:</span>
 					<select id="columns">
+						<option value="-2">七区/七位/杂10</option>
+						<option value="-1">首位/五行/杂9</option>
 						<option value="0">所有遗值</option>
 						<option value="1">所有振幅</option>
 						<option value="2">生肖</option>
@@ -79,10 +81,21 @@
 						<option value="66">杂项18</option>
 						<option value="67">杂项18振幅</option>
 					</select>
+					<button id="downloadBtn" class="btn btn-success">导出</button>
 					<button id="calYZBtn" class="btn btn-info">遗值计算</button>
 					<button id="searchBtn" class="btn btn-primary">搜索</button>
 					<button id="showOrHideBtn" class="btn btn-primary">显示/隐藏</button>
 					<div class="clearfix"></div>
+					<form id="download" name="download" action="/mvc/yz/downloadFXSW1" class="hidden">
+						<input id="size" type="hidden" name="size" />
+						<input id="endYear" type="hidden" name="year" />
+						<input id="endPhase" type="hidden" name="phase" />
+						<input id="yearList" type="hidden" name="years" />
+						<input id="phaseList" type="hidden" name="phases" />
+						<input id="counts01" type="hidden" name="counts01" />
+						<input id="countsTotals" type="hidden" name="countsTotals" />
+						<input id="fzNums" type="hidden" name="fzNums" />
+					</form>
 				</div>
 			</div>
 		</div>
@@ -164,6 +177,7 @@
 							<th zf="true">杂项18振幅</th>
 							<th>计数(0/1)</th>
 							<th>计数</th>
+							<th>反转个数</th>
 							<th width="500">反转</th>
 						</tr>
 					</thead>
@@ -239,6 +253,7 @@
 							<td zf="true">杂项18振幅</td>
 							<td>计数(0/1)</td>
 							<td>计数</td>
+							<td>反转个数</td>
 							<td>反转</td>
 						</tr>
 					</tfoot>

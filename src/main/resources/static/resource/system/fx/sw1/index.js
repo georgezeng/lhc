@@ -4,37 +4,59 @@ $(document).ready(function() {
 	var lastHms = null;
 	var redCounts = [];
 	
+	var downloadForm = $("#download");
 	$("#columns").combobox();
 	
-	$("#showOrHideBtn").click(function() {
-		var value = $("#columns").val();
+	function showOrHide(value) {
 		var table = $("#dataTable");
 		lastHms = null;
-		if(value == "0" || value == "1") {
-			var zf = value == "0" ? "false" : "true";
-			table.find("th[zf='"+zf+"']").add(table.find("td[zf='"+zf+"']")).each(function() {
-				var td = $(this);
-				if(td.attr("status") == "hide") {
-					td.attr("status", "show");
-					td.show();
-				} else {
-					td.attr("status", "hide");
-					td.hide();
-				}
-			});
-			
-			table.find("tbody").find("tr").each(function() {
-				var td = $(this).children().eq(70);
-				if(td.text() != "反转") {
-					if(lastHms) {
-						td.text(lastHms);
+		if(value < 2) {
+			if(value > -1) {
+				var zf = value == 0 ? "false" : "true";
+				table.find("th[zf='"+zf+"']").add(table.find("td[zf='"+zf+"']")).each(function() {
+					var td = $(this);
+					if(td.attr("status") == "hide") {
+						td.attr("status", "show");
+						td.show();
+					} else {
+						td.attr("status", "hide");
+						td.hide();
 					}
-					lastHms = countReverseNums(td);
+				});
+				
+				table.find("tbody").find("tr").each(function() {
+					var td = $(this).children().eq(71);
+					if(td.text() != "反转") {
+						if(lastHms) {
+							td.text(lastHms);
+						}
+						lastHms = countReverseNums(td);
+					}
+				});
+			} else {
+				switch(value) {
+				case -1: {
+					showOrHide(6);
+					showOrHide(7);
+					showOrHide(16);
+					showOrHide(17);
+					showOrHide(48);
+					showOrHide(49);
+				} break;
+				case -2: {
+					showOrHide(24);
+					showOrHide(25);
+					showOrHide(26);
+					showOrHide(27);
+					showOrHide(50);
+					showOrHide(51);
+				} break;
 				}
-			});
+			}
+			
 		} else {
 			table.find("tr").each(function() {
-				var td = $(this).children().eq(parseInt(value));
+				var td = $(this).children().eq(value);
 				if(td.attr("status") == "hide") {
 					td.attr("status", "show");
 					td.show();
@@ -42,7 +64,7 @@ $(document).ready(function() {
 					td.attr("status", "hide");
 					td.hide();
 				}
-				td = $(this).children().eq(70);
+				td = $(this).children().eq(71);
 				if(td.text() != "反转") {
 					if(lastHms) {
 						td.text(lastHms);
@@ -53,6 +75,10 @@ $(document).ready(function() {
 		}
 		countNumber();
 		countTotalNumber();
+	}
+	
+	$("#showOrHideBtn").click(function() {
+		showOrHide(parseInt($("#columns").val()));
 	});
 	
 	function countNumber() {
@@ -109,6 +135,32 @@ $(document).ready(function() {
 		}
 		return reverseNums.join(", ");
 	}
+
+	$("#downloadBtn").unbind().click(function() {
+		var years = [];
+		var phases = [];
+		var counts01 = [];
+		var countsTotals = [];
+		var fzNums = [];
+		
+		var table = $("#dataTable");
+		table.find("tbody").find("tr").each(function() {
+			var tds = $(this).find("td");
+			years.push(tds.eq(0).text());
+			phases.push(tds.eq(1).text());
+			counts01.push(tds.eq(68).text());
+			countsTotals.push(tds.eq(69).text());
+			fzNums.push(tds.eq(70).text());
+		});
+		
+		$("#yearList").val(years.join(","));
+		$("#phaseList").val(phases.join(","));
+		$("#counts01").val(counts01.join(","));
+		$("#countsTotals").val(countsTotals.join(","));
+		$("#fzNums").val(fzNums.join(","));
+		
+		downloadForm.submit();
+	});
 	
 	var numlist = [
 		"sxNums", "sxzfNums",
@@ -185,6 +237,7 @@ $(document).ready(function() {
 	for(var i in sxlist) {
 		cols.push(sxlist[i]);
 	}
+	cols.push("phase");
 	cols.push("phase");
 	cols.push("phase");
 	cols.push("phase");
@@ -291,6 +344,16 @@ $(document).ready(function() {
 		aTargets: [70],
 		fnCreatedCell: function(nTd, sData, item, iRow, iCol) {
 			if(lastHms) {
+				$(nTd).text(lastHms.split(/,\s*/).length);
+			} else {
+				$(nTd).text("0");
+			}
+		}
+	});
+	columnDefs.push({
+		aTargets: [71],
+		fnCreatedCell: function(nTd, sData, item, iRow, iCol) {
+			if(lastHms) {
 				$(nTd).text(lastHms);
 			} else {
 				$(nTd).text("");
@@ -311,9 +374,14 @@ $(document).ready(function() {
 			totalCount = 0;
 			lastHms = null;
 			redCounts = [];
+			
 			queryInfo.object = {};
 			queryInfo.object.year = parseInt($("#years").val());
 			queryInfo.object.phase = parseInt($("#phases").val());
+			
+			$("#endYear").val(queryInfo.object.year);
+			$("#endPhase").val(queryInfo.object.phase);
+			$("#size").val(queryInfo.pageInfo.pageSize);
 		},
 		columns : columns,
 		aoColumnDefs: columnDefs

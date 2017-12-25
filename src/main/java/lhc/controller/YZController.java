@@ -2310,6 +2310,31 @@ public class YZController {
 		return null;
 	}
 
+	@RequestMapping("/downloadFXSW1")
+	public String downloadFXSW1(HttpServletRequest request, HttpServletResponse response) throws Exception {
+		response.setContentType("text/csv;charset=gbk;");
+		response.addHeader("Content-Disposition", "attachment;filename=fxsw1.csv");
+		Writer writer = response.getWriter();
+		writer.append("年份").append(", ");
+		writer.append("期数").append(", ");
+		writer.append("计数(0/1)").append(", ");
+		writer.append("计数").append(", ");
+		writer.append("反转个数").append("\n");
+		String[] years = request.getParameter("years").split(",");
+		String[] phases = request.getParameter("phases").split(",");
+		String[] counts01 = request.getParameter("counts01").split(",");
+		String[] countsTotals = request.getParameter("countsTotals").split(",");
+		String[] fzNums = request.getParameter("fzNums").split(",");
+		for (int i = 0; i < years.length; i++) {
+			writer.append(years[i]).append(", ");
+			writer.append(phases[i]).append(", ");
+			writer.append(counts01[i]).append(", ");
+			writer.append(countsTotals[i]).append(", ");
+			writer.append(fzNums[i]).append("\n");
+		}
+		return null;
+	}
+
 	@RequestMapping("/downloadAllD1YZ")
 	public String downloadAllD1YZ(HttpServletRequest request, HttpServletResponse response) throws Exception {
 		response.setContentType("text/csv;charset=gbk;");
