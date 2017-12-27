@@ -497,21 +497,21 @@ public class YZController {
 
 	@RequestMapping("/calYZ")
 	public BaseResult calYZ() throws Exception {
-		calBS();
-		calDS();
-		calLH();
-		calMW();
-		calPD();
-		calQiw();
-		calQQ();
-		calSLQ();
-		calSX();
-		calSW();
-		calTM();
-		calTwelve();
-		calWX();
-		calZS();
-		calZX();
+//		calBS();
+//		calDS();
+//		calLH();
+//		calMW();
+//		calPD();
+//		calQiw();
+//		calQQ();
+//		calSLQ();
+//		calSX();
+//		calSW();
+//		calTM();
+//		calTwelve();
+//		calWX();
+//		calZS();
+//		calZX();
 		calFXSW();
 		logger.info("Done calYZ...");
 		return BaseResult.EMPTY;

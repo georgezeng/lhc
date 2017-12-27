@@ -1,10 +1,24 @@
 package lhc.constants;
 
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 public class Bs9qNums {
 	public static final String[] FDS = {"Red1", "Red2", "Red3", "Blue1", "Blue2", "Blue3", "Green1", "Green2", "Green3"};
+	public static final Map<String, String> TXT_MAP = new HashMap<String, String>();
+	static {
+		TXT_MAP.put(FDS[0], "红1");
+		TXT_MAP.put(FDS[1], "红2");
+		TXT_MAP.put(FDS[2], "红3");
+		TXT_MAP.put(FDS[3], "蓝1");
+		TXT_MAP.put(FDS[4], "蓝2");
+		TXT_MAP.put(FDS[5], "蓝3");
+		TXT_MAP.put(FDS[6], "绿1");
+		TXT_MAP.put(FDS[7], "绿2");
+		TXT_MAP.put(FDS[8], "绿3");
+	}
 	
 	public static final List<Integer> RED1 = new ArrayList<Integer>();
 	public static final List<Integer> RED2 = new ArrayList<Integer>();

@@ -1,10 +1,20 @@
 package lhc.constants;
 
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 public class WxNums {
 	public static final String[] FDS = {"Jin", "Mu", "Shui", "Huo", "Tu"};
+	public static final Map<String, String> TXT_MAP = new HashMap<String, String>();
+	static {
+		TXT_MAP.put(FDS[0], "金");
+		TXT_MAP.put(FDS[1], "木");
+		TXT_MAP.put(FDS[2], "水");
+		TXT_MAP.put(FDS[3], "火");
+		TXT_MAP.put(FDS[4], "土");
+	}
 	
 	public static final List<Integer> JIN = new ArrayList<Integer>();
 	public static final List<Integer> MU = new ArrayList<Integer>();

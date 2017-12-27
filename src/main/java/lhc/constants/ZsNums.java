@@ -1,10 +1,25 @@
 package lhc.constants;
 
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 public class ZsNums {
 	public static final String[] FDS = { "Fd1", "Fd2", "Fd3", "Fd4", "Fd5", "Fd6", "Fd7", "Fd8", "Fd9" };
+	public static final Map<String, String> TXT_MAP = new HashMap<String, String>();
+	static {
+		TXT_MAP.put(FDS[0], "位1");
+		TXT_MAP.put(FDS[1], "位2");
+		TXT_MAP.put(FDS[2], "位3");
+		TXT_MAP.put(FDS[3], "位4");
+		TXT_MAP.put(FDS[4], "位5");
+		TXT_MAP.put(FDS[5], "位6");
+		TXT_MAP.put(FDS[6], "位7");
+		TXT_MAP.put(FDS[7], "位8");
+		TXT_MAP.put(FDS[8], "位9");
+	}
+	
 	public static final List<Integer> FD1 = new ArrayList<Integer>();
 	public static final List<Integer> FD2 = new ArrayList<Integer>();
 	public static final List<Integer> FD3 = new ArrayList<Integer>();

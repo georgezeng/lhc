@@ -3452,7 +3452,13 @@ function createFXSW(url) {
 			} else {
 				value = "个数";
 			}
-			$(nTd).text(value);
+			$(nTd).text(value).css("fontSize", "12px");
+		}
+	});
+	columnDefs.push({
+		aTargets: [1],
+		fnCreatedCell: function(nTd, sData, item, iRow, iCol) {
+			$(nTd).text(item.phase).css("fontSize", "12px");
 		}
 	});
 	for(var i = 2; i < 68; i++) {
@@ -3482,7 +3488,7 @@ function createFXSW(url) {
 							$(nTd).css("backgroundColor", "#ffc")
 						}
 						lastReds[index-2] = value == 0;
-						value = item[sxlist[index-2]] + " (" + item[sxlist[index-2] + "DW"] + ")";
+						value = "<div>" + item[sxlist[index-2]] + "</div><div style='min-width: 35px;'>(" + item[sxlist[index-2] + "DW"] + ")</div>";
 						$(nTd).attr("hms", item[numlist[index-2]]);
 					} else {
 						value = redCounts[index-2];
@@ -3501,7 +3507,7 @@ function createFXSW(url) {
 					} else {
 						$(nTd).attr("zf", "true");
 					}
-					$(nTd).text(value);
+					$(nTd).html(value);
 				}
 			});
 		})(i);

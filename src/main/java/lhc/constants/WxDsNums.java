@@ -1,12 +1,27 @@
 package lhc.constants;
 
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 public class WxDsNums {
 	public static final String[] FDS = { "JinOdd", "JinEven", "MuOdd", "MuEven", "ShuiOdd", "ShuiEven", "HuoOdd",
 			"HuoEven", "TuOdd", "TuEven" };
-
+	public static final Map<String, String> TXT_MAP = new HashMap<String, String>();
+	static {
+		TXT_MAP.put(FDS[0], "金单");
+		TXT_MAP.put(FDS[1], "金双");
+		TXT_MAP.put(FDS[2], "木单");
+		TXT_MAP.put(FDS[3], "木双");
+		TXT_MAP.put(FDS[4], "水单");
+		TXT_MAP.put(FDS[5], "水双");
+		TXT_MAP.put(FDS[6], "火单");
+		TXT_MAP.put(FDS[7], "火双");
+		TXT_MAP.put(FDS[8], "土单");
+		TXT_MAP.put(FDS[9], "土双");
+	}
+	
 	public static final List<Integer> JINODD = new ArrayList<Integer>();
 	public static final List<Integer> JINEVEN = new ArrayList<Integer>();
 	public static final List<Integer> MUODD = new ArrayList<Integer>();

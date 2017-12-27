@@ -1,10 +1,25 @@
 package lhc.constants;
 
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 public class LhNums {
 	public static final String[] FDS = {"W0", "W1", "W2", "W3", "W4", "W5", "W6", "W7", "W8", "W9"};
+	public static final Map<String, String> TXT_MAP = new HashMap<String, String>();
+	static {
+		TXT_MAP.put(FDS[0], "位0");
+		TXT_MAP.put(FDS[1], "位1");
+		TXT_MAP.put(FDS[2], "位2");
+		TXT_MAP.put(FDS[3], "位3");
+		TXT_MAP.put(FDS[4], "位4");
+		TXT_MAP.put(FDS[5], "位5");
+		TXT_MAP.put(FDS[6], "位6");
+		TXT_MAP.put(FDS[7], "位7");
+		TXT_MAP.put(FDS[8], "位8");
+		TXT_MAP.put(FDS[9], "位9");
+	}
 	
 	public static final List<Integer> W0 = new ArrayList<Integer>();
 	public static final List<Integer> W1 = new ArrayList<Integer>();

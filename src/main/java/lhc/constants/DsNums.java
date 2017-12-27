@@ -1,11 +1,26 @@
 package lhc.constants;
 
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 public class DsNums {
 	public static final String[] FDS = { "Ds0Odd", "Ds0Even", "Ds1Odd", "Ds1Even", "Ds2Odd", "Ds2Even", "Ds3Odd",
 			"Ds3Even", "Ds4Odd", "Ds4Even" };
+	public static final Map<String, String> TXT_MAP = new HashMap<String, String>();
+	static {
+		TXT_MAP.put(FDS[0], "0单");
+		TXT_MAP.put(FDS[1], "0双");
+		TXT_MAP.put(FDS[2], "1单");
+		TXT_MAP.put(FDS[3], "1双");
+		TXT_MAP.put(FDS[4], "2单");
+		TXT_MAP.put(FDS[5], "2双");
+		TXT_MAP.put(FDS[6], "3单");
+		TXT_MAP.put(FDS[7], "3双");
+		TXT_MAP.put(FDS[8], "4单");
+		TXT_MAP.put(FDS[9], "4双");
+	}
 
 	public static final List<Integer> DS0ODD = new ArrayList<Integer>();
 	public static final List<Integer> DS0EVEN = new ArrayList<Integer>();

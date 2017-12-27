@@ -1,10 +1,22 @@
 package lhc.constants;
 
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 public class Zx10Nums {
 	public static final String[] FDS = {"W1", "W2", "W3", "W4", "W5", "W6", "W7"};
+	public static final Map<String, String> TXT_MAP = new HashMap<String, String>();
+	static {
+		TXT_MAP.put(FDS[0], "位1");
+		TXT_MAP.put(FDS[1], "位2");
+		TXT_MAP.put(FDS[2], "位3");
+		TXT_MAP.put(FDS[3], "位4");
+		TXT_MAP.put(FDS[4], "位5");
+		TXT_MAP.put(FDS[5], "位6");
+		TXT_MAP.put(FDS[6], "位7");
+	}
 	
 	public static final List<Integer> W1 = new ArrayList<Integer>();
 	public static final List<Integer> W2 = new ArrayList<Integer>();
