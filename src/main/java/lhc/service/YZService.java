@@ -8181,4 +8181,9 @@ class XbwInfo {
 		this.obj = obj;
 		this.yz = yz;
 	}
+
+	public String toString() {
+		return "{fd: " + fd + ", obj: " + obj + ", yz: " + yz + "}";
+	}
+
 }

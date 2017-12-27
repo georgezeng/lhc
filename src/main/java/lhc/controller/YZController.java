@@ -39,6 +39,8 @@ import lhc.domain.DsLrYz;
 import lhc.domain.DsYz;
 import lhc.domain.DsZfYz;
 import lhc.domain.FxSw1;
+import lhc.domain.FxSw2;
+import lhc.domain.FxSw3;
 import lhc.domain.HmDsYz;
 import lhc.domain.KaiJiang;
 import lhc.domain.LhDsYz;
@@ -479,28 +481,37 @@ public class YZController {
 
 	public void calFXSW() throws Exception {
 		List<Future<Exception>> futures = new ArrayList<Future<Exception>>();
+		repositories.yzService.clearFxSwData();
 		futures.add(repositories.yzService.calFxSw1());
+		futures.add(repositories.yzService.calFxSw2());
 		repositories.yzService.sleep(futures, 100);
+		repositories.yzService.saveFxSwData();
+		repositories.yzService.clearFxSwData();
+		futures.clear();
+		futures.add(repositories.yzService.calFxSw3());
+		repositories.yzService.sleep(futures, 100);
+		repositories.yzService.saveFxSwData();
+		repositories.yzService.clearFxSwData();
 		logger.info("End of calFXSW stage...");
 	}
 
 	@RequestMapping("/calYZ")
 	public BaseResult calYZ() throws Exception {
-		calBS();
-		calDS();
-		calLH();
-		calMW();
-		calPD();
-		calQiw();
-		calQQ();
-		calSLQ();
-		calSX();
-		calSW();
-		calTM();
-		calTwelve();
-		calWX();
-		calZS();
-		calZX();
+//		calBS();
+//		calDS();
+//		calLH();
+//		calMW();
+//		calPD();
+//		calQiw();
+//		calQQ();
+//		calSLQ();
+//		calSX();
+//		calSW();
+//		calTM();
+//		calTwelve();
+//		calWX();
+//		calZS();
+//		calZX();
 		calFXSW();
 		logger.info("Done calYZ...");
 		return BaseResult.EMPTY;
@@ -2310,26 +2321,29 @@ public class YZController {
 		return null;
 	}
 
-	@RequestMapping("/downloadFXSW1")
-	public String downloadFXSW1(HttpServletRequest request, HttpServletResponse response) throws Exception {
+	@RequestMapping("/downloadFXSW")
+	public String downloadFXSW(HttpServletRequest request, HttpServletResponse response) throws Exception {
 		response.setContentType("text/csv;charset=gbk;");
-		response.addHeader("Content-Disposition", "attachment;filename=fxsw1.csv");
+		response.addHeader("Content-Disposition", "attachment;filename=fxsw" + request.getParameter("pos") + ".csv");
 		Writer writer = response.getWriter();
 		writer.append("年份").append(", ");
 		writer.append("期数").append(", ");
 		writer.append("计数(0/1)").append(", ");
 		writer.append("计数").append(", ");
+		writer.append("连续计数(0/1)").append(", ");
 		writer.append("反转个数").append("\n");
 		String[] years = request.getParameter("years").split(",");
 		String[] phases = request.getParameter("phases").split(",");
 		String[] counts01 = request.getParameter("counts01").split(",");
 		String[] countsTotals = request.getParameter("countsTotals").split(",");
+		String[] continuosCounts = request.getParameter("continuosCounts").split(",");
 		String[] fzNums = request.getParameter("fzNums").split(",");
 		for (int i = 0; i < years.length; i++) {
 			writer.append(years[i]).append(", ");
 			writer.append(phases[i]).append(", ");
 			writer.append(counts01[i]).append(", ");
 			writer.append(countsTotals[i]).append(", ");
+			writer.append(continuosCounts[i]).append(", ");
 			writer.append(fzNums[i]).append("\n");
 		}
 		return null;
@@ -3465,6 +3479,24 @@ public class YZController {
 		PageResult<FxSw1> result = repositories.fxsw1Dao.query(queryInfo);
 		if (result != null && result.getTotal() > 0) {
 			result.getList().add(new FxSw1());
+		}
+		return new BaseResult(result);
+	}
+
+	@RequestMapping("/listFXSW2")
+	public BaseResult listFXSW2(@RequestBody QueryInfo<FxSw2> queryInfo) throws Exception {
+		PageResult<FxSw2> result = repositories.fxsw2Dao.query(queryInfo);
+		if (result != null && result.getTotal() > 0) {
+			result.getList().add(new FxSw2());
+		}
+		return new BaseResult(result);
+	}
+	
+	@RequestMapping("/listFXSW3")
+	public BaseResult listFXSW3(@RequestBody QueryInfo<FxSw3> queryInfo) throws Exception {
+		PageResult<FxSw3> result = repositories.fxsw3Dao.query(queryInfo);
+		if (result != null && result.getTotal() > 0) {
+			result.getList().add(new FxSw3());
 		}
 		return new BaseResult(result);
 	}

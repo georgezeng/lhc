@@ -87,3 +87,5 @@ TRUNCATE table `zx17_yz`;
 TRUNCATE table `zx17_zf_yz`;
 TRUNCATE table `zx18_yz`;
 TRUNCATE table `zx18_zf_yz`;
+TRUNCATE table `fx_sw1_yz`;
+TRUNCATE table `fx_sw2_yz`;

@@ -1,5 +1,5 @@
 $(document).ready(function() {
-	createFXSW("/mvc/yz/listFXSW1");
+	createFXSW("/mvc/yz/listFXSW3");
 	
 });
 
