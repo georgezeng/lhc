@@ -497,21 +497,21 @@ public class YZController {
 
 	@RequestMapping("/calYZ")
 	public BaseResult calYZ() throws Exception {
-//		calBS();
-//		calDS();
-//		calLH();
-//		calMW();
-//		calPD();
-//		calQiw();
-//		calQQ();
-//		calSLQ();
-//		calSX();
-//		calSW();
-//		calTM();
-//		calTwelve();
-//		calWX();
-//		calZS();
-//		calZX();
+		calBS();
+		calDS();
+		calLH();
+		calMW();
+		calPD();
+		calQiw();
+		calQQ();
+		calSLQ();
+		calSX();
+		calSW();
+		calTM();
+		calTwelve();
+		calWX();
+		calZS();
+		calZX();
 		calFXSW();
 		logger.info("Done calYZ...");
 		return BaseResult.EMPTY;
@@ -3491,7 +3491,7 @@ public class YZController {
 		}
 		return new BaseResult(result);
 	}
-	
+
 	@RequestMapping("/listFXSW3")
 	public BaseResult listFXSW3(@RequestBody QueryInfo<FxSw3> queryInfo) throws Exception {
 		PageResult<FxSw3> result = repositories.fxsw3Dao.query(queryInfo);
