@@ -386,13 +386,13 @@ public class YZController {
 	public void calFXSW() throws Exception {
 		List<Future<Exception>> futures = new ArrayList<Future<Exception>>();
 		repositories.yzService.clearFxSwData();
-//		futures.add(repositories.yzService.calFxSw1());
-//		futures.add(repositories.yzService.calFxSw2());
+		futures.add(repositories.yzService.calFxSw1());
+		futures.add(repositories.yzService.calFxSw2());
 		repositories.yzService.sleep(futures, 100);
 		repositories.yzService.saveFxSwData();
 		repositories.yzService.clearFxSwData();
 		futures.clear();
-//		futures.add(repositories.yzService.calFxSw3());
+		futures.add(repositories.yzService.calFxSw3());
 		futures.add(repositories.yzService.calFxSw4());
 		repositories.yzService.sleep(futures, 100);
 		repositories.yzService.saveFxSwData();
@@ -426,21 +426,21 @@ public class YZController {
 
 	@RequestMapping("/calYZ")
 	public BaseResult calYZ() throws Exception {
-//		calBS();
-//		calDS();
-//		calLH();
-//		calMW();
-//		calPD();
-//		calQiw();
-//		calQQ();
-//		calSLQ();
-//		calSX();
-//		calSW();
-//		calTM();
-//		calTwelve();
-//		calWX();
-//		calZS();
-//		calZX();
+		calBS();
+		calDS();
+		calLH();
+		calMW();
+		calPD();
+		calQiw();
+		calQQ();
+		calSLQ();
+		calSX();
+		calSW();
+		calTM();
+		calTwelve();
+		calWX();
+		calZS();
+		calZX();
 		calFXSW();
 		logger.info("Done calYZ...");
 		return BaseResult.EMPTY;

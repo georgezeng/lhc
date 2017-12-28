@@ -54,7 +54,7 @@ public class KaiJiangController {
 	}
 
 	public BaseResult sync(int year, boolean sleep) throws Exception {
-		delete(year);
+//		delete(year);
 		parseService.syncKaiJiang(year);
 //		yZController.calYZ(sleep);
 		return BaseResult.EMPTY;

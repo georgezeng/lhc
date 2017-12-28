@@ -45,14 +45,15 @@ public class ParseService {
 				if (dates.contains(date)) {
 					continue;
 				}
+				Integer phase = Integer.valueOf(phaseEl.text().trim().replace("期", ""));
 				dates.add(date);
-				KaiJiang data = kaiJiangRepository.findByDate(date);
+				KaiJiang data = kaiJiangRepository.findByYearAndPhase(year, phase);
 				if (data == null) {
 					data = new KaiJiang();
-					data.setDate(date);
-				}
-				data.setYear(year);
-				data.setPhase(Integer.valueOf(phaseEl.text().trim().replace("期", "")));
+					data.setYear(year);
+					data.setPhase(phase);
+				} 
+				data.setDate(date);
 				data.setSpecialSx(SX.textOf(specialSxEl.text().trim()));
 				data.setSpecialNum(Integer.valueOf(specialNumEl.text().trim()));
 				for (int j = 0; j < 6; j++) {
