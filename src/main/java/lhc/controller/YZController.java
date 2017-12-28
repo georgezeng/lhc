@@ -27,103 +27,7 @@ import org.springframework.web.bind.annotation.RestController;
 
 import lhc.constants.SwNums;
 import lhc.constants.WxNums;
-import lhc.domain.Avg;
-import lhc.domain.BaseDsYz;
-import lhc.domain.BaseYz;
-import lhc.domain.Bs9qLrYz;
-import lhc.domain.Bs9qYz;
-import lhc.domain.Bs9qZfYz;
-import lhc.domain.BsYz;
-import lhc.domain.BsZfYz;
-import lhc.domain.DsLrYz;
-import lhc.domain.DsYz;
-import lhc.domain.DsZfYz;
-import lhc.domain.FxSw1;
-import lhc.domain.FxSw2;
-import lhc.domain.FxSw3;
-import lhc.domain.HmDsYz;
-import lhc.domain.KaiJiang;
-import lhc.domain.LhDsYz;
-import lhc.domain.LhLrYz;
-import lhc.domain.LhYz;
-import lhc.domain.LhZfYz;
-import lhc.domain.MwCsYz;
-import lhc.domain.MwLrYz;
-import lhc.domain.MwYz;
-import lhc.domain.MwZfYz;
-import lhc.domain.PdLrYz;
-import lhc.domain.PdYz;
-import lhc.domain.PdZfYz;
-import lhc.domain.PtYz;
-import lhc.domain.QiwYz;
-import lhc.domain.QiwZfYz;
-import lhc.domain.QqYz;
-import lhc.domain.QqZfYz;
-import lhc.domain.QwYz;
-import lhc.domain.SlqLrYz;
-import lhc.domain.SlqYz;
-import lhc.domain.SlqZfYz;
-import lhc.domain.SqYz;
-import lhc.domain.SwYz;
-import lhc.domain.SwZfYz;
-import lhc.domain.SxCsYz;
-import lhc.domain.SxDsYz;
-import lhc.domain.SxLrYz;
-import lhc.domain.SxYz;
-import lhc.domain.SxZfYz;
-import lhc.domain.SxZfYz2;
-import lhc.domain.Tm12FdLrYz;
-import lhc.domain.Tm12FdYz;
-import lhc.domain.Tm12FdZfYz;
-import lhc.domain.TmFdYz;
-import lhc.domain.TmYz;
-import lhc.domain.TwelveLrYz;
-import lhc.domain.TwelveYz;
-import lhc.domain.TwelveZfYz;
-import lhc.domain.WxYz;
-import lhc.domain.WxZfYz;
-import lhc.domain.WxdsLrYz;
-import lhc.domain.WxdsYz;
-import lhc.domain.WxdsZfYz;
-import lhc.domain.ZsLrYz;
-import lhc.domain.ZsYz;
-import lhc.domain.ZsZfYz;
-import lhc.domain.Zx10Yz;
-import lhc.domain.Zx10ZfYz;
-import lhc.domain.Zx11Yz;
-import lhc.domain.Zx11ZfYz;
-import lhc.domain.Zx12Yz;
-import lhc.domain.Zx12ZfYz;
-import lhc.domain.Zx13Yz;
-import lhc.domain.Zx13ZfYz;
-import lhc.domain.Zx14Yz;
-import lhc.domain.Zx14ZfYz;
-import lhc.domain.Zx15Yz;
-import lhc.domain.Zx15ZfYz;
-import lhc.domain.Zx16Yz;
-import lhc.domain.Zx16ZfYz;
-import lhc.domain.Zx17Yz;
-import lhc.domain.Zx17ZfYz;
-import lhc.domain.Zx18Yz;
-import lhc.domain.Zx18ZfYz;
-import lhc.domain.Zx1Yz;
-import lhc.domain.Zx1ZfYz;
-import lhc.domain.Zx2Yz;
-import lhc.domain.Zx2ZfYz;
-import lhc.domain.Zx3Yz;
-import lhc.domain.Zx3ZfYz;
-import lhc.domain.Zx4Yz;
-import lhc.domain.Zx4ZfYz;
-import lhc.domain.Zx5Yz;
-import lhc.domain.Zx5ZfYz;
-import lhc.domain.Zx6Yz;
-import lhc.domain.Zx6ZfYz;
-import lhc.domain.Zx7Yz;
-import lhc.domain.Zx7ZfYz;
-import lhc.domain.Zx8Yz;
-import lhc.domain.Zx8ZfYz;
-import lhc.domain.Zx9Yz;
-import lhc.domain.Zx9ZfYz;
+import lhc.domain.*;
 import lhc.dto.BaseResult;
 import lhc.dto.D1Yz;
 import lhc.dto.DownloadDTO;
@@ -482,13 +386,20 @@ public class YZController {
 	public void calFXSW() throws Exception {
 		List<Future<Exception>> futures = new ArrayList<Future<Exception>>();
 		repositories.yzService.clearFxSwData();
-		futures.add(repositories.yzService.calFxSw1());
-		futures.add(repositories.yzService.calFxSw2());
+//		futures.add(repositories.yzService.calFxSw1());
+//		futures.add(repositories.yzService.calFxSw2());
 		repositories.yzService.sleep(futures, 100);
 		repositories.yzService.saveFxSwData();
 		repositories.yzService.clearFxSwData();
 		futures.clear();
-		futures.add(repositories.yzService.calFxSw3());
+//		futures.add(repositories.yzService.calFxSw3());
+		futures.add(repositories.yzService.calFxSw4());
+		repositories.yzService.sleep(futures, 100);
+		repositories.yzService.saveFxSwData();
+		repositories.yzService.clearFxSwData();
+		futures.clear();
+		futures.add(repositories.yzService.calFxSw5());
+		futures.add(repositories.yzService.calFxSw6());
 		repositories.yzService.sleep(futures, 100);
 		repositories.yzService.saveFxSwData();
 		repositories.yzService.clearFxSwData();
@@ -497,21 +408,21 @@ public class YZController {
 
 	@RequestMapping("/calYZ")
 	public BaseResult calYZ() throws Exception {
-		calBS();
-		calDS();
-		calLH();
-		calMW();
-		calPD();
-		calQiw();
-		calQQ();
-		calSLQ();
-		calSX();
-		calSW();
-		calTM();
-		calTwelve();
-		calWX();
-		calZS();
-		calZX();
+//		calBS();
+//		calDS();
+//		calLH();
+//		calMW();
+//		calPD();
+//		calQiw();
+//		calQQ();
+//		calSLQ();
+//		calSX();
+//		calSW();
+//		calTM();
+//		calTwelve();
+//		calWX();
+//		calZS();
+//		calZX();
 		calFXSW();
 		logger.info("Done calYZ...");
 		return BaseResult.EMPTY;
@@ -3497,6 +3408,33 @@ public class YZController {
 		PageResult<FxSw3> result = repositories.fxsw3Dao.query(queryInfo);
 		if (result != null && result.getTotal() > 0) {
 			result.getList().add(new FxSw3());
+		}
+		return new BaseResult(result);
+	}
+	
+	@RequestMapping("/listFXSW4")
+	public BaseResult listFXSW4(@RequestBody QueryInfo<FxSw4> queryInfo) throws Exception {
+		PageResult<FxSw4> result = repositories.fxsw4Dao.query(queryInfo);
+		if (result != null && result.getTotal() > 0) {
+			result.getList().add(new FxSw4());
+		}
+		return new BaseResult(result);
+	}
+	
+	@RequestMapping("/listFXSW5")
+	public BaseResult listFXSW5(@RequestBody QueryInfo<FxSw5> queryInfo) throws Exception {
+		PageResult<FxSw5> result = repositories.fxsw5Dao.query(queryInfo);
+		if (result != null && result.getTotal() > 0) {
+			result.getList().add(new FxSw5());
+		}
+		return new BaseResult(result);
+	}
+	
+	@RequestMapping("/listFXSW6")
+	public BaseResult listFXSW6(@RequestBody QueryInfo<FxSw6> queryInfo) throws Exception {
+		PageResult<FxSw6> result = repositories.fxsw6Dao.query(queryInfo);
+		if (result != null && result.getTotal() > 0) {
+			result.getList().add(new FxSw6());
 		}
 		return new BaseResult(result);
 	}

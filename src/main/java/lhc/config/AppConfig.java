@@ -17,11 +17,14 @@ import org.springframework.scheduling.concurrent.ThreadPoolTaskExecutor;
 // @EnableRedisRepositories(basePackages = { "lhc.repository.redis.api" })
 @EnableJpaRepositories(basePackages = { "lhc.repository.jpa.api" })
 public class AppConfig extends AsyncConfigurerSupport {
+	@Value("${executor.poolSize}")
+	private int poolSize;
+
 	@Override
 	public Executor getAsyncExecutor() {
 		ThreadPoolTaskExecutor executor = new ThreadPoolTaskExecutor();
-		executor.setCorePoolSize(500);
-		executor.setMaxPoolSize(500);
+		executor.setCorePoolSize(poolSize);
+		executor.setMaxPoolSize(poolSize);
 		executor.setQueueCapacity(Integer.MAX_VALUE);
 		executor.setThreadNamePrefix("Async-Executor-");
 		executor.initialize();

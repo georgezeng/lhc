@@ -3195,7 +3195,7 @@ function createFXSW(url) {
 	var downloadForm = $("#download");
 	$("#columns").combobox();
 	
-	function showOrHide(value) {
+	var showOrHide = function (value) {
 		var table = $("#dataTable");
 		lastHms = null;
 		if(value < 2) {
@@ -3488,7 +3488,7 @@ function createFXSW(url) {
 							$(nTd).css("backgroundColor", "#ffc")
 						}
 						lastReds[index-2] = value == 0;
-						value = "<div>" + item[sxlist[index-2]] + "</div><div style='min-width: 35px;'>(" + item[sxlist[index-2] + "DW"] + ")</div>";
+						value = "<div>" + item[sxlist[index-2]] + "</div><div style='min-width: 40px;'>(" + item[sxlist[index-2] + "DW"] + ")</div>";
 						$(nTd).attr("hms", item[numlist[index-2]]);
 					} else {
 						value = redCounts[index-2];
@@ -3617,4 +3617,6 @@ function createFXSW(url) {
 		columns : columns,
 		aoColumnDefs: columnDefs
 	}));
+	
+	return showOrHide;
 }
