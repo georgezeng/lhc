@@ -3,199 +3,8 @@ package lhc.repository.jpa;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
-import lhc.repository.jpa.api.Bs9qLrYzRepository;
-import lhc.repository.jpa.api.Bs9qYzRepository;
-import lhc.repository.jpa.api.Bs9qZfYzRepository;
-import lhc.repository.jpa.api.BsYzRepository;
-import lhc.repository.jpa.api.BsZfYzRepository;
-import lhc.repository.jpa.api.DsLrYzRepository;
-import lhc.repository.jpa.api.DsYzRepository;
-import lhc.repository.jpa.api.DsZfYzRepository;
-import lhc.repository.jpa.api.FxSw1Repository;
-import lhc.repository.jpa.api.FxSw2Repository;
-import lhc.repository.jpa.api.FxSw3Repository;
-import lhc.repository.jpa.api.FxSw4Repository;
-import lhc.repository.jpa.api.FxSw5Repository;
-import lhc.repository.jpa.api.FxSw6Repository;
-import lhc.repository.jpa.api.HmDsYzRepository;
-import lhc.repository.jpa.api.KaiJiangRepository;
-import lhc.repository.jpa.api.LhDsYzRepository;
-import lhc.repository.jpa.api.LhLrYzRepository;
-import lhc.repository.jpa.api.LhYzRepository;
-import lhc.repository.jpa.api.LhZfYzRepository;
-import lhc.repository.jpa.api.MwLrYzRepository;
-import lhc.repository.jpa.api.MwYzRepository;
-import lhc.repository.jpa.api.MwZfYzRepository;
-import lhc.repository.jpa.api.PdLrYzRepository;
-import lhc.repository.jpa.api.PdYzRepository;
-import lhc.repository.jpa.api.PdZfYzRepository;
-import lhc.repository.jpa.api.PtYzRepository;
-import lhc.repository.jpa.api.QiwYzRepository;
-import lhc.repository.jpa.api.QiwZfYzRepository;
-import lhc.repository.jpa.api.QqYzRepository;
-import lhc.repository.jpa.api.QqZfYzRepository;
-import lhc.repository.jpa.api.QwYzRepository;
-import lhc.repository.jpa.api.SlqLrYzRepository;
-import lhc.repository.jpa.api.SlqYzRepository;
-import lhc.repository.jpa.api.SlqZfYzRepository;
-import lhc.repository.jpa.api.SqYzRepository;
-import lhc.repository.jpa.api.SwYzRepository;
-import lhc.repository.jpa.api.SwZfYzRepository;
-import lhc.repository.jpa.api.SxCsYzRepository;
-import lhc.repository.jpa.api.SxDsYzRepository;
-import lhc.repository.jpa.api.SxLrYzRepository;
-import lhc.repository.jpa.api.SxYzRepository;
-import lhc.repository.jpa.api.SxZfYz2Repository;
-import lhc.repository.jpa.api.SxZfYzRepository;
-import lhc.repository.jpa.api.Tm12FdLrYzRepository;
-import lhc.repository.jpa.api.Tm12FdYzRepository;
-import lhc.repository.jpa.api.Tm12FdZfYzRepository;
-import lhc.repository.jpa.api.TmFdYzRepository;
-import lhc.repository.jpa.api.TmYzRepository;
-import lhc.repository.jpa.api.TwelveLrYzRepository;
-import lhc.repository.jpa.api.TwelveYzRepository;
-import lhc.repository.jpa.api.TwelveZfYzRepository;
-import lhc.repository.jpa.api.WxYzRepository;
-import lhc.repository.jpa.api.WxZfYzRepository;
-import lhc.repository.jpa.api.WxdsLrYzRepository;
-import lhc.repository.jpa.api.WxdsYzRepository;
-import lhc.repository.jpa.api.WxdsZfYzRepository;
-import lhc.repository.jpa.api.ZsLrYzRepository;
-import lhc.repository.jpa.api.ZsYzRepository;
-import lhc.repository.jpa.api.ZsZfYzRepository;
-import lhc.repository.jpa.api.Zx10YzRepository;
-import lhc.repository.jpa.api.Zx10ZfYzRepository;
-import lhc.repository.jpa.api.Zx11YzRepository;
-import lhc.repository.jpa.api.Zx11ZfYzRepository;
-import lhc.repository.jpa.api.Zx12YzRepository;
-import lhc.repository.jpa.api.Zx12ZfYzRepository;
-import lhc.repository.jpa.api.Zx13YzRepository;
-import lhc.repository.jpa.api.Zx13ZfYzRepository;
-import lhc.repository.jpa.api.Zx14YzRepository;
-import lhc.repository.jpa.api.Zx14ZfYzRepository;
-import lhc.repository.jpa.api.Zx15YzRepository;
-import lhc.repository.jpa.api.Zx15ZfYzRepository;
-import lhc.repository.jpa.api.Zx16YzRepository;
-import lhc.repository.jpa.api.Zx16ZfYzRepository;
-import lhc.repository.jpa.api.Zx17YzRepository;
-import lhc.repository.jpa.api.Zx17ZfYzRepository;
-import lhc.repository.jpa.api.Zx18YzRepository;
-import lhc.repository.jpa.api.Zx18ZfYzRepository;
-import lhc.repository.jpa.api.Zx1YzRepository;
-import lhc.repository.jpa.api.Zx1ZfYzRepository;
-import lhc.repository.jpa.api.Zx2YzRepository;
-import lhc.repository.jpa.api.Zx2ZfYzRepository;
-import lhc.repository.jpa.api.Zx3YzRepository;
-import lhc.repository.jpa.api.Zx3ZfYzRepository;
-import lhc.repository.jpa.api.Zx4YzRepository;
-import lhc.repository.jpa.api.Zx4ZfYzRepository;
-import lhc.repository.jpa.api.Zx5YzRepository;
-import lhc.repository.jpa.api.Zx5ZfYzRepository;
-import lhc.repository.jpa.api.Zx6YzRepository;
-import lhc.repository.jpa.api.Zx6ZfYzRepository;
-import lhc.repository.jpa.api.Zx7YzRepository;
-import lhc.repository.jpa.api.Zx7ZfYzRepository;
-import lhc.repository.jpa.api.Zx8YzRepository;
-import lhc.repository.jpa.api.Zx8ZfYzRepository;
-import lhc.repository.jpa.api.Zx9YzRepository;
-import lhc.repository.jpa.api.Zx9ZfYzRepository;
-import lhc.repository.jpa.dao.Bs9qLrYzDao;
-import lhc.repository.jpa.dao.Bs9qYzDao;
-import lhc.repository.jpa.dao.Bs9qZfYzDao;
-import lhc.repository.jpa.dao.BsYzDao;
-import lhc.repository.jpa.dao.BsZfYzDao;
-import lhc.repository.jpa.dao.CommonDao;
-import lhc.repository.jpa.dao.DsLrYzDao;
-import lhc.repository.jpa.dao.DsYzDao;
-import lhc.repository.jpa.dao.DsZfYzDao;
-import lhc.repository.jpa.dao.FxSw1Dao;
-import lhc.repository.jpa.dao.FxSw2Dao;
-import lhc.repository.jpa.dao.FxSw3Dao;
-import lhc.repository.jpa.dao.FxSw4Dao;
-import lhc.repository.jpa.dao.FxSw5Dao;
-import lhc.repository.jpa.dao.FxSw6Dao;
-import lhc.repository.jpa.dao.HmDsYzDao;
-import lhc.repository.jpa.dao.KaiJiangDao;
-import lhc.repository.jpa.dao.LhDsYzDao;
-import lhc.repository.jpa.dao.LhLrYzDao;
-import lhc.repository.jpa.dao.LhYzDao;
-import lhc.repository.jpa.dao.LhZfYzDao;
-import lhc.repository.jpa.dao.MwLrYzDao;
-import lhc.repository.jpa.dao.MwYzDao;
-import lhc.repository.jpa.dao.MwZfYzDao;
-import lhc.repository.jpa.dao.PdLrYzDao;
-import lhc.repository.jpa.dao.PdYzDao;
-import lhc.repository.jpa.dao.PdZfYzDao;
-import lhc.repository.jpa.dao.PtYzDao;
-import lhc.repository.jpa.dao.QiwYzDao;
-import lhc.repository.jpa.dao.QiwZfYzDao;
-import lhc.repository.jpa.dao.QqYzDao;
-import lhc.repository.jpa.dao.QqZfYzDao;
-import lhc.repository.jpa.dao.QwYzDao;
-import lhc.repository.jpa.dao.SlqLrYzDao;
-import lhc.repository.jpa.dao.SlqYzDao;
-import lhc.repository.jpa.dao.SlqZfYzDao;
-import lhc.repository.jpa.dao.SqYzDao;
-import lhc.repository.jpa.dao.SwYzDao;
-import lhc.repository.jpa.dao.SwZfYzDao;
-import lhc.repository.jpa.dao.SxCsYzDao;
-import lhc.repository.jpa.dao.SxDsYzDao;
-import lhc.repository.jpa.dao.SxLrYzDao;
-import lhc.repository.jpa.dao.SxYzDao;
-import lhc.repository.jpa.dao.SxZfYz2Dao;
-import lhc.repository.jpa.dao.SxZfYzDao;
-import lhc.repository.jpa.dao.Tm12FdLrYzDao;
-import lhc.repository.jpa.dao.Tm12FdYzDao;
-import lhc.repository.jpa.dao.Tm12FdZfYzDao;
-import lhc.repository.jpa.dao.TmFdYzDao;
-import lhc.repository.jpa.dao.TmYzDao;
-import lhc.repository.jpa.dao.TwelveLrYzDao;
-import lhc.repository.jpa.dao.TwelveYzDao;
-import lhc.repository.jpa.dao.TwelveZfYzDao;
-import lhc.repository.jpa.dao.WxYzDao;
-import lhc.repository.jpa.dao.WxZfYzDao;
-import lhc.repository.jpa.dao.WxdsLrYzDao;
-import lhc.repository.jpa.dao.WxdsYzDao;
-import lhc.repository.jpa.dao.WxdsZfYzDao;
-import lhc.repository.jpa.dao.ZsLrYzDao;
-import lhc.repository.jpa.dao.ZsYzDao;
-import lhc.repository.jpa.dao.ZsZfYzDao;
-import lhc.repository.jpa.dao.Zx10YzDao;
-import lhc.repository.jpa.dao.Zx10ZfYzDao;
-import lhc.repository.jpa.dao.Zx11YzDao;
-import lhc.repository.jpa.dao.Zx11ZfYzDao;
-import lhc.repository.jpa.dao.Zx12YzDao;
-import lhc.repository.jpa.dao.Zx12ZfYzDao;
-import lhc.repository.jpa.dao.Zx13YzDao;
-import lhc.repository.jpa.dao.Zx13ZfYzDao;
-import lhc.repository.jpa.dao.Zx14YzDao;
-import lhc.repository.jpa.dao.Zx14ZfYzDao;
-import lhc.repository.jpa.dao.Zx15YzDao;
-import lhc.repository.jpa.dao.Zx15ZfYzDao;
-import lhc.repository.jpa.dao.Zx16YzDao;
-import lhc.repository.jpa.dao.Zx16ZfYzDao;
-import lhc.repository.jpa.dao.Zx17YzDao;
-import lhc.repository.jpa.dao.Zx17ZfYzDao;
-import lhc.repository.jpa.dao.Zx18YzDao;
-import lhc.repository.jpa.dao.Zx18ZfYzDao;
-import lhc.repository.jpa.dao.Zx1YzDao;
-import lhc.repository.jpa.dao.Zx1ZfYzDao;
-import lhc.repository.jpa.dao.Zx2YzDao;
-import lhc.repository.jpa.dao.Zx2ZfYzDao;
-import lhc.repository.jpa.dao.Zx3YzDao;
-import lhc.repository.jpa.dao.Zx3ZfYzDao;
-import lhc.repository.jpa.dao.Zx4YzDao;
-import lhc.repository.jpa.dao.Zx4ZfYzDao;
-import lhc.repository.jpa.dao.Zx5YzDao;
-import lhc.repository.jpa.dao.Zx5ZfYzDao;
-import lhc.repository.jpa.dao.Zx6YzDao;
-import lhc.repository.jpa.dao.Zx6ZfYzDao;
-import lhc.repository.jpa.dao.Zx7YzDao;
-import lhc.repository.jpa.dao.Zx7ZfYzDao;
-import lhc.repository.jpa.dao.Zx8YzDao;
-import lhc.repository.jpa.dao.Zx8ZfYzDao;
-import lhc.repository.jpa.dao.Zx9YzDao;
-import lhc.repository.jpa.dao.Zx9ZfYzDao;
+import lhc.repository.jpa.api.*;
+import lhc.repository.jpa.dao.*;
 import lhc.service.YZ2Service;
 
 @Service
@@ -776,6 +585,42 @@ public class Repositories {
 	
 	@Autowired
 	public FxSw6Dao fxsw6Dao;
+	
+	@Autowired
+	public FxSw7Repository fxsw7Repository;
+	
+	@Autowired
+	public FxSw7Dao fxsw7Dao;
+	
+	@Autowired
+	public FxSw8Repository fxsw8Repository;
+	
+	@Autowired
+	public FxSw8Dao fxsw8Dao;
+	
+	@Autowired
+	public FxSw9Repository fxsw9Repository;
+	
+	@Autowired
+	public FxSw9Dao fxsw9Dao;
+	
+	@Autowired
+	public FxSw10Repository fxsw10Repository;
+	
+	@Autowired
+	public FxSw10Dao fxsw10Dao;
+	
+	@Autowired
+	public FxSw11Repository fxsw11Repository;
+	
+	@Autowired
+	public FxSw11Dao fxsw11Dao;
+	
+	@Autowired
+	public FxSw12Repository fxsw12Repository;
+	
+	@Autowired
+	public FxSw12Dao fxsw12Dao;
 
 	@Autowired
 	public CommonDao commonDao;

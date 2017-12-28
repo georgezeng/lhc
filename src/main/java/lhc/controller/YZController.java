@@ -403,6 +403,24 @@ public class YZController {
 		repositories.yzService.sleep(futures, 100);
 		repositories.yzService.saveFxSwData();
 		repositories.yzService.clearFxSwData();
+		futures.clear();
+		futures.add(repositories.yzService.calFxSw7());
+		futures.add(repositories.yzService.calFxSw8());
+		repositories.yzService.sleep(futures, 100);
+		repositories.yzService.saveFxSwData();
+		repositories.yzService.clearFxSwData();
+		futures.clear();
+		futures.add(repositories.yzService.calFxSw9());
+		futures.add(repositories.yzService.calFxSw10());
+		repositories.yzService.sleep(futures, 100);
+		repositories.yzService.saveFxSwData();
+		repositories.yzService.clearFxSwData();
+		futures.clear();
+		futures.add(repositories.yzService.calFxSw11());
+		futures.add(repositories.yzService.calFxSw12());
+		repositories.yzService.sleep(futures, 100);
+		repositories.yzService.saveFxSwData();
+		repositories.yzService.clearFxSwData();
 		logger.info("End of calFXSW stage...");
 	}
 
@@ -3435,6 +3453,60 @@ public class YZController {
 		PageResult<FxSw6> result = repositories.fxsw6Dao.query(queryInfo);
 		if (result != null && result.getTotal() > 0) {
 			result.getList().add(new FxSw6());
+		}
+		return new BaseResult(result);
+	}
+	
+	@RequestMapping("/listFXSW7")
+	public BaseResult listFXSW7(@RequestBody QueryInfo<FxSw7> queryInfo) throws Exception {
+		PageResult<FxSw7> result = repositories.fxsw7Dao.query(queryInfo);
+		if (result != null && result.getTotal() > 0) {
+			result.getList().add(new FxSw7());
+		}
+		return new BaseResult(result);
+	}
+	
+	@RequestMapping("/listFXSW8")
+	public BaseResult listFXSW8(@RequestBody QueryInfo<FxSw8> queryInfo) throws Exception {
+		PageResult<FxSw8> result = repositories.fxsw8Dao.query(queryInfo);
+		if (result != null && result.getTotal() > 0) {
+			result.getList().add(new FxSw8());
+		}
+		return new BaseResult(result);
+	}
+	
+	@RequestMapping("/listFXSW9")
+	public BaseResult listFXSW9(@RequestBody QueryInfo<FxSw9> queryInfo) throws Exception {
+		PageResult<FxSw9> result = repositories.fxsw9Dao.query(queryInfo);
+		if (result != null && result.getTotal() > 0) {
+			result.getList().add(new FxSw9());
+		}
+		return new BaseResult(result);
+	}
+	
+	@RequestMapping("/listFXSW10")
+	public BaseResult listFXSW10(@RequestBody QueryInfo<FxSw10> queryInfo) throws Exception {
+		PageResult<FxSw10> result = repositories.fxsw10Dao.query(queryInfo);
+		if (result != null && result.getTotal() > 0) {
+			result.getList().add(new FxSw10());
+		}
+		return new BaseResult(result);
+	}
+	
+	@RequestMapping("/listFXSW11")
+	public BaseResult listFXSW11(@RequestBody QueryInfo<FxSw11> queryInfo) throws Exception {
+		PageResult<FxSw11> result = repositories.fxsw11Dao.query(queryInfo);
+		if (result != null && result.getTotal() > 0) {
+			result.getList().add(new FxSw11());
+		}
+		return new BaseResult(result);
+	}
+	
+	@RequestMapping("/listFXSW12")
+	public BaseResult listFXSW12(@RequestBody QueryInfo<FxSw12> queryInfo) throws Exception {
+		PageResult<FxSw12> result = repositories.fxsw12Dao.query(queryInfo);
+		if (result != null && result.getTotal() > 0) {
+			result.getList().add(new FxSw12());
 		}
 		return new BaseResult(result);
 	}

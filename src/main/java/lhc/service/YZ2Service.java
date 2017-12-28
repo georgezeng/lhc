@@ -65,11 +65,17 @@ import lhc.domain.DsYz;
 import lhc.domain.DsZfYz;
 import lhc.domain.FxSw;
 import lhc.domain.FxSw1;
+import lhc.domain.FxSw10;
+import lhc.domain.FxSw11;
+import lhc.domain.FxSw12;
 import lhc.domain.FxSw2;
 import lhc.domain.FxSw3;
 import lhc.domain.FxSw4;
 import lhc.domain.FxSw5;
 import lhc.domain.FxSw6;
+import lhc.domain.FxSw7;
+import lhc.domain.FxSw8;
+import lhc.domain.FxSw9;
 import lhc.domain.LhYz;
 import lhc.domain.LhZfYz;
 import lhc.domain.MwYz;
@@ -742,6 +748,102 @@ public class YZ2Service extends YZService {
 		}
 		return new AsyncResult<Exception>(t);
 	}
+	
+	@Async
+	public Future<Exception> calFxSxSw7() {
+		Exception t = null;
+		try {
+			calFxSx(7, FxSw7.class, repositories.fxsw7Repository);
+			calFxSxZf(7, FxSw7.class, repositories.fxsw7Repository);
+			logger.info("End of calFxSxSw7...");
+		} catch (Exception e) {
+			if (DataAccessException.class.isAssignableFrom(e.getClass())) {
+				logger.error(e.getMessage(), e);
+			}
+			t = e;
+		}
+		return new AsyncResult<Exception>(t);
+	}
+	
+	@Async
+	public Future<Exception> calFxSxSw8() {
+		Exception t = null;
+		try {
+			calFxSx(8, FxSw8.class, repositories.fxsw8Repository);
+			calFxSxZf(8, FxSw8.class, repositories.fxsw8Repository);
+			logger.info("End of calFxSxSw8...");
+		} catch (Exception e) {
+			if (DataAccessException.class.isAssignableFrom(e.getClass())) {
+				logger.error(e.getMessage(), e);
+			}
+			t = e;
+		}
+		return new AsyncResult<Exception>(t);
+	}
+	
+	@Async
+	public Future<Exception> calFxSxSw9() {
+		Exception t = null;
+		try {
+			calFxSx(9, FxSw9.class, repositories.fxsw9Repository);
+			calFxSxZf(9, FxSw9.class, repositories.fxsw9Repository);
+			logger.info("End of calFxSxSw9...");
+		} catch (Exception e) {
+			if (DataAccessException.class.isAssignableFrom(e.getClass())) {
+				logger.error(e.getMessage(), e);
+			}
+			t = e;
+		}
+		return new AsyncResult<Exception>(t);
+	}
+	
+	@Async
+	public Future<Exception> calFxSxSw10() {
+		Exception t = null;
+		try {
+			calFxSx(10, FxSw10.class, repositories.fxsw10Repository);
+			calFxSxZf(10, FxSw10.class, repositories.fxsw10Repository);
+			logger.info("End of calFxSxSw10...");
+		} catch (Exception e) {
+			if (DataAccessException.class.isAssignableFrom(e.getClass())) {
+				logger.error(e.getMessage(), e);
+			}
+			t = e;
+		}
+		return new AsyncResult<Exception>(t);
+	}
+	
+	@Async
+	public Future<Exception> calFxSxSw11() {
+		Exception t = null;
+		try {
+			calFxSx(11, FxSw11.class, repositories.fxsw11Repository);
+			calFxSxZf(11, FxSw11.class, repositories.fxsw11Repository);
+			logger.info("End of calFxSxSw11...");
+		} catch (Exception e) {
+			if (DataAccessException.class.isAssignableFrom(e.getClass())) {
+				logger.error(e.getMessage(), e);
+			}
+			t = e;
+		}
+		return new AsyncResult<Exception>(t);
+	}
+	
+	@Async
+	public Future<Exception> calFxSxSw12() {
+		Exception t = null;
+		try {
+			calFxSx(12, FxSw12.class, repositories.fxsw12Repository);
+			calFxSxZf(12, FxSw12.class, repositories.fxsw12Repository);
+			logger.info("End of calFxSxSw12...");
+		} catch (Exception e) {
+			if (DataAccessException.class.isAssignableFrom(e.getClass())) {
+				logger.error(e.getMessage(), e);
+			}
+			t = e;
+		}
+		return new AsyncResult<Exception>(t);
+	}
 
 	@Async
 	public Future<Exception> calFxDsSw1() {
@@ -842,6 +944,78 @@ public class YZ2Service extends YZService {
 			calFxZf(6, DsZfYz.class, DsYz.class, FxSw6.class, DsNums.class, repositories.dszfyzRepository,
 					repositories.dsyzRepository, repositories.fxsw6Repository, "Ds", new FxZfHandler<DsYz>());
 			logger.info("End of calFxDsSw6...");
+		} catch (Exception e) {
+			if (DataAccessException.class.isAssignableFrom(e.getClass())) {
+				logger.error(e.getMessage(), e);
+			}
+			t = e;
+		}
+		return new AsyncResult<Exception>(t);
+	}
+	
+	@Async
+	public Future<Exception> calFxDsSw7() {
+		Exception t = null;
+		try {
+			calFx(7, DsYz.class, DsNums.class, FxSw7.class, repositories.dsyzRepository, repositories.fxsw7Repository,
+					new FxHandler(), "Ds");
+			calFxZf(7, DsZfYz.class, DsYz.class, FxSw7.class, DsNums.class, repositories.dszfyzRepository,
+					repositories.dsyzRepository, repositories.fxsw7Repository, "Ds", new FxZfHandler<DsYz>());
+			logger.info("End of calFxDsSw7...");
+		} catch (Exception e) {
+			if (DataAccessException.class.isAssignableFrom(e.getClass())) {
+				logger.error(e.getMessage(), e);
+			}
+			t = e;
+		}
+		return new AsyncResult<Exception>(t);
+	}
+	
+	@Async
+	public Future<Exception> calFxDsSw8() {
+		Exception t = null;
+		try {
+			calFx(8, DsYz.class, DsNums.class, FxSw8.class, repositories.dsyzRepository, repositories.fxsw8Repository,
+					new FxHandler(), "Ds");
+			calFxZf(8, DsZfYz.class, DsYz.class, FxSw8.class, DsNums.class, repositories.dszfyzRepository,
+					repositories.dsyzRepository, repositories.fxsw8Repository, "Ds", new FxZfHandler<DsYz>());
+			logger.info("End of calFxDsSw8...");
+		} catch (Exception e) {
+			if (DataAccessException.class.isAssignableFrom(e.getClass())) {
+				logger.error(e.getMessage(), e);
+			}
+			t = e;
+		}
+		return new AsyncResult<Exception>(t);
+	}
+	
+	@Async
+	public Future<Exception> calFxDsSw9() {
+		Exception t = null;
+		try {
+			calFx(9, DsYz.class, DsNums.class, FxSw9.class, repositories.dsyzRepository, repositories.fxsw9Repository,
+					new FxHandler(), "Ds");
+			calFxZf(9, DsZfYz.class, DsYz.class, FxSw9.class, DsNums.class, repositories.dszfyzRepository,
+					repositories.dsyzRepository, repositories.fxsw9Repository, "Ds", new FxZfHandler<DsYz>());
+			logger.info("End of calFxDsSw9...");
+		} catch (Exception e) {
+			if (DataAccessException.class.isAssignableFrom(e.getClass())) {
+				logger.error(e.getMessage(), e);
+			}
+			t = e;
+		}
+		return new AsyncResult<Exception>(t);
+	}
+	
+	@Async
+	public Future<Exception> calFxDsSw10() {
+		Exception t = null;
+		try {
+			calFx(10, DsYz.class, DsNums.class, FxSw10.class, repositories.dsyzRepository, repositories.fxsw10Repository,
+					new FxHandler(), "Ds");
+			calFxZf(10, DsZfYz.class, DsYz.class, FxSw10.class, DsNums.class, repositories.dszfyzRepository,
+					repositories.dsyzRepository, repositories.fxsw10Repository, "Ds", new FxZfHandler<DsYz>());
+			logger.info("End of calFxDsSw10...");
 		} catch (Exception e) {
 			if (DataAccessException.class.isAssignableFrom(e.getClass())) {
 				logger.error(e.getMessage(), e);
@@ -1048,6 +1222,78 @@ public class YZ2Service extends YZService {
 		}
 		return new AsyncResult<Exception>(t);
 	}
+	
+	@Async
+	public Future<Exception> calFxMwSw7() {
+		Exception t = null;
+		try {
+			calFx(7, MwYz.class, MwNums.class, FxSw7.class, repositories.mwyzRepository, repositories.fxsw7Repository,
+					new FxHandler(), "Mw");
+			calFxZf(7, MwZfYz.class, MwYz.class, FxSw7.class, MwNums.class, repositories.mwzfyzRepository,
+					repositories.mwyzRepository, repositories.fxsw7Repository, "Mw", new FxZfHandler<MwYz>());
+			logger.info("End of calFxMwSw7...");
+		} catch (Exception e) {
+			if (DataAccessException.class.isAssignableFrom(e.getClass())) {
+				logger.error(e.getMessage(), e);
+			}
+			t = e;
+		}
+		return new AsyncResult<Exception>(t);
+	}
+	
+	@Async
+	public Future<Exception> calFxMwSw8() {
+		Exception t = null;
+		try {
+			calFx(8, MwYz.class, MwNums.class, FxSw8.class, repositories.mwyzRepository, repositories.fxsw8Repository,
+					new FxHandler(), "Mw");
+			calFxZf(8, MwZfYz.class, MwYz.class, FxSw8.class, MwNums.class, repositories.mwzfyzRepository,
+					repositories.mwyzRepository, repositories.fxsw8Repository, "Mw", new FxZfHandler<MwYz>());
+			logger.info("End of calFxMwSw8...");
+		} catch (Exception e) {
+			if (DataAccessException.class.isAssignableFrom(e.getClass())) {
+				logger.error(e.getMessage(), e);
+			}
+			t = e;
+		}
+		return new AsyncResult<Exception>(t);
+	}
+	
+	@Async
+	public Future<Exception> calFxMwSw9() {
+		Exception t = null;
+		try {
+			calFx(9, MwYz.class, MwNums.class, FxSw9.class, repositories.mwyzRepository, repositories.fxsw9Repository,
+					new FxHandler(), "Mw");
+			calFxZf(9, MwZfYz.class, MwYz.class, FxSw9.class, MwNums.class, repositories.mwzfyzRepository,
+					repositories.mwyzRepository, repositories.fxsw9Repository, "Mw", new FxZfHandler<MwYz>());
+			logger.info("End of calFxMwSw9...");
+		} catch (Exception e) {
+			if (DataAccessException.class.isAssignableFrom(e.getClass())) {
+				logger.error(e.getMessage(), e);
+			}
+			t = e;
+		}
+		return new AsyncResult<Exception>(t);
+	}
+	
+	@Async
+	public Future<Exception> calFxMwSw10() {
+		Exception t = null;
+		try {
+			calFx(10, MwYz.class, MwNums.class, FxSw10.class, repositories.mwyzRepository, repositories.fxsw10Repository,
+					new FxHandler(), "Mw");
+			calFxZf(10, MwZfYz.class, MwYz.class, FxSw10.class, MwNums.class, repositories.mwzfyzRepository,
+					repositories.mwyzRepository, repositories.fxsw10Repository, "Mw", new FxZfHandler<MwYz>());
+			logger.info("End of calFxMwSw10...");
+		} catch (Exception e) {
+			if (DataAccessException.class.isAssignableFrom(e.getClass())) {
+				logger.error(e.getMessage(), e);
+			}
+			t = e;
+		}
+		return new AsyncResult<Exception>(t);
+	}
 
 	@Async
 	public Future<Exception> calFxLhSw1() {
@@ -1148,6 +1394,78 @@ public class YZ2Service extends YZService {
 			calFxZf(6, LhZfYz.class, LhYz.class, FxSw6.class, LhNums.class, repositories.lhzfyzRepository,
 					repositories.lhyzRepository, repositories.fxsw6Repository, "Lh", new FxZfHandler<LhYz>());
 			logger.info("End of calFxLhSw6...");
+		} catch (Exception e) {
+			if (DataAccessException.class.isAssignableFrom(e.getClass())) {
+				logger.error(e.getMessage(), e);
+			}
+			t = e;
+		}
+		return new AsyncResult<Exception>(t);
+	}
+	
+	@Async
+	public Future<Exception> calFxLhSw7() {
+		Exception t = null;
+		try {
+			calFx(7, LhYz.class, LhNums.class, FxSw7.class, repositories.lhyzRepository, repositories.fxsw7Repository,
+					new FxHandler(), "Lh");
+			calFxZf(7, LhZfYz.class, LhYz.class, FxSw7.class, LhNums.class, repositories.lhzfyzRepository,
+					repositories.lhyzRepository, repositories.fxsw7Repository, "Lh", new FxZfHandler<LhYz>());
+			logger.info("End of calFxLhSw7...");
+		} catch (Exception e) {
+			if (DataAccessException.class.isAssignableFrom(e.getClass())) {
+				logger.error(e.getMessage(), e);
+			}
+			t = e;
+		}
+		return new AsyncResult<Exception>(t);
+	}
+	
+	@Async
+	public Future<Exception> calFxLhSw8() {
+		Exception t = null;
+		try {
+			calFx(8, LhYz.class, LhNums.class, FxSw8.class, repositories.lhyzRepository, repositories.fxsw8Repository,
+					new FxHandler(), "Lh");
+			calFxZf(8, LhZfYz.class, LhYz.class, FxSw8.class, LhNums.class, repositories.lhzfyzRepository,
+					repositories.lhyzRepository, repositories.fxsw8Repository, "Lh", new FxZfHandler<LhYz>());
+			logger.info("End of calFxLhSw8...");
+		} catch (Exception e) {
+			if (DataAccessException.class.isAssignableFrom(e.getClass())) {
+				logger.error(e.getMessage(), e);
+			}
+			t = e;
+		}
+		return new AsyncResult<Exception>(t);
+	}
+	
+	@Async
+	public Future<Exception> calFxLhSw9() {
+		Exception t = null;
+		try {
+			calFx(9, LhYz.class, LhNums.class, FxSw9.class, repositories.lhyzRepository, repositories.fxsw9Repository,
+					new FxHandler(), "Lh");
+			calFxZf(9, LhZfYz.class, LhYz.class, FxSw9.class, LhNums.class, repositories.lhzfyzRepository,
+					repositories.lhyzRepository, repositories.fxsw9Repository, "Lh", new FxZfHandler<LhYz>());
+			logger.info("End of calFxLhSw9...");
+		} catch (Exception e) {
+			if (DataAccessException.class.isAssignableFrom(e.getClass())) {
+				logger.error(e.getMessage(), e);
+			}
+			t = e;
+		}
+		return new AsyncResult<Exception>(t);
+	}
+	
+	@Async
+	public Future<Exception> calFxLhSw10() {
+		Exception t = null;
+		try {
+			calFx(10, LhYz.class, LhNums.class, FxSw10.class, repositories.lhyzRepository, repositories.fxsw10Repository,
+					new FxHandler(), "Lh");
+			calFxZf(10, LhZfYz.class, LhYz.class, FxSw10.class, LhNums.class, repositories.lhzfyzRepository,
+					repositories.lhyzRepository, repositories.fxsw10Repository, "Lh", new FxZfHandler<LhYz>());
+			logger.info("End of calFxLhSw10...");
 		} catch (Exception e) {
 			if (DataAccessException.class.isAssignableFrom(e.getClass())) {
 				logger.error(e.getMessage(), e);
@@ -1264,6 +1582,60 @@ public class YZ2Service extends YZService {
 		}
 		return new AsyncResult<Exception>(t);
 	}
+	
+	@Async
+	public Future<Exception> calFxBsSw7() {
+		Exception t = null;
+		try {
+			calFx(7, Bs9qYz.class, Bs9qNums.class, FxSw7.class, repositories.bs9qyzRepository, repositories.fxsw7Repository,
+					new FxHandler(), "Bs");
+			calFxZf(7, Bs9qZfYz.class, Bs9qYz.class, FxSw7.class, Bs9qNums.class, repositories.bs9qzfyzRepository,
+					repositories.bs9qyzRepository, repositories.fxsw7Repository, "Bs", new FxZfHandler<Bs9qYz>());
+			logger.info("End of calFxBsSw7...");
+		} catch (Exception e) {
+			if (DataAccessException.class.isAssignableFrom(e.getClass())) {
+				logger.error(e.getMessage(), e);
+			}
+			t = e;
+		}
+		return new AsyncResult<Exception>(t);
+	}
+	
+	@Async
+	public Future<Exception> calFxBsSw8() {
+		Exception t = null;
+		try {
+			calFx(8, Bs9qYz.class, Bs9qNums.class, FxSw8.class, repositories.bs9qyzRepository, repositories.fxsw8Repository,
+					new FxHandler(), "Bs");
+			calFxZf(8, Bs9qZfYz.class, Bs9qYz.class, FxSw8.class, Bs9qNums.class, repositories.bs9qzfyzRepository,
+					repositories.bs9qyzRepository, repositories.fxsw8Repository, "Bs", new FxZfHandler<Bs9qYz>());
+			logger.info("End of calFxBsSw8...");
+		} catch (Exception e) {
+			if (DataAccessException.class.isAssignableFrom(e.getClass())) {
+				logger.error(e.getMessage(), e);
+			}
+			t = e;
+		}
+		return new AsyncResult<Exception>(t);
+	}
+	
+	@Async
+	public Future<Exception> calFxBsSw9() {
+		Exception t = null;
+		try {
+			calFx(9, Bs9qYz.class, Bs9qNums.class, FxSw9.class, repositories.bs9qyzRepository, repositories.fxsw9Repository,
+					new FxHandler(), "Bs");
+			calFxZf(9, Bs9qZfYz.class, Bs9qYz.class, FxSw9.class, Bs9qNums.class, repositories.bs9qzfyzRepository,
+					repositories.bs9qyzRepository, repositories.fxsw9Repository, "Bs", new FxZfHandler<Bs9qYz>());
+			logger.info("End of calFxBsSw9...");
+		} catch (Exception e) {
+			if (DataAccessException.class.isAssignableFrom(e.getClass())) {
+				logger.error(e.getMessage(), e);
+			}
+			t = e;
+		}
+		return new AsyncResult<Exception>(t);
+	}
 
 	@Async
 	public Future<Exception> calFxZsSw1() {
@@ -1364,6 +1736,60 @@ public class YZ2Service extends YZService {
 			calFxZf(6, ZsZfYz.class, ZsYz.class, FxSw6.class, ZsNums.class, repositories.zszfyzRepository,
 					repositories.zsyzRepository, repositories.fxsw6Repository, "Zs", new FxZfHandler<ZsYz>());
 			logger.info("End of calFxZsSw6...");
+		} catch (Exception e) {
+			if (DataAccessException.class.isAssignableFrom(e.getClass())) {
+				logger.error(e.getMessage(), e);
+			}
+			t = e;
+		}
+		return new AsyncResult<Exception>(t);
+	}
+	
+	@Async
+	public Future<Exception> calFxZsSw7() {
+		Exception t = null;
+		try {
+			calFx(7, ZsYz.class, ZsNums.class, FxSw7.class, repositories.zsyzRepository, repositories.fxsw7Repository,
+					new FxHandler(), "Zs");
+			calFxZf(7, ZsZfYz.class, ZsYz.class, FxSw7.class, ZsNums.class, repositories.zszfyzRepository,
+					repositories.zsyzRepository, repositories.fxsw7Repository, "Zs", new FxZfHandler<ZsYz>());
+			logger.info("End of calFxZsSw7...");
+		} catch (Exception e) {
+			if (DataAccessException.class.isAssignableFrom(e.getClass())) {
+				logger.error(e.getMessage(), e);
+			}
+			t = e;
+		}
+		return new AsyncResult<Exception>(t);
+	}
+	
+	@Async
+	public Future<Exception> calFxZsSw8() {
+		Exception t = null;
+		try {
+			calFx(8, ZsYz.class, ZsNums.class, FxSw8.class, repositories.zsyzRepository, repositories.fxsw8Repository,
+					new FxHandler(), "Zs");
+			calFxZf(8, ZsZfYz.class, ZsYz.class, FxSw8.class, ZsNums.class, repositories.zszfyzRepository,
+					repositories.zsyzRepository, repositories.fxsw8Repository, "Zs", new FxZfHandler<ZsYz>());
+			logger.info("End of calFxZsSw8...");
+		} catch (Exception e) {
+			if (DataAccessException.class.isAssignableFrom(e.getClass())) {
+				logger.error(e.getMessage(), e);
+			}
+			t = e;
+		}
+		return new AsyncResult<Exception>(t);
+	}
+	
+	@Async
+	public Future<Exception> calFxZsSw9() {
+		Exception t = null;
+		try {
+			calFx(9, ZsYz.class, ZsNums.class, FxSw9.class, repositories.zsyzRepository, repositories.fxsw9Repository,
+					new FxHandler(), "Zs");
+			calFxZf(9, ZsZfYz.class, ZsYz.class, FxSw9.class, ZsNums.class, repositories.zszfyzRepository,
+					repositories.zsyzRepository, repositories.fxsw9Repository, "Zs", new FxZfHandler<ZsYz>());
+			logger.info("End of calFxZsSw9...");
 		} catch (Exception e) {
 			if (DataAccessException.class.isAssignableFrom(e.getClass())) {
 				logger.error(e.getMessage(), e);
@@ -1570,6 +1996,78 @@ public class YZ2Service extends YZService {
 		}
 		return new AsyncResult<Exception>(t);
 	}
+	
+	@Async
+	public Future<Exception> calFxWxdsSw7() {
+		Exception t = null;
+		try {
+			calFx(7, WxdsYz.class, WxDsNums.class, FxSw7.class, repositories.wxdsyzRepository, repositories.fxsw7Repository,
+					new FxHandler(), "Wxds");
+			calFxZf(7, WxdsZfYz.class, WxdsYz.class, FxSw7.class, WxDsNums.class, repositories.wxdszfyzRepository,
+					repositories.wxdsyzRepository, repositories.fxsw7Repository, "Wxds", new FxZfHandler<WxdsYz>());
+			logger.info("End of calFxWxdsSw7...");
+		} catch (Exception e) {
+			if (DataAccessException.class.isAssignableFrom(e.getClass())) {
+				logger.error(e.getMessage(), e);
+			}
+			t = e;
+		}
+		return new AsyncResult<Exception>(t);
+	}
+	
+	@Async
+	public Future<Exception> calFxWxdsSw8() {
+		Exception t = null;
+		try {
+			calFx(8, WxdsYz.class, WxDsNums.class, FxSw8.class, repositories.wxdsyzRepository, repositories.fxsw8Repository,
+					new FxHandler(), "Wxds");
+			calFxZf(8, WxdsZfYz.class, WxdsYz.class, FxSw8.class, WxDsNums.class, repositories.wxdszfyzRepository,
+					repositories.wxdsyzRepository, repositories.fxsw8Repository, "Wxds", new FxZfHandler<WxdsYz>());
+			logger.info("End of calFxWxdsSw8...");
+		} catch (Exception e) {
+			if (DataAccessException.class.isAssignableFrom(e.getClass())) {
+				logger.error(e.getMessage(), e);
+			}
+			t = e;
+		}
+		return new AsyncResult<Exception>(t);
+	}
+	
+	@Async
+	public Future<Exception> calFxWxdsSw9() {
+		Exception t = null;
+		try {
+			calFx(9, WxdsYz.class, WxDsNums.class, FxSw9.class, repositories.wxdsyzRepository, repositories.fxsw9Repository,
+					new FxHandler(), "Wxds");
+			calFxZf(9, WxdsZfYz.class, WxdsYz.class, FxSw9.class, WxDsNums.class, repositories.wxdszfyzRepository,
+					repositories.wxdsyzRepository, repositories.fxsw9Repository, "Wxds", new FxZfHandler<WxdsYz>());
+			logger.info("End of calFxWxdsSw9...");
+		} catch (Exception e) {
+			if (DataAccessException.class.isAssignableFrom(e.getClass())) {
+				logger.error(e.getMessage(), e);
+			}
+			t = e;
+		}
+		return new AsyncResult<Exception>(t);
+	}
+	
+	@Async
+	public Future<Exception> calFxWxdsSw10() {
+		Exception t = null;
+		try {
+			calFx(10, WxdsYz.class, WxDsNums.class, FxSw10.class, repositories.wxdsyzRepository, repositories.fxsw10Repository,
+					new FxHandler(), "Wxds");
+			calFxZf(10, WxdsZfYz.class, WxdsYz.class, FxSw10.class, WxDsNums.class, repositories.wxdszfyzRepository,
+					repositories.wxdsyzRepository, repositories.fxsw10Repository, "Wxds", new FxZfHandler<WxdsYz>());
+			logger.info("End of calFxWxdsSw10...");
+		} catch (Exception e) {
+			if (DataAccessException.class.isAssignableFrom(e.getClass())) {
+				logger.error(e.getMessage(), e);
+			}
+			t = e;
+		}
+		return new AsyncResult<Exception>(t);
+	}
 
 	@Async
 	public Future<Exception> calFxPdSw1() {
@@ -1678,6 +2176,114 @@ public class YZ2Service extends YZService {
 		}
 		return new AsyncResult<Exception>(t);
 	}
+	
+	@Async
+	public Future<Exception> calFxPdSw7() {
+		Exception t = null;
+		try {
+			calFx(7, PdYz.class, PdNums.class, FxSw7.class, repositories.pdyzRepository, repositories.fxsw7Repository,
+					new FxHandler(), "Pd");
+			calFxZf(7, PdZfYz.class, PdYz.class, FxSw7.class, PdNums.class, repositories.pdzfyzRepository,
+					repositories.pdyzRepository, repositories.fxsw7Repository, "Pd", new FxZfHandler<PdYz>());
+			logger.info("End of calFxPdSw7...");
+		} catch (Exception e) {
+			if (DataAccessException.class.isAssignableFrom(e.getClass())) {
+				logger.error(e.getMessage(), e);
+			}
+			t = e;
+		}
+		return new AsyncResult<Exception>(t);
+	}
+	
+	@Async
+	public Future<Exception> calFxPdSw8() {
+		Exception t = null;
+		try {
+			calFx(8, PdYz.class, PdNums.class, FxSw8.class, repositories.pdyzRepository, repositories.fxsw8Repository,
+					new FxHandler(), "Pd");
+			calFxZf(8, PdZfYz.class, PdYz.class, FxSw8.class, PdNums.class, repositories.pdzfyzRepository,
+					repositories.pdyzRepository, repositories.fxsw8Repository, "Pd", new FxZfHandler<PdYz>());
+			logger.info("End of calFxPdSw8...");
+		} catch (Exception e) {
+			if (DataAccessException.class.isAssignableFrom(e.getClass())) {
+				logger.error(e.getMessage(), e);
+			}
+			t = e;
+		}
+		return new AsyncResult<Exception>(t);
+	}
+	
+	@Async
+	public Future<Exception> calFxPdSw9() {
+		Exception t = null;
+		try {
+			calFx(9, PdYz.class, PdNums.class, FxSw9.class, repositories.pdyzRepository, repositories.fxsw9Repository,
+					new FxHandler(), "Pd");
+			calFxZf(9, PdZfYz.class, PdYz.class, FxSw9.class, PdNums.class, repositories.pdzfyzRepository,
+					repositories.pdyzRepository, repositories.fxsw9Repository, "Pd", new FxZfHandler<PdYz>());
+			logger.info("End of calFxPdSw9...");
+		} catch (Exception e) {
+			if (DataAccessException.class.isAssignableFrom(e.getClass())) {
+				logger.error(e.getMessage(), e);
+			}
+			t = e;
+		}
+		return new AsyncResult<Exception>(t);
+	}
+	
+	@Async
+	public Future<Exception> calFxPdSw10() {
+		Exception t = null;
+		try {
+			calFx(10, PdYz.class, PdNums.class, FxSw10.class, repositories.pdyzRepository, repositories.fxsw10Repository,
+					new FxHandler(), "Pd");
+			calFxZf(10, PdZfYz.class, PdYz.class, FxSw10.class, PdNums.class, repositories.pdzfyzRepository,
+					repositories.pdyzRepository, repositories.fxsw10Repository, "Pd", new FxZfHandler<PdYz>());
+			logger.info("End of calFxPdSw10...");
+		} catch (Exception e) {
+			if (DataAccessException.class.isAssignableFrom(e.getClass())) {
+				logger.error(e.getMessage(), e);
+			}
+			t = e;
+		}
+		return new AsyncResult<Exception>(t);
+	}
+	
+	@Async
+	public Future<Exception> calFxPdSw11() {
+		Exception t = null;
+		try {
+			calFx(11, PdYz.class, PdNums.class, FxSw11.class, repositories.pdyzRepository, repositories.fxsw11Repository,
+					new FxHandler(), "Pd");
+			calFxZf(11, PdZfYz.class, PdYz.class, FxSw11.class, PdNums.class, repositories.pdzfyzRepository,
+					repositories.pdyzRepository, repositories.fxsw11Repository, "Pd", new FxZfHandler<PdYz>());
+			logger.info("End of calFxPdSw11...");
+		} catch (Exception e) {
+			if (DataAccessException.class.isAssignableFrom(e.getClass())) {
+				logger.error(e.getMessage(), e);
+			}
+			t = e;
+		}
+		return new AsyncResult<Exception>(t);
+	}
+	
+	@Async
+	public Future<Exception> calFxPdSw12() {
+		Exception t = null;
+		try {
+			calFx(12, PdYz.class, PdNums.class, FxSw12.class, repositories.pdyzRepository, repositories.fxsw12Repository,
+					new FxHandler(), "Pd");
+			calFxZf(12, PdZfYz.class, PdYz.class, FxSw12.class, PdNums.class, repositories.pdzfyzRepository,
+					repositories.pdyzRepository, repositories.fxsw12Repository, "Pd", new FxZfHandler<PdYz>());
+			logger.info("End of calFxPdSw12...");
+		} catch (Exception e) {
+			if (DataAccessException.class.isAssignableFrom(e.getClass())) {
+				logger.error(e.getMessage(), e);
+			}
+			t = e;
+		}
+		return new AsyncResult<Exception>(t);
+	}
 
 	@Async
 	public Future<Exception> calFxFdSw1() {
@@ -1766,6 +2372,102 @@ public class YZ2Service extends YZService {
 			calFxFd(6, FxSw6.class, repositories.fxsw6Repository);
 			calFxFdZf(6, FxSw6.class, repositories.fxsw6Repository);
 			logger.info("End of calFxFdSw6...");
+		} catch (Exception e) {
+			if (DataAccessException.class.isAssignableFrom(e.getClass())) {
+				logger.error(e.getMessage(), e);
+			}
+			t = e;
+		}
+		return new AsyncResult<Exception>(t);
+	}
+	
+	@Async
+	public Future<Exception> calFxFdSw7() {
+		Exception t = null;
+		try {
+			calFxFd(7, FxSw7.class, repositories.fxsw7Repository);
+			calFxFdZf(7, FxSw7.class, repositories.fxsw7Repository);
+			logger.info("End of calFxFdSw7...");
+		} catch (Exception e) {
+			if (DataAccessException.class.isAssignableFrom(e.getClass())) {
+				logger.error(e.getMessage(), e);
+			}
+			t = e;
+		}
+		return new AsyncResult<Exception>(t);
+	}
+	
+	@Async
+	public Future<Exception> calFxFdSw8() {
+		Exception t = null;
+		try {
+			calFxFd(8, FxSw8.class, repositories.fxsw8Repository);
+			calFxFdZf(8, FxSw8.class, repositories.fxsw8Repository);
+			logger.info("End of calFxFdSw8...");
+		} catch (Exception e) {
+			if (DataAccessException.class.isAssignableFrom(e.getClass())) {
+				logger.error(e.getMessage(), e);
+			}
+			t = e;
+		}
+		return new AsyncResult<Exception>(t);
+	}
+	
+	@Async
+	public Future<Exception> calFxFdSw9() {
+		Exception t = null;
+		try {
+			calFxFd(9, FxSw9.class, repositories.fxsw9Repository);
+			calFxFdZf(9, FxSw9.class, repositories.fxsw9Repository);
+			logger.info("End of calFxFdSw9...");
+		} catch (Exception e) {
+			if (DataAccessException.class.isAssignableFrom(e.getClass())) {
+				logger.error(e.getMessage(), e);
+			}
+			t = e;
+		}
+		return new AsyncResult<Exception>(t);
+	}
+	
+	@Async
+	public Future<Exception> calFxFdSw10() {
+		Exception t = null;
+		try {
+			calFxFd(10, FxSw10.class, repositories.fxsw10Repository);
+			calFxFdZf(10, FxSw10.class, repositories.fxsw10Repository);
+			logger.info("End of calFxFdSw10...");
+		} catch (Exception e) {
+			if (DataAccessException.class.isAssignableFrom(e.getClass())) {
+				logger.error(e.getMessage(), e);
+			}
+			t = e;
+		}
+		return new AsyncResult<Exception>(t);
+	}
+	
+	@Async
+	public Future<Exception> calFxFdSw11() {
+		Exception t = null;
+		try {
+			calFxFd(11, FxSw11.class, repositories.fxsw11Repository);
+			calFxFdZf(11, FxSw11.class, repositories.fxsw11Repository);
+			logger.info("End of calFxFdSw11...");
+		} catch (Exception e) {
+			if (DataAccessException.class.isAssignableFrom(e.getClass())) {
+				logger.error(e.getMessage(), e);
+			}
+			t = e;
+		}
+		return new AsyncResult<Exception>(t);
+	}
+	
+	@Async
+	public Future<Exception> calFxFdSw12() {
+		Exception t = null;
+		try {
+			calFxFd(12, FxSw12.class, repositories.fxsw12Repository);
+			calFxFdZf(12, FxSw12.class, repositories.fxsw12Repository);
+			logger.info("End of calFxFdSw12...");
 		} catch (Exception e) {
 			if (DataAccessException.class.isAssignableFrom(e.getClass())) {
 				logger.error(e.getMessage(), e);
@@ -1882,6 +2584,24 @@ public class YZ2Service extends YZService {
 		}
 		return new AsyncResult<Exception>(t);
 	}
+	
+	@Async
+	public Future<Exception> calFxQqSw7() {
+		Exception t = null;
+		try {
+			calFx(7, QqYz.class, QqNums.class, FxSw7.class, repositories.qqyzRepository, repositories.fxsw7Repository,
+					new FxHandler(), "Qq");
+			calFxZf(7, QqZfYz.class, QqYz.class, FxSw7.class, QqNums.class, repositories.qqzfyzRepository,
+					repositories.qqyzRepository, repositories.fxsw7Repository, "Qq", new FxZfHandler<QqYz>());
+			logger.info("End of calFxQqSw7...");
+		} catch (Exception e) {
+			if (DataAccessException.class.isAssignableFrom(e.getClass())) {
+				logger.error(e.getMessage(), e);
+			}
+			t = e;
+		}
+		return new AsyncResult<Exception>(t);
+	}
 
 	@Async
 	public Future<Exception> calFxQiwSw1() {
@@ -1982,6 +2702,24 @@ public class YZ2Service extends YZService {
 			calFxZf(6, QiwZfYz.class, QiwYz.class, FxSw6.class, QiwNums.class, repositories.qiwzfYzRepository,
 					repositories.qiwYzRepository, repositories.fxsw6Repository, "Qiw", new FxZfHandler<QiwYz>());
 			logger.info("End of calFxQiwSw6...");
+		} catch (Exception e) {
+			if (DataAccessException.class.isAssignableFrom(e.getClass())) {
+				logger.error(e.getMessage(), e);
+			}
+			t = e;
+		}
+		return new AsyncResult<Exception>(t);
+	}
+	
+	@Async
+	public Future<Exception> calFxQiwSw7() {
+		Exception t = null;
+		try {
+			calFx(7, QiwYz.class, QiwNums.class, FxSw7.class, repositories.qiwYzRepository, repositories.fxsw7Repository,
+					new FxHandler(), "Qiw");
+			calFxZf(7, QiwZfYz.class, QiwYz.class, FxSw7.class, QiwNums.class, repositories.qiwzfYzRepository,
+					repositories.qiwYzRepository, repositories.fxsw7Repository, "Qiw", new FxZfHandler<QiwYz>());
+			logger.info("End of calFxQiwSw7...");
 		} catch (Exception e) {
 			if (DataAccessException.class.isAssignableFrom(e.getClass())) {
 				logger.error(e.getMessage(), e);
@@ -2098,6 +2836,114 @@ public class YZ2Service extends YZService {
 		}
 		return new AsyncResult<Exception>(t);
 	}
+	
+	@Async
+	public Future<Exception> calFxTwelveSw7() {
+		Exception t = null;
+		try {
+			calFx(7, TwelveYz.class, TwelveNums.class, FxSw7.class, repositories.twelveyzRepository,
+					repositories.fxsw7Repository, new FxHandler(), "Twelve");
+			calFxZf(7, TwelveZfYz.class, TwelveYz.class, FxSw7.class, TwelveNums.class, repositories.twelvezfyzRepository,
+					repositories.twelveyzRepository, repositories.fxsw7Repository, "Twelve", new FxZfHandler<TwelveYz>());
+			logger.info("End of calFxTwelveSw7...");
+		} catch (Exception e) {
+			if (DataAccessException.class.isAssignableFrom(e.getClass())) {
+				logger.error(e.getMessage(), e);
+			}
+			t = e;
+		}
+		return new AsyncResult<Exception>(t);
+	}
+	
+	@Async
+	public Future<Exception> calFxTwelveSw8() {
+		Exception t = null;
+		try {
+			calFx(8, TwelveYz.class, TwelveNums.class, FxSw8.class, repositories.twelveyzRepository,
+					repositories.fxsw8Repository, new FxHandler(), "Twelve");
+			calFxZf(8, TwelveZfYz.class, TwelveYz.class, FxSw8.class, TwelveNums.class, repositories.twelvezfyzRepository,
+					repositories.twelveyzRepository, repositories.fxsw8Repository, "Twelve", new FxZfHandler<TwelveYz>());
+			logger.info("End of calFxTwelveSw8...");
+		} catch (Exception e) {
+			if (DataAccessException.class.isAssignableFrom(e.getClass())) {
+				logger.error(e.getMessage(), e);
+			}
+			t = e;
+		}
+		return new AsyncResult<Exception>(t);
+	}
+	
+	@Async
+	public Future<Exception> calFxTwelveSw9() {
+		Exception t = null;
+		try {
+			calFx(9, TwelveYz.class, TwelveNums.class, FxSw9.class, repositories.twelveyzRepository,
+					repositories.fxsw9Repository, new FxHandler(), "Twelve");
+			calFxZf(9, TwelveZfYz.class, TwelveYz.class, FxSw9.class, TwelveNums.class, repositories.twelvezfyzRepository,
+					repositories.twelveyzRepository, repositories.fxsw9Repository, "Twelve", new FxZfHandler<TwelveYz>());
+			logger.info("End of calFxTwelveSw9...");
+		} catch (Exception e) {
+			if (DataAccessException.class.isAssignableFrom(e.getClass())) {
+				logger.error(e.getMessage(), e);
+			}
+			t = e;
+		}
+		return new AsyncResult<Exception>(t);
+	}
+	
+	@Async
+	public Future<Exception> calFxTwelveSw10() {
+		Exception t = null;
+		try {
+			calFx(10, TwelveYz.class, TwelveNums.class, FxSw10.class, repositories.twelveyzRepository,
+					repositories.fxsw10Repository, new FxHandler(), "Twelve");
+			calFxZf(10, TwelveZfYz.class, TwelveYz.class, FxSw10.class, TwelveNums.class, repositories.twelvezfyzRepository,
+					repositories.twelveyzRepository, repositories.fxsw10Repository, "Twelve", new FxZfHandler<TwelveYz>());
+			logger.info("End of calFxTwelveSw10...");
+		} catch (Exception e) {
+			if (DataAccessException.class.isAssignableFrom(e.getClass())) {
+				logger.error(e.getMessage(), e);
+			}
+			t = e;
+		}
+		return new AsyncResult<Exception>(t);
+	}
+	
+	@Async
+	public Future<Exception> calFxTwelveSw11() {
+		Exception t = null;
+		try {
+			calFx(11, TwelveYz.class, TwelveNums.class, FxSw11.class, repositories.twelveyzRepository,
+					repositories.fxsw11Repository, new FxHandler(), "Twelve");
+			calFxZf(11, TwelveZfYz.class, TwelveYz.class, FxSw11.class, TwelveNums.class, repositories.twelvezfyzRepository,
+					repositories.twelveyzRepository, repositories.fxsw11Repository, "Twelve", new FxZfHandler<TwelveYz>());
+			logger.info("End of calFxTwelveSw11...");
+		} catch (Exception e) {
+			if (DataAccessException.class.isAssignableFrom(e.getClass())) {
+				logger.error(e.getMessage(), e);
+			}
+			t = e;
+		}
+		return new AsyncResult<Exception>(t);
+	}
+	
+	@Async
+	public Future<Exception> calFxTwelveSw12() {
+		Exception t = null;
+		try {
+			calFx(12, TwelveYz.class, TwelveNums.class, FxSw12.class, repositories.twelveyzRepository,
+					repositories.fxsw12Repository, new FxHandler(), "Twelve");
+			calFxZf(12, TwelveZfYz.class, TwelveYz.class, FxSw12.class, TwelveNums.class, repositories.twelvezfyzRepository,
+					repositories.twelveyzRepository, repositories.fxsw12Repository, "Twelve", new FxZfHandler<TwelveYz>());
+			logger.info("End of calFxTwelveSw12...");
+		} catch (Exception e) {
+			if (DataAccessException.class.isAssignableFrom(e.getClass())) {
+				logger.error(e.getMessage(), e);
+			}
+			t = e;
+		}
+		return new AsyncResult<Exception>(t);
+	}
 
 	@Async
 	public Future<Exception> calFxSlqSw1() {
@@ -2198,6 +3044,114 @@ public class YZ2Service extends YZService {
 			calFxZf(6, SlqZfYz.class, SlqYz.class, FxSw6.class, SlqNums.class, repositories.slqzfyzRepository,
 					repositories.slqyzRepository, repositories.fxsw6Repository, "Slq", new FxZfHandler<SlqYz>());
 			logger.info("End of calFxSlqSw6...");
+		} catch (Exception e) {
+			if (DataAccessException.class.isAssignableFrom(e.getClass())) {
+				logger.error(e.getMessage(), e);
+			}
+			t = e;
+		}
+		return new AsyncResult<Exception>(t);
+	}
+	
+	@Async
+	public Future<Exception> calFxSlqSw7() {
+		Exception t = null;
+		try {
+			calFx(7, SlqYz.class, SlqNums.class, FxSw7.class, repositories.slqyzRepository, repositories.fxsw7Repository,
+					new FxHandler(), "Slq");
+			calFxZf(7, SlqZfYz.class, SlqYz.class, FxSw7.class, SlqNums.class, repositories.slqzfyzRepository,
+					repositories.slqyzRepository, repositories.fxsw7Repository, "Slq", new FxZfHandler<SlqYz>());
+			logger.info("End of calFxSlqSw7...");
+		} catch (Exception e) {
+			if (DataAccessException.class.isAssignableFrom(e.getClass())) {
+				logger.error(e.getMessage(), e);
+			}
+			t = e;
+		}
+		return new AsyncResult<Exception>(t);
+	}
+	
+	@Async
+	public Future<Exception> calFxSlqSw8() {
+		Exception t = null;
+		try {
+			calFx(8, SlqYz.class, SlqNums.class, FxSw8.class, repositories.slqyzRepository, repositories.fxsw8Repository,
+					new FxHandler(), "Slq");
+			calFxZf(8, SlqZfYz.class, SlqYz.class, FxSw8.class, SlqNums.class, repositories.slqzfyzRepository,
+					repositories.slqyzRepository, repositories.fxsw8Repository, "Slq", new FxZfHandler<SlqYz>());
+			logger.info("End of calFxSlqSw8...");
+		} catch (Exception e) {
+			if (DataAccessException.class.isAssignableFrom(e.getClass())) {
+				logger.error(e.getMessage(), e);
+			}
+			t = e;
+		}
+		return new AsyncResult<Exception>(t);
+	}
+	
+	@Async
+	public Future<Exception> calFxSlqSw9() {
+		Exception t = null;
+		try {
+			calFx(9, SlqYz.class, SlqNums.class, FxSw9.class, repositories.slqyzRepository, repositories.fxsw9Repository,
+					new FxHandler(), "Slq");
+			calFxZf(9, SlqZfYz.class, SlqYz.class, FxSw9.class, SlqNums.class, repositories.slqzfyzRepository,
+					repositories.slqyzRepository, repositories.fxsw9Repository, "Slq", new FxZfHandler<SlqYz>());
+			logger.info("End of calFxSlqSw9...");
+		} catch (Exception e) {
+			if (DataAccessException.class.isAssignableFrom(e.getClass())) {
+				logger.error(e.getMessage(), e);
+			}
+			t = e;
+		}
+		return new AsyncResult<Exception>(t);
+	}
+	
+	@Async
+	public Future<Exception> calFxSlqSw10() {
+		Exception t = null;
+		try {
+			calFx(10, SlqYz.class, SlqNums.class, FxSw10.class, repositories.slqyzRepository, repositories.fxsw10Repository,
+					new FxHandler(), "Slq");
+			calFxZf(10, SlqZfYz.class, SlqYz.class, FxSw10.class, SlqNums.class, repositories.slqzfyzRepository,
+					repositories.slqyzRepository, repositories.fxsw10Repository, "Slq", new FxZfHandler<SlqYz>());
+			logger.info("End of calFxSlqSw10...");
+		} catch (Exception e) {
+			if (DataAccessException.class.isAssignableFrom(e.getClass())) {
+				logger.error(e.getMessage(), e);
+			}
+			t = e;
+		}
+		return new AsyncResult<Exception>(t);
+	}
+	
+	@Async
+	public Future<Exception> calFxSlqSw11() {
+		Exception t = null;
+		try {
+			calFx(11, SlqYz.class, SlqNums.class, FxSw11.class, repositories.slqyzRepository, repositories.fxsw11Repository,
+					new FxHandler(), "Slq");
+			calFxZf(11, SlqZfYz.class, SlqYz.class, FxSw11.class, SlqNums.class, repositories.slqzfyzRepository,
+					repositories.slqyzRepository, repositories.fxsw11Repository, "Slq", new FxZfHandler<SlqYz>());
+			logger.info("End of calFxSlqSw11...");
+		} catch (Exception e) {
+			if (DataAccessException.class.isAssignableFrom(e.getClass())) {
+				logger.error(e.getMessage(), e);
+			}
+			t = e;
+		}
+		return new AsyncResult<Exception>(t);
+	}
+	
+	@Async
+	public Future<Exception> calFxSlqSw12() {
+		Exception t = null;
+		try {
+			calFx(12, SlqYz.class, SlqNums.class, FxSw12.class, repositories.slqyzRepository, repositories.fxsw12Repository,
+					new FxHandler(), "Slq");
+			calFxZf(12, SlqZfYz.class, SlqYz.class, FxSw12.class, SlqNums.class, repositories.slqzfyzRepository,
+					repositories.slqyzRepository, repositories.fxsw12Repository, "Slq", new FxZfHandler<SlqYz>());
+			logger.info("End of calFxSlqSw12...");
 		} catch (Exception e) {
 			if (DataAccessException.class.isAssignableFrom(e.getClass())) {
 				logger.error(e.getMessage(), e);
@@ -2314,6 +3268,114 @@ public class YZ2Service extends YZService {
 		}
 		return new AsyncResult<Exception>(t);
 	}
+	
+	@Async
+	public Future<Exception> calFxZx1Sw7() {
+		Exception t = null;
+		try {
+			calFx(7, Zx1Yz.class, Zx1Nums.class, FxSw7.class, repositories.zx1yzRepository, repositories.fxsw7Repository,
+					new FxHandler(), "Zx1");
+			calFxZf(7, Zx1ZfYz.class, Zx1Yz.class, FxSw7.class, Zx1Nums.class, repositories.zx1zfyzRepository,
+					repositories.zx1yzRepository, repositories.fxsw7Repository, "Zx1", new FxZfHandler<Zx1Yz>());
+			logger.info("End of calFxZx1Sw7...");
+		} catch (Exception e) {
+			if (DataAccessException.class.isAssignableFrom(e.getClass())) {
+				logger.error(e.getMessage(), e);
+			}
+			t = e;
+		}
+		return new AsyncResult<Exception>(t);
+	}
+	
+	@Async
+	public Future<Exception> calFxZx1Sw8() {
+		Exception t = null;
+		try {
+			calFx(8, Zx1Yz.class, Zx1Nums.class, FxSw8.class, repositories.zx1yzRepository, repositories.fxsw8Repository,
+					new FxHandler(), "Zx1");
+			calFxZf(8, Zx1ZfYz.class, Zx1Yz.class, FxSw8.class, Zx1Nums.class, repositories.zx1zfyzRepository,
+					repositories.zx1yzRepository, repositories.fxsw8Repository, "Zx1", new FxZfHandler<Zx1Yz>());
+			logger.info("End of calFxZx1Sw8...");
+		} catch (Exception e) {
+			if (DataAccessException.class.isAssignableFrom(e.getClass())) {
+				logger.error(e.getMessage(), e);
+			}
+			t = e;
+		}
+		return new AsyncResult<Exception>(t);
+	}
+	
+	@Async
+	public Future<Exception> calFxZx1Sw9() {
+		Exception t = null;
+		try {
+			calFx(9, Zx1Yz.class, Zx1Nums.class, FxSw9.class, repositories.zx1yzRepository, repositories.fxsw9Repository,
+					new FxHandler(), "Zx1");
+			calFxZf(9, Zx1ZfYz.class, Zx1Yz.class, FxSw9.class, Zx1Nums.class, repositories.zx1zfyzRepository,
+					repositories.zx1yzRepository, repositories.fxsw9Repository, "Zx1", new FxZfHandler<Zx1Yz>());
+			logger.info("End of calFxZx1Sw9...");
+		} catch (Exception e) {
+			if (DataAccessException.class.isAssignableFrom(e.getClass())) {
+				logger.error(e.getMessage(), e);
+			}
+			t = e;
+		}
+		return new AsyncResult<Exception>(t);
+	}
+	
+	@Async
+	public Future<Exception> calFxZx1Sw10() {
+		Exception t = null;
+		try {
+			calFx(10, Zx1Yz.class, Zx1Nums.class, FxSw10.class, repositories.zx1yzRepository, repositories.fxsw10Repository,
+					new FxHandler(), "Zx1");
+			calFxZf(10, Zx1ZfYz.class, Zx1Yz.class, FxSw10.class, Zx1Nums.class, repositories.zx1zfyzRepository,
+					repositories.zx1yzRepository, repositories.fxsw10Repository, "Zx1", new FxZfHandler<Zx1Yz>());
+			logger.info("End of calFxZx1Sw10...");
+		} catch (Exception e) {
+			if (DataAccessException.class.isAssignableFrom(e.getClass())) {
+				logger.error(e.getMessage(), e);
+			}
+			t = e;
+		}
+		return new AsyncResult<Exception>(t);
+	}
+	
+	@Async
+	public Future<Exception> calFxZx1Sw11() {
+		Exception t = null;
+		try {
+			calFx(11, Zx1Yz.class, Zx1Nums.class, FxSw11.class, repositories.zx1yzRepository, repositories.fxsw11Repository,
+					new FxHandler(), "Zx1");
+			calFxZf(11, Zx1ZfYz.class, Zx1Yz.class, FxSw11.class, Zx1Nums.class, repositories.zx1zfyzRepository,
+					repositories.zx1yzRepository, repositories.fxsw11Repository, "Zx1", new FxZfHandler<Zx1Yz>());
+			logger.info("End of calFxZx1Sw11...");
+		} catch (Exception e) {
+			if (DataAccessException.class.isAssignableFrom(e.getClass())) {
+				logger.error(e.getMessage(), e);
+			}
+			t = e;
+		}
+		return new AsyncResult<Exception>(t);
+	}
+	
+	@Async
+	public Future<Exception> calFxZx1Sw12() {
+		Exception t = null;
+		try {
+			calFx(12, Zx1Yz.class, Zx1Nums.class, FxSw12.class, repositories.zx1yzRepository, repositories.fxsw12Repository,
+					new FxHandler(), "Zx1");
+			calFxZf(12, Zx1ZfYz.class, Zx1Yz.class, FxSw12.class, Zx1Nums.class, repositories.zx1zfyzRepository,
+					repositories.zx1yzRepository, repositories.fxsw12Repository, "Zx1", new FxZfHandler<Zx1Yz>());
+			logger.info("End of calFxZx1Sw12...");
+		} catch (Exception e) {
+			if (DataAccessException.class.isAssignableFrom(e.getClass())) {
+				logger.error(e.getMessage(), e);
+			}
+			t = e;
+		}
+		return new AsyncResult<Exception>(t);
+	}
 
 	@Async
 	public Future<Exception> calFxZx2Sw1() {
@@ -2422,6 +3484,114 @@ public class YZ2Service extends YZService {
 		}
 		return new AsyncResult<Exception>(t);
 	}
+	
+	@Async
+	public Future<Exception> calFxZx2Sw7() {
+		Exception t = null;
+		try {
+			calFx(7, Zx2Yz.class, Zx2Nums.class, FxSw7.class, repositories.zx2yzRepository, repositories.fxsw7Repository,
+					new FxHandler(), "Zx2");
+			calFxZf(7, Zx2ZfYz.class, Zx2Yz.class, FxSw7.class, Zx2Nums.class, repositories.zx2zfyzRepository,
+					repositories.zx2yzRepository, repositories.fxsw7Repository, "Zx2", new FxZfHandler<Zx2Yz>());
+			logger.info("End of calFxZx2Sw7...");
+		} catch (Exception e) {
+			if (DataAccessException.class.isAssignableFrom(e.getClass())) {
+				logger.error(e.getMessage(), e);
+			}
+			t = e;
+		}
+		return new AsyncResult<Exception>(t);
+	}
+	
+	@Async
+	public Future<Exception> calFxZx2Sw8() {
+		Exception t = null;
+		try {
+			calFx(8, Zx2Yz.class, Zx2Nums.class, FxSw8.class, repositories.zx2yzRepository, repositories.fxsw8Repository,
+					new FxHandler(), "Zx2");
+			calFxZf(8, Zx2ZfYz.class, Zx2Yz.class, FxSw8.class, Zx2Nums.class, repositories.zx2zfyzRepository,
+					repositories.zx2yzRepository, repositories.fxsw8Repository, "Zx2", new FxZfHandler<Zx2Yz>());
+			logger.info("End of calFxZx2Sw8...");
+		} catch (Exception e) {
+			if (DataAccessException.class.isAssignableFrom(e.getClass())) {
+				logger.error(e.getMessage(), e);
+			}
+			t = e;
+		}
+		return new AsyncResult<Exception>(t);
+	}
+	
+	@Async
+	public Future<Exception> calFxZx2Sw9() {
+		Exception t = null;
+		try {
+			calFx(9, Zx2Yz.class, Zx2Nums.class, FxSw9.class, repositories.zx2yzRepository, repositories.fxsw9Repository,
+					new FxHandler(), "Zx2");
+			calFxZf(9, Zx2ZfYz.class, Zx2Yz.class, FxSw9.class, Zx2Nums.class, repositories.zx2zfyzRepository,
+					repositories.zx2yzRepository, repositories.fxsw9Repository, "Zx2", new FxZfHandler<Zx2Yz>());
+			logger.info("End of calFxZx2Sw9...");
+		} catch (Exception e) {
+			if (DataAccessException.class.isAssignableFrom(e.getClass())) {
+				logger.error(e.getMessage(), e);
+			}
+			t = e;
+		}
+		return new AsyncResult<Exception>(t);
+	}
+	
+	@Async
+	public Future<Exception> calFxZx2Sw10() {
+		Exception t = null;
+		try {
+			calFx(10, Zx2Yz.class, Zx2Nums.class, FxSw10.class, repositories.zx2yzRepository, repositories.fxsw10Repository,
+					new FxHandler(), "Zx2");
+			calFxZf(10, Zx2ZfYz.class, Zx2Yz.class, FxSw10.class, Zx2Nums.class, repositories.zx2zfyzRepository,
+					repositories.zx2yzRepository, repositories.fxsw10Repository, "Zx2", new FxZfHandler<Zx2Yz>());
+			logger.info("End of calFxZx2Sw10...");
+		} catch (Exception e) {
+			if (DataAccessException.class.isAssignableFrom(e.getClass())) {
+				logger.error(e.getMessage(), e);
+			}
+			t = e;
+		}
+		return new AsyncResult<Exception>(t);
+	}
+	
+	@Async
+	public Future<Exception> calFxZx2Sw11() {
+		Exception t = null;
+		try {
+			calFx(11, Zx2Yz.class, Zx2Nums.class, FxSw11.class, repositories.zx2yzRepository, repositories.fxsw11Repository,
+					new FxHandler(), "Zx2");
+			calFxZf(11, Zx2ZfYz.class, Zx2Yz.class, FxSw11.class, Zx2Nums.class, repositories.zx2zfyzRepository,
+					repositories.zx2yzRepository, repositories.fxsw11Repository, "Zx2", new FxZfHandler<Zx2Yz>());
+			logger.info("End of calFxZx2Sw11...");
+		} catch (Exception e) {
+			if (DataAccessException.class.isAssignableFrom(e.getClass())) {
+				logger.error(e.getMessage(), e);
+			}
+			t = e;
+		}
+		return new AsyncResult<Exception>(t);
+	}
+	
+	@Async
+	public Future<Exception> calFxZx2Sw12() {
+		Exception t = null;
+		try {
+			calFx(12, Zx2Yz.class, Zx2Nums.class, FxSw12.class, repositories.zx2yzRepository, repositories.fxsw12Repository,
+					new FxHandler(), "Zx2");
+			calFxZf(12, Zx2ZfYz.class, Zx2Yz.class, FxSw12.class, Zx2Nums.class, repositories.zx2zfyzRepository,
+					repositories.zx2yzRepository, repositories.fxsw12Repository, "Zx2", new FxZfHandler<Zx2Yz>());
+			logger.info("End of calFxZx2Sw12...");
+		} catch (Exception e) {
+			if (DataAccessException.class.isAssignableFrom(e.getClass())) {
+				logger.error(e.getMessage(), e);
+			}
+			t = e;
+		}
+		return new AsyncResult<Exception>(t);
+	}
 
 	@Async
 	public Future<Exception> calFxZx3Sw1() {
@@ -2522,6 +3692,114 @@ public class YZ2Service extends YZService {
 			calFxZf(6, Zx3ZfYz.class, Zx3Yz.class, FxSw6.class, Zx3Nums.class, repositories.zx3zfyzRepository,
 					repositories.zx3yzRepository, repositories.fxsw6Repository, "Zx3", new FxZfHandler<Zx3Yz>());
 			logger.info("End of calFxZx3Sw6...");
+		} catch (Exception e) {
+			if (DataAccessException.class.isAssignableFrom(e.getClass())) {
+				logger.error(e.getMessage(), e);
+			}
+			t = e;
+		}
+		return new AsyncResult<Exception>(t);
+	}
+	
+	@Async
+	public Future<Exception> calFxZx3Sw7() {
+		Exception t = null;
+		try {
+			calFx(7, Zx3Yz.class, Zx3Nums.class, FxSw7.class, repositories.zx3yzRepository, repositories.fxsw7Repository,
+					new FxHandler(), "Zx3");
+			calFxZf(7, Zx3ZfYz.class, Zx3Yz.class, FxSw7.class, Zx3Nums.class, repositories.zx3zfyzRepository,
+					repositories.zx3yzRepository, repositories.fxsw7Repository, "Zx3", new FxZfHandler<Zx3Yz>());
+			logger.info("End of calFxZx3Sw7...");
+		} catch (Exception e) {
+			if (DataAccessException.class.isAssignableFrom(e.getClass())) {
+				logger.error(e.getMessage(), e);
+			}
+			t = e;
+		}
+		return new AsyncResult<Exception>(t);
+	}
+	
+	@Async
+	public Future<Exception> calFxZx3Sw8() {
+		Exception t = null;
+		try {
+			calFx(8, Zx3Yz.class, Zx3Nums.class, FxSw8.class, repositories.zx3yzRepository, repositories.fxsw8Repository,
+					new FxHandler(), "Zx3");
+			calFxZf(8, Zx3ZfYz.class, Zx3Yz.class, FxSw8.class, Zx3Nums.class, repositories.zx3zfyzRepository,
+					repositories.zx3yzRepository, repositories.fxsw8Repository, "Zx3", new FxZfHandler<Zx3Yz>());
+			logger.info("End of calFxZx3Sw8...");
+		} catch (Exception e) {
+			if (DataAccessException.class.isAssignableFrom(e.getClass())) {
+				logger.error(e.getMessage(), e);
+			}
+			t = e;
+		}
+		return new AsyncResult<Exception>(t);
+	}
+	
+	@Async
+	public Future<Exception> calFxZx3Sw9() {
+		Exception t = null;
+		try {
+			calFx(9, Zx3Yz.class, Zx3Nums.class, FxSw9.class, repositories.zx3yzRepository, repositories.fxsw9Repository,
+					new FxHandler(), "Zx3");
+			calFxZf(9, Zx3ZfYz.class, Zx3Yz.class, FxSw9.class, Zx3Nums.class, repositories.zx3zfyzRepository,
+					repositories.zx3yzRepository, repositories.fxsw9Repository, "Zx3", new FxZfHandler<Zx3Yz>());
+			logger.info("End of calFxZx3Sw9...");
+		} catch (Exception e) {
+			if (DataAccessException.class.isAssignableFrom(e.getClass())) {
+				logger.error(e.getMessage(), e);
+			}
+			t = e;
+		}
+		return new AsyncResult<Exception>(t);
+	}
+	
+	@Async
+	public Future<Exception> calFxZx3Sw10() {
+		Exception t = null;
+		try {
+			calFx(10, Zx3Yz.class, Zx3Nums.class, FxSw10.class, repositories.zx3yzRepository, repositories.fxsw10Repository,
+					new FxHandler(), "Zx3");
+			calFxZf(10, Zx3ZfYz.class, Zx3Yz.class, FxSw10.class, Zx3Nums.class, repositories.zx3zfyzRepository,
+					repositories.zx3yzRepository, repositories.fxsw10Repository, "Zx3", new FxZfHandler<Zx3Yz>());
+			logger.info("End of calFxZx3Sw10...");
+		} catch (Exception e) {
+			if (DataAccessException.class.isAssignableFrom(e.getClass())) {
+				logger.error(e.getMessage(), e);
+			}
+			t = e;
+		}
+		return new AsyncResult<Exception>(t);
+	}
+	
+	@Async
+	public Future<Exception> calFxZx3Sw11() {
+		Exception t = null;
+		try {
+			calFx(11, Zx3Yz.class, Zx3Nums.class, FxSw11.class, repositories.zx3yzRepository, repositories.fxsw11Repository,
+					new FxHandler(), "Zx3");
+			calFxZf(11, Zx3ZfYz.class, Zx3Yz.class, FxSw11.class, Zx3Nums.class, repositories.zx3zfyzRepository,
+					repositories.zx3yzRepository, repositories.fxsw11Repository, "Zx3", new FxZfHandler<Zx3Yz>());
+			logger.info("End of calFxZx3Sw11...");
+		} catch (Exception e) {
+			if (DataAccessException.class.isAssignableFrom(e.getClass())) {
+				logger.error(e.getMessage(), e);
+			}
+			t = e;
+		}
+		return new AsyncResult<Exception>(t);
+	}
+	
+	@Async
+	public Future<Exception> calFxZx3Sw12() {
+		Exception t = null;
+		try {
+			calFx(12, Zx3Yz.class, Zx3Nums.class, FxSw12.class, repositories.zx3yzRepository, repositories.fxsw12Repository,
+					new FxHandler(), "Zx3");
+			calFxZf(12, Zx3ZfYz.class, Zx3Yz.class, FxSw12.class, Zx3Nums.class, repositories.zx3zfyzRepository,
+					repositories.zx3yzRepository, repositories.fxsw12Repository, "Zx3", new FxZfHandler<Zx3Yz>());
+			logger.info("End of calFxZx3Sw12...");
 		} catch (Exception e) {
 			if (DataAccessException.class.isAssignableFrom(e.getClass())) {
 				logger.error(e.getMessage(), e);
@@ -2640,6 +3918,114 @@ public class YZ2Service extends YZService {
 	}
 
 	@Async
+	public Future<Exception> calFxZx4Sw7() {
+		Exception t = null;
+		try {
+			calFx(7, Zx4Yz.class, Zx4Nums.class, FxSw7.class, repositories.zx4yzRepository, repositories.fxsw7Repository,
+					new FxHandler(), "Zx4");
+			calFxZf(7, Zx4ZfYz.class, Zx4Yz.class, FxSw7.class, Zx4Nums.class, repositories.zx4zfyzRepository,
+					repositories.zx4yzRepository, repositories.fxsw7Repository, "Zx4", new FxZfHandler<Zx4Yz>());
+			logger.info("End of calFxZx4Sw7...");
+		} catch (Exception e) {
+			if (DataAccessException.class.isAssignableFrom(e.getClass())) {
+				logger.error(e.getMessage(), e);
+			}
+			t = e;
+		}
+		return new AsyncResult<Exception>(t);
+	}
+	
+	@Async
+	public Future<Exception> calFxZx4Sw8() {
+		Exception t = null;
+		try {
+			calFx(8, Zx4Yz.class, Zx4Nums.class, FxSw8.class, repositories.zx4yzRepository, repositories.fxsw8Repository,
+					new FxHandler(), "Zx4");
+			calFxZf(8, Zx4ZfYz.class, Zx4Yz.class, FxSw8.class, Zx4Nums.class, repositories.zx4zfyzRepository,
+					repositories.zx4yzRepository, repositories.fxsw8Repository, "Zx4", new FxZfHandler<Zx4Yz>());
+			logger.info("End of calFxZx4Sw8...");
+		} catch (Exception e) {
+			if (DataAccessException.class.isAssignableFrom(e.getClass())) {
+				logger.error(e.getMessage(), e);
+			}
+			t = e;
+		}
+		return new AsyncResult<Exception>(t);
+	}
+	
+	@Async
+	public Future<Exception> calFxZx4Sw9() {
+		Exception t = null;
+		try {
+			calFx(9, Zx4Yz.class, Zx4Nums.class, FxSw9.class, repositories.zx4yzRepository, repositories.fxsw9Repository,
+					new FxHandler(), "Zx4");
+			calFxZf(9, Zx4ZfYz.class, Zx4Yz.class, FxSw9.class, Zx4Nums.class, repositories.zx4zfyzRepository,
+					repositories.zx4yzRepository, repositories.fxsw9Repository, "Zx4", new FxZfHandler<Zx4Yz>());
+			logger.info("End of calFxZx4Sw9...");
+		} catch (Exception e) {
+			if (DataAccessException.class.isAssignableFrom(e.getClass())) {
+				logger.error(e.getMessage(), e);
+			}
+			t = e;
+		}
+		return new AsyncResult<Exception>(t);
+	}
+	
+	@Async
+	public Future<Exception> calFxZx4Sw10() {
+		Exception t = null;
+		try {
+			calFx(10, Zx4Yz.class, Zx4Nums.class, FxSw10.class, repositories.zx4yzRepository, repositories.fxsw10Repository,
+					new FxHandler(), "Zx4");
+			calFxZf(10, Zx4ZfYz.class, Zx4Yz.class, FxSw10.class, Zx4Nums.class, repositories.zx4zfyzRepository,
+					repositories.zx4yzRepository, repositories.fxsw10Repository, "Zx4", new FxZfHandler<Zx4Yz>());
+			logger.info("End of calFxZx4Sw10...");
+		} catch (Exception e) {
+			if (DataAccessException.class.isAssignableFrom(e.getClass())) {
+				logger.error(e.getMessage(), e);
+			}
+			t = e;
+		}
+		return new AsyncResult<Exception>(t);
+	}
+	
+	@Async
+	public Future<Exception> calFxZx4Sw11() {
+		Exception t = null;
+		try {
+			calFx(11, Zx4Yz.class, Zx4Nums.class, FxSw11.class, repositories.zx4yzRepository, repositories.fxsw11Repository,
+					new FxHandler(), "Zx4");
+			calFxZf(11, Zx4ZfYz.class, Zx4Yz.class, FxSw11.class, Zx4Nums.class, repositories.zx4zfyzRepository,
+					repositories.zx4yzRepository, repositories.fxsw11Repository, "Zx4", new FxZfHandler<Zx4Yz>());
+			logger.info("End of calFxZx4Sw11...");
+		} catch (Exception e) {
+			if (DataAccessException.class.isAssignableFrom(e.getClass())) {
+				logger.error(e.getMessage(), e);
+			}
+			t = e;
+		}
+		return new AsyncResult<Exception>(t);
+	}
+	
+	@Async
+	public Future<Exception> calFxZx4Sw12() {
+		Exception t = null;
+		try {
+			calFx(12, Zx4Yz.class, Zx4Nums.class, FxSw12.class, repositories.zx4yzRepository, repositories.fxsw12Repository,
+					new FxHandler(), "Zx4");
+			calFxZf(12, Zx4ZfYz.class, Zx4Yz.class, FxSw12.class, Zx4Nums.class, repositories.zx4zfyzRepository,
+					repositories.zx4yzRepository, repositories.fxsw12Repository, "Zx4", new FxZfHandler<Zx4Yz>());
+			logger.info("End of calFxZx4Sw12...");
+		} catch (Exception e) {
+			if (DataAccessException.class.isAssignableFrom(e.getClass())) {
+				logger.error(e.getMessage(), e);
+			}
+			t = e;
+		}
+		return new AsyncResult<Exception>(t);
+	}
+	
+	@Async
 	public Future<Exception> calFxZx5Sw1() {
 		Exception t = null;
 		try {
@@ -2738,6 +4124,114 @@ public class YZ2Service extends YZService {
 			calFxZf(6, Zx5ZfYz.class, Zx5Yz.class, FxSw6.class, Zx5Nums.class, repositories.zx5zfyzRepository,
 					repositories.zx5yzRepository, repositories.fxsw6Repository, "Zx5", new FxZfHandler<Zx5Yz>());
 			logger.info("End of calFxZx5Sw6...");
+		} catch (Exception e) {
+			if (DataAccessException.class.isAssignableFrom(e.getClass())) {
+				logger.error(e.getMessage(), e);
+			}
+			t = e;
+		}
+		return new AsyncResult<Exception>(t);
+	}
+	
+	@Async
+	public Future<Exception> calFxZx5Sw7() {
+		Exception t = null;
+		try {
+			calFx(7, Zx5Yz.class, Zx5Nums.class, FxSw7.class, repositories.zx5yzRepository, repositories.fxsw7Repository,
+					new FxHandler(), "Zx5");
+			calFxZf(7, Zx5ZfYz.class, Zx5Yz.class, FxSw7.class, Zx5Nums.class, repositories.zx5zfyzRepository,
+					repositories.zx5yzRepository, repositories.fxsw7Repository, "Zx5", new FxZfHandler<Zx5Yz>());
+			logger.info("End of calFxZx5Sw7...");
+		} catch (Exception e) {
+			if (DataAccessException.class.isAssignableFrom(e.getClass())) {
+				logger.error(e.getMessage(), e);
+			}
+			t = e;
+		}
+		return new AsyncResult<Exception>(t);
+	}
+	
+	@Async
+	public Future<Exception> calFxZx5Sw8() {
+		Exception t = null;
+		try {
+			calFx(8, Zx5Yz.class, Zx5Nums.class, FxSw8.class, repositories.zx5yzRepository, repositories.fxsw8Repository,
+					new FxHandler(), "Zx5");
+			calFxZf(8, Zx5ZfYz.class, Zx5Yz.class, FxSw8.class, Zx5Nums.class, repositories.zx5zfyzRepository,
+					repositories.zx5yzRepository, repositories.fxsw8Repository, "Zx5", new FxZfHandler<Zx5Yz>());
+			logger.info("End of calFxZx5Sw8...");
+		} catch (Exception e) {
+			if (DataAccessException.class.isAssignableFrom(e.getClass())) {
+				logger.error(e.getMessage(), e);
+			}
+			t = e;
+		}
+		return new AsyncResult<Exception>(t);
+	}
+	
+	@Async
+	public Future<Exception> calFxZx5Sw9() {
+		Exception t = null;
+		try {
+			calFx(9, Zx5Yz.class, Zx5Nums.class, FxSw9.class, repositories.zx5yzRepository, repositories.fxsw9Repository,
+					new FxHandler(), "Zx5");
+			calFxZf(9, Zx5ZfYz.class, Zx5Yz.class, FxSw9.class, Zx5Nums.class, repositories.zx5zfyzRepository,
+					repositories.zx5yzRepository, repositories.fxsw9Repository, "Zx5", new FxZfHandler<Zx5Yz>());
+			logger.info("End of calFxZx5Sw9...");
+		} catch (Exception e) {
+			if (DataAccessException.class.isAssignableFrom(e.getClass())) {
+				logger.error(e.getMessage(), e);
+			}
+			t = e;
+		}
+		return new AsyncResult<Exception>(t);
+	}
+	
+	@Async
+	public Future<Exception> calFxZx5Sw10() {
+		Exception t = null;
+		try {
+			calFx(10, Zx5Yz.class, Zx5Nums.class, FxSw10.class, repositories.zx5yzRepository, repositories.fxsw10Repository,
+					new FxHandler(), "Zx5");
+			calFxZf(10, Zx5ZfYz.class, Zx5Yz.class, FxSw10.class, Zx5Nums.class, repositories.zx5zfyzRepository,
+					repositories.zx5yzRepository, repositories.fxsw10Repository, "Zx5", new FxZfHandler<Zx5Yz>());
+			logger.info("End of calFxZx5Sw10...");
+		} catch (Exception e) {
+			if (DataAccessException.class.isAssignableFrom(e.getClass())) {
+				logger.error(e.getMessage(), e);
+			}
+			t = e;
+		}
+		return new AsyncResult<Exception>(t);
+	}
+	
+	@Async
+	public Future<Exception> calFxZx5Sw11() {
+		Exception t = null;
+		try {
+			calFx(11, Zx5Yz.class, Zx5Nums.class, FxSw11.class, repositories.zx5yzRepository, repositories.fxsw11Repository,
+					new FxHandler(), "Zx5");
+			calFxZf(11, Zx5ZfYz.class, Zx5Yz.class, FxSw11.class, Zx5Nums.class, repositories.zx5zfyzRepository,
+					repositories.zx5yzRepository, repositories.fxsw11Repository, "Zx5", new FxZfHandler<Zx5Yz>());
+			logger.info("End of calFxZx5Sw11...");
+		} catch (Exception e) {
+			if (DataAccessException.class.isAssignableFrom(e.getClass())) {
+				logger.error(e.getMessage(), e);
+			}
+			t = e;
+		}
+		return new AsyncResult<Exception>(t);
+	}
+	
+	@Async
+	public Future<Exception> calFxZx5Sw12() {
+		Exception t = null;
+		try {
+			calFx(12, Zx5Yz.class, Zx5Nums.class, FxSw12.class, repositories.zx5yzRepository, repositories.fxsw12Repository,
+					new FxHandler(), "Zx5");
+			calFxZf(12, Zx5ZfYz.class, Zx5Yz.class, FxSw12.class, Zx5Nums.class, repositories.zx5zfyzRepository,
+					repositories.zx5yzRepository, repositories.fxsw12Repository, "Zx5", new FxZfHandler<Zx5Yz>());
+			logger.info("End of calFxZx5Sw12...");
 		} catch (Exception e) {
 			if (DataAccessException.class.isAssignableFrom(e.getClass())) {
 				logger.error(e.getMessage(), e);
@@ -2856,6 +4350,114 @@ public class YZ2Service extends YZService {
 	}
 
 	@Async
+	public Future<Exception> calFxZx6Sw7() {
+		Exception t = null;
+		try {
+			calFx(7, Zx6Yz.class, Zx6Nums.class, FxSw7.class, repositories.zx6yzRepository, repositories.fxsw7Repository,
+					new FxHandler(), "Zx6");
+			calFxZf(7, Zx6ZfYz.class, Zx6Yz.class, FxSw7.class, Zx6Nums.class, repositories.zx6zfyzRepository,
+					repositories.zx6yzRepository, repositories.fxsw7Repository, "Zx6", new FxZfHandler<Zx6Yz>());
+			logger.info("End of calFxZx6Sw7...");
+		} catch (Exception e) {
+			if (DataAccessException.class.isAssignableFrom(e.getClass())) {
+				logger.error(e.getMessage(), e);
+			}
+			t = e;
+		}
+		return new AsyncResult<Exception>(t);
+	}
+	
+	@Async
+	public Future<Exception> calFxZx6Sw8() {
+		Exception t = null;
+		try {
+			calFx(8, Zx6Yz.class, Zx6Nums.class, FxSw8.class, repositories.zx6yzRepository, repositories.fxsw8Repository,
+					new FxHandler(), "Zx6");
+			calFxZf(8, Zx6ZfYz.class, Zx6Yz.class, FxSw8.class, Zx6Nums.class, repositories.zx6zfyzRepository,
+					repositories.zx6yzRepository, repositories.fxsw8Repository, "Zx6", new FxZfHandler<Zx6Yz>());
+			logger.info("End of calFxZx6Sw8...");
+		} catch (Exception e) {
+			if (DataAccessException.class.isAssignableFrom(e.getClass())) {
+				logger.error(e.getMessage(), e);
+			}
+			t = e;
+		}
+		return new AsyncResult<Exception>(t);
+	}
+	
+	@Async
+	public Future<Exception> calFxZx6Sw9() {
+		Exception t = null;
+		try {
+			calFx(9, Zx6Yz.class, Zx6Nums.class, FxSw9.class, repositories.zx6yzRepository, repositories.fxsw9Repository,
+					new FxHandler(), "Zx6");
+			calFxZf(9, Zx6ZfYz.class, Zx6Yz.class, FxSw9.class, Zx6Nums.class, repositories.zx6zfyzRepository,
+					repositories.zx6yzRepository, repositories.fxsw9Repository, "Zx6", new FxZfHandler<Zx6Yz>());
+			logger.info("End of calFxZx6Sw9...");
+		} catch (Exception e) {
+			if (DataAccessException.class.isAssignableFrom(e.getClass())) {
+				logger.error(e.getMessage(), e);
+			}
+			t = e;
+		}
+		return new AsyncResult<Exception>(t);
+	}
+	
+	@Async
+	public Future<Exception> calFxZx6Sw10() {
+		Exception t = null;
+		try {
+			calFx(10, Zx6Yz.class, Zx6Nums.class, FxSw10.class, repositories.zx6yzRepository, repositories.fxsw10Repository,
+					new FxHandler(), "Zx6");
+			calFxZf(10, Zx6ZfYz.class, Zx6Yz.class, FxSw10.class, Zx6Nums.class, repositories.zx6zfyzRepository,
+					repositories.zx6yzRepository, repositories.fxsw10Repository, "Zx6", new FxZfHandler<Zx6Yz>());
+			logger.info("End of calFxZx6Sw10...");
+		} catch (Exception e) {
+			if (DataAccessException.class.isAssignableFrom(e.getClass())) {
+				logger.error(e.getMessage(), e);
+			}
+			t = e;
+		}
+		return new AsyncResult<Exception>(t);
+	}
+	
+	@Async
+	public Future<Exception> calFxZx6Sw11() {
+		Exception t = null;
+		try {
+			calFx(11, Zx6Yz.class, Zx6Nums.class, FxSw11.class, repositories.zx6yzRepository, repositories.fxsw11Repository,
+					new FxHandler(), "Zx6");
+			calFxZf(11, Zx6ZfYz.class, Zx6Yz.class, FxSw11.class, Zx6Nums.class, repositories.zx6zfyzRepository,
+					repositories.zx6yzRepository, repositories.fxsw11Repository, "Zx6", new FxZfHandler<Zx6Yz>());
+			logger.info("End of calFxZx6Sw11...");
+		} catch (Exception e) {
+			if (DataAccessException.class.isAssignableFrom(e.getClass())) {
+				logger.error(e.getMessage(), e);
+			}
+			t = e;
+		}
+		return new AsyncResult<Exception>(t);
+	}
+	
+	@Async
+	public Future<Exception> calFxZx6Sw12() {
+		Exception t = null;
+		try {
+			calFx(12, Zx6Yz.class, Zx6Nums.class, FxSw12.class, repositories.zx6yzRepository, repositories.fxsw12Repository,
+					new FxHandler(), "Zx6");
+			calFxZf(12, Zx6ZfYz.class, Zx6Yz.class, FxSw12.class, Zx6Nums.class, repositories.zx6zfyzRepository,
+					repositories.zx6yzRepository, repositories.fxsw12Repository, "Zx6", new FxZfHandler<Zx6Yz>());
+			logger.info("End of calFxZx6Sw12...");
+		} catch (Exception e) {
+			if (DataAccessException.class.isAssignableFrom(e.getClass())) {
+				logger.error(e.getMessage(), e);
+			}
+			t = e;
+		}
+		return new AsyncResult<Exception>(t);
+	}
+	
+	@Async
 	public Future<Exception> calFxZx7Sw1() {
 		Exception t = null;
 		try {
@@ -2962,7 +4564,79 @@ public class YZ2Service extends YZService {
 		}
 		return new AsyncResult<Exception>(t);
 	}
-
+	
+	@Async
+	public Future<Exception> calFxZx7Sw7() {
+		Exception t = null;
+		try {
+			calFx(7, Zx7Yz.class, Zx7Nums.class, FxSw7.class, repositories.zx7yzRepository, repositories.fxsw7Repository,
+					new FxHandler(), "Zx7");
+			calFxZf(7, Zx7ZfYz.class, Zx7Yz.class, FxSw7.class, Zx7Nums.class, repositories.zx7zfyzRepository,
+					repositories.zx7yzRepository, repositories.fxsw7Repository, "Zx7", new FxZfHandler<Zx7Yz>());
+			logger.info("End of calFxZx7Sw7...");
+		} catch (Exception e) {
+			if (DataAccessException.class.isAssignableFrom(e.getClass())) {
+				logger.error(e.getMessage(), e);
+			}
+			t = e;
+		}
+		return new AsyncResult<Exception>(t);
+	}
+	
+	@Async
+	public Future<Exception> calFxZx7Sw8() {
+		Exception t = null;
+		try {
+			calFx(8, Zx7Yz.class, Zx7Nums.class, FxSw8.class, repositories.zx7yzRepository, repositories.fxsw8Repository,
+					new FxHandler(), "Zx7");
+			calFxZf(8, Zx7ZfYz.class, Zx7Yz.class, FxSw8.class, Zx7Nums.class, repositories.zx7zfyzRepository,
+					repositories.zx7yzRepository, repositories.fxsw8Repository, "Zx7", new FxZfHandler<Zx7Yz>());
+			logger.info("End of calFxZx7Sw8...");
+		} catch (Exception e) {
+			if (DataAccessException.class.isAssignableFrom(e.getClass())) {
+				logger.error(e.getMessage(), e);
+			}
+			t = e;
+		}
+		return new AsyncResult<Exception>(t);
+	}
+	
+	@Async
+	public Future<Exception> calFxZx7Sw9() {
+		Exception t = null;
+		try {
+			calFx(9, Zx7Yz.class, Zx7Nums.class, FxSw9.class, repositories.zx7yzRepository, repositories.fxsw9Repository,
+					new FxHandler(), "Zx7");
+			calFxZf(9, Zx7ZfYz.class, Zx7Yz.class, FxSw9.class, Zx7Nums.class, repositories.zx7zfyzRepository,
+					repositories.zx7yzRepository, repositories.fxsw9Repository, "Zx7", new FxZfHandler<Zx7Yz>());
+			logger.info("End of calFxZx7Sw9...");
+		} catch (Exception e) {
+			if (DataAccessException.class.isAssignableFrom(e.getClass())) {
+				logger.error(e.getMessage(), e);
+			}
+			t = e;
+		}
+		return new AsyncResult<Exception>(t);
+	}
+	
+	@Async
+	public Future<Exception> calFxZx7Sw10() {
+		Exception t = null;
+		try {
+			calFx(10, Zx7Yz.class, Zx7Nums.class, FxSw10.class, repositories.zx7yzRepository, repositories.fxsw10Repository,
+					new FxHandler(), "Zx7");
+			calFxZf(10, Zx7ZfYz.class, Zx7Yz.class, FxSw10.class, Zx7Nums.class, repositories.zx7zfyzRepository,
+					repositories.zx7yzRepository, repositories.fxsw10Repository, "Zx7", new FxZfHandler<Zx7Yz>());
+			logger.info("End of calFxZx7Sw10...");
+		} catch (Exception e) {
+			if (DataAccessException.class.isAssignableFrom(e.getClass())) {
+				logger.error(e.getMessage(), e);
+			}
+			t = e;
+		}
+		return new AsyncResult<Exception>(t);
+	}
+	
 	@Async
 	public Future<Exception> calFxZx8Sw1() {
 		Exception t = null;
@@ -3070,7 +4744,79 @@ public class YZ2Service extends YZService {
 		}
 		return new AsyncResult<Exception>(t);
 	}
-
+	
+	@Async
+	public Future<Exception> calFxZx8Sw7() {
+		Exception t = null;
+		try {
+			calFx(7, Zx8Yz.class, Zx8Nums.class, FxSw7.class, repositories.zx8yzRepository, repositories.fxsw7Repository,
+					new FxHandler(), "Zx8");
+			calFxZf(7, Zx8ZfYz.class, Zx8Yz.class, FxSw7.class, Zx8Nums.class, repositories.zx8zfyzRepository,
+					repositories.zx8yzRepository, repositories.fxsw7Repository, "Zx8", new FxZfHandler<Zx8Yz>());
+			logger.info("End of calFxZx8Sw7...");
+		} catch (Exception e) {
+			if (DataAccessException.class.isAssignableFrom(e.getClass())) {
+				logger.error(e.getMessage(), e);
+			}
+			t = e;
+		}
+		return new AsyncResult<Exception>(t);
+	}
+	
+	@Async
+	public Future<Exception> calFxZx8Sw8() {
+		Exception t = null;
+		try {
+			calFx(8, Zx8Yz.class, Zx8Nums.class, FxSw8.class, repositories.zx8yzRepository, repositories.fxsw8Repository,
+					new FxHandler(), "Zx8");
+			calFxZf(8, Zx8ZfYz.class, Zx8Yz.class, FxSw8.class, Zx8Nums.class, repositories.zx8zfyzRepository,
+					repositories.zx8yzRepository, repositories.fxsw8Repository, "Zx8", new FxZfHandler<Zx8Yz>());
+			logger.info("End of calFxZx8Sw8...");
+		} catch (Exception e) {
+			if (DataAccessException.class.isAssignableFrom(e.getClass())) {
+				logger.error(e.getMessage(), e);
+			}
+			t = e;
+		}
+		return new AsyncResult<Exception>(t);
+	}
+	
+	@Async
+	public Future<Exception> calFxZx8Sw9() {
+		Exception t = null;
+		try {
+			calFx(9, Zx8Yz.class, Zx8Nums.class, FxSw9.class, repositories.zx8yzRepository, repositories.fxsw9Repository,
+					new FxHandler(), "Zx8");
+			calFxZf(9, Zx8ZfYz.class, Zx8Yz.class, FxSw9.class, Zx8Nums.class, repositories.zx8zfyzRepository,
+					repositories.zx8yzRepository, repositories.fxsw9Repository, "Zx8", new FxZfHandler<Zx8Yz>());
+			logger.info("End of calFxZx8Sw9...");
+		} catch (Exception e) {
+			if (DataAccessException.class.isAssignableFrom(e.getClass())) {
+				logger.error(e.getMessage(), e);
+			}
+			t = e;
+		}
+		return new AsyncResult<Exception>(t);
+	}
+	
+	@Async
+	public Future<Exception> calFxZx8Sw10() {
+		Exception t = null;
+		try {
+			calFx(10, Zx8Yz.class, Zx8Nums.class, FxSw10.class, repositories.zx8yzRepository, repositories.fxsw10Repository,
+					new FxHandler(), "Zx8");
+			calFxZf(10, Zx8ZfYz.class, Zx8Yz.class, FxSw10.class, Zx8Nums.class, repositories.zx8zfyzRepository,
+					repositories.zx8yzRepository, repositories.fxsw10Repository, "Zx8", new FxZfHandler<Zx8Yz>());
+			logger.info("End of calFxZx8Sw10...");
+		} catch (Exception e) {
+			if (DataAccessException.class.isAssignableFrom(e.getClass())) {
+				logger.error(e.getMessage(), e);
+			}
+			t = e;
+		}
+		return new AsyncResult<Exception>(t);
+	}
+	
 	@Async
 	public Future<Exception> calFxZx9Sw1() {
 		Exception t = null;
@@ -3268,6 +5014,24 @@ public class YZ2Service extends YZService {
 		}
 		return new AsyncResult<Exception>(t);
 	}
+	
+	@Async
+	public Future<Exception> calFxZx10Sw7() {
+		Exception t = null;
+		try {
+			calFx(7, Zx10Yz.class, Zx10Nums.class, FxSw7.class, repositories.zx10yzRepository, repositories.fxsw7Repository,
+					new FxHandler(), "Zx10");
+			calFxZf(7, Zx10ZfYz.class, Zx10Yz.class, FxSw7.class, Zx10Nums.class, repositories.zx10zfyzRepository,
+					repositories.zx10yzRepository, repositories.fxsw7Repository, "Zx10", new FxZfHandler<Zx10Yz>());
+			logger.info("End of calFxZx10Sw7...");
+		} catch (Exception e) {
+			if (DataAccessException.class.isAssignableFrom(e.getClass())) {
+				logger.error(e.getMessage(), e);
+			}
+			t = e;
+		}
+		return new AsyncResult<Exception>(t);
+	}
 
 	@Async
 	public Future<Exception> calFxZx11Sw1() {
@@ -3378,6 +5142,114 @@ public class YZ2Service extends YZService {
 	}
 
 	@Async
+	public Future<Exception> calFxZx11Sw7() {
+		Exception t = null;
+		try {
+			calFx(7, Zx11Yz.class, Zx11Nums.class, FxSw7.class, repositories.zx11yzRepository, repositories.fxsw7Repository,
+					new FxHandler(), "Zx11");
+			calFxZf(7, Zx11ZfYz.class, Zx11Yz.class, FxSw7.class, Zx11Nums.class, repositories.zx11zfyzRepository,
+					repositories.zx11yzRepository, repositories.fxsw7Repository, "Zx11", new FxZfHandler<Zx11Yz>());
+			logger.info("End of calFxZx11Sw7...");
+		} catch (Exception e) {
+			if (DataAccessException.class.isAssignableFrom(e.getClass())) {
+				logger.error(e.getMessage(), e);
+			}
+			t = e;
+		}
+		return new AsyncResult<Exception>(t);
+	}
+	
+	@Async
+	public Future<Exception> calFxZx11Sw8() {
+		Exception t = null;
+		try {
+			calFx(8, Zx11Yz.class, Zx11Nums.class, FxSw8.class, repositories.zx11yzRepository, repositories.fxsw8Repository,
+					new FxHandler(), "Zx11");
+			calFxZf(8, Zx11ZfYz.class, Zx11Yz.class, FxSw8.class, Zx11Nums.class, repositories.zx11zfyzRepository,
+					repositories.zx11yzRepository, repositories.fxsw8Repository, "Zx11", new FxZfHandler<Zx11Yz>());
+			logger.info("End of calFxZx11Sw8...");
+		} catch (Exception e) {
+			if (DataAccessException.class.isAssignableFrom(e.getClass())) {
+				logger.error(e.getMessage(), e);
+			}
+			t = e;
+		}
+		return new AsyncResult<Exception>(t);
+	}
+	
+	@Async
+	public Future<Exception> calFxZx11Sw9() {
+		Exception t = null;
+		try {
+			calFx(9, Zx11Yz.class, Zx11Nums.class, FxSw9.class, repositories.zx11yzRepository, repositories.fxsw9Repository,
+					new FxHandler(), "Zx11");
+			calFxZf(9, Zx11ZfYz.class, Zx11Yz.class, FxSw9.class, Zx11Nums.class, repositories.zx11zfyzRepository,
+					repositories.zx11yzRepository, repositories.fxsw9Repository, "Zx11", new FxZfHandler<Zx11Yz>());
+			logger.info("End of calFxZx11Sw9...");
+		} catch (Exception e) {
+			if (DataAccessException.class.isAssignableFrom(e.getClass())) {
+				logger.error(e.getMessage(), e);
+			}
+			t = e;
+		}
+		return new AsyncResult<Exception>(t);
+	}
+	
+	@Async
+	public Future<Exception> calFxZx11Sw10() {
+		Exception t = null;
+		try {
+			calFx(10, Zx11Yz.class, Zx11Nums.class, FxSw10.class, repositories.zx11yzRepository, repositories.fxsw10Repository,
+					new FxHandler(), "Zx11");
+			calFxZf(10, Zx11ZfYz.class, Zx11Yz.class, FxSw10.class, Zx11Nums.class, repositories.zx11zfyzRepository,
+					repositories.zx11yzRepository, repositories.fxsw10Repository, "Zx11", new FxZfHandler<Zx11Yz>());
+			logger.info("End of calFxZx11Sw10...");
+		} catch (Exception e) {
+			if (DataAccessException.class.isAssignableFrom(e.getClass())) {
+				logger.error(e.getMessage(), e);
+			}
+			t = e;
+		}
+		return new AsyncResult<Exception>(t);
+	}
+	
+	@Async
+	public Future<Exception> calFxZx11Sw11() {
+		Exception t = null;
+		try {
+			calFx(11, Zx11Yz.class, Zx11Nums.class, FxSw11.class, repositories.zx11yzRepository, repositories.fxsw11Repository,
+					new FxHandler(), "Zx11");
+			calFxZf(11, Zx11ZfYz.class, Zx11Yz.class, FxSw11.class, Zx11Nums.class, repositories.zx11zfyzRepository,
+					repositories.zx11yzRepository, repositories.fxsw11Repository, "Zx11", new FxZfHandler<Zx11Yz>());
+			logger.info("End of calFxZx11Sw11...");
+		} catch (Exception e) {
+			if (DataAccessException.class.isAssignableFrom(e.getClass())) {
+				logger.error(e.getMessage(), e);
+			}
+			t = e;
+		}
+		return new AsyncResult<Exception>(t);
+	}
+	
+	@Async
+	public Future<Exception> calFxZx11Sw12() {
+		Exception t = null;
+		try {
+			calFx(12, Zx11Yz.class, Zx11Nums.class, FxSw12.class, repositories.zx11yzRepository, repositories.fxsw12Repository,
+					new FxHandler(), "Zx11");
+			calFxZf(12, Zx11ZfYz.class, Zx11Yz.class, FxSw12.class, Zx11Nums.class, repositories.zx11zfyzRepository,
+					repositories.zx11yzRepository, repositories.fxsw12Repository, "Zx11", new FxZfHandler<Zx11Yz>());
+			logger.info("End of calFxZx11Sw12...");
+		} catch (Exception e) {
+			if (DataAccessException.class.isAssignableFrom(e.getClass())) {
+				logger.error(e.getMessage(), e);
+			}
+			t = e;
+		}
+		return new AsyncResult<Exception>(t);
+	}
+	
+	@Async
 	public Future<Exception> calFxZx12Sw1() {
 		Exception t = null;
 		try {
@@ -3486,6 +5358,114 @@ public class YZ2Service extends YZService {
 	}
 
 	@Async
+	public Future<Exception> calFxZx12Sw7() {
+		Exception t = null;
+		try {
+			calFx(7, Zx12Yz.class, Zx12Nums.class, FxSw7.class, repositories.zx12yzRepository, repositories.fxsw7Repository,
+					new FxHandler(), "Zx12");
+			calFxZf(7, Zx12ZfYz.class, Zx12Yz.class, FxSw7.class, Zx12Nums.class, repositories.zx12zfyzRepository,
+					repositories.zx12yzRepository, repositories.fxsw7Repository, "Zx12", new FxZfHandler<Zx12Yz>());
+			logger.info("End of calFxZx12Sw7...");
+		} catch (Exception e) {
+			if (DataAccessException.class.isAssignableFrom(e.getClass())) {
+				logger.error(e.getMessage(), e);
+			}
+			t = e;
+		}
+		return new AsyncResult<Exception>(t);
+	}
+	
+	@Async
+	public Future<Exception> calFxZx12Sw8() {
+		Exception t = null;
+		try {
+			calFx(8, Zx12Yz.class, Zx12Nums.class, FxSw8.class, repositories.zx12yzRepository, repositories.fxsw8Repository,
+					new FxHandler(), "Zx12");
+			calFxZf(8, Zx12ZfYz.class, Zx12Yz.class, FxSw8.class, Zx12Nums.class, repositories.zx12zfyzRepository,
+					repositories.zx12yzRepository, repositories.fxsw8Repository, "Zx12", new FxZfHandler<Zx12Yz>());
+			logger.info("End of calFxZx12Sw8...");
+		} catch (Exception e) {
+			if (DataAccessException.class.isAssignableFrom(e.getClass())) {
+				logger.error(e.getMessage(), e);
+			}
+			t = e;
+		}
+		return new AsyncResult<Exception>(t);
+	}
+	
+	@Async
+	public Future<Exception> calFxZx12Sw9() {
+		Exception t = null;
+		try {
+			calFx(9, Zx12Yz.class, Zx12Nums.class, FxSw9.class, repositories.zx12yzRepository, repositories.fxsw9Repository,
+					new FxHandler(), "Zx12");
+			calFxZf(9, Zx12ZfYz.class, Zx12Yz.class, FxSw9.class, Zx12Nums.class, repositories.zx12zfyzRepository,
+					repositories.zx12yzRepository, repositories.fxsw9Repository, "Zx12", new FxZfHandler<Zx12Yz>());
+			logger.info("End of calFxZx12Sw9...");
+		} catch (Exception e) {
+			if (DataAccessException.class.isAssignableFrom(e.getClass())) {
+				logger.error(e.getMessage(), e);
+			}
+			t = e;
+		}
+		return new AsyncResult<Exception>(t);
+	}
+	
+	@Async
+	public Future<Exception> calFxZx12Sw10() {
+		Exception t = null;
+		try {
+			calFx(10, Zx12Yz.class, Zx12Nums.class, FxSw10.class, repositories.zx12yzRepository, repositories.fxsw10Repository,
+					new FxHandler(), "Zx12");
+			calFxZf(10, Zx12ZfYz.class, Zx12Yz.class, FxSw10.class, Zx12Nums.class, repositories.zx12zfyzRepository,
+					repositories.zx12yzRepository, repositories.fxsw10Repository, "Zx12", new FxZfHandler<Zx12Yz>());
+			logger.info("End of calFxZx12Sw10...");
+		} catch (Exception e) {
+			if (DataAccessException.class.isAssignableFrom(e.getClass())) {
+				logger.error(e.getMessage(), e);
+			}
+			t = e;
+		}
+		return new AsyncResult<Exception>(t);
+	}
+	
+	@Async
+	public Future<Exception> calFxZx12Sw11() {
+		Exception t = null;
+		try {
+			calFx(11, Zx12Yz.class, Zx12Nums.class, FxSw11.class, repositories.zx12yzRepository, repositories.fxsw11Repository,
+					new FxHandler(), "Zx12");
+			calFxZf(11, Zx12ZfYz.class, Zx12Yz.class, FxSw11.class, Zx12Nums.class, repositories.zx12zfyzRepository,
+					repositories.zx12yzRepository, repositories.fxsw11Repository, "Zx12", new FxZfHandler<Zx12Yz>());
+			logger.info("End of calFxZx12Sw11...");
+		} catch (Exception e) {
+			if (DataAccessException.class.isAssignableFrom(e.getClass())) {
+				logger.error(e.getMessage(), e);
+			}
+			t = e;
+		}
+		return new AsyncResult<Exception>(t);
+	}
+	
+	@Async
+	public Future<Exception> calFxZx12Sw12() {
+		Exception t = null;
+		try {
+			calFx(12, Zx12Yz.class, Zx12Nums.class, FxSw12.class, repositories.zx12yzRepository, repositories.fxsw12Repository,
+					new FxHandler(), "Zx12");
+			calFxZf(12, Zx12ZfYz.class, Zx12Yz.class, FxSw12.class, Zx12Nums.class, repositories.zx12zfyzRepository,
+					repositories.zx12yzRepository, repositories.fxsw12Repository, "Zx12", new FxZfHandler<Zx12Yz>());
+			logger.info("End of calFxZx12Sw12...");
+		} catch (Exception e) {
+			if (DataAccessException.class.isAssignableFrom(e.getClass())) {
+				logger.error(e.getMessage(), e);
+			}
+			t = e;
+		}
+		return new AsyncResult<Exception>(t);
+	}
+	
+	@Async
 	public Future<Exception> calFxZx13Sw1() {
 		Exception t = null;
 		try {
@@ -3584,6 +5564,114 @@ public class YZ2Service extends YZService {
 			calFxZf(6, Zx13ZfYz.class, Zx13Yz.class, FxSw6.class, Zx13Nums.class, repositories.zx13zfyzRepository,
 					repositories.zx13yzRepository, repositories.fxsw6Repository, "Zx13", new FxZfHandler<Zx13Yz>());
 			logger.info("End of calFxZx13Sw6...");
+		} catch (Exception e) {
+			if (DataAccessException.class.isAssignableFrom(e.getClass())) {
+				logger.error(e.getMessage(), e);
+			}
+			t = e;
+		}
+		return new AsyncResult<Exception>(t);
+	}
+
+	@Async
+	public Future<Exception> calFxZx13Sw7() {
+		Exception t = null;
+		try {
+			calFx(7, Zx13Yz.class, Zx13Nums.class, FxSw7.class, repositories.zx13yzRepository, repositories.fxsw7Repository,
+					new FxHandler(), "Zx13");
+			calFxZf(7, Zx13ZfYz.class, Zx13Yz.class, FxSw7.class, Zx13Nums.class, repositories.zx13zfyzRepository,
+					repositories.zx13yzRepository, repositories.fxsw7Repository, "Zx13", new FxZfHandler<Zx13Yz>());
+			logger.info("End of calFxZx13Sw7...");
+		} catch (Exception e) {
+			if (DataAccessException.class.isAssignableFrom(e.getClass())) {
+				logger.error(e.getMessage(), e);
+			}
+			t = e;
+		}
+		return new AsyncResult<Exception>(t);
+	}
+	
+	@Async
+	public Future<Exception> calFxZx13Sw8() {
+		Exception t = null;
+		try {
+			calFx(8, Zx13Yz.class, Zx13Nums.class, FxSw8.class, repositories.zx13yzRepository, repositories.fxsw8Repository,
+					new FxHandler(), "Zx13");
+			calFxZf(8, Zx13ZfYz.class, Zx13Yz.class, FxSw8.class, Zx13Nums.class, repositories.zx13zfyzRepository,
+					repositories.zx13yzRepository, repositories.fxsw8Repository, "Zx13", new FxZfHandler<Zx13Yz>());
+			logger.info("End of calFxZx13Sw8...");
+		} catch (Exception e) {
+			if (DataAccessException.class.isAssignableFrom(e.getClass())) {
+				logger.error(e.getMessage(), e);
+			}
+			t = e;
+		}
+		return new AsyncResult<Exception>(t);
+	}
+	
+	@Async
+	public Future<Exception> calFxZx13Sw9() {
+		Exception t = null;
+		try {
+			calFx(9, Zx13Yz.class, Zx13Nums.class, FxSw9.class, repositories.zx13yzRepository, repositories.fxsw9Repository,
+					new FxHandler(), "Zx13");
+			calFxZf(9, Zx13ZfYz.class, Zx13Yz.class, FxSw9.class, Zx13Nums.class, repositories.zx13zfyzRepository,
+					repositories.zx13yzRepository, repositories.fxsw9Repository, "Zx13", new FxZfHandler<Zx13Yz>());
+			logger.info("End of calFxZx13Sw9...");
+		} catch (Exception e) {
+			if (DataAccessException.class.isAssignableFrom(e.getClass())) {
+				logger.error(e.getMessage(), e);
+			}
+			t = e;
+		}
+		return new AsyncResult<Exception>(t);
+	}
+	
+	@Async
+	public Future<Exception> calFxZx13Sw10() {
+		Exception t = null;
+		try {
+			calFx(10, Zx13Yz.class, Zx13Nums.class, FxSw10.class, repositories.zx13yzRepository, repositories.fxsw10Repository,
+					new FxHandler(), "Zx13");
+			calFxZf(10, Zx13ZfYz.class, Zx13Yz.class, FxSw10.class, Zx13Nums.class, repositories.zx13zfyzRepository,
+					repositories.zx13yzRepository, repositories.fxsw10Repository, "Zx13", new FxZfHandler<Zx13Yz>());
+			logger.info("End of calFxZx13Sw10...");
+		} catch (Exception e) {
+			if (DataAccessException.class.isAssignableFrom(e.getClass())) {
+				logger.error(e.getMessage(), e);
+			}
+			t = e;
+		}
+		return new AsyncResult<Exception>(t);
+	}
+	
+	@Async
+	public Future<Exception> calFxZx13Sw11() {
+		Exception t = null;
+		try {
+			calFx(11, Zx13Yz.class, Zx13Nums.class, FxSw11.class, repositories.zx13yzRepository, repositories.fxsw11Repository,
+					new FxHandler(), "Zx13");
+			calFxZf(11, Zx13ZfYz.class, Zx13Yz.class, FxSw11.class, Zx13Nums.class, repositories.zx13zfyzRepository,
+					repositories.zx13yzRepository, repositories.fxsw11Repository, "Zx13", new FxZfHandler<Zx13Yz>());
+			logger.info("End of calFxZx13Sw11...");
+		} catch (Exception e) {
+			if (DataAccessException.class.isAssignableFrom(e.getClass())) {
+				logger.error(e.getMessage(), e);
+			}
+			t = e;
+		}
+		return new AsyncResult<Exception>(t);
+	}
+	
+	@Async
+	public Future<Exception> calFxZx13Sw12() {
+		Exception t = null;
+		try {
+			calFx(12, Zx13Yz.class, Zx13Nums.class, FxSw12.class, repositories.zx13yzRepository, repositories.fxsw12Repository,
+					new FxHandler(), "Zx13");
+			calFxZf(12, Zx13ZfYz.class, Zx13Yz.class, FxSw12.class, Zx13Nums.class, repositories.zx13zfyzRepository,
+					repositories.zx13yzRepository, repositories.fxsw12Repository, "Zx13", new FxZfHandler<Zx13Yz>());
+			logger.info("End of calFxZx13Sw12...");
 		} catch (Exception e) {
 			if (DataAccessException.class.isAssignableFrom(e.getClass())) {
 				logger.error(e.getMessage(), e);
@@ -3702,6 +5790,114 @@ public class YZ2Service extends YZService {
 	}
 
 	@Async
+	public Future<Exception> calFxZx14Sw7() {
+		Exception t = null;
+		try {
+			calFx(7, Zx14Yz.class, Zx14Nums.class, FxSw7.class, repositories.zx14yzRepository, repositories.fxsw7Repository,
+					new FxHandler(), "Zx14");
+			calFxZf(7, Zx14ZfYz.class, Zx14Yz.class, FxSw7.class, Zx14Nums.class, repositories.zx14zfyzRepository,
+					repositories.zx14yzRepository, repositories.fxsw7Repository, "Zx14", new FxZfHandler<Zx14Yz>());
+			logger.info("End of calFxZx14Sw7...");
+		} catch (Exception e) {
+			if (DataAccessException.class.isAssignableFrom(e.getClass())) {
+				logger.error(e.getMessage(), e);
+			}
+			t = e;
+		}
+		return new AsyncResult<Exception>(t);
+	}
+	
+	@Async
+	public Future<Exception> calFxZx14Sw8() {
+		Exception t = null;
+		try {
+			calFx(8, Zx14Yz.class, Zx14Nums.class, FxSw8.class, repositories.zx14yzRepository, repositories.fxsw8Repository,
+					new FxHandler(), "Zx14");
+			calFxZf(8, Zx14ZfYz.class, Zx14Yz.class, FxSw8.class, Zx14Nums.class, repositories.zx14zfyzRepository,
+					repositories.zx14yzRepository, repositories.fxsw8Repository, "Zx14", new FxZfHandler<Zx14Yz>());
+			logger.info("End of calFxZx14Sw8...");
+		} catch (Exception e) {
+			if (DataAccessException.class.isAssignableFrom(e.getClass())) {
+				logger.error(e.getMessage(), e);
+			}
+			t = e;
+		}
+		return new AsyncResult<Exception>(t);
+	}
+	
+	@Async
+	public Future<Exception> calFxZx14Sw9() {
+		Exception t = null;
+		try {
+			calFx(9, Zx14Yz.class, Zx14Nums.class, FxSw9.class, repositories.zx14yzRepository, repositories.fxsw9Repository,
+					new FxHandler(), "Zx14");
+			calFxZf(9, Zx14ZfYz.class, Zx14Yz.class, FxSw9.class, Zx14Nums.class, repositories.zx14zfyzRepository,
+					repositories.zx14yzRepository, repositories.fxsw9Repository, "Zx14", new FxZfHandler<Zx14Yz>());
+			logger.info("End of calFxZx14Sw9...");
+		} catch (Exception e) {
+			if (DataAccessException.class.isAssignableFrom(e.getClass())) {
+				logger.error(e.getMessage(), e);
+			}
+			t = e;
+		}
+		return new AsyncResult<Exception>(t);
+	}
+	
+	@Async
+	public Future<Exception> calFxZx14Sw10() {
+		Exception t = null;
+		try {
+			calFx(10, Zx14Yz.class, Zx14Nums.class, FxSw10.class, repositories.zx14yzRepository, repositories.fxsw10Repository,
+					new FxHandler(), "Zx14");
+			calFxZf(10, Zx14ZfYz.class, Zx14Yz.class, FxSw10.class, Zx14Nums.class, repositories.zx14zfyzRepository,
+					repositories.zx14yzRepository, repositories.fxsw10Repository, "Zx14", new FxZfHandler<Zx14Yz>());
+			logger.info("End of calFxZx14Sw10...");
+		} catch (Exception e) {
+			if (DataAccessException.class.isAssignableFrom(e.getClass())) {
+				logger.error(e.getMessage(), e);
+			}
+			t = e;
+		}
+		return new AsyncResult<Exception>(t);
+	}
+	
+	@Async
+	public Future<Exception> calFxZx14Sw11() {
+		Exception t = null;
+		try {
+			calFx(11, Zx14Yz.class, Zx14Nums.class, FxSw11.class, repositories.zx14yzRepository, repositories.fxsw11Repository,
+					new FxHandler(), "Zx14");
+			calFxZf(11, Zx14ZfYz.class, Zx14Yz.class, FxSw11.class, Zx14Nums.class, repositories.zx14zfyzRepository,
+					repositories.zx14yzRepository, repositories.fxsw11Repository, "Zx14", new FxZfHandler<Zx14Yz>());
+			logger.info("End of calFxZx14Sw11...");
+		} catch (Exception e) {
+			if (DataAccessException.class.isAssignableFrom(e.getClass())) {
+				logger.error(e.getMessage(), e);
+			}
+			t = e;
+		}
+		return new AsyncResult<Exception>(t);
+	}
+	
+	@Async
+	public Future<Exception> calFxZx14Sw12() {
+		Exception t = null;
+		try {
+			calFx(12, Zx14Yz.class, Zx14Nums.class, FxSw12.class, repositories.zx14yzRepository, repositories.fxsw12Repository,
+					new FxHandler(), "Zx14");
+			calFxZf(12, Zx14ZfYz.class, Zx14Yz.class, FxSw12.class, Zx14Nums.class, repositories.zx14zfyzRepository,
+					repositories.zx14yzRepository, repositories.fxsw12Repository, "Zx14", new FxZfHandler<Zx14Yz>());
+			logger.info("End of calFxZx14Sw12...");
+		} catch (Exception e) {
+			if (DataAccessException.class.isAssignableFrom(e.getClass())) {
+				logger.error(e.getMessage(), e);
+			}
+			t = e;
+		}
+		return new AsyncResult<Exception>(t);
+	}
+
+	@Async
 	public Future<Exception> calFxZx15Sw1() {
 		Exception t = null;
 		try {
@@ -3800,6 +5996,114 @@ public class YZ2Service extends YZService {
 			calFxZf(6, Zx15ZfYz.class, Zx15Yz.class, FxSw6.class, Zx15Nums.class, repositories.zx15zfyzRepository,
 					repositories.zx15yzRepository, repositories.fxsw6Repository, "Zx15", new FxZfHandler<Zx15Yz>());
 			logger.info("End of calFxZx15Sw6...");
+		} catch (Exception e) {
+			if (DataAccessException.class.isAssignableFrom(e.getClass())) {
+				logger.error(e.getMessage(), e);
+			}
+			t = e;
+		}
+		return new AsyncResult<Exception>(t);
+	}
+
+	@Async
+	public Future<Exception> calFxZx15Sw7() {
+		Exception t = null;
+		try {
+			calFx(7, Zx15Yz.class, Zx15Nums.class, FxSw7.class, repositories.zx15yzRepository, repositories.fxsw7Repository,
+					new FxHandler(), "Zx15");
+			calFxZf(7, Zx15ZfYz.class, Zx15Yz.class, FxSw7.class, Zx15Nums.class, repositories.zx15zfyzRepository,
+					repositories.zx15yzRepository, repositories.fxsw7Repository, "Zx15", new FxZfHandler<Zx15Yz>());
+			logger.info("End of calFxZx15Sw7...");
+		} catch (Exception e) {
+			if (DataAccessException.class.isAssignableFrom(e.getClass())) {
+				logger.error(e.getMessage(), e);
+			}
+			t = e;
+		}
+		return new AsyncResult<Exception>(t);
+	}
+	
+	@Async
+	public Future<Exception> calFxZx15Sw8() {
+		Exception t = null;
+		try {
+			calFx(8, Zx15Yz.class, Zx15Nums.class, FxSw8.class, repositories.zx15yzRepository, repositories.fxsw8Repository,
+					new FxHandler(), "Zx15");
+			calFxZf(8, Zx15ZfYz.class, Zx15Yz.class, FxSw8.class, Zx15Nums.class, repositories.zx15zfyzRepository,
+					repositories.zx15yzRepository, repositories.fxsw8Repository, "Zx15", new FxZfHandler<Zx15Yz>());
+			logger.info("End of calFxZx15Sw8...");
+		} catch (Exception e) {
+			if (DataAccessException.class.isAssignableFrom(e.getClass())) {
+				logger.error(e.getMessage(), e);
+			}
+			t = e;
+		}
+		return new AsyncResult<Exception>(t);
+	}
+	
+	@Async
+	public Future<Exception> calFxZx15Sw9() {
+		Exception t = null;
+		try {
+			calFx(9, Zx15Yz.class, Zx15Nums.class, FxSw9.class, repositories.zx15yzRepository, repositories.fxsw9Repository,
+					new FxHandler(), "Zx15");
+			calFxZf(9, Zx15ZfYz.class, Zx15Yz.class, FxSw9.class, Zx15Nums.class, repositories.zx15zfyzRepository,
+					repositories.zx15yzRepository, repositories.fxsw9Repository, "Zx15", new FxZfHandler<Zx15Yz>());
+			logger.info("End of calFxZx15Sw9...");
+		} catch (Exception e) {
+			if (DataAccessException.class.isAssignableFrom(e.getClass())) {
+				logger.error(e.getMessage(), e);
+			}
+			t = e;
+		}
+		return new AsyncResult<Exception>(t);
+	}
+	
+	@Async
+	public Future<Exception> calFxZx15Sw10() {
+		Exception t = null;
+		try {
+			calFx(10, Zx15Yz.class, Zx15Nums.class, FxSw10.class, repositories.zx15yzRepository, repositories.fxsw10Repository,
+					new FxHandler(), "Zx15");
+			calFxZf(10, Zx15ZfYz.class, Zx15Yz.class, FxSw10.class, Zx15Nums.class, repositories.zx15zfyzRepository,
+					repositories.zx15yzRepository, repositories.fxsw10Repository, "Zx15", new FxZfHandler<Zx15Yz>());
+			logger.info("End of calFxZx15Sw10...");
+		} catch (Exception e) {
+			if (DataAccessException.class.isAssignableFrom(e.getClass())) {
+				logger.error(e.getMessage(), e);
+			}
+			t = e;
+		}
+		return new AsyncResult<Exception>(t);
+	}
+	
+	@Async
+	public Future<Exception> calFxZx15Sw11() {
+		Exception t = null;
+		try {
+			calFx(11, Zx15Yz.class, Zx15Nums.class, FxSw11.class, repositories.zx15yzRepository, repositories.fxsw11Repository,
+					new FxHandler(), "Zx15");
+			calFxZf(11, Zx15ZfYz.class, Zx15Yz.class, FxSw11.class, Zx15Nums.class, repositories.zx15zfyzRepository,
+					repositories.zx15yzRepository, repositories.fxsw11Repository, "Zx15", new FxZfHandler<Zx15Yz>());
+			logger.info("End of calFxZx15Sw11...");
+		} catch (Exception e) {
+			if (DataAccessException.class.isAssignableFrom(e.getClass())) {
+				logger.error(e.getMessage(), e);
+			}
+			t = e;
+		}
+		return new AsyncResult<Exception>(t);
+	}
+	
+	@Async
+	public Future<Exception> calFxZx15Sw12() {
+		Exception t = null;
+		try {
+			calFx(12, Zx15Yz.class, Zx15Nums.class, FxSw12.class, repositories.zx15yzRepository, repositories.fxsw12Repository,
+					new FxHandler(), "Zx15");
+			calFxZf(12, Zx15ZfYz.class, Zx15Yz.class, FxSw12.class, Zx15Nums.class, repositories.zx15zfyzRepository,
+					repositories.zx15yzRepository, repositories.fxsw12Repository, "Zx15", new FxZfHandler<Zx15Yz>());
+			logger.info("End of calFxZx15Sw12...");
 		} catch (Exception e) {
 			if (DataAccessException.class.isAssignableFrom(e.getClass())) {
 				logger.error(e.getMessage(), e);
@@ -3918,6 +6222,114 @@ public class YZ2Service extends YZService {
 	}
 
 	@Async
+	public Future<Exception> calFxZx16Sw7() {
+		Exception t = null;
+		try {
+			calFx(7, Zx16Yz.class, Zx16Nums.class, FxSw7.class, repositories.zx16yzRepository, repositories.fxsw7Repository,
+					new FxHandler(), "Zx16");
+			calFxZf(7, Zx16ZfYz.class, Zx16Yz.class, FxSw7.class, Zx16Nums.class, repositories.zx16zfyzRepository,
+					repositories.zx16yzRepository, repositories.fxsw7Repository, "Zx16", new FxZfHandler<Zx16Yz>());
+			logger.info("End of calFxZx16Sw7...");
+		} catch (Exception e) {
+			if (DataAccessException.class.isAssignableFrom(e.getClass())) {
+				logger.error(e.getMessage(), e);
+			}
+			t = e;
+		}
+		return new AsyncResult<Exception>(t);
+	}
+	
+	@Async
+	public Future<Exception> calFxZx16Sw8() {
+		Exception t = null;
+		try {
+			calFx(8, Zx16Yz.class, Zx16Nums.class, FxSw8.class, repositories.zx16yzRepository, repositories.fxsw8Repository,
+					new FxHandler(), "Zx16");
+			calFxZf(8, Zx16ZfYz.class, Zx16Yz.class, FxSw8.class, Zx16Nums.class, repositories.zx16zfyzRepository,
+					repositories.zx16yzRepository, repositories.fxsw8Repository, "Zx16", new FxZfHandler<Zx16Yz>());
+			logger.info("End of calFxZx16Sw8...");
+		} catch (Exception e) {
+			if (DataAccessException.class.isAssignableFrom(e.getClass())) {
+				logger.error(e.getMessage(), e);
+			}
+			t = e;
+		}
+		return new AsyncResult<Exception>(t);
+	}
+	
+	@Async
+	public Future<Exception> calFxZx16Sw9() {
+		Exception t = null;
+		try {
+			calFx(9, Zx16Yz.class, Zx16Nums.class, FxSw9.class, repositories.zx16yzRepository, repositories.fxsw9Repository,
+					new FxHandler(), "Zx16");
+			calFxZf(9, Zx16ZfYz.class, Zx16Yz.class, FxSw9.class, Zx16Nums.class, repositories.zx16zfyzRepository,
+					repositories.zx16yzRepository, repositories.fxsw9Repository, "Zx16", new FxZfHandler<Zx16Yz>());
+			logger.info("End of calFxZx16Sw9...");
+		} catch (Exception e) {
+			if (DataAccessException.class.isAssignableFrom(e.getClass())) {
+				logger.error(e.getMessage(), e);
+			}
+			t = e;
+		}
+		return new AsyncResult<Exception>(t);
+	}
+	
+	@Async
+	public Future<Exception> calFxZx16Sw10() {
+		Exception t = null;
+		try {
+			calFx(10, Zx16Yz.class, Zx16Nums.class, FxSw10.class, repositories.zx16yzRepository, repositories.fxsw10Repository,
+					new FxHandler(), "Zx16");
+			calFxZf(10, Zx16ZfYz.class, Zx16Yz.class, FxSw10.class, Zx16Nums.class, repositories.zx16zfyzRepository,
+					repositories.zx16yzRepository, repositories.fxsw10Repository, "Zx16", new FxZfHandler<Zx16Yz>());
+			logger.info("End of calFxZx16Sw10...");
+		} catch (Exception e) {
+			if (DataAccessException.class.isAssignableFrom(e.getClass())) {
+				logger.error(e.getMessage(), e);
+			}
+			t = e;
+		}
+		return new AsyncResult<Exception>(t);
+	}
+	
+	@Async
+	public Future<Exception> calFxZx16Sw11() {
+		Exception t = null;
+		try {
+			calFx(11, Zx16Yz.class, Zx16Nums.class, FxSw11.class, repositories.zx16yzRepository, repositories.fxsw11Repository,
+					new FxHandler(), "Zx16");
+			calFxZf(11, Zx16ZfYz.class, Zx16Yz.class, FxSw11.class, Zx16Nums.class, repositories.zx16zfyzRepository,
+					repositories.zx16yzRepository, repositories.fxsw11Repository, "Zx16", new FxZfHandler<Zx16Yz>());
+			logger.info("End of calFxZx16Sw11...");
+		} catch (Exception e) {
+			if (DataAccessException.class.isAssignableFrom(e.getClass())) {
+				logger.error(e.getMessage(), e);
+			}
+			t = e;
+		}
+		return new AsyncResult<Exception>(t);
+	}
+	
+	@Async
+	public Future<Exception> calFxZx16Sw12() {
+		Exception t = null;
+		try {
+			calFx(12, Zx16Yz.class, Zx16Nums.class, FxSw12.class, repositories.zx16yzRepository, repositories.fxsw12Repository,
+					new FxHandler(), "Zx16");
+			calFxZf(12, Zx16ZfYz.class, Zx16Yz.class, FxSw12.class, Zx16Nums.class, repositories.zx16zfyzRepository,
+					repositories.zx16yzRepository, repositories.fxsw12Repository, "Zx16", new FxZfHandler<Zx16Yz>());
+			logger.info("End of calFxZx16Sw12...");
+		} catch (Exception e) {
+			if (DataAccessException.class.isAssignableFrom(e.getClass())) {
+				logger.error(e.getMessage(), e);
+			}
+			t = e;
+		}
+		return new AsyncResult<Exception>(t);
+	}
+
+	@Async
 	public Future<Exception> calFxZx17Sw1() {
 		Exception t = null;
 		try {
@@ -4026,6 +6438,114 @@ public class YZ2Service extends YZService {
 	}
 
 	@Async
+	public Future<Exception> calFxZx17Sw7() {
+		Exception t = null;
+		try {
+			calFx(7, Zx17Yz.class, Zx17Nums.class, FxSw7.class, repositories.zx17yzRepository, repositories.fxsw7Repository,
+					new FxHandler(), "Zx17");
+			calFxZf(7, Zx17ZfYz.class, Zx17Yz.class, FxSw7.class, Zx17Nums.class, repositories.zx17zfyzRepository,
+					repositories.zx17yzRepository, repositories.fxsw7Repository, "Zx17", new FxZfHandler<Zx17Yz>());
+			logger.info("End of calFxZx17Sw7...");
+		} catch (Exception e) {
+			if (DataAccessException.class.isAssignableFrom(e.getClass())) {
+				logger.error(e.getMessage(), e);
+			}
+			t = e;
+		}
+		return new AsyncResult<Exception>(t);
+	}
+	
+	@Async
+	public Future<Exception> calFxZx17Sw8() {
+		Exception t = null;
+		try {
+			calFx(8, Zx17Yz.class, Zx17Nums.class, FxSw8.class, repositories.zx17yzRepository, repositories.fxsw8Repository,
+					new FxHandler(), "Zx17");
+			calFxZf(8, Zx17ZfYz.class, Zx17Yz.class, FxSw8.class, Zx17Nums.class, repositories.zx17zfyzRepository,
+					repositories.zx17yzRepository, repositories.fxsw8Repository, "Zx17", new FxZfHandler<Zx17Yz>());
+			logger.info("End of calFxZx17Sw8...");
+		} catch (Exception e) {
+			if (DataAccessException.class.isAssignableFrom(e.getClass())) {
+				logger.error(e.getMessage(), e);
+			}
+			t = e;
+		}
+		return new AsyncResult<Exception>(t);
+	}
+	
+	@Async
+	public Future<Exception> calFxZx17Sw9() {
+		Exception t = null;
+		try {
+			calFx(9, Zx17Yz.class, Zx17Nums.class, FxSw9.class, repositories.zx17yzRepository, repositories.fxsw9Repository,
+					new FxHandler(), "Zx17");
+			calFxZf(9, Zx17ZfYz.class, Zx17Yz.class, FxSw9.class, Zx17Nums.class, repositories.zx17zfyzRepository,
+					repositories.zx17yzRepository, repositories.fxsw9Repository, "Zx17", new FxZfHandler<Zx17Yz>());
+			logger.info("End of calFxZx17Sw9...");
+		} catch (Exception e) {
+			if (DataAccessException.class.isAssignableFrom(e.getClass())) {
+				logger.error(e.getMessage(), e);
+			}
+			t = e;
+		}
+		return new AsyncResult<Exception>(t);
+	}
+	
+	@Async
+	public Future<Exception> calFxZx17Sw10() {
+		Exception t = null;
+		try {
+			calFx(10, Zx17Yz.class, Zx17Nums.class, FxSw10.class, repositories.zx17yzRepository, repositories.fxsw10Repository,
+					new FxHandler(), "Zx17");
+			calFxZf(10, Zx17ZfYz.class, Zx17Yz.class, FxSw10.class, Zx17Nums.class, repositories.zx17zfyzRepository,
+					repositories.zx17yzRepository, repositories.fxsw10Repository, "Zx17", new FxZfHandler<Zx17Yz>());
+			logger.info("End of calFxZx17Sw10...");
+		} catch (Exception e) {
+			if (DataAccessException.class.isAssignableFrom(e.getClass())) {
+				logger.error(e.getMessage(), e);
+			}
+			t = e;
+		}
+		return new AsyncResult<Exception>(t);
+	}
+	
+	@Async
+	public Future<Exception> calFxZx17Sw11() {
+		Exception t = null;
+		try {
+			calFx(11, Zx17Yz.class, Zx17Nums.class, FxSw11.class, repositories.zx17yzRepository, repositories.fxsw11Repository,
+					new FxHandler(), "Zx17");
+			calFxZf(11, Zx17ZfYz.class, Zx17Yz.class, FxSw11.class, Zx17Nums.class, repositories.zx17zfyzRepository,
+					repositories.zx17yzRepository, repositories.fxsw11Repository, "Zx17", new FxZfHandler<Zx17Yz>());
+			logger.info("End of calFxZx17Sw11...");
+		} catch (Exception e) {
+			if (DataAccessException.class.isAssignableFrom(e.getClass())) {
+				logger.error(e.getMessage(), e);
+			}
+			t = e;
+		}
+		return new AsyncResult<Exception>(t);
+	}
+	
+	@Async
+	public Future<Exception> calFxZx17Sw12() {
+		Exception t = null;
+		try {
+			calFx(12, Zx17Yz.class, Zx17Nums.class, FxSw12.class, repositories.zx17yzRepository, repositories.fxsw12Repository,
+					new FxHandler(), "Zx17");
+			calFxZf(12, Zx17ZfYz.class, Zx17Yz.class, FxSw12.class, Zx17Nums.class, repositories.zx17zfyzRepository,
+					repositories.zx17yzRepository, repositories.fxsw12Repository, "Zx17", new FxZfHandler<Zx17Yz>());
+			logger.info("End of calFxZx17Sw12...");
+		} catch (Exception e) {
+			if (DataAccessException.class.isAssignableFrom(e.getClass())) {
+				logger.error(e.getMessage(), e);
+			}
+			t = e;
+		}
+		return new AsyncResult<Exception>(t);
+	}
+
+	@Async
 	public Future<Exception> calFxZx18Sw1() {
 		Exception t = null;
 		try {
@@ -4124,6 +6644,114 @@ public class YZ2Service extends YZService {
 			calFxZf(6, Zx18ZfYz.class, Zx18Yz.class, FxSw6.class, Zx18Nums.class, repositories.zx18zfyzRepository,
 					repositories.zx18yzRepository, repositories.fxsw6Repository, "Zx18", new FxZfHandler<Zx18Yz>());
 			logger.info("End of calFxZx18Sw6...");
+		} catch (Exception e) {
+			if (DataAccessException.class.isAssignableFrom(e.getClass())) {
+				logger.error(e.getMessage(), e);
+			}
+			t = e;
+		}
+		return new AsyncResult<Exception>(t);
+	}
+
+	@Async
+	public Future<Exception> calFxZx18Sw7() {
+		Exception t = null;
+		try {
+			calFx(7, Zx18Yz.class, Zx18Nums.class, FxSw7.class, repositories.zx18yzRepository, repositories.fxsw7Repository,
+					new FxHandler(), "Zx18");
+			calFxZf(7, Zx18ZfYz.class, Zx18Yz.class, FxSw7.class, Zx18Nums.class, repositories.zx18zfyzRepository,
+					repositories.zx18yzRepository, repositories.fxsw7Repository, "Zx18", new FxZfHandler<Zx18Yz>());
+			logger.info("End of calFxZx18Sw7...");
+		} catch (Exception e) {
+			if (DataAccessException.class.isAssignableFrom(e.getClass())) {
+				logger.error(e.getMessage(), e);
+			}
+			t = e;
+		}
+		return new AsyncResult<Exception>(t);
+	}
+	
+	@Async
+	public Future<Exception> calFxZx18Sw8() {
+		Exception t = null;
+		try {
+			calFx(8, Zx18Yz.class, Zx18Nums.class, FxSw8.class, repositories.zx18yzRepository, repositories.fxsw8Repository,
+					new FxHandler(), "Zx18");
+			calFxZf(8, Zx18ZfYz.class, Zx18Yz.class, FxSw8.class, Zx18Nums.class, repositories.zx18zfyzRepository,
+					repositories.zx18yzRepository, repositories.fxsw8Repository, "Zx18", new FxZfHandler<Zx18Yz>());
+			logger.info("End of calFxZx18Sw8...");
+		} catch (Exception e) {
+			if (DataAccessException.class.isAssignableFrom(e.getClass())) {
+				logger.error(e.getMessage(), e);
+			}
+			t = e;
+		}
+		return new AsyncResult<Exception>(t);
+	}
+	
+	@Async
+	public Future<Exception> calFxZx18Sw9() {
+		Exception t = null;
+		try {
+			calFx(9, Zx18Yz.class, Zx18Nums.class, FxSw9.class, repositories.zx18yzRepository, repositories.fxsw9Repository,
+					new FxHandler(), "Zx18");
+			calFxZf(9, Zx18ZfYz.class, Zx18Yz.class, FxSw9.class, Zx18Nums.class, repositories.zx18zfyzRepository,
+					repositories.zx18yzRepository, repositories.fxsw9Repository, "Zx18", new FxZfHandler<Zx18Yz>());
+			logger.info("End of calFxZx18Sw9...");
+		} catch (Exception e) {
+			if (DataAccessException.class.isAssignableFrom(e.getClass())) {
+				logger.error(e.getMessage(), e);
+			}
+			t = e;
+		}
+		return new AsyncResult<Exception>(t);
+	}
+	
+	@Async
+	public Future<Exception> calFxZx18Sw10() {
+		Exception t = null;
+		try {
+			calFx(10, Zx18Yz.class, Zx18Nums.class, FxSw10.class, repositories.zx18yzRepository, repositories.fxsw10Repository,
+					new FxHandler(), "Zx18");
+			calFxZf(10, Zx18ZfYz.class, Zx18Yz.class, FxSw10.class, Zx18Nums.class, repositories.zx18zfyzRepository,
+					repositories.zx18yzRepository, repositories.fxsw10Repository, "Zx18", new FxZfHandler<Zx18Yz>());
+			logger.info("End of calFxZx18Sw10...");
+		} catch (Exception e) {
+			if (DataAccessException.class.isAssignableFrom(e.getClass())) {
+				logger.error(e.getMessage(), e);
+			}
+			t = e;
+		}
+		return new AsyncResult<Exception>(t);
+	}
+	
+	@Async
+	public Future<Exception> calFxZx18Sw11() {
+		Exception t = null;
+		try {
+			calFx(11, Zx18Yz.class, Zx18Nums.class, FxSw11.class, repositories.zx18yzRepository, repositories.fxsw11Repository,
+					new FxHandler(), "Zx18");
+			calFxZf(11, Zx18ZfYz.class, Zx18Yz.class, FxSw11.class, Zx18Nums.class, repositories.zx18zfyzRepository,
+					repositories.zx18yzRepository, repositories.fxsw11Repository, "Zx18", new FxZfHandler<Zx18Yz>());
+			logger.info("End of calFxZx18Sw11...");
+		} catch (Exception e) {
+			if (DataAccessException.class.isAssignableFrom(e.getClass())) {
+				logger.error(e.getMessage(), e);
+			}
+			t = e;
+		}
+		return new AsyncResult<Exception>(t);
+	}
+	
+	@Async
+	public Future<Exception> calFxZx18Sw12() {
+		Exception t = null;
+		try {
+			calFx(12, Zx18Yz.class, Zx18Nums.class, FxSw12.class, repositories.zx18yzRepository, repositories.fxsw12Repository,
+					new FxHandler(), "Zx18");
+			calFxZf(12, Zx18ZfYz.class, Zx18Yz.class, FxSw12.class, Zx18Nums.class, repositories.zx18zfyzRepository,
+					repositories.zx18yzRepository, repositories.fxsw12Repository, "Zx18", new FxZfHandler<Zx18Yz>());
+			logger.info("End of calFxZx18Sw12...");
 		} catch (Exception e) {
 			if (DataAccessException.class.isAssignableFrom(e.getClass())) {
 				logger.error(e.getMessage(), e);
@@ -4413,6 +7041,243 @@ public class YZ2Service extends YZService {
 			futures.add(repositories.yzService.calFxZx16Sw6());
 			futures.add(repositories.yzService.calFxZx17Sw6());
 			futures.add(repositories.yzService.calFxZx18Sw6());
+			sleep(futures, 10000);
+		} catch (Exception e) {
+			if (DataAccessException.class.isAssignableFrom(e.getClass())) {
+				logger.error(e.getMessage(), e);
+			}
+			t = e;
+		}
+		return new AsyncResult<Exception>(t);
+	}
+	
+	@Async
+	public Future<Exception> calFxSw7() {
+		Exception t = null;
+		try {
+			List<Future<Exception>> futures = new ArrayList<Future<Exception>>();
+			futures.add(repositories.yzService.calFxSxSw7());
+			futures.add(repositories.yzService.calFxDsSw7());
+			futures.add(repositories.yzService.calFxMwSw7());
+			futures.add(repositories.yzService.calFxLhSw7());
+			futures.add(repositories.yzService.calFxBsSw7());
+			futures.add(repositories.yzService.calFxZsSw7());
+			futures.add(repositories.yzService.calFxWxdsSw7());
+			futures.add(repositories.yzService.calFxPdSw7());
+			futures.add(repositories.yzService.calFxFdSw7());
+			futures.add(repositories.yzService.calFxQqSw7());
+			futures.add(repositories.yzService.calFxQiwSw7());
+			futures.add(repositories.yzService.calFxTwelveSw7());
+			futures.add(repositories.yzService.calFxSlqSw7());
+			futures.add(repositories.yzService.calFxZx1Sw7());
+			futures.add(repositories.yzService.calFxZx2Sw7());
+			futures.add(repositories.yzService.calFxZx3Sw7());
+			futures.add(repositories.yzService.calFxZx4Sw7());
+			futures.add(repositories.yzService.calFxZx5Sw7());
+			futures.add(repositories.yzService.calFxZx6Sw7());
+			futures.add(repositories.yzService.calFxZx7Sw7());
+			futures.add(repositories.yzService.calFxZx8Sw7());
+			futures.add(repositories.yzService.calFxZx10Sw7());
+			futures.add(repositories.yzService.calFxZx11Sw7());
+			futures.add(repositories.yzService.calFxZx12Sw7());
+			futures.add(repositories.yzService.calFxZx13Sw7());
+			futures.add(repositories.yzService.calFxZx14Sw7());
+			futures.add(repositories.yzService.calFxZx15Sw7());
+			futures.add(repositories.yzService.calFxZx16Sw7());
+			futures.add(repositories.yzService.calFxZx17Sw7());
+			futures.add(repositories.yzService.calFxZx18Sw7());
+			sleep(futures, 10000);
+		} catch (Exception e) {
+			if (DataAccessException.class.isAssignableFrom(e.getClass())) {
+				logger.error(e.getMessage(), e);
+			}
+			t = e;
+		}
+		return new AsyncResult<Exception>(t);
+	}
+	
+	@Async
+	public Future<Exception> calFxSw8() {
+		Exception t = null;
+		try {
+			List<Future<Exception>> futures = new ArrayList<Future<Exception>>();
+			futures.add(repositories.yzService.calFxSxSw8());
+			futures.add(repositories.yzService.calFxDsSw8());
+			futures.add(repositories.yzService.calFxMwSw8());
+			futures.add(repositories.yzService.calFxLhSw8());
+			futures.add(repositories.yzService.calFxBsSw8());
+			futures.add(repositories.yzService.calFxZsSw8());
+			futures.add(repositories.yzService.calFxWxdsSw8());
+			futures.add(repositories.yzService.calFxPdSw8());
+			futures.add(repositories.yzService.calFxFdSw8());
+			futures.add(repositories.yzService.calFxTwelveSw8());
+			futures.add(repositories.yzService.calFxSlqSw8());
+			futures.add(repositories.yzService.calFxZx1Sw8());
+			futures.add(repositories.yzService.calFxZx2Sw8());
+			futures.add(repositories.yzService.calFxZx3Sw8());
+			futures.add(repositories.yzService.calFxZx4Sw8());
+			futures.add(repositories.yzService.calFxZx5Sw8());
+			futures.add(repositories.yzService.calFxZx6Sw8());
+			futures.add(repositories.yzService.calFxZx7Sw8());
+			futures.add(repositories.yzService.calFxZx8Sw8());
+			futures.add(repositories.yzService.calFxZx11Sw8());
+			futures.add(repositories.yzService.calFxZx12Sw8());
+			futures.add(repositories.yzService.calFxZx13Sw8());
+			futures.add(repositories.yzService.calFxZx14Sw8());
+			futures.add(repositories.yzService.calFxZx15Sw8());
+			futures.add(repositories.yzService.calFxZx16Sw8());
+			futures.add(repositories.yzService.calFxZx17Sw8());
+			futures.add(repositories.yzService.calFxZx18Sw8());
+			sleep(futures, 10000);
+		} catch (Exception e) {
+			if (DataAccessException.class.isAssignableFrom(e.getClass())) {
+				logger.error(e.getMessage(), e);
+			}
+			t = e;
+		}
+		return new AsyncResult<Exception>(t);
+	}
+	
+	@Async
+	public Future<Exception> calFxSw9() {
+		Exception t = null;
+		try {
+			List<Future<Exception>> futures = new ArrayList<Future<Exception>>();
+			futures.add(repositories.yzService.calFxSxSw9());
+			futures.add(repositories.yzService.calFxDsSw9());
+			futures.add(repositories.yzService.calFxMwSw9());
+			futures.add(repositories.yzService.calFxLhSw9());
+			futures.add(repositories.yzService.calFxBsSw9());
+			futures.add(repositories.yzService.calFxZsSw9());
+			futures.add(repositories.yzService.calFxWxdsSw9());
+			futures.add(repositories.yzService.calFxPdSw9());
+			futures.add(repositories.yzService.calFxFdSw9());
+			futures.add(repositories.yzService.calFxTwelveSw9());
+			futures.add(repositories.yzService.calFxSlqSw9());
+			futures.add(repositories.yzService.calFxZx1Sw9());
+			futures.add(repositories.yzService.calFxZx2Sw9());
+			futures.add(repositories.yzService.calFxZx3Sw9());
+			futures.add(repositories.yzService.calFxZx4Sw9());
+			futures.add(repositories.yzService.calFxZx5Sw9());
+			futures.add(repositories.yzService.calFxZx6Sw9());
+			futures.add(repositories.yzService.calFxZx7Sw9());
+			futures.add(repositories.yzService.calFxZx8Sw9());
+			futures.add(repositories.yzService.calFxZx11Sw9());
+			futures.add(repositories.yzService.calFxZx12Sw9());
+			futures.add(repositories.yzService.calFxZx13Sw9());
+			futures.add(repositories.yzService.calFxZx14Sw9());
+			futures.add(repositories.yzService.calFxZx15Sw9());
+			futures.add(repositories.yzService.calFxZx16Sw9());
+			futures.add(repositories.yzService.calFxZx17Sw9());
+			futures.add(repositories.yzService.calFxZx18Sw9());
+			sleep(futures, 10000);
+		} catch (Exception e) {
+			if (DataAccessException.class.isAssignableFrom(e.getClass())) {
+				logger.error(e.getMessage(), e);
+			}
+			t = e;
+		}
+		return new AsyncResult<Exception>(t);
+	}
+	
+	@Async
+	public Future<Exception> calFxSw10() {
+		Exception t = null;
+		try {
+			List<Future<Exception>> futures = new ArrayList<Future<Exception>>();
+			futures.add(repositories.yzService.calFxSxSw10());
+			futures.add(repositories.yzService.calFxDsSw10());
+			futures.add(repositories.yzService.calFxMwSw10());
+			futures.add(repositories.yzService.calFxLhSw10());
+			futures.add(repositories.yzService.calFxWxdsSw10());
+			futures.add(repositories.yzService.calFxPdSw10());
+			futures.add(repositories.yzService.calFxFdSw10());
+			futures.add(repositories.yzService.calFxTwelveSw10());
+			futures.add(repositories.yzService.calFxSlqSw10());
+			futures.add(repositories.yzService.calFxZx1Sw10());
+			futures.add(repositories.yzService.calFxZx2Sw10());
+			futures.add(repositories.yzService.calFxZx3Sw10());
+			futures.add(repositories.yzService.calFxZx4Sw10());
+			futures.add(repositories.yzService.calFxZx5Sw10());
+			futures.add(repositories.yzService.calFxZx6Sw10());
+			futures.add(repositories.yzService.calFxZx7Sw10());
+			futures.add(repositories.yzService.calFxZx8Sw10());
+			futures.add(repositories.yzService.calFxZx11Sw10());
+			futures.add(repositories.yzService.calFxZx12Sw10());
+			futures.add(repositories.yzService.calFxZx13Sw10());
+			futures.add(repositories.yzService.calFxZx14Sw10());
+			futures.add(repositories.yzService.calFxZx15Sw10());
+			futures.add(repositories.yzService.calFxZx16Sw10());
+			futures.add(repositories.yzService.calFxZx17Sw10());
+			futures.add(repositories.yzService.calFxZx18Sw10());
+			sleep(futures, 10000);
+		} catch (Exception e) {
+			if (DataAccessException.class.isAssignableFrom(e.getClass())) {
+				logger.error(e.getMessage(), e);
+			}
+			t = e;
+		}
+		return new AsyncResult<Exception>(t);
+	}
+	
+	@Async
+	public Future<Exception> calFxSw11() {
+		Exception t = null;
+		try {
+			List<Future<Exception>> futures = new ArrayList<Future<Exception>>();
+			futures.add(repositories.yzService.calFxSxSw11());
+			futures.add(repositories.yzService.calFxPdSw11());
+			futures.add(repositories.yzService.calFxFdSw11());
+			futures.add(repositories.yzService.calFxTwelveSw11());
+			futures.add(repositories.yzService.calFxSlqSw11());
+			futures.add(repositories.yzService.calFxZx1Sw11());
+			futures.add(repositories.yzService.calFxZx2Sw11());
+			futures.add(repositories.yzService.calFxZx3Sw11());
+			futures.add(repositories.yzService.calFxZx4Sw11());
+			futures.add(repositories.yzService.calFxZx5Sw11());
+			futures.add(repositories.yzService.calFxZx6Sw11());
+			futures.add(repositories.yzService.calFxZx11Sw11());
+			futures.add(repositories.yzService.calFxZx12Sw11());
+			futures.add(repositories.yzService.calFxZx13Sw11());
+			futures.add(repositories.yzService.calFxZx14Sw11());
+			futures.add(repositories.yzService.calFxZx15Sw11());
+			futures.add(repositories.yzService.calFxZx16Sw11());
+			futures.add(repositories.yzService.calFxZx17Sw11());
+			futures.add(repositories.yzService.calFxZx18Sw11());
+			sleep(futures, 10000);
+		} catch (Exception e) {
+			if (DataAccessException.class.isAssignableFrom(e.getClass())) {
+				logger.error(e.getMessage(), e);
+			}
+			t = e;
+		}
+		return new AsyncResult<Exception>(t);
+	}
+	
+	@Async
+	public Future<Exception> calFxSw12() {
+		Exception t = null;
+		try {
+			List<Future<Exception>> futures = new ArrayList<Future<Exception>>();
+			futures.add(repositories.yzService.calFxSxSw12());
+			futures.add(repositories.yzService.calFxPdSw12());
+			futures.add(repositories.yzService.calFxFdSw12());
+			futures.add(repositories.yzService.calFxTwelveSw12());
+			futures.add(repositories.yzService.calFxSlqSw12());
+			futures.add(repositories.yzService.calFxZx1Sw12());
+			futures.add(repositories.yzService.calFxZx2Sw12());
+			futures.add(repositories.yzService.calFxZx3Sw12());
+			futures.add(repositories.yzService.calFxZx4Sw12());
+			futures.add(repositories.yzService.calFxZx5Sw12());
+			futures.add(repositories.yzService.calFxZx6Sw12());
+			futures.add(repositories.yzService.calFxZx11Sw12());
+			futures.add(repositories.yzService.calFxZx12Sw12());
+			futures.add(repositories.yzService.calFxZx13Sw12());
+			futures.add(repositories.yzService.calFxZx14Sw12());
+			futures.add(repositories.yzService.calFxZx15Sw12());
+			futures.add(repositories.yzService.calFxZx16Sw12());
+			futures.add(repositories.yzService.calFxZx17Sw12());
+			futures.add(repositories.yzService.calFxZx18Sw12());
 			sleep(futures, 10000);
 		} catch (Exception e) {
 			if (DataAccessException.class.isAssignableFrom(e.getClass())) {
