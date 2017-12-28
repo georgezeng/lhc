@@ -634,7 +634,7 @@ public class YZ2Service extends YZService {
 						}
 						int fdpos = currentPos + zf;
 						int len = 12;
-						if (fdpos > len) {
+						if (fdpos >= len) {
 							fdpos -= len;
 						}
 						int maxLength = 4;
