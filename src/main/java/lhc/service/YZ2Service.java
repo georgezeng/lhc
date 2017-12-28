@@ -632,17 +632,29 @@ public class YZ2Service extends YZService {
 							}
 							currentPos++;
 						}
+						int range = 4;
+						int length = 12;
+						if (currentPos % range == 0) {
+							currentPos = currentPos / range;
+						} else {
+							currentPos = currentPos / range + 1;
+						}
+						int maxLength = 4;
+						if (currentPos >= length) {
+							currentPos = length;
+							maxLength = 5;
+						}
+						currentPos = currentPos - 1;
+
 						int fdpos = currentPos + zf;
 						int len = 12;
 						if (fdpos >= len) {
 							fdpos -= len;
 						}
-						int maxLength = 4;
-						int range = 4;
 						if (fdpos == 11) {
 							maxLength = 5;
 						}
-						int startPos = pos * range;
+						int startPos = fdpos * range;
 						List<Integer> nums = new ArrayList<Integer>();
 						for (int i = startPos; i < startPos + maxLength; i++) {
 							nums.add(infos.get(i).getNum());
@@ -700,7 +712,7 @@ public class YZ2Service extends YZService {
 		}
 		return new AsyncResult<Exception>(t);
 	}
-	
+
 	@Async
 	public Future<Exception> calFxSxSw4() {
 		Exception t = null;
@@ -716,7 +728,7 @@ public class YZ2Service extends YZService {
 		}
 		return new AsyncResult<Exception>(t);
 	}
-	
+
 	@Async
 	public Future<Exception> calFxSxSw5() {
 		Exception t = null;
@@ -732,7 +744,7 @@ public class YZ2Service extends YZService {
 		}
 		return new AsyncResult<Exception>(t);
 	}
-	
+
 	@Async
 	public Future<Exception> calFxSxSw6() {
 		Exception t = null;
@@ -748,7 +760,7 @@ public class YZ2Service extends YZService {
 		}
 		return new AsyncResult<Exception>(t);
 	}
-	
+
 	@Async
 	public Future<Exception> calFxSxSw7() {
 		Exception t = null;
@@ -764,7 +776,7 @@ public class YZ2Service extends YZService {
 		}
 		return new AsyncResult<Exception>(t);
 	}
-	
+
 	@Async
 	public Future<Exception> calFxSxSw8() {
 		Exception t = null;
@@ -780,7 +792,7 @@ public class YZ2Service extends YZService {
 		}
 		return new AsyncResult<Exception>(t);
 	}
-	
+
 	@Async
 	public Future<Exception> calFxSxSw9() {
 		Exception t = null;
@@ -796,7 +808,7 @@ public class YZ2Service extends YZService {
 		}
 		return new AsyncResult<Exception>(t);
 	}
-	
+
 	@Async
 	public Future<Exception> calFxSxSw10() {
 		Exception t = null;
@@ -812,7 +824,7 @@ public class YZ2Service extends YZService {
 		}
 		return new AsyncResult<Exception>(t);
 	}
-	
+
 	@Async
 	public Future<Exception> calFxSxSw11() {
 		Exception t = null;
@@ -828,7 +840,7 @@ public class YZ2Service extends YZService {
 		}
 		return new AsyncResult<Exception>(t);
 	}
-	
+
 	@Async
 	public Future<Exception> calFxSxSw12() {
 		Exception t = null;
@@ -898,7 +910,7 @@ public class YZ2Service extends YZService {
 		}
 		return new AsyncResult<Exception>(t);
 	}
-	
+
 	@Async
 	public Future<Exception> calFxDsSw4() {
 		Exception t = null;
@@ -916,7 +928,7 @@ public class YZ2Service extends YZService {
 		}
 		return new AsyncResult<Exception>(t);
 	}
-	
+
 	@Async
 	public Future<Exception> calFxDsSw5() {
 		Exception t = null;
@@ -934,7 +946,7 @@ public class YZ2Service extends YZService {
 		}
 		return new AsyncResult<Exception>(t);
 	}
-	
+
 	@Async
 	public Future<Exception> calFxDsSw6() {
 		Exception t = null;
@@ -952,7 +964,7 @@ public class YZ2Service extends YZService {
 		}
 		return new AsyncResult<Exception>(t);
 	}
-	
+
 	@Async
 	public Future<Exception> calFxDsSw7() {
 		Exception t = null;
@@ -970,7 +982,7 @@ public class YZ2Service extends YZService {
 		}
 		return new AsyncResult<Exception>(t);
 	}
-	
+
 	@Async
 	public Future<Exception> calFxDsSw8() {
 		Exception t = null;
@@ -988,7 +1000,7 @@ public class YZ2Service extends YZService {
 		}
 		return new AsyncResult<Exception>(t);
 	}
-	
+
 	@Async
 	public Future<Exception> calFxDsSw9() {
 		Exception t = null;
@@ -1006,7 +1018,7 @@ public class YZ2Service extends YZService {
 		}
 		return new AsyncResult<Exception>(t);
 	}
-	
+
 	@Async
 	public Future<Exception> calFxDsSw10() {
 		Exception t = null;
@@ -1078,7 +1090,7 @@ public class YZ2Service extends YZService {
 		}
 		return new AsyncResult<Exception>(t);
 	}
-	
+
 	@Async
 	public Future<Exception> calFxSwSw4() {
 		Exception t = null;
@@ -1096,7 +1108,7 @@ public class YZ2Service extends YZService {
 		}
 		return new AsyncResult<Exception>(t);
 	}
-	
+
 	@Async
 	public Future<Exception> calFxSwSw5() {
 		Exception t = null;
@@ -1168,7 +1180,7 @@ public class YZ2Service extends YZService {
 		}
 		return new AsyncResult<Exception>(t);
 	}
-	
+
 	@Async
 	public Future<Exception> calFxMwSw4() {
 		Exception t = null;
@@ -1186,7 +1198,7 @@ public class YZ2Service extends YZService {
 		}
 		return new AsyncResult<Exception>(t);
 	}
-	
+
 	@Async
 	public Future<Exception> calFxMwSw5() {
 		Exception t = null;
@@ -1204,7 +1216,7 @@ public class YZ2Service extends YZService {
 		}
 		return new AsyncResult<Exception>(t);
 	}
-	
+
 	@Async
 	public Future<Exception> calFxMwSw6() {
 		Exception t = null;
@@ -1222,7 +1234,7 @@ public class YZ2Service extends YZService {
 		}
 		return new AsyncResult<Exception>(t);
 	}
-	
+
 	@Async
 	public Future<Exception> calFxMwSw7() {
 		Exception t = null;
@@ -1240,7 +1252,7 @@ public class YZ2Service extends YZService {
 		}
 		return new AsyncResult<Exception>(t);
 	}
-	
+
 	@Async
 	public Future<Exception> calFxMwSw8() {
 		Exception t = null;
@@ -1258,7 +1270,7 @@ public class YZ2Service extends YZService {
 		}
 		return new AsyncResult<Exception>(t);
 	}
-	
+
 	@Async
 	public Future<Exception> calFxMwSw9() {
 		Exception t = null;
@@ -1276,7 +1288,7 @@ public class YZ2Service extends YZService {
 		}
 		return new AsyncResult<Exception>(t);
 	}
-	
+
 	@Async
 	public Future<Exception> calFxMwSw10() {
 		Exception t = null;
@@ -1348,7 +1360,7 @@ public class YZ2Service extends YZService {
 		}
 		return new AsyncResult<Exception>(t);
 	}
-	
+
 	@Async
 	public Future<Exception> calFxLhSw4() {
 		Exception t = null;
@@ -1366,7 +1378,7 @@ public class YZ2Service extends YZService {
 		}
 		return new AsyncResult<Exception>(t);
 	}
-	
+
 	@Async
 	public Future<Exception> calFxLhSw5() {
 		Exception t = null;
@@ -1384,7 +1396,7 @@ public class YZ2Service extends YZService {
 		}
 		return new AsyncResult<Exception>(t);
 	}
-	
+
 	@Async
 	public Future<Exception> calFxLhSw6() {
 		Exception t = null;
@@ -1402,7 +1414,7 @@ public class YZ2Service extends YZService {
 		}
 		return new AsyncResult<Exception>(t);
 	}
-	
+
 	@Async
 	public Future<Exception> calFxLhSw7() {
 		Exception t = null;
@@ -1420,7 +1432,7 @@ public class YZ2Service extends YZService {
 		}
 		return new AsyncResult<Exception>(t);
 	}
-	
+
 	@Async
 	public Future<Exception> calFxLhSw8() {
 		Exception t = null;
@@ -1438,7 +1450,7 @@ public class YZ2Service extends YZService {
 		}
 		return new AsyncResult<Exception>(t);
 	}
-	
+
 	@Async
 	public Future<Exception> calFxLhSw9() {
 		Exception t = null;
@@ -1456,7 +1468,7 @@ public class YZ2Service extends YZService {
 		}
 		return new AsyncResult<Exception>(t);
 	}
-	
+
 	@Async
 	public Future<Exception> calFxLhSw10() {
 		Exception t = null;
@@ -1528,7 +1540,7 @@ public class YZ2Service extends YZService {
 		}
 		return new AsyncResult<Exception>(t);
 	}
-	
+
 	@Async
 	public Future<Exception> calFxBsSw4() {
 		Exception t = null;
@@ -1546,7 +1558,7 @@ public class YZ2Service extends YZService {
 		}
 		return new AsyncResult<Exception>(t);
 	}
-	
+
 	@Async
 	public Future<Exception> calFxBsSw5() {
 		Exception t = null;
@@ -1564,7 +1576,7 @@ public class YZ2Service extends YZService {
 		}
 		return new AsyncResult<Exception>(t);
 	}
-	
+
 	@Async
 	public Future<Exception> calFxBsSw6() {
 		Exception t = null;
@@ -1582,7 +1594,7 @@ public class YZ2Service extends YZService {
 		}
 		return new AsyncResult<Exception>(t);
 	}
-	
+
 	@Async
 	public Future<Exception> calFxBsSw7() {
 		Exception t = null;
@@ -1600,7 +1612,7 @@ public class YZ2Service extends YZService {
 		}
 		return new AsyncResult<Exception>(t);
 	}
-	
+
 	@Async
 	public Future<Exception> calFxBsSw8() {
 		Exception t = null;
@@ -1618,7 +1630,7 @@ public class YZ2Service extends YZService {
 		}
 		return new AsyncResult<Exception>(t);
 	}
-	
+
 	@Async
 	public Future<Exception> calFxBsSw9() {
 		Exception t = null;
@@ -1690,7 +1702,7 @@ public class YZ2Service extends YZService {
 		}
 		return new AsyncResult<Exception>(t);
 	}
-	
+
 	@Async
 	public Future<Exception> calFxZsSw4() {
 		Exception t = null;
@@ -1708,7 +1720,7 @@ public class YZ2Service extends YZService {
 		}
 		return new AsyncResult<Exception>(t);
 	}
-	
+
 	@Async
 	public Future<Exception> calFxZsSw5() {
 		Exception t = null;
@@ -1726,7 +1738,7 @@ public class YZ2Service extends YZService {
 		}
 		return new AsyncResult<Exception>(t);
 	}
-	
+
 	@Async
 	public Future<Exception> calFxZsSw6() {
 		Exception t = null;
@@ -1744,7 +1756,7 @@ public class YZ2Service extends YZService {
 		}
 		return new AsyncResult<Exception>(t);
 	}
-	
+
 	@Async
 	public Future<Exception> calFxZsSw7() {
 		Exception t = null;
@@ -1762,7 +1774,7 @@ public class YZ2Service extends YZService {
 		}
 		return new AsyncResult<Exception>(t);
 	}
-	
+
 	@Async
 	public Future<Exception> calFxZsSw8() {
 		Exception t = null;
@@ -1780,7 +1792,7 @@ public class YZ2Service extends YZService {
 		}
 		return new AsyncResult<Exception>(t);
 	}
-	
+
 	@Async
 	public Future<Exception> calFxZsSw9() {
 		Exception t = null;
@@ -1852,7 +1864,7 @@ public class YZ2Service extends YZService {
 		}
 		return new AsyncResult<Exception>(t);
 	}
-	
+
 	@Async
 	public Future<Exception> calFxWxSw4() {
 		Exception t = null;
@@ -1870,7 +1882,7 @@ public class YZ2Service extends YZService {
 		}
 		return new AsyncResult<Exception>(t);
 	}
-	
+
 	@Async
 	public Future<Exception> calFxWxSw5() {
 		Exception t = null;
@@ -1942,7 +1954,7 @@ public class YZ2Service extends YZService {
 		}
 		return new AsyncResult<Exception>(t);
 	}
-	
+
 	@Async
 	public Future<Exception> calFxWxdsSw4() {
 		Exception t = null;
@@ -1960,7 +1972,7 @@ public class YZ2Service extends YZService {
 		}
 		return new AsyncResult<Exception>(t);
 	}
-	
+
 	@Async
 	public Future<Exception> calFxWxdsSw5() {
 		Exception t = null;
@@ -1978,7 +1990,7 @@ public class YZ2Service extends YZService {
 		}
 		return new AsyncResult<Exception>(t);
 	}
-	
+
 	@Async
 	public Future<Exception> calFxWxdsSw6() {
 		Exception t = null;
@@ -1996,7 +2008,7 @@ public class YZ2Service extends YZService {
 		}
 		return new AsyncResult<Exception>(t);
 	}
-	
+
 	@Async
 	public Future<Exception> calFxWxdsSw7() {
 		Exception t = null;
@@ -2014,7 +2026,7 @@ public class YZ2Service extends YZService {
 		}
 		return new AsyncResult<Exception>(t);
 	}
-	
+
 	@Async
 	public Future<Exception> calFxWxdsSw8() {
 		Exception t = null;
@@ -2032,7 +2044,7 @@ public class YZ2Service extends YZService {
 		}
 		return new AsyncResult<Exception>(t);
 	}
-	
+
 	@Async
 	public Future<Exception> calFxWxdsSw9() {
 		Exception t = null;
@@ -2050,13 +2062,13 @@ public class YZ2Service extends YZService {
 		}
 		return new AsyncResult<Exception>(t);
 	}
-	
+
 	@Async
 	public Future<Exception> calFxWxdsSw10() {
 		Exception t = null;
 		try {
-			calFx(10, WxdsYz.class, WxDsNums.class, FxSw10.class, repositories.wxdsyzRepository, repositories.fxsw10Repository,
-					new FxHandler(), "Wxds");
+			calFx(10, WxdsYz.class, WxDsNums.class, FxSw10.class, repositories.wxdsyzRepository,
+					repositories.fxsw10Repository, new FxHandler(), "Wxds");
 			calFxZf(10, WxdsZfYz.class, WxdsYz.class, FxSw10.class, WxDsNums.class, repositories.wxdszfyzRepository,
 					repositories.wxdsyzRepository, repositories.fxsw10Repository, "Wxds", new FxZfHandler<WxdsYz>());
 			logger.info("End of calFxWxdsSw10...");
@@ -2122,7 +2134,7 @@ public class YZ2Service extends YZService {
 		}
 		return new AsyncResult<Exception>(t);
 	}
-	
+
 	@Async
 	public Future<Exception> calFxPdSw4() {
 		Exception t = null;
@@ -2140,7 +2152,7 @@ public class YZ2Service extends YZService {
 		}
 		return new AsyncResult<Exception>(t);
 	}
-	
+
 	@Async
 	public Future<Exception> calFxPdSw5() {
 		Exception t = null;
@@ -2158,7 +2170,7 @@ public class YZ2Service extends YZService {
 		}
 		return new AsyncResult<Exception>(t);
 	}
-	
+
 	@Async
 	public Future<Exception> calFxPdSw6() {
 		Exception t = null;
@@ -2176,7 +2188,7 @@ public class YZ2Service extends YZService {
 		}
 		return new AsyncResult<Exception>(t);
 	}
-	
+
 	@Async
 	public Future<Exception> calFxPdSw7() {
 		Exception t = null;
@@ -2194,7 +2206,7 @@ public class YZ2Service extends YZService {
 		}
 		return new AsyncResult<Exception>(t);
 	}
-	
+
 	@Async
 	public Future<Exception> calFxPdSw8() {
 		Exception t = null;
@@ -2212,7 +2224,7 @@ public class YZ2Service extends YZService {
 		}
 		return new AsyncResult<Exception>(t);
 	}
-	
+
 	@Async
 	public Future<Exception> calFxPdSw9() {
 		Exception t = null;
@@ -2230,7 +2242,7 @@ public class YZ2Service extends YZService {
 		}
 		return new AsyncResult<Exception>(t);
 	}
-	
+
 	@Async
 	public Future<Exception> calFxPdSw10() {
 		Exception t = null;
@@ -2248,7 +2260,7 @@ public class YZ2Service extends YZService {
 		}
 		return new AsyncResult<Exception>(t);
 	}
-	
+
 	@Async
 	public Future<Exception> calFxPdSw11() {
 		Exception t = null;
@@ -2266,7 +2278,7 @@ public class YZ2Service extends YZService {
 		}
 		return new AsyncResult<Exception>(t);
 	}
-	
+
 	@Async
 	public Future<Exception> calFxPdSw12() {
 		Exception t = null;
@@ -2332,7 +2344,7 @@ public class YZ2Service extends YZService {
 		}
 		return new AsyncResult<Exception>(t);
 	}
-	
+
 	@Async
 	public Future<Exception> calFxFdSw4() {
 		Exception t = null;
@@ -2348,7 +2360,7 @@ public class YZ2Service extends YZService {
 		}
 		return new AsyncResult<Exception>(t);
 	}
-	
+
 	@Async
 	public Future<Exception> calFxFdSw5() {
 		Exception t = null;
@@ -2364,7 +2376,7 @@ public class YZ2Service extends YZService {
 		}
 		return new AsyncResult<Exception>(t);
 	}
-	
+
 	@Async
 	public Future<Exception> calFxFdSw6() {
 		Exception t = null;
@@ -2380,7 +2392,7 @@ public class YZ2Service extends YZService {
 		}
 		return new AsyncResult<Exception>(t);
 	}
-	
+
 	@Async
 	public Future<Exception> calFxFdSw7() {
 		Exception t = null;
@@ -2396,7 +2408,7 @@ public class YZ2Service extends YZService {
 		}
 		return new AsyncResult<Exception>(t);
 	}
-	
+
 	@Async
 	public Future<Exception> calFxFdSw8() {
 		Exception t = null;
@@ -2412,7 +2424,7 @@ public class YZ2Service extends YZService {
 		}
 		return new AsyncResult<Exception>(t);
 	}
-	
+
 	@Async
 	public Future<Exception> calFxFdSw9() {
 		Exception t = null;
@@ -2428,7 +2440,7 @@ public class YZ2Service extends YZService {
 		}
 		return new AsyncResult<Exception>(t);
 	}
-	
+
 	@Async
 	public Future<Exception> calFxFdSw10() {
 		Exception t = null;
@@ -2444,7 +2456,7 @@ public class YZ2Service extends YZService {
 		}
 		return new AsyncResult<Exception>(t);
 	}
-	
+
 	@Async
 	public Future<Exception> calFxFdSw11() {
 		Exception t = null;
@@ -2460,7 +2472,7 @@ public class YZ2Service extends YZService {
 		}
 		return new AsyncResult<Exception>(t);
 	}
-	
+
 	@Async
 	public Future<Exception> calFxFdSw12() {
 		Exception t = null;
@@ -2530,7 +2542,7 @@ public class YZ2Service extends YZService {
 		}
 		return new AsyncResult<Exception>(t);
 	}
-	
+
 	@Async
 	public Future<Exception> calFxQqSw4() {
 		Exception t = null;
@@ -2548,7 +2560,7 @@ public class YZ2Service extends YZService {
 		}
 		return new AsyncResult<Exception>(t);
 	}
-	
+
 	@Async
 	public Future<Exception> calFxQqSw5() {
 		Exception t = null;
@@ -2566,7 +2578,7 @@ public class YZ2Service extends YZService {
 		}
 		return new AsyncResult<Exception>(t);
 	}
-	
+
 	@Async
 	public Future<Exception> calFxQqSw6() {
 		Exception t = null;
@@ -2584,7 +2596,7 @@ public class YZ2Service extends YZService {
 		}
 		return new AsyncResult<Exception>(t);
 	}
-	
+
 	@Async
 	public Future<Exception> calFxQqSw7() {
 		Exception t = null;
@@ -2656,7 +2668,7 @@ public class YZ2Service extends YZService {
 		}
 		return new AsyncResult<Exception>(t);
 	}
-	
+
 	@Async
 	public Future<Exception> calFxQiwSw4() {
 		Exception t = null;
@@ -2674,7 +2686,7 @@ public class YZ2Service extends YZService {
 		}
 		return new AsyncResult<Exception>(t);
 	}
-	
+
 	@Async
 	public Future<Exception> calFxQiwSw5() {
 		Exception t = null;
@@ -2692,7 +2704,7 @@ public class YZ2Service extends YZService {
 		}
 		return new AsyncResult<Exception>(t);
 	}
-	
+
 	@Async
 	public Future<Exception> calFxQiwSw6() {
 		Exception t = null;
@@ -2710,7 +2722,7 @@ public class YZ2Service extends YZService {
 		}
 		return new AsyncResult<Exception>(t);
 	}
-	
+
 	@Async
 	public Future<Exception> calFxQiwSw7() {
 		Exception t = null;
@@ -2782,7 +2794,7 @@ public class YZ2Service extends YZService {
 		}
 		return new AsyncResult<Exception>(t);
 	}
-	
+
 	@Async
 	public Future<Exception> calFxTwelveSw4() {
 		Exception t = null;
@@ -2800,7 +2812,7 @@ public class YZ2Service extends YZService {
 		}
 		return new AsyncResult<Exception>(t);
 	}
-	
+
 	@Async
 	public Future<Exception> calFxTwelveSw5() {
 		Exception t = null;
@@ -2818,7 +2830,7 @@ public class YZ2Service extends YZService {
 		}
 		return new AsyncResult<Exception>(t);
 	}
-	
+
 	@Async
 	public Future<Exception> calFxTwelveSw6() {
 		Exception t = null;
@@ -2836,7 +2848,7 @@ public class YZ2Service extends YZService {
 		}
 		return new AsyncResult<Exception>(t);
 	}
-	
+
 	@Async
 	public Future<Exception> calFxTwelveSw7() {
 		Exception t = null;
@@ -2854,7 +2866,7 @@ public class YZ2Service extends YZService {
 		}
 		return new AsyncResult<Exception>(t);
 	}
-	
+
 	@Async
 	public Future<Exception> calFxTwelveSw8() {
 		Exception t = null;
@@ -2872,7 +2884,7 @@ public class YZ2Service extends YZService {
 		}
 		return new AsyncResult<Exception>(t);
 	}
-	
+
 	@Async
 	public Future<Exception> calFxTwelveSw9() {
 		Exception t = null;
@@ -2890,7 +2902,7 @@ public class YZ2Service extends YZService {
 		}
 		return new AsyncResult<Exception>(t);
 	}
-	
+
 	@Async
 	public Future<Exception> calFxTwelveSw10() {
 		Exception t = null;
@@ -2908,7 +2920,7 @@ public class YZ2Service extends YZService {
 		}
 		return new AsyncResult<Exception>(t);
 	}
-	
+
 	@Async
 	public Future<Exception> calFxTwelveSw11() {
 		Exception t = null;
@@ -2926,7 +2938,7 @@ public class YZ2Service extends YZService {
 		}
 		return new AsyncResult<Exception>(t);
 	}
-	
+
 	@Async
 	public Future<Exception> calFxTwelveSw12() {
 		Exception t = null;
@@ -2998,7 +3010,7 @@ public class YZ2Service extends YZService {
 		}
 		return new AsyncResult<Exception>(t);
 	}
-	
+
 	@Async
 	public Future<Exception> calFxSlqSw4() {
 		Exception t = null;
@@ -3016,7 +3028,7 @@ public class YZ2Service extends YZService {
 		}
 		return new AsyncResult<Exception>(t);
 	}
-	
+
 	@Async
 	public Future<Exception> calFxSlqSw5() {
 		Exception t = null;
@@ -3034,7 +3046,7 @@ public class YZ2Service extends YZService {
 		}
 		return new AsyncResult<Exception>(t);
 	}
-	
+
 	@Async
 	public Future<Exception> calFxSlqSw6() {
 		Exception t = null;
@@ -3052,7 +3064,7 @@ public class YZ2Service extends YZService {
 		}
 		return new AsyncResult<Exception>(t);
 	}
-	
+
 	@Async
 	public Future<Exception> calFxSlqSw7() {
 		Exception t = null;
@@ -3070,7 +3082,7 @@ public class YZ2Service extends YZService {
 		}
 		return new AsyncResult<Exception>(t);
 	}
-	
+
 	@Async
 	public Future<Exception> calFxSlqSw8() {
 		Exception t = null;
@@ -3088,7 +3100,7 @@ public class YZ2Service extends YZService {
 		}
 		return new AsyncResult<Exception>(t);
 	}
-	
+
 	@Async
 	public Future<Exception> calFxSlqSw9() {
 		Exception t = null;
@@ -3106,7 +3118,7 @@ public class YZ2Service extends YZService {
 		}
 		return new AsyncResult<Exception>(t);
 	}
-	
+
 	@Async
 	public Future<Exception> calFxSlqSw10() {
 		Exception t = null;
@@ -3124,7 +3136,7 @@ public class YZ2Service extends YZService {
 		}
 		return new AsyncResult<Exception>(t);
 	}
-	
+
 	@Async
 	public Future<Exception> calFxSlqSw11() {
 		Exception t = null;
@@ -3142,7 +3154,7 @@ public class YZ2Service extends YZService {
 		}
 		return new AsyncResult<Exception>(t);
 	}
-	
+
 	@Async
 	public Future<Exception> calFxSlqSw12() {
 		Exception t = null;
@@ -3214,7 +3226,7 @@ public class YZ2Service extends YZService {
 		}
 		return new AsyncResult<Exception>(t);
 	}
-	
+
 	@Async
 	public Future<Exception> calFxZx1Sw4() {
 		Exception t = null;
@@ -3232,7 +3244,7 @@ public class YZ2Service extends YZService {
 		}
 		return new AsyncResult<Exception>(t);
 	}
-	
+
 	@Async
 	public Future<Exception> calFxZx1Sw5() {
 		Exception t = null;
@@ -3250,7 +3262,7 @@ public class YZ2Service extends YZService {
 		}
 		return new AsyncResult<Exception>(t);
 	}
-	
+
 	@Async
 	public Future<Exception> calFxZx1Sw6() {
 		Exception t = null;
@@ -3268,7 +3280,7 @@ public class YZ2Service extends YZService {
 		}
 		return new AsyncResult<Exception>(t);
 	}
-	
+
 	@Async
 	public Future<Exception> calFxZx1Sw7() {
 		Exception t = null;
@@ -3286,7 +3298,7 @@ public class YZ2Service extends YZService {
 		}
 		return new AsyncResult<Exception>(t);
 	}
-	
+
 	@Async
 	public Future<Exception> calFxZx1Sw8() {
 		Exception t = null;
@@ -3304,7 +3316,7 @@ public class YZ2Service extends YZService {
 		}
 		return new AsyncResult<Exception>(t);
 	}
-	
+
 	@Async
 	public Future<Exception> calFxZx1Sw9() {
 		Exception t = null;
@@ -3322,7 +3334,7 @@ public class YZ2Service extends YZService {
 		}
 		return new AsyncResult<Exception>(t);
 	}
-	
+
 	@Async
 	public Future<Exception> calFxZx1Sw10() {
 		Exception t = null;
@@ -3340,7 +3352,7 @@ public class YZ2Service extends YZService {
 		}
 		return new AsyncResult<Exception>(t);
 	}
-	
+
 	@Async
 	public Future<Exception> calFxZx1Sw11() {
 		Exception t = null;
@@ -3358,7 +3370,7 @@ public class YZ2Service extends YZService {
 		}
 		return new AsyncResult<Exception>(t);
 	}
-	
+
 	@Async
 	public Future<Exception> calFxZx1Sw12() {
 		Exception t = null;
@@ -3430,7 +3442,7 @@ public class YZ2Service extends YZService {
 		}
 		return new AsyncResult<Exception>(t);
 	}
-	
+
 	@Async
 	public Future<Exception> calFxZx2Sw4() {
 		Exception t = null;
@@ -3448,7 +3460,7 @@ public class YZ2Service extends YZService {
 		}
 		return new AsyncResult<Exception>(t);
 	}
-	
+
 	@Async
 	public Future<Exception> calFxZx2Sw5() {
 		Exception t = null;
@@ -3466,7 +3478,7 @@ public class YZ2Service extends YZService {
 		}
 		return new AsyncResult<Exception>(t);
 	}
-	
+
 	@Async
 	public Future<Exception> calFxZx2Sw6() {
 		Exception t = null;
@@ -3484,7 +3496,7 @@ public class YZ2Service extends YZService {
 		}
 		return new AsyncResult<Exception>(t);
 	}
-	
+
 	@Async
 	public Future<Exception> calFxZx2Sw7() {
 		Exception t = null;
@@ -3502,7 +3514,7 @@ public class YZ2Service extends YZService {
 		}
 		return new AsyncResult<Exception>(t);
 	}
-	
+
 	@Async
 	public Future<Exception> calFxZx2Sw8() {
 		Exception t = null;
@@ -3520,7 +3532,7 @@ public class YZ2Service extends YZService {
 		}
 		return new AsyncResult<Exception>(t);
 	}
-	
+
 	@Async
 	public Future<Exception> calFxZx2Sw9() {
 		Exception t = null;
@@ -3538,7 +3550,7 @@ public class YZ2Service extends YZService {
 		}
 		return new AsyncResult<Exception>(t);
 	}
-	
+
 	@Async
 	public Future<Exception> calFxZx2Sw10() {
 		Exception t = null;
@@ -3556,7 +3568,7 @@ public class YZ2Service extends YZService {
 		}
 		return new AsyncResult<Exception>(t);
 	}
-	
+
 	@Async
 	public Future<Exception> calFxZx2Sw11() {
 		Exception t = null;
@@ -3574,7 +3586,7 @@ public class YZ2Service extends YZService {
 		}
 		return new AsyncResult<Exception>(t);
 	}
-	
+
 	@Async
 	public Future<Exception> calFxZx2Sw12() {
 		Exception t = null;
@@ -3646,7 +3658,7 @@ public class YZ2Service extends YZService {
 		}
 		return new AsyncResult<Exception>(t);
 	}
-	
+
 	@Async
 	public Future<Exception> calFxZx3Sw4() {
 		Exception t = null;
@@ -3664,7 +3676,7 @@ public class YZ2Service extends YZService {
 		}
 		return new AsyncResult<Exception>(t);
 	}
-	
+
 	@Async
 	public Future<Exception> calFxZx3Sw5() {
 		Exception t = null;
@@ -3682,7 +3694,7 @@ public class YZ2Service extends YZService {
 		}
 		return new AsyncResult<Exception>(t);
 	}
-	
+
 	@Async
 	public Future<Exception> calFxZx3Sw6() {
 		Exception t = null;
@@ -3700,7 +3712,7 @@ public class YZ2Service extends YZService {
 		}
 		return new AsyncResult<Exception>(t);
 	}
-	
+
 	@Async
 	public Future<Exception> calFxZx3Sw7() {
 		Exception t = null;
@@ -3718,7 +3730,7 @@ public class YZ2Service extends YZService {
 		}
 		return new AsyncResult<Exception>(t);
 	}
-	
+
 	@Async
 	public Future<Exception> calFxZx3Sw8() {
 		Exception t = null;
@@ -3736,7 +3748,7 @@ public class YZ2Service extends YZService {
 		}
 		return new AsyncResult<Exception>(t);
 	}
-	
+
 	@Async
 	public Future<Exception> calFxZx3Sw9() {
 		Exception t = null;
@@ -3754,7 +3766,7 @@ public class YZ2Service extends YZService {
 		}
 		return new AsyncResult<Exception>(t);
 	}
-	
+
 	@Async
 	public Future<Exception> calFxZx3Sw10() {
 		Exception t = null;
@@ -3772,7 +3784,7 @@ public class YZ2Service extends YZService {
 		}
 		return new AsyncResult<Exception>(t);
 	}
-	
+
 	@Async
 	public Future<Exception> calFxZx3Sw11() {
 		Exception t = null;
@@ -3790,7 +3802,7 @@ public class YZ2Service extends YZService {
 		}
 		return new AsyncResult<Exception>(t);
 	}
-	
+
 	@Async
 	public Future<Exception> calFxZx3Sw12() {
 		Exception t = null;
@@ -3862,7 +3874,7 @@ public class YZ2Service extends YZService {
 		}
 		return new AsyncResult<Exception>(t);
 	}
-	
+
 	@Async
 	public Future<Exception> calFxZx4Sw4() {
 		Exception t = null;
@@ -3880,7 +3892,7 @@ public class YZ2Service extends YZService {
 		}
 		return new AsyncResult<Exception>(t);
 	}
-	
+
 	@Async
 	public Future<Exception> calFxZx4Sw5() {
 		Exception t = null;
@@ -3898,7 +3910,7 @@ public class YZ2Service extends YZService {
 		}
 		return new AsyncResult<Exception>(t);
 	}
-	
+
 	@Async
 	public Future<Exception> calFxZx4Sw6() {
 		Exception t = null;
@@ -3934,7 +3946,7 @@ public class YZ2Service extends YZService {
 		}
 		return new AsyncResult<Exception>(t);
 	}
-	
+
 	@Async
 	public Future<Exception> calFxZx4Sw8() {
 		Exception t = null;
@@ -3952,7 +3964,7 @@ public class YZ2Service extends YZService {
 		}
 		return new AsyncResult<Exception>(t);
 	}
-	
+
 	@Async
 	public Future<Exception> calFxZx4Sw9() {
 		Exception t = null;
@@ -3970,7 +3982,7 @@ public class YZ2Service extends YZService {
 		}
 		return new AsyncResult<Exception>(t);
 	}
-	
+
 	@Async
 	public Future<Exception> calFxZx4Sw10() {
 		Exception t = null;
@@ -3988,7 +4000,7 @@ public class YZ2Service extends YZService {
 		}
 		return new AsyncResult<Exception>(t);
 	}
-	
+
 	@Async
 	public Future<Exception> calFxZx4Sw11() {
 		Exception t = null;
@@ -4006,7 +4018,7 @@ public class YZ2Service extends YZService {
 		}
 		return new AsyncResult<Exception>(t);
 	}
-	
+
 	@Async
 	public Future<Exception> calFxZx4Sw12() {
 		Exception t = null;
@@ -4024,7 +4036,7 @@ public class YZ2Service extends YZService {
 		}
 		return new AsyncResult<Exception>(t);
 	}
-	
+
 	@Async
 	public Future<Exception> calFxZx5Sw1() {
 		Exception t = null;
@@ -4078,7 +4090,7 @@ public class YZ2Service extends YZService {
 		}
 		return new AsyncResult<Exception>(t);
 	}
-	
+
 	@Async
 	public Future<Exception> calFxZx5Sw4() {
 		Exception t = null;
@@ -4096,7 +4108,7 @@ public class YZ2Service extends YZService {
 		}
 		return new AsyncResult<Exception>(t);
 	}
-	
+
 	@Async
 	public Future<Exception> calFxZx5Sw5() {
 		Exception t = null;
@@ -4114,7 +4126,7 @@ public class YZ2Service extends YZService {
 		}
 		return new AsyncResult<Exception>(t);
 	}
-	
+
 	@Async
 	public Future<Exception> calFxZx5Sw6() {
 		Exception t = null;
@@ -4132,7 +4144,7 @@ public class YZ2Service extends YZService {
 		}
 		return new AsyncResult<Exception>(t);
 	}
-	
+
 	@Async
 	public Future<Exception> calFxZx5Sw7() {
 		Exception t = null;
@@ -4150,7 +4162,7 @@ public class YZ2Service extends YZService {
 		}
 		return new AsyncResult<Exception>(t);
 	}
-	
+
 	@Async
 	public Future<Exception> calFxZx5Sw8() {
 		Exception t = null;
@@ -4168,7 +4180,7 @@ public class YZ2Service extends YZService {
 		}
 		return new AsyncResult<Exception>(t);
 	}
-	
+
 	@Async
 	public Future<Exception> calFxZx5Sw9() {
 		Exception t = null;
@@ -4186,7 +4198,7 @@ public class YZ2Service extends YZService {
 		}
 		return new AsyncResult<Exception>(t);
 	}
-	
+
 	@Async
 	public Future<Exception> calFxZx5Sw10() {
 		Exception t = null;
@@ -4204,7 +4216,7 @@ public class YZ2Service extends YZService {
 		}
 		return new AsyncResult<Exception>(t);
 	}
-	
+
 	@Async
 	public Future<Exception> calFxZx5Sw11() {
 		Exception t = null;
@@ -4222,7 +4234,7 @@ public class YZ2Service extends YZService {
 		}
 		return new AsyncResult<Exception>(t);
 	}
-	
+
 	@Async
 	public Future<Exception> calFxZx5Sw12() {
 		Exception t = null;
@@ -4294,7 +4306,7 @@ public class YZ2Service extends YZService {
 		}
 		return new AsyncResult<Exception>(t);
 	}
-	
+
 	@Async
 	public Future<Exception> calFxZx6Sw4() {
 		Exception t = null;
@@ -4312,7 +4324,7 @@ public class YZ2Service extends YZService {
 		}
 		return new AsyncResult<Exception>(t);
 	}
-	
+
 	@Async
 	public Future<Exception> calFxZx6Sw5() {
 		Exception t = null;
@@ -4330,7 +4342,7 @@ public class YZ2Service extends YZService {
 		}
 		return new AsyncResult<Exception>(t);
 	}
-	
+
 	@Async
 	public Future<Exception> calFxZx6Sw6() {
 		Exception t = null;
@@ -4366,7 +4378,7 @@ public class YZ2Service extends YZService {
 		}
 		return new AsyncResult<Exception>(t);
 	}
-	
+
 	@Async
 	public Future<Exception> calFxZx6Sw8() {
 		Exception t = null;
@@ -4384,7 +4396,7 @@ public class YZ2Service extends YZService {
 		}
 		return new AsyncResult<Exception>(t);
 	}
-	
+
 	@Async
 	public Future<Exception> calFxZx6Sw9() {
 		Exception t = null;
@@ -4402,7 +4414,7 @@ public class YZ2Service extends YZService {
 		}
 		return new AsyncResult<Exception>(t);
 	}
-	
+
 	@Async
 	public Future<Exception> calFxZx6Sw10() {
 		Exception t = null;
@@ -4420,7 +4432,7 @@ public class YZ2Service extends YZService {
 		}
 		return new AsyncResult<Exception>(t);
 	}
-	
+
 	@Async
 	public Future<Exception> calFxZx6Sw11() {
 		Exception t = null;
@@ -4438,7 +4450,7 @@ public class YZ2Service extends YZService {
 		}
 		return new AsyncResult<Exception>(t);
 	}
-	
+
 	@Async
 	public Future<Exception> calFxZx6Sw12() {
 		Exception t = null;
@@ -4456,7 +4468,7 @@ public class YZ2Service extends YZService {
 		}
 		return new AsyncResult<Exception>(t);
 	}
-	
+
 	@Async
 	public Future<Exception> calFxZx7Sw1() {
 		Exception t = null;
@@ -4510,7 +4522,7 @@ public class YZ2Service extends YZService {
 		}
 		return new AsyncResult<Exception>(t);
 	}
-	
+
 	@Async
 	public Future<Exception> calFxZx7Sw4() {
 		Exception t = null;
@@ -4528,7 +4540,7 @@ public class YZ2Service extends YZService {
 		}
 		return new AsyncResult<Exception>(t);
 	}
-	
+
 	@Async
 	public Future<Exception> calFxZx7Sw5() {
 		Exception t = null;
@@ -4546,7 +4558,7 @@ public class YZ2Service extends YZService {
 		}
 		return new AsyncResult<Exception>(t);
 	}
-	
+
 	@Async
 	public Future<Exception> calFxZx7Sw6() {
 		Exception t = null;
@@ -4564,7 +4576,7 @@ public class YZ2Service extends YZService {
 		}
 		return new AsyncResult<Exception>(t);
 	}
-	
+
 	@Async
 	public Future<Exception> calFxZx7Sw7() {
 		Exception t = null;
@@ -4582,7 +4594,7 @@ public class YZ2Service extends YZService {
 		}
 		return new AsyncResult<Exception>(t);
 	}
-	
+
 	@Async
 	public Future<Exception> calFxZx7Sw8() {
 		Exception t = null;
@@ -4600,7 +4612,7 @@ public class YZ2Service extends YZService {
 		}
 		return new AsyncResult<Exception>(t);
 	}
-	
+
 	@Async
 	public Future<Exception> calFxZx7Sw9() {
 		Exception t = null;
@@ -4618,7 +4630,7 @@ public class YZ2Service extends YZService {
 		}
 		return new AsyncResult<Exception>(t);
 	}
-	
+
 	@Async
 	public Future<Exception> calFxZx7Sw10() {
 		Exception t = null;
@@ -4636,7 +4648,7 @@ public class YZ2Service extends YZService {
 		}
 		return new AsyncResult<Exception>(t);
 	}
-	
+
 	@Async
 	public Future<Exception> calFxZx8Sw1() {
 		Exception t = null;
@@ -4690,7 +4702,7 @@ public class YZ2Service extends YZService {
 		}
 		return new AsyncResult<Exception>(t);
 	}
-	
+
 	@Async
 	public Future<Exception> calFxZx8Sw4() {
 		Exception t = null;
@@ -4708,7 +4720,7 @@ public class YZ2Service extends YZService {
 		}
 		return new AsyncResult<Exception>(t);
 	}
-	
+
 	@Async
 	public Future<Exception> calFxZx8Sw5() {
 		Exception t = null;
@@ -4726,7 +4738,7 @@ public class YZ2Service extends YZService {
 		}
 		return new AsyncResult<Exception>(t);
 	}
-	
+
 	@Async
 	public Future<Exception> calFxZx8Sw6() {
 		Exception t = null;
@@ -4744,7 +4756,7 @@ public class YZ2Service extends YZService {
 		}
 		return new AsyncResult<Exception>(t);
 	}
-	
+
 	@Async
 	public Future<Exception> calFxZx8Sw7() {
 		Exception t = null;
@@ -4762,7 +4774,7 @@ public class YZ2Service extends YZService {
 		}
 		return new AsyncResult<Exception>(t);
 	}
-	
+
 	@Async
 	public Future<Exception> calFxZx8Sw8() {
 		Exception t = null;
@@ -4780,7 +4792,7 @@ public class YZ2Service extends YZService {
 		}
 		return new AsyncResult<Exception>(t);
 	}
-	
+
 	@Async
 	public Future<Exception> calFxZx8Sw9() {
 		Exception t = null;
@@ -4798,7 +4810,7 @@ public class YZ2Service extends YZService {
 		}
 		return new AsyncResult<Exception>(t);
 	}
-	
+
 	@Async
 	public Future<Exception> calFxZx8Sw10() {
 		Exception t = null;
@@ -4816,7 +4828,7 @@ public class YZ2Service extends YZService {
 		}
 		return new AsyncResult<Exception>(t);
 	}
-	
+
 	@Async
 	public Future<Exception> calFxZx9Sw1() {
 		Exception t = null;
@@ -4870,7 +4882,7 @@ public class YZ2Service extends YZService {
 		}
 		return new AsyncResult<Exception>(t);
 	}
-	
+
 	@Async
 	public Future<Exception> calFxZx9Sw4() {
 		Exception t = null;
@@ -4888,7 +4900,7 @@ public class YZ2Service extends YZService {
 		}
 		return new AsyncResult<Exception>(t);
 	}
-	
+
 	@Async
 	public Future<Exception> calFxZx9Sw5() {
 		Exception t = null;
@@ -4960,7 +4972,7 @@ public class YZ2Service extends YZService {
 		}
 		return new AsyncResult<Exception>(t);
 	}
-	
+
 	@Async
 	public Future<Exception> calFxZx10Sw4() {
 		Exception t = null;
@@ -4978,7 +4990,7 @@ public class YZ2Service extends YZService {
 		}
 		return new AsyncResult<Exception>(t);
 	}
-	
+
 	@Async
 	public Future<Exception> calFxZx10Sw5() {
 		Exception t = null;
@@ -4996,7 +5008,7 @@ public class YZ2Service extends YZService {
 		}
 		return new AsyncResult<Exception>(t);
 	}
-	
+
 	@Async
 	public Future<Exception> calFxZx10Sw6() {
 		Exception t = null;
@@ -5014,7 +5026,7 @@ public class YZ2Service extends YZService {
 		}
 		return new AsyncResult<Exception>(t);
 	}
-	
+
 	@Async
 	public Future<Exception> calFxZx10Sw7() {
 		Exception t = null;
@@ -5086,7 +5098,7 @@ public class YZ2Service extends YZService {
 		}
 		return new AsyncResult<Exception>(t);
 	}
-	
+
 	@Async
 	public Future<Exception> calFxZx11Sw4() {
 		Exception t = null;
@@ -5104,7 +5116,7 @@ public class YZ2Service extends YZService {
 		}
 		return new AsyncResult<Exception>(t);
 	}
-	
+
 	@Async
 	public Future<Exception> calFxZx11Sw5() {
 		Exception t = null;
@@ -5122,7 +5134,7 @@ public class YZ2Service extends YZService {
 		}
 		return new AsyncResult<Exception>(t);
 	}
-	
+
 	@Async
 	public Future<Exception> calFxZx11Sw6() {
 		Exception t = null;
@@ -5158,7 +5170,7 @@ public class YZ2Service extends YZService {
 		}
 		return new AsyncResult<Exception>(t);
 	}
-	
+
 	@Async
 	public Future<Exception> calFxZx11Sw8() {
 		Exception t = null;
@@ -5176,7 +5188,7 @@ public class YZ2Service extends YZService {
 		}
 		return new AsyncResult<Exception>(t);
 	}
-	
+
 	@Async
 	public Future<Exception> calFxZx11Sw9() {
 		Exception t = null;
@@ -5194,13 +5206,13 @@ public class YZ2Service extends YZService {
 		}
 		return new AsyncResult<Exception>(t);
 	}
-	
+
 	@Async
 	public Future<Exception> calFxZx11Sw10() {
 		Exception t = null;
 		try {
-			calFx(10, Zx11Yz.class, Zx11Nums.class, FxSw10.class, repositories.zx11yzRepository, repositories.fxsw10Repository,
-					new FxHandler(), "Zx11");
+			calFx(10, Zx11Yz.class, Zx11Nums.class, FxSw10.class, repositories.zx11yzRepository,
+					repositories.fxsw10Repository, new FxHandler(), "Zx11");
 			calFxZf(10, Zx11ZfYz.class, Zx11Yz.class, FxSw10.class, Zx11Nums.class, repositories.zx11zfyzRepository,
 					repositories.zx11yzRepository, repositories.fxsw10Repository, "Zx11", new FxZfHandler<Zx11Yz>());
 			logger.info("End of calFxZx11Sw10...");
@@ -5212,13 +5224,13 @@ public class YZ2Service extends YZService {
 		}
 		return new AsyncResult<Exception>(t);
 	}
-	
+
 	@Async
 	public Future<Exception> calFxZx11Sw11() {
 		Exception t = null;
 		try {
-			calFx(11, Zx11Yz.class, Zx11Nums.class, FxSw11.class, repositories.zx11yzRepository, repositories.fxsw11Repository,
-					new FxHandler(), "Zx11");
+			calFx(11, Zx11Yz.class, Zx11Nums.class, FxSw11.class, repositories.zx11yzRepository,
+					repositories.fxsw11Repository, new FxHandler(), "Zx11");
 			calFxZf(11, Zx11ZfYz.class, Zx11Yz.class, FxSw11.class, Zx11Nums.class, repositories.zx11zfyzRepository,
 					repositories.zx11yzRepository, repositories.fxsw11Repository, "Zx11", new FxZfHandler<Zx11Yz>());
 			logger.info("End of calFxZx11Sw11...");
@@ -5230,13 +5242,13 @@ public class YZ2Service extends YZService {
 		}
 		return new AsyncResult<Exception>(t);
 	}
-	
+
 	@Async
 	public Future<Exception> calFxZx11Sw12() {
 		Exception t = null;
 		try {
-			calFx(12, Zx11Yz.class, Zx11Nums.class, FxSw12.class, repositories.zx11yzRepository, repositories.fxsw12Repository,
-					new FxHandler(), "Zx11");
+			calFx(12, Zx11Yz.class, Zx11Nums.class, FxSw12.class, repositories.zx11yzRepository,
+					repositories.fxsw12Repository, new FxHandler(), "Zx11");
 			calFxZf(12, Zx11ZfYz.class, Zx11Yz.class, FxSw12.class, Zx11Nums.class, repositories.zx11zfyzRepository,
 					repositories.zx11yzRepository, repositories.fxsw12Repository, "Zx11", new FxZfHandler<Zx11Yz>());
 			logger.info("End of calFxZx11Sw12...");
@@ -5248,7 +5260,7 @@ public class YZ2Service extends YZService {
 		}
 		return new AsyncResult<Exception>(t);
 	}
-	
+
 	@Async
 	public Future<Exception> calFxZx12Sw1() {
 		Exception t = null;
@@ -5302,7 +5314,7 @@ public class YZ2Service extends YZService {
 		}
 		return new AsyncResult<Exception>(t);
 	}
-	
+
 	@Async
 	public Future<Exception> calFxZx12Sw4() {
 		Exception t = null;
@@ -5320,7 +5332,7 @@ public class YZ2Service extends YZService {
 		}
 		return new AsyncResult<Exception>(t);
 	}
-	
+
 	@Async
 	public Future<Exception> calFxZx12Sw5() {
 		Exception t = null;
@@ -5338,7 +5350,7 @@ public class YZ2Service extends YZService {
 		}
 		return new AsyncResult<Exception>(t);
 	}
-	
+
 	@Async
 	public Future<Exception> calFxZx12Sw6() {
 		Exception t = null;
@@ -5374,7 +5386,7 @@ public class YZ2Service extends YZService {
 		}
 		return new AsyncResult<Exception>(t);
 	}
-	
+
 	@Async
 	public Future<Exception> calFxZx12Sw8() {
 		Exception t = null;
@@ -5392,7 +5404,7 @@ public class YZ2Service extends YZService {
 		}
 		return new AsyncResult<Exception>(t);
 	}
-	
+
 	@Async
 	public Future<Exception> calFxZx12Sw9() {
 		Exception t = null;
@@ -5410,13 +5422,13 @@ public class YZ2Service extends YZService {
 		}
 		return new AsyncResult<Exception>(t);
 	}
-	
+
 	@Async
 	public Future<Exception> calFxZx12Sw10() {
 		Exception t = null;
 		try {
-			calFx(10, Zx12Yz.class, Zx12Nums.class, FxSw10.class, repositories.zx12yzRepository, repositories.fxsw10Repository,
-					new FxHandler(), "Zx12");
+			calFx(10, Zx12Yz.class, Zx12Nums.class, FxSw10.class, repositories.zx12yzRepository,
+					repositories.fxsw10Repository, new FxHandler(), "Zx12");
 			calFxZf(10, Zx12ZfYz.class, Zx12Yz.class, FxSw10.class, Zx12Nums.class, repositories.zx12zfyzRepository,
 					repositories.zx12yzRepository, repositories.fxsw10Repository, "Zx12", new FxZfHandler<Zx12Yz>());
 			logger.info("End of calFxZx12Sw10...");
@@ -5428,13 +5440,13 @@ public class YZ2Service extends YZService {
 		}
 		return new AsyncResult<Exception>(t);
 	}
-	
+
 	@Async
 	public Future<Exception> calFxZx12Sw11() {
 		Exception t = null;
 		try {
-			calFx(11, Zx12Yz.class, Zx12Nums.class, FxSw11.class, repositories.zx12yzRepository, repositories.fxsw11Repository,
-					new FxHandler(), "Zx12");
+			calFx(11, Zx12Yz.class, Zx12Nums.class, FxSw11.class, repositories.zx12yzRepository,
+					repositories.fxsw11Repository, new FxHandler(), "Zx12");
 			calFxZf(11, Zx12ZfYz.class, Zx12Yz.class, FxSw11.class, Zx12Nums.class, repositories.zx12zfyzRepository,
 					repositories.zx12yzRepository, repositories.fxsw11Repository, "Zx12", new FxZfHandler<Zx12Yz>());
 			logger.info("End of calFxZx12Sw11...");
@@ -5446,13 +5458,13 @@ public class YZ2Service extends YZService {
 		}
 		return new AsyncResult<Exception>(t);
 	}
-	
+
 	@Async
 	public Future<Exception> calFxZx12Sw12() {
 		Exception t = null;
 		try {
-			calFx(12, Zx12Yz.class, Zx12Nums.class, FxSw12.class, repositories.zx12yzRepository, repositories.fxsw12Repository,
-					new FxHandler(), "Zx12");
+			calFx(12, Zx12Yz.class, Zx12Nums.class, FxSw12.class, repositories.zx12yzRepository,
+					repositories.fxsw12Repository, new FxHandler(), "Zx12");
 			calFxZf(12, Zx12ZfYz.class, Zx12Yz.class, FxSw12.class, Zx12Nums.class, repositories.zx12zfyzRepository,
 					repositories.zx12yzRepository, repositories.fxsw12Repository, "Zx12", new FxZfHandler<Zx12Yz>());
 			logger.info("End of calFxZx12Sw12...");
@@ -5464,7 +5476,7 @@ public class YZ2Service extends YZService {
 		}
 		return new AsyncResult<Exception>(t);
 	}
-	
+
 	@Async
 	public Future<Exception> calFxZx13Sw1() {
 		Exception t = null;
@@ -5518,7 +5530,7 @@ public class YZ2Service extends YZService {
 		}
 		return new AsyncResult<Exception>(t);
 	}
-	
+
 	@Async
 	public Future<Exception> calFxZx13Sw4() {
 		Exception t = null;
@@ -5536,7 +5548,7 @@ public class YZ2Service extends YZService {
 		}
 		return new AsyncResult<Exception>(t);
 	}
-	
+
 	@Async
 	public Future<Exception> calFxZx13Sw5() {
 		Exception t = null;
@@ -5554,7 +5566,7 @@ public class YZ2Service extends YZService {
 		}
 		return new AsyncResult<Exception>(t);
 	}
-	
+
 	@Async
 	public Future<Exception> calFxZx13Sw6() {
 		Exception t = null;
@@ -5590,7 +5602,7 @@ public class YZ2Service extends YZService {
 		}
 		return new AsyncResult<Exception>(t);
 	}
-	
+
 	@Async
 	public Future<Exception> calFxZx13Sw8() {
 		Exception t = null;
@@ -5608,7 +5620,7 @@ public class YZ2Service extends YZService {
 		}
 		return new AsyncResult<Exception>(t);
 	}
-	
+
 	@Async
 	public Future<Exception> calFxZx13Sw9() {
 		Exception t = null;
@@ -5626,13 +5638,13 @@ public class YZ2Service extends YZService {
 		}
 		return new AsyncResult<Exception>(t);
 	}
-	
+
 	@Async
 	public Future<Exception> calFxZx13Sw10() {
 		Exception t = null;
 		try {
-			calFx(10, Zx13Yz.class, Zx13Nums.class, FxSw10.class, repositories.zx13yzRepository, repositories.fxsw10Repository,
-					new FxHandler(), "Zx13");
+			calFx(10, Zx13Yz.class, Zx13Nums.class, FxSw10.class, repositories.zx13yzRepository,
+					repositories.fxsw10Repository, new FxHandler(), "Zx13");
 			calFxZf(10, Zx13ZfYz.class, Zx13Yz.class, FxSw10.class, Zx13Nums.class, repositories.zx13zfyzRepository,
 					repositories.zx13yzRepository, repositories.fxsw10Repository, "Zx13", new FxZfHandler<Zx13Yz>());
 			logger.info("End of calFxZx13Sw10...");
@@ -5644,13 +5656,13 @@ public class YZ2Service extends YZService {
 		}
 		return new AsyncResult<Exception>(t);
 	}
-	
+
 	@Async
 	public Future<Exception> calFxZx13Sw11() {
 		Exception t = null;
 		try {
-			calFx(11, Zx13Yz.class, Zx13Nums.class, FxSw11.class, repositories.zx13yzRepository, repositories.fxsw11Repository,
-					new FxHandler(), "Zx13");
+			calFx(11, Zx13Yz.class, Zx13Nums.class, FxSw11.class, repositories.zx13yzRepository,
+					repositories.fxsw11Repository, new FxHandler(), "Zx13");
 			calFxZf(11, Zx13ZfYz.class, Zx13Yz.class, FxSw11.class, Zx13Nums.class, repositories.zx13zfyzRepository,
 					repositories.zx13yzRepository, repositories.fxsw11Repository, "Zx13", new FxZfHandler<Zx13Yz>());
 			logger.info("End of calFxZx13Sw11...");
@@ -5662,13 +5674,13 @@ public class YZ2Service extends YZService {
 		}
 		return new AsyncResult<Exception>(t);
 	}
-	
+
 	@Async
 	public Future<Exception> calFxZx13Sw12() {
 		Exception t = null;
 		try {
-			calFx(12, Zx13Yz.class, Zx13Nums.class, FxSw12.class, repositories.zx13yzRepository, repositories.fxsw12Repository,
-					new FxHandler(), "Zx13");
+			calFx(12, Zx13Yz.class, Zx13Nums.class, FxSw12.class, repositories.zx13yzRepository,
+					repositories.fxsw12Repository, new FxHandler(), "Zx13");
 			calFxZf(12, Zx13ZfYz.class, Zx13Yz.class, FxSw12.class, Zx13Nums.class, repositories.zx13zfyzRepository,
 					repositories.zx13yzRepository, repositories.fxsw12Repository, "Zx13", new FxZfHandler<Zx13Yz>());
 			logger.info("End of calFxZx13Sw12...");
@@ -5734,7 +5746,7 @@ public class YZ2Service extends YZService {
 		}
 		return new AsyncResult<Exception>(t);
 	}
-	
+
 	@Async
 	public Future<Exception> calFxZx14Sw4() {
 		Exception t = null;
@@ -5752,7 +5764,7 @@ public class YZ2Service extends YZService {
 		}
 		return new AsyncResult<Exception>(t);
 	}
-	
+
 	@Async
 	public Future<Exception> calFxZx14Sw5() {
 		Exception t = null;
@@ -5770,7 +5782,7 @@ public class YZ2Service extends YZService {
 		}
 		return new AsyncResult<Exception>(t);
 	}
-	
+
 	@Async
 	public Future<Exception> calFxZx14Sw6() {
 		Exception t = null;
@@ -5806,7 +5818,7 @@ public class YZ2Service extends YZService {
 		}
 		return new AsyncResult<Exception>(t);
 	}
-	
+
 	@Async
 	public Future<Exception> calFxZx14Sw8() {
 		Exception t = null;
@@ -5824,7 +5836,7 @@ public class YZ2Service extends YZService {
 		}
 		return new AsyncResult<Exception>(t);
 	}
-	
+
 	@Async
 	public Future<Exception> calFxZx14Sw9() {
 		Exception t = null;
@@ -5842,13 +5854,13 @@ public class YZ2Service extends YZService {
 		}
 		return new AsyncResult<Exception>(t);
 	}
-	
+
 	@Async
 	public Future<Exception> calFxZx14Sw10() {
 		Exception t = null;
 		try {
-			calFx(10, Zx14Yz.class, Zx14Nums.class, FxSw10.class, repositories.zx14yzRepository, repositories.fxsw10Repository,
-					new FxHandler(), "Zx14");
+			calFx(10, Zx14Yz.class, Zx14Nums.class, FxSw10.class, repositories.zx14yzRepository,
+					repositories.fxsw10Repository, new FxHandler(), "Zx14");
 			calFxZf(10, Zx14ZfYz.class, Zx14Yz.class, FxSw10.class, Zx14Nums.class, repositories.zx14zfyzRepository,
 					repositories.zx14yzRepository, repositories.fxsw10Repository, "Zx14", new FxZfHandler<Zx14Yz>());
 			logger.info("End of calFxZx14Sw10...");
@@ -5860,13 +5872,13 @@ public class YZ2Service extends YZService {
 		}
 		return new AsyncResult<Exception>(t);
 	}
-	
+
 	@Async
 	public Future<Exception> calFxZx14Sw11() {
 		Exception t = null;
 		try {
-			calFx(11, Zx14Yz.class, Zx14Nums.class, FxSw11.class, repositories.zx14yzRepository, repositories.fxsw11Repository,
-					new FxHandler(), "Zx14");
+			calFx(11, Zx14Yz.class, Zx14Nums.class, FxSw11.class, repositories.zx14yzRepository,
+					repositories.fxsw11Repository, new FxHandler(), "Zx14");
 			calFxZf(11, Zx14ZfYz.class, Zx14Yz.class, FxSw11.class, Zx14Nums.class, repositories.zx14zfyzRepository,
 					repositories.zx14yzRepository, repositories.fxsw11Repository, "Zx14", new FxZfHandler<Zx14Yz>());
 			logger.info("End of calFxZx14Sw11...");
@@ -5878,13 +5890,13 @@ public class YZ2Service extends YZService {
 		}
 		return new AsyncResult<Exception>(t);
 	}
-	
+
 	@Async
 	public Future<Exception> calFxZx14Sw12() {
 		Exception t = null;
 		try {
-			calFx(12, Zx14Yz.class, Zx14Nums.class, FxSw12.class, repositories.zx14yzRepository, repositories.fxsw12Repository,
-					new FxHandler(), "Zx14");
+			calFx(12, Zx14Yz.class, Zx14Nums.class, FxSw12.class, repositories.zx14yzRepository,
+					repositories.fxsw12Repository, new FxHandler(), "Zx14");
 			calFxZf(12, Zx14ZfYz.class, Zx14Yz.class, FxSw12.class, Zx14Nums.class, repositories.zx14zfyzRepository,
 					repositories.zx14yzRepository, repositories.fxsw12Repository, "Zx14", new FxZfHandler<Zx14Yz>());
 			logger.info("End of calFxZx14Sw12...");
@@ -5950,7 +5962,7 @@ public class YZ2Service extends YZService {
 		}
 		return new AsyncResult<Exception>(t);
 	}
-	
+
 	@Async
 	public Future<Exception> calFxZx15Sw4() {
 		Exception t = null;
@@ -5968,7 +5980,7 @@ public class YZ2Service extends YZService {
 		}
 		return new AsyncResult<Exception>(t);
 	}
-	
+
 	@Async
 	public Future<Exception> calFxZx15Sw5() {
 		Exception t = null;
@@ -5986,7 +5998,7 @@ public class YZ2Service extends YZService {
 		}
 		return new AsyncResult<Exception>(t);
 	}
-	
+
 	@Async
 	public Future<Exception> calFxZx15Sw6() {
 		Exception t = null;
@@ -6022,7 +6034,7 @@ public class YZ2Service extends YZService {
 		}
 		return new AsyncResult<Exception>(t);
 	}
-	
+
 	@Async
 	public Future<Exception> calFxZx15Sw8() {
 		Exception t = null;
@@ -6040,7 +6052,7 @@ public class YZ2Service extends YZService {
 		}
 		return new AsyncResult<Exception>(t);
 	}
-	
+
 	@Async
 	public Future<Exception> calFxZx15Sw9() {
 		Exception t = null;
@@ -6058,13 +6070,13 @@ public class YZ2Service extends YZService {
 		}
 		return new AsyncResult<Exception>(t);
 	}
-	
+
 	@Async
 	public Future<Exception> calFxZx15Sw10() {
 		Exception t = null;
 		try {
-			calFx(10, Zx15Yz.class, Zx15Nums.class, FxSw10.class, repositories.zx15yzRepository, repositories.fxsw10Repository,
-					new FxHandler(), "Zx15");
+			calFx(10, Zx15Yz.class, Zx15Nums.class, FxSw10.class, repositories.zx15yzRepository,
+					repositories.fxsw10Repository, new FxHandler(), "Zx15");
 			calFxZf(10, Zx15ZfYz.class, Zx15Yz.class, FxSw10.class, Zx15Nums.class, repositories.zx15zfyzRepository,
 					repositories.zx15yzRepository, repositories.fxsw10Repository, "Zx15", new FxZfHandler<Zx15Yz>());
 			logger.info("End of calFxZx15Sw10...");
@@ -6076,13 +6088,13 @@ public class YZ2Service extends YZService {
 		}
 		return new AsyncResult<Exception>(t);
 	}
-	
+
 	@Async
 	public Future<Exception> calFxZx15Sw11() {
 		Exception t = null;
 		try {
-			calFx(11, Zx15Yz.class, Zx15Nums.class, FxSw11.class, repositories.zx15yzRepository, repositories.fxsw11Repository,
-					new FxHandler(), "Zx15");
+			calFx(11, Zx15Yz.class, Zx15Nums.class, FxSw11.class, repositories.zx15yzRepository,
+					repositories.fxsw11Repository, new FxHandler(), "Zx15");
 			calFxZf(11, Zx15ZfYz.class, Zx15Yz.class, FxSw11.class, Zx15Nums.class, repositories.zx15zfyzRepository,
 					repositories.zx15yzRepository, repositories.fxsw11Repository, "Zx15", new FxZfHandler<Zx15Yz>());
 			logger.info("End of calFxZx15Sw11...");
@@ -6094,13 +6106,13 @@ public class YZ2Service extends YZService {
 		}
 		return new AsyncResult<Exception>(t);
 	}
-	
+
 	@Async
 	public Future<Exception> calFxZx15Sw12() {
 		Exception t = null;
 		try {
-			calFx(12, Zx15Yz.class, Zx15Nums.class, FxSw12.class, repositories.zx15yzRepository, repositories.fxsw12Repository,
-					new FxHandler(), "Zx15");
+			calFx(12, Zx15Yz.class, Zx15Nums.class, FxSw12.class, repositories.zx15yzRepository,
+					repositories.fxsw12Repository, new FxHandler(), "Zx15");
 			calFxZf(12, Zx15ZfYz.class, Zx15Yz.class, FxSw12.class, Zx15Nums.class, repositories.zx15zfyzRepository,
 					repositories.zx15yzRepository, repositories.fxsw12Repository, "Zx15", new FxZfHandler<Zx15Yz>());
 			logger.info("End of calFxZx15Sw12...");
@@ -6166,7 +6178,7 @@ public class YZ2Service extends YZService {
 		}
 		return new AsyncResult<Exception>(t);
 	}
-	
+
 	@Async
 	public Future<Exception> calFxZx16Sw4() {
 		Exception t = null;
@@ -6184,7 +6196,7 @@ public class YZ2Service extends YZService {
 		}
 		return new AsyncResult<Exception>(t);
 	}
-	
+
 	@Async
 	public Future<Exception> calFxZx16Sw5() {
 		Exception t = null;
@@ -6202,7 +6214,7 @@ public class YZ2Service extends YZService {
 		}
 		return new AsyncResult<Exception>(t);
 	}
-	
+
 	@Async
 	public Future<Exception> calFxZx16Sw6() {
 		Exception t = null;
@@ -6238,7 +6250,7 @@ public class YZ2Service extends YZService {
 		}
 		return new AsyncResult<Exception>(t);
 	}
-	
+
 	@Async
 	public Future<Exception> calFxZx16Sw8() {
 		Exception t = null;
@@ -6256,7 +6268,7 @@ public class YZ2Service extends YZService {
 		}
 		return new AsyncResult<Exception>(t);
 	}
-	
+
 	@Async
 	public Future<Exception> calFxZx16Sw9() {
 		Exception t = null;
@@ -6274,13 +6286,13 @@ public class YZ2Service extends YZService {
 		}
 		return new AsyncResult<Exception>(t);
 	}
-	
+
 	@Async
 	public Future<Exception> calFxZx16Sw10() {
 		Exception t = null;
 		try {
-			calFx(10, Zx16Yz.class, Zx16Nums.class, FxSw10.class, repositories.zx16yzRepository, repositories.fxsw10Repository,
-					new FxHandler(), "Zx16");
+			calFx(10, Zx16Yz.class, Zx16Nums.class, FxSw10.class, repositories.zx16yzRepository,
+					repositories.fxsw10Repository, new FxHandler(), "Zx16");
 			calFxZf(10, Zx16ZfYz.class, Zx16Yz.class, FxSw10.class, Zx16Nums.class, repositories.zx16zfyzRepository,
 					repositories.zx16yzRepository, repositories.fxsw10Repository, "Zx16", new FxZfHandler<Zx16Yz>());
 			logger.info("End of calFxZx16Sw10...");
@@ -6292,13 +6304,13 @@ public class YZ2Service extends YZService {
 		}
 		return new AsyncResult<Exception>(t);
 	}
-	
+
 	@Async
 	public Future<Exception> calFxZx16Sw11() {
 		Exception t = null;
 		try {
-			calFx(11, Zx16Yz.class, Zx16Nums.class, FxSw11.class, repositories.zx16yzRepository, repositories.fxsw11Repository,
-					new FxHandler(), "Zx16");
+			calFx(11, Zx16Yz.class, Zx16Nums.class, FxSw11.class, repositories.zx16yzRepository,
+					repositories.fxsw11Repository, new FxHandler(), "Zx16");
 			calFxZf(11, Zx16ZfYz.class, Zx16Yz.class, FxSw11.class, Zx16Nums.class, repositories.zx16zfyzRepository,
 					repositories.zx16yzRepository, repositories.fxsw11Repository, "Zx16", new FxZfHandler<Zx16Yz>());
 			logger.info("End of calFxZx16Sw11...");
@@ -6310,13 +6322,13 @@ public class YZ2Service extends YZService {
 		}
 		return new AsyncResult<Exception>(t);
 	}
-	
+
 	@Async
 	public Future<Exception> calFxZx16Sw12() {
 		Exception t = null;
 		try {
-			calFx(12, Zx16Yz.class, Zx16Nums.class, FxSw12.class, repositories.zx16yzRepository, repositories.fxsw12Repository,
-					new FxHandler(), "Zx16");
+			calFx(12, Zx16Yz.class, Zx16Nums.class, FxSw12.class, repositories.zx16yzRepository,
+					repositories.fxsw12Repository, new FxHandler(), "Zx16");
 			calFxZf(12, Zx16ZfYz.class, Zx16Yz.class, FxSw12.class, Zx16Nums.class, repositories.zx16zfyzRepository,
 					repositories.zx16yzRepository, repositories.fxsw12Repository, "Zx16", new FxZfHandler<Zx16Yz>());
 			logger.info("End of calFxZx16Sw12...");
@@ -6382,7 +6394,7 @@ public class YZ2Service extends YZService {
 		}
 		return new AsyncResult<Exception>(t);
 	}
-	
+
 	@Async
 	public Future<Exception> calFxZx17Sw4() {
 		Exception t = null;
@@ -6400,7 +6412,7 @@ public class YZ2Service extends YZService {
 		}
 		return new AsyncResult<Exception>(t);
 	}
-	
+
 	@Async
 	public Future<Exception> calFxZx17Sw5() {
 		Exception t = null;
@@ -6418,7 +6430,7 @@ public class YZ2Service extends YZService {
 		}
 		return new AsyncResult<Exception>(t);
 	}
-	
+
 	@Async
 	public Future<Exception> calFxZx17Sw6() {
 		Exception t = null;
@@ -6454,7 +6466,7 @@ public class YZ2Service extends YZService {
 		}
 		return new AsyncResult<Exception>(t);
 	}
-	
+
 	@Async
 	public Future<Exception> calFxZx17Sw8() {
 		Exception t = null;
@@ -6472,7 +6484,7 @@ public class YZ2Service extends YZService {
 		}
 		return new AsyncResult<Exception>(t);
 	}
-	
+
 	@Async
 	public Future<Exception> calFxZx17Sw9() {
 		Exception t = null;
@@ -6490,13 +6502,13 @@ public class YZ2Service extends YZService {
 		}
 		return new AsyncResult<Exception>(t);
 	}
-	
+
 	@Async
 	public Future<Exception> calFxZx17Sw10() {
 		Exception t = null;
 		try {
-			calFx(10, Zx17Yz.class, Zx17Nums.class, FxSw10.class, repositories.zx17yzRepository, repositories.fxsw10Repository,
-					new FxHandler(), "Zx17");
+			calFx(10, Zx17Yz.class, Zx17Nums.class, FxSw10.class, repositories.zx17yzRepository,
+					repositories.fxsw10Repository, new FxHandler(), "Zx17");
 			calFxZf(10, Zx17ZfYz.class, Zx17Yz.class, FxSw10.class, Zx17Nums.class, repositories.zx17zfyzRepository,
 					repositories.zx17yzRepository, repositories.fxsw10Repository, "Zx17", new FxZfHandler<Zx17Yz>());
 			logger.info("End of calFxZx17Sw10...");
@@ -6508,13 +6520,13 @@ public class YZ2Service extends YZService {
 		}
 		return new AsyncResult<Exception>(t);
 	}
-	
+
 	@Async
 	public Future<Exception> calFxZx17Sw11() {
 		Exception t = null;
 		try {
-			calFx(11, Zx17Yz.class, Zx17Nums.class, FxSw11.class, repositories.zx17yzRepository, repositories.fxsw11Repository,
-					new FxHandler(), "Zx17");
+			calFx(11, Zx17Yz.class, Zx17Nums.class, FxSw11.class, repositories.zx17yzRepository,
+					repositories.fxsw11Repository, new FxHandler(), "Zx17");
 			calFxZf(11, Zx17ZfYz.class, Zx17Yz.class, FxSw11.class, Zx17Nums.class, repositories.zx17zfyzRepository,
 					repositories.zx17yzRepository, repositories.fxsw11Repository, "Zx17", new FxZfHandler<Zx17Yz>());
 			logger.info("End of calFxZx17Sw11...");
@@ -6526,13 +6538,13 @@ public class YZ2Service extends YZService {
 		}
 		return new AsyncResult<Exception>(t);
 	}
-	
+
 	@Async
 	public Future<Exception> calFxZx17Sw12() {
 		Exception t = null;
 		try {
-			calFx(12, Zx17Yz.class, Zx17Nums.class, FxSw12.class, repositories.zx17yzRepository, repositories.fxsw12Repository,
-					new FxHandler(), "Zx17");
+			calFx(12, Zx17Yz.class, Zx17Nums.class, FxSw12.class, repositories.zx17yzRepository,
+					repositories.fxsw12Repository, new FxHandler(), "Zx17");
 			calFxZf(12, Zx17ZfYz.class, Zx17Yz.class, FxSw12.class, Zx17Nums.class, repositories.zx17zfyzRepository,
 					repositories.zx17yzRepository, repositories.fxsw12Repository, "Zx17", new FxZfHandler<Zx17Yz>());
 			logger.info("End of calFxZx17Sw12...");
@@ -6598,7 +6610,7 @@ public class YZ2Service extends YZService {
 		}
 		return new AsyncResult<Exception>(t);
 	}
-	
+
 	@Async
 	public Future<Exception> calFxZx18Sw4() {
 		Exception t = null;
@@ -6616,7 +6628,7 @@ public class YZ2Service extends YZService {
 		}
 		return new AsyncResult<Exception>(t);
 	}
-	
+
 	@Async
 	public Future<Exception> calFxZx18Sw5() {
 		Exception t = null;
@@ -6634,7 +6646,7 @@ public class YZ2Service extends YZService {
 		}
 		return new AsyncResult<Exception>(t);
 	}
-	
+
 	@Async
 	public Future<Exception> calFxZx18Sw6() {
 		Exception t = null;
@@ -6670,7 +6682,7 @@ public class YZ2Service extends YZService {
 		}
 		return new AsyncResult<Exception>(t);
 	}
-	
+
 	@Async
 	public Future<Exception> calFxZx18Sw8() {
 		Exception t = null;
@@ -6688,7 +6700,7 @@ public class YZ2Service extends YZService {
 		}
 		return new AsyncResult<Exception>(t);
 	}
-	
+
 	@Async
 	public Future<Exception> calFxZx18Sw9() {
 		Exception t = null;
@@ -6706,13 +6718,13 @@ public class YZ2Service extends YZService {
 		}
 		return new AsyncResult<Exception>(t);
 	}
-	
+
 	@Async
 	public Future<Exception> calFxZx18Sw10() {
 		Exception t = null;
 		try {
-			calFx(10, Zx18Yz.class, Zx18Nums.class, FxSw10.class, repositories.zx18yzRepository, repositories.fxsw10Repository,
-					new FxHandler(), "Zx18");
+			calFx(10, Zx18Yz.class, Zx18Nums.class, FxSw10.class, repositories.zx18yzRepository,
+					repositories.fxsw10Repository, new FxHandler(), "Zx18");
 			calFxZf(10, Zx18ZfYz.class, Zx18Yz.class, FxSw10.class, Zx18Nums.class, repositories.zx18zfyzRepository,
 					repositories.zx18yzRepository, repositories.fxsw10Repository, "Zx18", new FxZfHandler<Zx18Yz>());
 			logger.info("End of calFxZx18Sw10...");
@@ -6724,13 +6736,13 @@ public class YZ2Service extends YZService {
 		}
 		return new AsyncResult<Exception>(t);
 	}
-	
+
 	@Async
 	public Future<Exception> calFxZx18Sw11() {
 		Exception t = null;
 		try {
-			calFx(11, Zx18Yz.class, Zx18Nums.class, FxSw11.class, repositories.zx18yzRepository, repositories.fxsw11Repository,
-					new FxHandler(), "Zx18");
+			calFx(11, Zx18Yz.class, Zx18Nums.class, FxSw11.class, repositories.zx18yzRepository,
+					repositories.fxsw11Repository, new FxHandler(), "Zx18");
 			calFxZf(11, Zx18ZfYz.class, Zx18Yz.class, FxSw11.class, Zx18Nums.class, repositories.zx18zfyzRepository,
 					repositories.zx18yzRepository, repositories.fxsw11Repository, "Zx18", new FxZfHandler<Zx18Yz>());
 			logger.info("End of calFxZx18Sw11...");
@@ -6742,13 +6754,13 @@ public class YZ2Service extends YZService {
 		}
 		return new AsyncResult<Exception>(t);
 	}
-	
+
 	@Async
 	public Future<Exception> calFxZx18Sw12() {
 		Exception t = null;
 		try {
-			calFx(12, Zx18Yz.class, Zx18Nums.class, FxSw12.class, repositories.zx18yzRepository, repositories.fxsw12Repository,
-					new FxHandler(), "Zx18");
+			calFx(12, Zx18Yz.class, Zx18Nums.class, FxSw12.class, repositories.zx18yzRepository,
+					repositories.fxsw12Repository, new FxHandler(), "Zx18");
 			calFxZf(12, Zx18ZfYz.class, Zx18Yz.class, FxSw12.class, Zx18Nums.class, repositories.zx18zfyzRepository,
 					repositories.zx18yzRepository, repositories.fxsw12Repository, "Zx18", new FxZfHandler<Zx18Yz>());
 			logger.info("End of calFxZx18Sw12...");
@@ -6909,7 +6921,7 @@ public class YZ2Service extends YZService {
 		}
 		return new AsyncResult<Exception>(t);
 	}
-	
+
 	@Async
 	public Future<Exception> calFxSw4() {
 		Exception t = null;
@@ -6957,7 +6969,7 @@ public class YZ2Service extends YZService {
 		}
 		return new AsyncResult<Exception>(t);
 	}
-	
+
 	@Async
 	public Future<Exception> calFxSw5() {
 		Exception t = null;
@@ -7005,7 +7017,7 @@ public class YZ2Service extends YZService {
 		}
 		return new AsyncResult<Exception>(t);
 	}
-	
+
 	@Async
 	public Future<Exception> calFxSw6() {
 		Exception t = null;
@@ -7050,7 +7062,7 @@ public class YZ2Service extends YZService {
 		}
 		return new AsyncResult<Exception>(t);
 	}
-	
+
 	@Async
 	public Future<Exception> calFxSw7() {
 		Exception t = null;
@@ -7095,7 +7107,7 @@ public class YZ2Service extends YZService {
 		}
 		return new AsyncResult<Exception>(t);
 	}
-	
+
 	@Async
 	public Future<Exception> calFxSw8() {
 		Exception t = null;
@@ -7137,7 +7149,7 @@ public class YZ2Service extends YZService {
 		}
 		return new AsyncResult<Exception>(t);
 	}
-	
+
 	@Async
 	public Future<Exception> calFxSw9() {
 		Exception t = null;
@@ -7179,7 +7191,7 @@ public class YZ2Service extends YZService {
 		}
 		return new AsyncResult<Exception>(t);
 	}
-	
+
 	@Async
 	public Future<Exception> calFxSw10() {
 		Exception t = null;
@@ -7219,7 +7231,7 @@ public class YZ2Service extends YZService {
 		}
 		return new AsyncResult<Exception>(t);
 	}
-	
+
 	@Async
 	public Future<Exception> calFxSw11() {
 		Exception t = null;
@@ -7253,7 +7265,7 @@ public class YZ2Service extends YZService {
 		}
 		return new AsyncResult<Exception>(t);
 	}
-	
+
 	@Async
 	public Future<Exception> calFxSw12() {
 		Exception t = null;
