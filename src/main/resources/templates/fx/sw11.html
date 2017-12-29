@@ -1,0 +1,270 @@
+<!doctype html>
+<html xmlns:th="http://www.thymeleaf.org">
+<body>
+	<div id="page-wrapper" th:fragment="content">
+		<div class="row">
+			<div class="col-lg-12">
+				<h3 class="page-header">分析-顺11-遗值列表</h3>
+				<div class="buttonArea">
+					<span class="title">截止年份:</span><select id="years"></select>
+					<span class="title">截止期数:</span><select id="phases"></select>
+					<span class="title">显示/隐藏:</span>
+					<select id="columns">
+						<option value="-2">七区/七位/杂10</option>
+						<option value="-1">首位/五行/杂9</option>
+						<option value="0">所有遗值</option>
+						<option value="1">所有振幅</option>
+						<option value="2">生肖</option>
+						<option value="3">生肖振幅</option>
+						<option value="4">单双</option>
+						<option value="5">单双振幅</option>
+						<option value="6">首位</option>
+						<option value="7">首位振幅</option>
+						<option value="8">末位</option>
+						<option value="9">末位振幅</option>
+						<option value="10">合数</option>
+						<option value="11">合数振幅</option>
+						<option value="12">波色</option>
+						<option value="13">波色振幅</option>
+						<option value="14">质数</option>
+						<option value="15">质数振幅</option>
+						<option value="16">五行</option>
+						<option value="17">五行振幅</option>
+						<option value="18">五行单双</option>
+						<option value="19">五行单双振幅</option>
+						<option value="20">配对</option>
+						<option value="21">配对振幅</option>
+						<option value="22">分段</option>
+						<option value="23">分段振幅</option>
+						<option value="24">七区</option>
+						<option value="25">七区振幅</option>
+						<option value="26">七位</option>
+						<option value="27">七位振幅</option>
+						<option value="28">十二区</option>
+						<option value="29">十二区振幅</option>
+						<option value="30">十六区</option>
+						<option value="31">十六区振幅</option>
+						<option value="32">杂项1</option>
+						<option value="33">杂项1振幅</option>
+						<option value="34">杂项2</option>
+						<option value="35">杂项2振幅</option>
+						<option value="36">杂项3</option>
+						<option value="37">杂项3振幅</option>
+						<option value="38">杂项4</option>
+						<option value="39">杂项4振幅</option>
+						<option value="40">杂项5</option>
+						<option value="41">杂项5振幅</option>
+						<option value="42">杂项6</option>
+						<option value="43">杂项6振幅</option>
+						<option value="44">杂项7</option>
+						<option value="45">杂项7振幅</option>
+						<option value="46">杂项8</option>
+						<option value="47">杂项8振幅</option>
+						<option value="48">杂项9</option>
+						<option value="49">杂项9振幅</option>
+						<option value="50">杂项10</option>
+						<option value="51">杂项10振幅</option>
+						<option value="52">杂项11</option>
+						<option value="53">杂项11振幅</option>
+						<option value="54">杂项12</option>
+						<option value="55">杂项12振幅</option>
+						<option value="56">杂项13</option>
+						<option value="57">杂项13振幅</option>
+						<option value="58">杂项14</option>
+						<option value="59">杂项14振幅</option>
+						<option value="60">杂项15</option>
+						<option value="61">杂项15振幅</option>
+						<option value="62">杂项16</option>
+						<option value="63">杂项16振幅</option>
+						<option value="64">杂项17</option>
+						<option value="65">杂项17振幅</option>
+						<option value="66">杂项18</option>
+						<option value="67">杂项18振幅</option>
+					</select>
+					<button id="downloadBtn" class="btn btn-success">导出</button>
+					<button id="calYZBtn" class="btn btn-info">遗值计算</button>
+					<button id="searchBtn" class="btn btn-primary">搜索</button>
+					<button id="showOrHideBtn" class="btn btn-primary">显示/隐藏</button>
+					<div class="clearfix"></div>
+					<form id="download" name="download" action="/mvc/yz/downloadFXSW" class="hidden">
+						<input type="hidden" name="pos" value="11" />
+						<input id="size" type="hidden" name="size" />
+						<input id="endYear" type="hidden" name="year" />
+						<input id="endPhase" type="hidden" name="phase" />
+						<input id="yearList" type="hidden" name="years" />
+						<input id="phaseList" type="hidden" name="phases" />
+						<input id="counts01" type="hidden" name="counts01" />
+						<input id="countsTotals" type="hidden" name="countsTotals" />
+						<input id="fzNums" type="hidden" name="fzNums" />
+						<input id="continuosCounts" type="hidden" name="continuosCounts" />
+					</form>
+				</div>
+			</div>
+		</div>
+
+		<div class="row">
+			<div class="col-lg-12">
+				<table width="4500"
+					class="table table-striped table-bordered table-hover"
+					id="dataTable">
+					<thead>
+						<tr>
+							<th>年份</th>
+							<th>期数</th>
+							<th zf="false">生肖</th>
+							<th zf="true">生肖振幅</th>
+							<th zf="false">单双</th>
+							<th zf="true">单双振幅</th>
+							<th zf="false">首位</th>
+							<th zf="true">首位振幅</th>
+							<th zf="false">末位</th>
+							<th zf="true">末位振幅</th>
+							<th zf="false">合数</th>
+							<th zf="true">合数振幅</th>
+							<th zf="false">波色</th>
+							<th zf="true">波色振幅</th>
+							<th zf="false">质数</th>
+							<th zf="true">质数振幅</th>
+							<th zf="false">五行</th>
+							<th zf="true">五行振幅</th>
+							<th zf="false">五行单双</th>
+							<th zf="true">五行单双振幅</th>
+							<th zf="false">配对</th>
+							<th zf="true">配对振幅</th>
+							<th zf="false">分段</th>
+							<th zf="true">分段振幅</th>
+							<th zf="false">七区</th>
+							<th zf="true">七区振幅</th>
+							<th zf="false">七位</th>
+							<th zf="true">七位振幅</th>
+							<th zf="false">十二区</th>
+							<th zf="true">十二区振幅</th>
+							<th zf="false">十六区</th>
+							<th zf="true">十六区振幅</th>
+							<th zf="false">杂项1</th>
+							<th zf="true">杂项1振幅</th>
+							<th zf="false">杂项2</th>
+							<th zf="true">杂项2振幅</th>
+							<th zf="false">杂项3</th>
+							<th zf="true">杂项3振幅</th>
+							<th zf="false">杂项4</th>
+							<th zf="true">杂项4振幅</th>
+							<th zf="false">杂项5</th>
+							<th zf="true">杂项5振幅</th>
+							<th zf="false">杂项6</th>
+							<th zf="true">杂项6振幅</th>
+							<th zf="false">杂项7</th>
+							<th zf="true">杂项7振幅</th>
+							<th zf="false">杂项8</th>
+							<th zf="true">杂项8振幅</th>
+							<th zf="false">杂项9</th>
+							<th zf="true">杂项9振幅</th>
+							<th zf="false">杂项10</th>
+							<th zf="true">杂项10振幅</th>
+							<th zf="false">杂项11</th>
+							<th zf="true">杂项11振幅</th>
+							<th zf="false">杂项12</th>
+							<th zf="true">杂项12振幅</th>
+							<th zf="false">杂项13</th>
+							<th zf="true">杂项13振幅</th>
+							<th zf="false">杂项14</th>
+							<th zf="true">杂项14振幅</th>
+							<th zf="false">杂项15</th>
+							<th zf="true">杂项15振幅</th>
+							<th zf="false">杂项16</th>
+							<th zf="true">杂项16振幅</th>
+							<th zf="false">杂项17</th>
+							<th zf="true">杂项17振幅</th>
+							<th zf="false">杂项18</th>
+							<th zf="true">杂项18振幅</th>
+							<th>计数(0/1)</th>
+							<th>计数</th>
+							<th>连续计数(0/1)</th>
+							<th>反转个数</th>
+							<th width="500">反转</th>
+						</tr>
+					</thead>
+					<tfoot>
+						<tr>
+							<td>年份</td>
+							<td>期数</td>
+							<td zf="false">生肖</td>
+							<td zf="true">生肖振幅</td>
+							<td zf="false">单双</td>
+							<td zf="true">单双振幅</td>
+							<td zf="false">首位</td>
+							<td zf="true">首位振幅</td>
+							<td zf="false">末位</td>
+							<td zf="true">末位振幅</td>
+							<td zf="false">合数</td>
+							<td zf="true">合数振幅</td>
+							<td zf="false">波色</td>
+							<td zf="true">波色振幅</td>
+							<td zf="false">质数</td>
+							<td zf="true">质数振幅</td>
+							<td zf="false">五行</td>
+							<td zf="true">五行振幅</td>
+							<td zf="false">五行单双</td>
+							<td zf="true">五行单双振幅</td>
+							<td zf="false">配对</td>
+							<td zf="true">配对振幅</td>
+							<td zf="false">分段</td>
+							<td zf="true">分段振幅</td>
+							<td zf="false">七区</td>
+							<td zf="true">七区振幅</td>
+							<td zf="false">七位</td>
+							<td zf="true">七位振幅</td>
+							<td zf="false">十二区</td>
+							<td zf="true">十二区振幅</td>
+							<td zf="false">十六区</td>
+							<td zf="true">十六区振幅</td>
+							<td zf="false">杂项1</td>
+							<td zf="true">杂项1振幅</td>
+							<td zf="false">杂项2</td>
+							<td zf="true">杂项2振幅</td>
+							<td zf="false">杂项3</td>
+							<td zf="true">杂项3振幅</td>
+							<td zf="false">杂项4</td>
+							<td zf="true">杂项4振幅</td>
+							<td zf="false">杂项5</td>
+							<td zf="true">杂项5振幅</td>
+							<td zf="false">杂项6</td>
+							<td zf="true">杂项6振幅</td>
+							<td zf="false">杂项7</td>
+							<td zf="true">杂项7振幅</td>
+							<td zf="false">杂项8</td>
+							<td zf="true">杂项8振幅</td>
+							<td zf="false">杂项9</td>
+							<td zf="true">杂项9振幅</td>
+							<td zf="false">杂项10</td>
+							<td zf="true">杂项10振幅</td>
+							<td zf="false">杂项11</td>
+							<td zf="true">杂项11振幅</td>
+							<td zf="false">杂项12</td>
+							<td zf="true">杂项12振幅</td>
+							<td zf="false">杂项13</td>
+							<td zf="true">杂项13振幅</td>
+							<td zf="false">杂项14</td>
+							<td zf="true">杂项14振幅</td>
+							<td zf="false">杂项15</td>
+							<td zf="true">杂项15振幅</td>
+							<td zf="false">杂项16</td>
+							<td zf="true">杂项16振幅</td>
+							<td zf="false">杂项17</td>
+							<td zf="true">杂项17振幅</td>
+							<td zf="false">杂项18</td>
+							<td zf="true">杂项18振幅</td>
+							<td>计数(0/1)</td>
+							<td>计数</td>
+							<td>连续计数(0/1)</td>
+							<td>反转个数</td>
+							<td>反转</td>
+						</tr>
+					</tfoot>
+				</table>
+			</div>
+		</div>
+		
+	</div>
+</body>
+</html>
