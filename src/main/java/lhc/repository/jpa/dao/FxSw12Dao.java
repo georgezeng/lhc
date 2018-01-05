@@ -3,10 +3,10 @@ package lhc.repository.jpa.dao;
 import org.springframework.stereotype.Repository;
 
 import lhc.domain.FxSw12;
-import lhc.repository.jpa.BaseYzDao;
+import lhc.repository.jpa.BaseFxSwDao;
 
 @Repository
-public class FxSw12Dao extends BaseYzDao<FxSw12> {
+public class FxSw12Dao extends BaseFxSwDao<FxSw12> {
 
 	@Override
 	protected String getTableName() {

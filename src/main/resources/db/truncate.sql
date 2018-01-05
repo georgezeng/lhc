@@ -99,3 +99,4 @@ TRUNCATE table `fx_sw9_yz`;
 TRUNCATE table `fx_sw10_yz`;
 TRUNCATE table `fx_sw11_yz`;
 TRUNCATE table `fx_sw12_yz`;
+TRUNCATE table `dsx_min_jy_jqb`;

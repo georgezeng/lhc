@@ -4,9 +4,7 @@ import java.lang.reflect.Field;
 import java.lang.reflect.Method;
 import java.math.BigDecimal;
 import java.math.RoundingMode;
-import java.text.SimpleDateFormat;
 import java.util.ArrayList;
-import java.util.Calendar;
 import java.util.Collections;
 import java.util.Comparator;
 import java.util.HashMap;
@@ -2742,8 +2740,6 @@ public class YZService {
 		if (dataResult != null && dataResult.getTotal() > 0) {
 			List<D1Yz> list = new ArrayList<D1Yz>();
 			Integer lastMax = null;
-			SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd");
-			Calendar c = Calendar.getInstance();
 			for (SxYz data : dataResult.getList()) {
 				D1Yz yz = new D1Yz();
 				yz.setDate(data.getDate());
@@ -2771,8 +2767,7 @@ public class YZService {
 				}
 				if (lastMax != null && lastMax >= max) {
 					yz.setRedForsxd1(true);
-					c.setTime(sdf.parse(data.getDate()));
-					SX bmnSX = DateUtil.getSxByYear(c.get(Calendar.YEAR));
+					SX bmnSX = DateUtil.getSxByYear(data.getDate());
 					yz.setSxNums(getSxNums(bmnSX, data.getCurrentSx()));
 
 					int pos = data.getCurrentSx().getPos()
@@ -2795,10 +2790,7 @@ public class YZService {
 	}
 
 	protected void calSxForD1(D1Yz yz, SX maxSX) throws Exception {
-		SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd");
-		Calendar c = Calendar.getInstance();
-		c.setTime(sdf.parse(yz.getDate()));
-		SX bmnSX = DateUtil.getSxByYear(c.get(Calendar.YEAR));
+		SX bmnSX = DateUtil.getSxByYear(yz.getDate());
 		yz.setSxNums(getSxNums(bmnSX, maxSX));
 	}
 
@@ -4514,10 +4506,7 @@ public class YZService {
 
 	protected void calSxForJ0(J0Yz yz) throws Exception {
 		SxYz sxYz = repositories.sxyzRepository.findByYearAndPhase(yz.getYear(), yz.getPhase());
-		SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd");
-		Calendar c = Calendar.getInstance();
-		c.setTime(sdf.parse(sxYz.getDate()));
-		SX bmnSX = DateUtil.getSxByYear(c.get(Calendar.YEAR));
+		SX bmnSX = DateUtil.getSxByYear(sxYz.getDate());
 		yz.setSxNums(getSxNums(bmnSX, sxYz.getCurrentSx()));
 
 		SxZfYz2 zfData = repositories.sxzfyz2Repository.findByYearAndPhase(yz.getYear(), yz.getPhase());
@@ -5057,30 +5046,35 @@ public class YZService {
 		}
 	}
 
-	protected void appendXbwJY(XbwJY data, List<XbwJY> list, Set<Integer> A, Set<Integer> B, Set<Integer> C,
-			Set<Integer> D, Set<Integer> E, Set<Integer> F, Set<Integer> G, Set<Integer> H) throws Exception {
+	protected Set<Integer>[] collectConditionList(Set<Integer> A, Set<Integer> B, Set<Integer> C, Set<Integer> D,
+			Set<Integer> E, Set<Integer> F, Set<Integer> G, Set<Integer> H, boolean reverse) throws Exception {
 		Set<Integer>[] AE = combineConditionList(A, E);
 		Set<Integer>[] BF = combineConditionList(B, F);
 		Set<Integer>[] CG = combineConditionList(C, G);
 		Set<Integer>[] DH = combineConditionList(D, H);
 
+		Set<Integer> ABCD = combineConditionList(A, B, C, D, reverse);
+		Set<Integer> EFGH = combineConditionList(E, F, G, H, reverse);
+
+		Set<Integer> EBCD = combineConditionList(AE[1], B, C, D, reverse);
+		Set<Integer> AFCD = combineConditionList(A, BF[1], C, D, reverse);
+		Set<Integer> ABGD = combineConditionList(A, B, CG[1], D, reverse);
+		Set<Integer> ABCH = combineConditionList(A, B, C, DH[1], reverse);
+
+		Set<Integer> AFGH = combineConditionList(AE[0], F, G, H, reverse);
+		Set<Integer> EBGH = combineConditionList(E, BF[0], G, H, reverse);
+		Set<Integer> EFCH = combineConditionList(E, F, CG[0], H, reverse);
+		Set<Integer> EFGD = combineConditionList(E, F, G, DH[0], reverse);
+		return new Set[] { ABCD, EFGH, EBCD, AFCD, ABGD, ABCH, AFGH, EBGH, EFCH, EFGD };
+	}
+
+	protected void appendXbwJY(XbwJY data, List<XbwJY> list, Set<Integer> A, Set<Integer> B, Set<Integer> C,
+			Set<Integer> D, Set<Integer> E, Set<Integer> F, Set<Integer> G, Set<Integer> H) throws Exception {
+
 		KaiJiang kj = repositories.kaiJiangRepository.findByYearAndPhase(data.getYear(), data.getPhase());
 		data.setSpecialNum(kj.getSpecialNum());
 
-		Set<Integer> ABCD = combineConditionList(A, B, C, D);
-		Set<Integer> EFGH = combineConditionList(E, F, G, H);
-
-		Set<Integer> EBCD = combineConditionList(AE[1], B, C, D);
-		Set<Integer> AFCD = combineConditionList(A, BF[1], C, D);
-		Set<Integer> ABGD = combineConditionList(A, B, CG[1], D);
-		Set<Integer> ABCH = combineConditionList(A, B, C, DH[1]);
-
-		Set<Integer> AFGH = combineConditionList(AE[0], F, G, H);
-		Set<Integer> EBGH = combineConditionList(E, BF[0], G, H);
-		Set<Integer> EFCH = combineConditionList(E, F, CG[0], H);
-		Set<Integer> EFGD = combineConditionList(E, F, G, DH[0]);
-
-		Set<Integer>[] arr = new Set[] { ABCD, EFGH, EBCD, AFCD, ABGD, ABCH, AFGH, EBGH, EFCH, EFGD };
+		Set<Integer>[] arr = collectConditionList(A, B, C, D, E, F, G, H, true);
 		List<XbwJYSub> all = new ArrayList<XbwJYSub>();
 		for (int i = 0; i < arr.length; i++) {
 			for (int num : arr[i]) {
@@ -5289,16 +5283,21 @@ public class YZService {
 		addNumsToConditionList(conditionSet, new ArrayList<Integer>(nums));
 	}
 
-	protected Set<Integer> combineConditionList(Set<Integer> a1, Set<Integer> a2, Set<Integer> a3, Set<Integer> a4) {
+	protected Set<Integer> combineConditionList(Set<Integer> a1, Set<Integer> a2, Set<Integer> a3, Set<Integer> a4,
+			boolean reverse) {
 		Set<Integer> arr = new HashSet<Integer>(a1);
 		addNumsToConditionList(arr, a2);
 		addNumsToConditionList(arr, a3);
 		addNumsToConditionList(arr, a4);
 		Set<Integer> reversed = new HashSet<Integer>();
-		for (int i = 1; i < 50; i++) {
-			if (!arr.contains(i)) {
-				reversed.add(i);
+		if (reverse) {
+			for (int i = 1; i < 50; i++) {
+				if (!arr.contains(i)) {
+					reversed.add(i);
+				}
 			}
+		} else {
+			reversed.addAll(arr);
 		}
 		return reversed;
 	}
@@ -5359,8 +5358,8 @@ public class YZService {
 					}
 
 					@Override
-					protected XbwJY2Sub getNums(XbwInfo info, String range) {
-						return new XbwJY2Sub(info.fd, range, getSxNums(DateUtil.getSxByYear(condition.getYear()), (SX) info.obj));
+					protected XbwJY2Sub getNums(XbwInfo info, String range, String date) {
+						return new XbwJY2Sub(info.fd, range, getSxNums(DateUtil.getSxByYear(date), (SX) info.obj));
 					}
 				}, infoHandler);
 	}
@@ -5587,7 +5586,7 @@ public class YZService {
 						}
 						SX sx = SX.posOf(pos);
 						return new XbwJY2Sub("生肖-振幅" + currentPos + "-" + sx.getText(), fdRange,
-								getSxNums(DateUtil.getSxByYear(condition.getYear()), sx));
+								getSxNums(DateUtil.getSxByYear(current.getDate()), sx));
 					}
 
 					@Override
@@ -6219,7 +6218,7 @@ public class YZService {
 			return fd.replace("W", textPrefix + "-位").replace("Fd", textPrefix + "-位");
 		}
 
-		protected XbwJY2Sub getNums(XbwInfo info, String range) {
+		protected XbwJY2Sub getNums(XbwInfo info, String range, String date) {
 			return new XbwJY2Sub(info.fd, range, (List<Integer>) info.obj);
 		}
 
@@ -6249,7 +6248,8 @@ public class YZService {
 
 		});
 		return handler.getNums(
-				infoHandler.getInfo(current, last, clazz, numsClass, currentInfos, handler.getLength(numsClass)), range);
+				infoHandler.getInfo(current, last, clazz, numsClass, currentInfos, handler.getLength(numsClass)), range,
+				current.getDate());
 	}
 
 	protected static class XbwOptionYzHandlerForGetPos<Z extends Avg> {

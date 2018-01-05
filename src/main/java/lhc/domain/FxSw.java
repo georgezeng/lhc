@@ -4,6 +4,73 @@ import javax.persistence.MappedSuperclass;
 
 @MappedSuperclass
 public abstract class FxSw extends BaseYz {
+	private Integer redCountsForSx;
+	private Integer redCountsForSxzf;
+	private Integer redCountsForDs;
+	private Integer redCountsForDszf;
+	private Integer redCountsForSw;
+	private Integer redCountsForSwzf;
+	private Integer redCountsForMw;
+	private Integer redCountsForMwzf;
+	private Integer redCountsForLh;
+	private Integer redCountsForLhzf;
+	private Integer redCountsForBs;
+	private Integer redCountsForBszf;
+	private Integer redCountsForZs;
+	private Integer redCountsForZszf;
+	private Integer redCountsForWx;
+	private Integer redCountsForWxzf;
+	private Integer redCountsForWxds;
+	private Integer redCountsForWxdszf;
+	private Integer redCountsForPd;
+	private Integer redCountsForPdzf;
+	private Integer redCountsForFd;
+	private Integer redCountsForFdzf;
+	private Integer redCountsForQq;
+	private Integer redCountsForQqzf;
+	private Integer redCountsForQiw;
+	private Integer redCountsForQiwzf;
+	private Integer redCountsForTwelve;
+	private Integer redCountsForTwelvezf;
+	private Integer redCountsForSlq;
+	private Integer redCountsForSlqzf;
+	private Integer redCountsForZx1;
+	private Integer redCountsForZx1zf;
+	private Integer redCountsForZx2;
+	private Integer redCountsForZx2zf;
+	private Integer redCountsForZx3;
+	private Integer redCountsForZx3zf;
+	private Integer redCountsForZx4;
+	private Integer redCountsForZx4zf;
+	private Integer redCountsForZx5;
+	private Integer redCountsForZx5zf;
+	private Integer redCountsForZx6;
+	private Integer redCountsForZx6zf;
+	private Integer redCountsForZx7;
+	private Integer redCountsForZx7zf;
+	private Integer redCountsForZx8;
+	private Integer redCountsForZx8zf;
+	private Integer redCountsForZx9;
+	private Integer redCountsForZx9zf;
+	private Integer redCountsForZx10;
+	private Integer redCountsForZx10zf;
+	private Integer redCountsForZx11;
+	private Integer redCountsForZx11zf;
+	private Integer redCountsForZx12;
+	private Integer redCountsForZx12zf;
+	private Integer redCountsForZx13;
+	private Integer redCountsForZx13zf;
+	private Integer redCountsForZx14;
+	private Integer redCountsForZx14zf;
+	private Integer redCountsForZx15;
+	private Integer redCountsForZx15zf;
+	private Integer redCountsForZx16;
+	private Integer redCountsForZx16zf;
+	private Integer redCountsForZx17;
+	private Integer redCountsForZx17zf;
+	private Integer redCountsForZx18;
+	private Integer redCountsForZx18zf;
+	
 	private Integer sx;
 	private String sxDW;
 	private String sxNums;
@@ -234,6 +301,535 @@ public abstract class FxSw extends BaseYz {
 	private Integer zx18zf;
 	private String zx18zfDW;
 	private String zx18zfNums;
+
+
+	public Integer getRedCountsForSx() {
+		return redCountsForSx;
+	}
+
+	public void setRedCountsForSx(Integer redCountsForSx) {
+		this.redCountsForSx = redCountsForSx;
+	}
+
+	public Integer getRedCountsForSxzf() {
+		return redCountsForSxzf;
+	}
+
+	public void setRedCountsForSxzf(Integer redCountsForSxzf) {
+		this.redCountsForSxzf = redCountsForSxzf;
+	}
+
+	public Integer getRedCountsForDs() {
+		return redCountsForDs;
+	}
+
+	public void setRedCountsForDs(Integer redCountsForDs) {
+		this.redCountsForDs = redCountsForDs;
+	}
+
+	public Integer getRedCountsForDszf() {
+		return redCountsForDszf;
+	}
+
+	public void setRedCountsForDszf(Integer redCountsForDszf) {
+		this.redCountsForDszf = redCountsForDszf;
+	}
+
+	public Integer getRedCountsForSw() {
+		return redCountsForSw;
+	}
+
+	public void setRedCountsForSw(Integer redCountsForSw) {
+		this.redCountsForSw = redCountsForSw;
+	}
+
+	public Integer getRedCountsForSwzf() {
+		return redCountsForSwzf;
+	}
+
+	public void setRedCountsForSwzf(Integer redCountsForSwzf) {
+		this.redCountsForSwzf = redCountsForSwzf;
+	}
+
+	public Integer getRedCountsForMw() {
+		return redCountsForMw;
+	}
+
+	public void setRedCountsForMw(Integer redCountsForMw) {
+		this.redCountsForMw = redCountsForMw;
+	}
+
+	public Integer getRedCountsForMwzf() {
+		return redCountsForMwzf;
+	}
+
+	public void setRedCountsForMwzf(Integer redCountsForMwzf) {
+		this.redCountsForMwzf = redCountsForMwzf;
+	}
+
+	public Integer getRedCountsForLh() {
+		return redCountsForLh;
+	}
+
+	public void setRedCountsForLh(Integer redCountsForLh) {
+		this.redCountsForLh = redCountsForLh;
+	}
+
+	public Integer getRedCountsForLhzf() {
+		return redCountsForLhzf;
+	}
+
+	public void setRedCountsForLhzf(Integer redCountsForLhzf) {
+		this.redCountsForLhzf = redCountsForLhzf;
+	}
+
+	public Integer getRedCountsForBs() {
+		return redCountsForBs;
+	}
+
+	public void setRedCountsForBs(Integer redCountsForBs) {
+		this.redCountsForBs = redCountsForBs;
+	}
+
+	public Integer getRedCountsForBszf() {
+		return redCountsForBszf;
+	}
+
+	public void setRedCountsForBszf(Integer redCountsForBszf) {
+		this.redCountsForBszf = redCountsForBszf;
+	}
+
+	public Integer getRedCountsForZs() {
+		return redCountsForZs;
+	}
+
+	public void setRedCountsForZs(Integer redCountsForZs) {
+		this.redCountsForZs = redCountsForZs;
+	}
+
+	public Integer getRedCountsForZszf() {
+		return redCountsForZszf;
+	}
+
+	public void setRedCountsForZszf(Integer redCountsForZszf) {
+		this.redCountsForZszf = redCountsForZszf;
+	}
+
+	public Integer getRedCountsForWx() {
+		return redCountsForWx;
+	}
+
+	public void setRedCountsForWx(Integer redCountsForWx) {
+		this.redCountsForWx = redCountsForWx;
+	}
+
+	public Integer getRedCountsForWxzf() {
+		return redCountsForWxzf;
+	}
+
+	public void setRedCountsForWxzf(Integer redCountsForWxzf) {
+		this.redCountsForWxzf = redCountsForWxzf;
+	}
+
+	public Integer getRedCountsForWxds() {
+		return redCountsForWxds;
+	}
+
+	public void setRedCountsForWxds(Integer redCountsForWxds) {
+		this.redCountsForWxds = redCountsForWxds;
+	}
+
+	public Integer getRedCountsForWxdszf() {
+		return redCountsForWxdszf;
+	}
+
+	public void setRedCountsForWxdszf(Integer redCountsForWxdszf) {
+		this.redCountsForWxdszf = redCountsForWxdszf;
+	}
+
+	public Integer getRedCountsForPd() {
+		return redCountsForPd;
+	}
+
+	public void setRedCountsForPd(Integer redCountsForPd) {
+		this.redCountsForPd = redCountsForPd;
+	}
+
+	public Integer getRedCountsForPdzf() {
+		return redCountsForPdzf;
+	}
+
+	public void setRedCountsForPdzf(Integer redCountsForPdzf) {
+		this.redCountsForPdzf = redCountsForPdzf;
+	}
+
+	public Integer getRedCountsForFd() {
+		return redCountsForFd;
+	}
+
+	public void setRedCountsForFd(Integer redCountsForFd) {
+		this.redCountsForFd = redCountsForFd;
+	}
+
+	public Integer getRedCountsForFdzf() {
+		return redCountsForFdzf;
+	}
+
+	public void setRedCountsForFdzf(Integer redCountsForFdzf) {
+		this.redCountsForFdzf = redCountsForFdzf;
+	}
+
+	public Integer getRedCountsForQq() {
+		return redCountsForQq;
+	}
+
+	public void setRedCountsForQq(Integer redCountsForQq) {
+		this.redCountsForQq = redCountsForQq;
+	}
+
+	public Integer getRedCountsForQqzf() {
+		return redCountsForQqzf;
+	}
+
+	public void setRedCountsForQqzf(Integer redCountsForQqzf) {
+		this.redCountsForQqzf = redCountsForQqzf;
+	}
+
+	public Integer getRedCountsForQiw() {
+		return redCountsForQiw;
+	}
+
+	public void setRedCountsForQiw(Integer redCountsForQiw) {
+		this.redCountsForQiw = redCountsForQiw;
+	}
+
+	public Integer getRedCountsForQiwzf() {
+		return redCountsForQiwzf;
+	}
+
+	public void setRedCountsForQiwzf(Integer redCountsForQiwzf) {
+		this.redCountsForQiwzf = redCountsForQiwzf;
+	}
+
+	public Integer getRedCountsForTwelve() {
+		return redCountsForTwelve;
+	}
+
+	public void setRedCountsForTwelve(Integer redCountsForTwelve) {
+		this.redCountsForTwelve = redCountsForTwelve;
+	}
+
+	public Integer getRedCountsForTwelvezf() {
+		return redCountsForTwelvezf;
+	}
+
+	public void setRedCountsForTwelvezf(Integer redCountsForTwelvezf) {
+		this.redCountsForTwelvezf = redCountsForTwelvezf;
+	}
+
+	public Integer getRedCountsForSlq() {
+		return redCountsForSlq;
+	}
+
+	public void setRedCountsForSlq(Integer redCountsForSlq) {
+		this.redCountsForSlq = redCountsForSlq;
+	}
+
+	public Integer getRedCountsForSlqzf() {
+		return redCountsForSlqzf;
+	}
+
+	public void setRedCountsForSlqzf(Integer redCountsForSlqzf) {
+		this.redCountsForSlqzf = redCountsForSlqzf;
+	}
+
+	public Integer getRedCountsForZx1() {
+		return redCountsForZx1;
+	}
+
+	public void setRedCountsForZx1(Integer redCountsForZx1) {
+		this.redCountsForZx1 = redCountsForZx1;
+	}
+
+	public Integer getRedCountsForZx1zf() {
+		return redCountsForZx1zf;
+	}
+
+	public void setRedCountsForZx1zf(Integer redCountsForZx1zf) {
+		this.redCountsForZx1zf = redCountsForZx1zf;
+	}
+
+	public Integer getRedCountsForZx2() {
+		return redCountsForZx2;
+	}
+
+	public void setRedCountsForZx2(Integer redCountsForZx2) {
+		this.redCountsForZx2 = redCountsForZx2;
+	}
+
+	public Integer getRedCountsForZx2zf() {
+		return redCountsForZx2zf;
+	}
+
+	public void setRedCountsForZx2zf(Integer redCountsForZx2zf) {
+		this.redCountsForZx2zf = redCountsForZx2zf;
+	}
+
+	public Integer getRedCountsForZx3() {
+		return redCountsForZx3;
+	}
+
+	public void setRedCountsForZx3(Integer redCountsForZx3) {
+		this.redCountsForZx3 = redCountsForZx3;
+	}
+
+	public Integer getRedCountsForZx3zf() {
+		return redCountsForZx3zf;
+	}
+
+	public void setRedCountsForZx3zf(Integer redCountsForZx3zf) {
+		this.redCountsForZx3zf = redCountsForZx3zf;
+	}
+
+	public Integer getRedCountsForZx4() {
+		return redCountsForZx4;
+	}
+
+	public void setRedCountsForZx4(Integer redCountsForZx4) {
+		this.redCountsForZx4 = redCountsForZx4;
+	}
+
+	public Integer getRedCountsForZx4zf() {
+		return redCountsForZx4zf;
+	}
+
+	public void setRedCountsForZx4zf(Integer redCountsForZx4zf) {
+		this.redCountsForZx4zf = redCountsForZx4zf;
+	}
+
+	public Integer getRedCountsForZx5() {
+		return redCountsForZx5;
+	}
+
+	public void setRedCountsForZx5(Integer redCountsForZx5) {
+		this.redCountsForZx5 = redCountsForZx5;
+	}
+
+	public Integer getRedCountsForZx5zf() {
+		return redCountsForZx5zf;
+	}
+
+	public void setRedCountsForZx5zf(Integer redCountsForZx5zf) {
+		this.redCountsForZx5zf = redCountsForZx5zf;
+	}
+
+	public Integer getRedCountsForZx6() {
+		return redCountsForZx6;
+	}
+
+	public void setRedCountsForZx6(Integer redCountsForZx6) {
+		this.redCountsForZx6 = redCountsForZx6;
+	}
+
+	public Integer getRedCountsForZx6zf() {
+		return redCountsForZx6zf;
+	}
+
+	public void setRedCountsForZx6zf(Integer redCountsForZx6zf) {
+		this.redCountsForZx6zf = redCountsForZx6zf;
+	}
+
+	public Integer getRedCountsForZx7() {
+		return redCountsForZx7;
+	}
+
+	public void setRedCountsForZx7(Integer redCountsForZx7) {
+		this.redCountsForZx7 = redCountsForZx7;
+	}
+
+	public Integer getRedCountsForZx7zf() {
+		return redCountsForZx7zf;
+	}
+
+	public void setRedCountsForZx7zf(Integer redCountsForZx7zf) {
+		this.redCountsForZx7zf = redCountsForZx7zf;
+	}
+
+	public Integer getRedCountsForZx8() {
+		return redCountsForZx8;
+	}
+
+	public void setRedCountsForZx8(Integer redCountsForZx8) {
+		this.redCountsForZx8 = redCountsForZx8;
+	}
+
+	public Integer getRedCountsForZx8zf() {
+		return redCountsForZx8zf;
+	}
+
+	public void setRedCountsForZx8zf(Integer redCountsForZx8zf) {
+		this.redCountsForZx8zf = redCountsForZx8zf;
+	}
+
+	public Integer getRedCountsForZx9() {
+		return redCountsForZx9;
+	}
+
+	public void setRedCountsForZx9(Integer redCountsForZx9) {
+		this.redCountsForZx9 = redCountsForZx9;
+	}
+
+	public Integer getRedCountsForZx9zf() {
+		return redCountsForZx9zf;
+	}
+
+	public void setRedCountsForZx9zf(Integer redCountsForZx9zf) {
+		this.redCountsForZx9zf = redCountsForZx9zf;
+	}
+
+	public Integer getRedCountsForZx10() {
+		return redCountsForZx10;
+	}
+
+	public void setRedCountsForZx10(Integer redCountsForZx10) {
+		this.redCountsForZx10 = redCountsForZx10;
+	}
+
+	public Integer getRedCountsForZx10zf() {
+		return redCountsForZx10zf;
+	}
+
+	public void setRedCountsForZx10zf(Integer redCountsForZx10zf) {
+		this.redCountsForZx10zf = redCountsForZx10zf;
+	}
+
+	public Integer getRedCountsForZx11() {
+		return redCountsForZx11;
+	}
+
+	public void setRedCountsForZx11(Integer redCountsForZx11) {
+		this.redCountsForZx11 = redCountsForZx11;
+	}
+
+	public Integer getRedCountsForZx11zf() {
+		return redCountsForZx11zf;
+	}
+
+	public void setRedCountsForZx11zf(Integer redCountsForZx11zf) {
+		this.redCountsForZx11zf = redCountsForZx11zf;
+	}
+
+	public Integer getRedCountsForZx12() {
+		return redCountsForZx12;
+	}
+
+	public void setRedCountsForZx12(Integer redCountsForZx12) {
+		this.redCountsForZx12 = redCountsForZx12;
+	}
+
+	public Integer getRedCountsForZx12zf() {
+		return redCountsForZx12zf;
+	}
+
+	public void setRedCountsForZx12zf(Integer redCountsForZx12zf) {
+		this.redCountsForZx12zf = redCountsForZx12zf;
+	}
+
+	public Integer getRedCountsForZx13() {
+		return redCountsForZx13;
+	}
+
+	public void setRedCountsForZx13(Integer redCountsForZx13) {
+		this.redCountsForZx13 = redCountsForZx13;
+	}
+
+	public Integer getRedCountsForZx13zf() {
+		return redCountsForZx13zf;
+	}
+
+	public void setRedCountsForZx13zf(Integer redCountsForZx13zf) {
+		this.redCountsForZx13zf = redCountsForZx13zf;
+	}
+
+	public Integer getRedCountsForZx14() {
+		return redCountsForZx14;
+	}
+
+	public void setRedCountsForZx14(Integer redCountsForZx14) {
+		this.redCountsForZx14 = redCountsForZx14;
+	}
+
+	public Integer getRedCountsForZx14zf() {
+		return redCountsForZx14zf;
+	}
+
+	public void setRedCountsForZx14zf(Integer redCountsForZx14zf) {
+		this.redCountsForZx14zf = redCountsForZx14zf;
+	}
+
+	public Integer getRedCountsForZx15() {
+		return redCountsForZx15;
+	}
+
+	public void setRedCountsForZx15(Integer redCountsForZx15) {
+		this.redCountsForZx15 = redCountsForZx15;
+	}
+
+	public Integer getRedCountsForZx15zf() {
+		return redCountsForZx15zf;
+	}
+
+	public void setRedCountsForZx15zf(Integer redCountsForZx15zf) {
+		this.redCountsForZx15zf = redCountsForZx15zf;
+	}
+
+	public Integer getRedCountsForZx16() {
+		return redCountsForZx16;
+	}
+
+	public void setRedCountsForZx16(Integer redCountsForZx16) {
+		this.redCountsForZx16 = redCountsForZx16;
+	}
+
+	public Integer getRedCountsForZx16zf() {
+		return redCountsForZx16zf;
+	}
+
+	public void setRedCountsForZx16zf(Integer redCountsForZx16zf) {
+		this.redCountsForZx16zf = redCountsForZx16zf;
+	}
+
+	public Integer getRedCountsForZx17() {
+		return redCountsForZx17;
+	}
+
+	public void setRedCountsForZx17(Integer redCountsForZx17) {
+		this.redCountsForZx17 = redCountsForZx17;
+	}
+
+	public Integer getRedCountsForZx17zf() {
+		return redCountsForZx17zf;
+	}
+
+	public void setRedCountsForZx17zf(Integer redCountsForZx17zf) {
+		this.redCountsForZx17zf = redCountsForZx17zf;
+	}
+
+	public Integer getRedCountsForZx18() {
+		return redCountsForZx18;
+	}
+
+	public void setRedCountsForZx18(Integer redCountsForZx18) {
+		this.redCountsForZx18 = redCountsForZx18;
+	}
+
+	public Integer getRedCountsForZx18zf() {
+		return redCountsForZx18zf;
+	}
+
+	public void setRedCountsForZx18zf(Integer redCountsForZx18zf) {
+		this.redCountsForZx18zf = redCountsForZx18zf;
+	}
 
 	public Integer getSw() {
 		return sw;

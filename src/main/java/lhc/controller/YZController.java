@@ -5,8 +5,8 @@ import java.lang.reflect.Method;
 import java.math.BigDecimal;
 import java.math.RoundingMode;
 import java.util.ArrayList;
-import java.util.Calendar;
 import java.util.Collections;
+import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -17,6 +17,7 @@ import javax.servlet.http.HttpServletResponse;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.util.ReflectionUtils;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -32,6 +33,8 @@ import lhc.dto.BaseResult;
 import lhc.dto.D1Yz;
 import lhc.dto.DownloadDTO;
 import lhc.dto.DownloadPrepareTZ;
+import lhc.dto.DsxJYCondition;
+import lhc.dto.DsxJYViewBean;
 import lhc.dto.J0Yz;
 import lhc.dto.PmDTO;
 import lhc.dto.PmNum;
@@ -385,62 +388,68 @@ public class YZController {
 
 	public void calFXSW() throws Exception {
 		List<Future<Exception>> futures = new ArrayList<Future<Exception>>();
-		repositories.yzService.clearFxSwData();
-		futures.add(repositories.yzService.calFxSw1());
-		futures.add(repositories.yzService.calFxSw2());
+		// repositories.yzService.clearFxSwData();
+		// futures.add(repositories.yzService.calFxSw1());
+		// futures.add(repositories.yzService.calFxSw2());
+		// repositories.yzService.sleep(futures, 100);
+		// repositories.yzService.saveFxSwData();
+		// repositories.yzService.clearFxSwData();
+		// futures.clear();
+		// futures.add(repositories.yzService.calFxSw3());
+		// futures.add(repositories.yzService.calFxSw4());
+		// repositories.yzService.sleep(futures, 100);
+		// repositories.yzService.saveFxSwData();
+		// repositories.yzService.clearFxSwData();
+		// futures.clear();
+		// futures.add(repositories.yzService.calFxSw5());
+		// futures.add(repositories.yzService.calFxSw6());
+		// repositories.yzService.sleep(futures, 100);
+		// repositories.yzService.saveFxSwData();
+		// repositories.yzService.clearFxSwData();
+		// futures.clear();
+		// futures.add(repositories.yzService.calFxSw7());
+		// futures.add(repositories.yzService.calFxSw8());
+		// repositories.yzService.sleep(futures, 100);
+		// repositories.yzService.saveFxSwData();
+		// repositories.yzService.clearFxSwData();
+		// futures.clear();
+		// futures.add(repositories.yzService.calFxSw9());
+		// futures.add(repositories.yzService.calFxSw10());
+		// repositories.yzService.sleep(futures, 100);
+		// repositories.yzService.saveFxSwData();
+		// repositories.yzService.clearFxSwData();
+		// futures.clear();
+		// futures.add(repositories.yzService.calFxSw11());
+		// futures.add(repositories.yzService.calFxSw12());
+		// repositories.yzService.sleep(futures, 100);
+		// repositories.yzService.saveFxSwData();
+		// repositories.yzService.clearFxSwData();
+		// futures.clear();
+		// futures.add(repositories.yzService.calFxSwRedCounts());
+		// repositories.yzService.sleep(futures, 100);
+		// futures.clear();
+		futures.add(repositories.yzService.calDsxMinJY());
 		repositories.yzService.sleep(futures, 100);
-		repositories.yzService.saveFxSwData();
-		repositories.yzService.clearFxSwData();
-		futures.clear();
-		futures.add(repositories.yzService.calFxSw3());
-		futures.add(repositories.yzService.calFxSw4());
-		repositories.yzService.sleep(futures, 100);
-		repositories.yzService.saveFxSwData();
-		repositories.yzService.clearFxSwData();
-		futures.clear();
-		futures.add(repositories.yzService.calFxSw5());
-		futures.add(repositories.yzService.calFxSw6());
-		repositories.yzService.sleep(futures, 100);
-		repositories.yzService.saveFxSwData();
-		repositories.yzService.clearFxSwData();
-		futures.clear();
-		futures.add(repositories.yzService.calFxSw7());
-		futures.add(repositories.yzService.calFxSw8());
-		repositories.yzService.sleep(futures, 100);
-		repositories.yzService.saveFxSwData();
-		repositories.yzService.clearFxSwData();
-		futures.clear();
-		futures.add(repositories.yzService.calFxSw9());
-		futures.add(repositories.yzService.calFxSw10());
-		repositories.yzService.sleep(futures, 100);
-		repositories.yzService.saveFxSwData();
-		repositories.yzService.clearFxSwData();
-		futures.clear();
-		futures.add(repositories.yzService.calFxSw11());
-		futures.add(repositories.yzService.calFxSw12());
-		repositories.yzService.sleep(futures, 100);
-		repositories.yzService.saveFxSwData();
-		repositories.yzService.clearFxSwData();
 		logger.info("End of calFXSW stage...");
 	}
 
 	@RequestMapping("/calYZ")
 	public BaseResult calYZ() throws Exception {
-		calBS();
-		calDS();
-		calLH();
-		calMW();
-		calPD();
-		calQiw();
-		calQQ();
-		calSLQ();
-		calSX();
-		calSW();
-		calTM();
-		calTwelve();
-		calWX();
-		calZS();
-		calZX();
+		// calBS();
+		// calDS();
+		// calLH();
+		// calMW();
+		// calPD();
+		// calQiw();
+		// calQQ();
+		// calSLQ();
+		// calSX();
+		// calSW();
+		// calTM();
+		// calTwelve();
+		// calWX();
+		// calZS();
+		// calZX();
 		calFXSW();
 		logger.info("Done calYZ...");
 		return BaseResult.EMPTY;
@@ -3386,7 +3395,7 @@ public class YZController {
 
 	@RequestMapping("/getSxListInCurrentYear")
 	public BaseResult getSxListInCurrentYear() {
-		SX bmnSx = DateUtil.getSxByYear(Calendar.getInstance().get(Calendar.YEAR));
+		SX bmnSx = DateUtil.getSxByYear(new Date());
 		List<SX> list = new ArrayList<SX>();
 		for (int i = bmnSx.getPos() + 12; i > bmnSx.getPos(); i--) {
 			int pos = i;
@@ -3429,7 +3438,7 @@ public class YZController {
 		}
 		return new BaseResult(result);
 	}
-	
+
 	@RequestMapping("/listFXSW4")
 	public BaseResult listFXSW4(@RequestBody QueryInfo<FxSw4> queryInfo) throws Exception {
 		PageResult<FxSw4> result = repositories.fxsw4Dao.query(queryInfo);
@@ -3438,7 +3447,7 @@ public class YZController {
 		}
 		return new BaseResult(result);
 	}
-	
+
 	@RequestMapping("/listFXSW5")
 	public BaseResult listFXSW5(@RequestBody QueryInfo<FxSw5> queryInfo) throws Exception {
 		PageResult<FxSw5> result = repositories.fxsw5Dao.query(queryInfo);
@@ -3447,7 +3456,7 @@ public class YZController {
 		}
 		return new BaseResult(result);
 	}
-	
+
 	@RequestMapping("/listFXSW6")
 	public BaseResult listFXSW6(@RequestBody QueryInfo<FxSw6> queryInfo) throws Exception {
 		PageResult<FxSw6> result = repositories.fxsw6Dao.query(queryInfo);
@@ -3456,7 +3465,7 @@ public class YZController {
 		}
 		return new BaseResult(result);
 	}
-	
+
 	@RequestMapping("/listFXSW7")
 	public BaseResult listFXSW7(@RequestBody QueryInfo<FxSw7> queryInfo) throws Exception {
 		PageResult<FxSw7> result = repositories.fxsw7Dao.query(queryInfo);
@@ -3465,7 +3474,7 @@ public class YZController {
 		}
 		return new BaseResult(result);
 	}
-	
+
 	@RequestMapping("/listFXSW8")
 	public BaseResult listFXSW8(@RequestBody QueryInfo<FxSw8> queryInfo) throws Exception {
 		PageResult<FxSw8> result = repositories.fxsw8Dao.query(queryInfo);
@@ -3474,7 +3483,7 @@ public class YZController {
 		}
 		return new BaseResult(result);
 	}
-	
+
 	@RequestMapping("/listFXSW9")
 	public BaseResult listFXSW9(@RequestBody QueryInfo<FxSw9> queryInfo) throws Exception {
 		PageResult<FxSw9> result = repositories.fxsw9Dao.query(queryInfo);
@@ -3483,7 +3492,7 @@ public class YZController {
 		}
 		return new BaseResult(result);
 	}
-	
+
 	@RequestMapping("/listFXSW10")
 	public BaseResult listFXSW10(@RequestBody QueryInfo<FxSw10> queryInfo) throws Exception {
 		PageResult<FxSw10> result = repositories.fxsw10Dao.query(queryInfo);
@@ -3492,7 +3501,7 @@ public class YZController {
 		}
 		return new BaseResult(result);
 	}
-	
+
 	@RequestMapping("/listFXSW11")
 	public BaseResult listFXSW11(@RequestBody QueryInfo<FxSw11> queryInfo) throws Exception {
 		PageResult<FxSw11> result = repositories.fxsw11Dao.query(queryInfo);
@@ -3501,12 +3510,68 @@ public class YZController {
 		}
 		return new BaseResult(result);
 	}
-	
+
 	@RequestMapping("/listFXSW12")
 	public BaseResult listFXSW12(@RequestBody QueryInfo<FxSw12> queryInfo) throws Exception {
 		PageResult<FxSw12> result = repositories.fxsw12Dao.query(queryInfo);
 		if (result != null && result.getTotal() > 0) {
 			result.getList().add(new FxSw12());
+		}
+		return new BaseResult(result);
+	}
+
+	@RequestMapping("/listDsxJY")
+	public BaseResult listDsxJY(@RequestBody QueryInfo<DsxJYCondition> queryInfo) throws Exception {
+		PageResult<DsxJYViewBean> result = null;
+		if (queryInfo.getObject().getVersion().equalsIgnoreCase("jqbzs")) {
+			result = repositories.dsxMinJyJQBDao.query(queryInfo);
+			DsxMinJyJQB latest = repositories.dsxMinJyJQBRepository.findByYearAndPhase(0, 0);
+			if (latest != null) {
+				DsxJYViewBean latestBean = new DsxJYViewBean();
+				if (!queryInfo.getObject().isQc()) {
+					latestBean.setC1n(latest.getC1NumsXc());
+					latestBean.setC2n(latest.getC2NumsXc());
+					latestBean.setC3n(latest.getC3NumsXc());
+					latestBean.setC4n(latest.getC4NumsXc());
+					latestBean.setC5n(latest.getC5NumsXc());
+					latestBean.setC6n(latest.getC6NumsXc());
+					latestBean.setC7n(latest.getC7NumsXc());
+					latestBean.setC8n(latest.getC8NumsXc());
+					latestBean.setC9n(latest.getC9NumsXc());
+					latestBean.setC10n(latest.getC10NumsXc());
+					latestBean.setC11n(latest.getC11NumsXc());
+				} else {
+					if (queryInfo.getObject().isReverse()) {
+						latestBean.setC1n(latest.getC1NumsReverse());
+						latestBean.setC2n(latest.getC2NumsReverse());
+						latestBean.setC3n(latest.getC3NumsReverse());
+						latestBean.setC4n(latest.getC4NumsReverse());
+						latestBean.setC5n(latest.getC5NumsReverse());
+						latestBean.setC6n(latest.getC6NumsReverse());
+						latestBean.setC7n(latest.getC7NumsReverse());
+						latestBean.setC8n(latest.getC8NumsReverse());
+						latestBean.setC9n(latest.getC9NumsReverse());
+						latestBean.setC10n(latest.getC10NumsReverse());
+						latestBean.setC11n(latest.getC11NumsReverse());
+					} else {
+						latestBean.setC1n(latest.getC1Nums());
+						latestBean.setC2n(latest.getC2Nums());
+						latestBean.setC3n(latest.getC3Nums());
+						latestBean.setC4n(latest.getC4Nums());
+						latestBean.setC5n(latest.getC5Nums());
+						latestBean.setC6n(latest.getC6Nums());
+						latestBean.setC7n(latest.getC7Nums());
+						latestBean.setC8n(latest.getC8Nums());
+						latestBean.setC9n(latest.getC9Nums());
+						latestBean.setC10n(latest.getC10Nums());
+						latestBean.setC11n(latest.getC11Nums());
+					}
+				}
+				result.getList().add(latestBean);
+			}
+		}
+		if (result != null && result.getTotal() > 0) {
+			result.getList().add(new DsxJYViewBean());
 		}
 		return new BaseResult(result);
 	}

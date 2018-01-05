@@ -28,7 +28,7 @@ public abstract class BaseYzDao<T extends BaseYz> {
 
 	protected abstract String getTableName();
 
-	private Class<T> clazz;
+	protected Class<T> clazz;
 
 	@PostConstruct
 	public void init() throws Exception {

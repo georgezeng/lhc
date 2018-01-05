@@ -21,7 +21,6 @@ import org.springframework.data.domain.Sort;
 import org.springframework.data.domain.Sort.Direction;
 import org.springframework.scheduling.annotation.Async;
 import org.springframework.scheduling.annotation.AsyncResult;
-import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.util.ReflectionUtils;
 
@@ -142,13 +141,13 @@ import lhc.domain.Zx9Yz;
 import lhc.domain.Zx9ZfYz;
 import lhc.dto.TmYzInfo;
 import lhc.enums.SX;
+import lhc.repository.jpa.BaseFxSwDao;
 import lhc.repository.jpa.BaseYzRepository;
 import lhc.util.DateUtil;
 
-@Service
 @Transactional
 @SuppressWarnings("unchecked")
-public class YZ2Service extends YZService {
+public abstract class YZ2Service extends YZService {
 	@Async
 	public Future<Exception> calZX11YZ() {
 		return calFDYZ(Zx11Yz.class, Zx11Nums.class, repositories.zx11yzRepository, new CommonHandler() {
@@ -472,7 +471,7 @@ public class YZ2Service extends YZService {
 						data.setSx(lastData.getSx() + 1);
 					}
 					data.setSxDW(sx.getText());
-					SX bmnSX = DateUtil.getSxByYear(Integer.valueOf(data.getYear()));
+					SX bmnSX = DateUtil.getSxByYear(data.getDate());
 					data.setSxNums(Joiner.on(",").join(getSxNums(bmnSX, sx)));
 				}
 			}
@@ -607,7 +606,7 @@ public class YZ2Service extends YZService {
 						if (sxpos > len) {
 							sxpos -= len;
 						}
-						SX bmnSX = DateUtil.getSxByYear(Integer.valueOf(data.getYear()));
+						SX bmnSX = DateUtil.getSxByYear(data.getDate());
 						data.setSxNums(Joiner.on(",").join(getSxNums(bmnSX, SX.posOf(sxpos))));
 					}
 				});
@@ -7315,5 +7314,58 @@ public class YZ2Service extends YZService {
 				em.persist(data);
 			}
 		}
+	}
+
+	@Async
+	public Future<Exception> calFxSwRedCounts() {
+		Exception t = null;
+		try {
+			List<Future<Exception>> futures = new ArrayList<Future<Exception>>();
+			futures.add(repositories.yzService.calFxSwRedCountsForSw(repositories.fxsw1Dao, repositories.fxsw1Repository));
+			futures.add(repositories.yzService.calFxSwRedCountsForSw(repositories.fxsw2Dao, repositories.fxsw2Repository));
+			futures.add(repositories.yzService.calFxSwRedCountsForSw(repositories.fxsw3Dao, repositories.fxsw3Repository));
+			futures.add(repositories.yzService.calFxSwRedCountsForSw(repositories.fxsw4Dao, repositories.fxsw4Repository));
+			futures.add(repositories.yzService.calFxSwRedCountsForSw(repositories.fxsw5Dao, repositories.fxsw5Repository));
+			futures.add(repositories.yzService.calFxSwRedCountsForSw(repositories.fxsw6Dao, repositories.fxsw6Repository));
+			futures.add(repositories.yzService.calFxSwRedCountsForSw(repositories.fxsw7Dao, repositories.fxsw7Repository));
+			futures.add(repositories.yzService.calFxSwRedCountsForSw(repositories.fxsw8Dao, repositories.fxsw8Repository));
+			futures.add(repositories.yzService.calFxSwRedCountsForSw(repositories.fxsw9Dao, repositories.fxsw9Repository));
+			futures.add(repositories.yzService.calFxSwRedCountsForSw(repositories.fxsw10Dao, repositories.fxsw10Repository));
+			futures.add(repositories.yzService.calFxSwRedCountsForSw(repositories.fxsw11Dao, repositories.fxsw11Repository));
+			futures.add(repositories.yzService.calFxSwRedCountsForSw(repositories.fxsw12Dao, repositories.fxsw12Repository));
+			repositories.yzService.sleep(futures, 100);
+			logger.info("End of calFXSWRedCounts...");
+		} catch (Exception e) {
+			if (DataAccessException.class.isAssignableFrom(e.getClass())) {
+				logger.error(e.getMessage(), e);
+			}
+			t = e;
+		}
+		return new AsyncResult<Exception>(t);
+	}
+
+	@Async
+	public <T extends FxSw> Future<Exception> calFxSwRedCountsForSw(BaseFxSwDao<T> dao, BaseYzRepository<T> repository) {
+		Exception t = null;
+		try {
+			int perSize = 160;
+			Pageable request = new PageRequest(0, 200, new Sort(Direction.ASC, "date"));
+			Page<T> result = null;
+			do {
+				result = repository.findAll(request);
+				if (result != null && result.hasContent()) {
+					for (T yz : result.getContent()) {
+						dao.countReds(yz.getYear(), yz.getPhase(), perSize);
+					}
+				}
+				request = request.next();
+			} while (result != null && result.hasNext());
+		} catch (Exception e) {
+			if (DataAccessException.class.isAssignableFrom(e.getClass())) {
+				logger.error(e.getMessage(), e);
+			}
+			t = e;
+		}
+		return new AsyncResult<Exception>(t);
 	}
 }
