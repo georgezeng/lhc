@@ -627,6 +627,36 @@ public class Repositories {
 	
 	@Autowired
 	public DsxMinJYJQBDao dsxMinJyJQBDao;
+	
+	@Autowired
+	public DsxMinJyJHBRepository dsxMinJyJHBRepository;
+	
+	@Autowired
+	public DsxMinJYJHBDao dsxMinJyJHBDao;
+	
+	@Autowired
+	public DsxMinJyJDBRepository dsxMinJyJDBRepository;
+	
+	@Autowired
+	public DsxMinJYJDBDao dsxMinJyJDBDao;
+	
+	@Autowired
+	public DsxMaxJyJQBRepository dsxMaxJyJQBRepository;
+	
+	@Autowired
+	public DsxMaxJYJQBDao dsxMaxJyJQBDao;
+	
+	@Autowired
+	public DsxMaxJyJHBRepository dsxMaxJyJHBRepository;
+	
+	@Autowired
+	public DsxMaxJYJHBDao dsxMaxJyJHBDao;
+	
+	@Autowired
+	public DsxMaxJyJDBRepository dsxMaxJyJDBRepository;
+	
+	@Autowired
+	public DsxMaxJYJDBDao dsxMaxJyJDBDao;
 
 	@Autowired
 	public CommonDao commonDao;

@@ -429,6 +429,7 @@ public class YZController {
 		// repositories.yzService.sleep(futures, 100);
 		// futures.clear();
 		futures.add(repositories.yzService.calDsxMinJY());
+		futures.add(repositories.yzService.calDsxMaxJY());
 		repositories.yzService.sleep(futures, 100);
 		logger.info("End of calFXSW stage...");
 	}
@@ -3525,51 +3526,42 @@ public class YZController {
 		PageResult<DsxJYViewBean> result = null;
 		if (queryInfo.getObject().getVersion().equalsIgnoreCase("jqbzs")) {
 			result = repositories.dsxMinJyJQBDao.query(queryInfo);
-			DsxMinJyJQB latest = repositories.dsxMinJyJQBRepository.findByYearAndPhase(0, 0);
+			DsxJYViewBean latest = repositories.dsxMinJyJQBDao.findLatestOne(queryInfo);
 			if (latest != null) {
-				DsxJYViewBean latestBean = new DsxJYViewBean();
-				if (!queryInfo.getObject().isQc()) {
-					latestBean.setC1n(latest.getC1NumsXc());
-					latestBean.setC2n(latest.getC2NumsXc());
-					latestBean.setC3n(latest.getC3NumsXc());
-					latestBean.setC4n(latest.getC4NumsXc());
-					latestBean.setC5n(latest.getC5NumsXc());
-					latestBean.setC6n(latest.getC6NumsXc());
-					latestBean.setC7n(latest.getC7NumsXc());
-					latestBean.setC8n(latest.getC8NumsXc());
-					latestBean.setC9n(latest.getC9NumsXc());
-					latestBean.setC10n(latest.getC10NumsXc());
-					latestBean.setC11n(latest.getC11NumsXc());
-				} else {
-					if (queryInfo.getObject().isReverse()) {
-						latestBean.setC1n(latest.getC1NumsReverse());
-						latestBean.setC2n(latest.getC2NumsReverse());
-						latestBean.setC3n(latest.getC3NumsReverse());
-						latestBean.setC4n(latest.getC4NumsReverse());
-						latestBean.setC5n(latest.getC5NumsReverse());
-						latestBean.setC6n(latest.getC6NumsReverse());
-						latestBean.setC7n(latest.getC7NumsReverse());
-						latestBean.setC8n(latest.getC8NumsReverse());
-						latestBean.setC9n(latest.getC9NumsReverse());
-						latestBean.setC10n(latest.getC10NumsReverse());
-						latestBean.setC11n(latest.getC11NumsReverse());
-					} else {
-						latestBean.setC1n(latest.getC1Nums());
-						latestBean.setC2n(latest.getC2Nums());
-						latestBean.setC3n(latest.getC3Nums());
-						latestBean.setC4n(latest.getC4Nums());
-						latestBean.setC5n(latest.getC5Nums());
-						latestBean.setC6n(latest.getC6Nums());
-						latestBean.setC7n(latest.getC7Nums());
-						latestBean.setC8n(latest.getC8Nums());
-						latestBean.setC9n(latest.getC9Nums());
-						latestBean.setC10n(latest.getC10Nums());
-						latestBean.setC11n(latest.getC11Nums());
-					}
-				}
-				result.getList().add(latestBean);
+				result.getList().add(latest);
+			}
+//		} else if (queryInfo.getObject().getVersion().equalsIgnoreCase("jdbzs")) {
+//			result = repositories.dsxMinJyJDBDao.query(queryInfo);
+//			DsxJYViewBean latest = repositories.dsxMinJyJDBDao.findLatestOne(queryInfo);
+//			if (latest != null) {
+//				result.getList().add(latest);
+//			}
+		} else if (queryInfo.getObject().getVersion().equalsIgnoreCase("jhbzs")) {
+			result = repositories.dsxMinJyJHBDao.query(queryInfo);
+			DsxJYViewBean latest = repositories.dsxMinJyJHBDao.findLatestOne(queryInfo);
+			if (latest != null) {
+				result.getList().add(latest);
 			}
 		}
+//		} else if (queryInfo.getObject().getVersion().equalsIgnoreCase("jqbzd")) {
+//			result = repositories.dsxMaxJyJQBDao.query(queryInfo);
+//			DsxJYViewBean latest = repositories.dsxMaxJyJQBDao.findLatestOne(queryInfo);
+//			if (latest != null) {
+//				result.getList().add(latest);
+//			}
+//		} else if (queryInfo.getObject().getVersion().equalsIgnoreCase("jdbzd")) {
+//			result = repositories.dsxMaxJyJDBDao.query(queryInfo);
+//			DsxJYViewBean latest = repositories.dsxMaxJyJDBDao.findLatestOne(queryInfo);
+//			if (latest != null) {
+//				result.getList().add(latest);
+//			}
+//		} else if (queryInfo.getObject().getVersion().equalsIgnoreCase("jhbzd")) {
+//			result = repositories.dsxMaxJyJHBDao.query(queryInfo);
+//			DsxJYViewBean latest = repositories.dsxMaxJyJHBDao.findLatestOne(queryInfo);
+//			if (latest != null) {
+//				result.getList().add(latest);
+//			}
+//		}
 		if (result != null && result.getTotal() > 0) {
 			result.getList().add(new DsxJYViewBean());
 		}

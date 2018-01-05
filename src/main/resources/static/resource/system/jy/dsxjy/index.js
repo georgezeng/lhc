@@ -8,7 +8,7 @@ $(document).ready(function() {
 	for(var i=1; i < 12; i++) {
 		cols.push("phase");
 	}
-	for(var i=1; i < 12; i++) {
+	for(var i=1; i < 11; i++) {
 		cols.push("c" + i + "n");
 	}
 	cols.push("phase");
@@ -58,7 +58,7 @@ $(document).ready(function() {
 			$(nTd).text(value);
 		}
 	});
-	for(var i = 3; i < 14; i++) {
+	for(var i = 3; i < 13; i++) {
 		(function(index) {
 			columnDefs.push({
 				aTargets: [index],
@@ -114,7 +114,14 @@ $(document).ready(function() {
 			});
 		})(i);
 	}
-	for(var i = 14; i < 25; i++) {
+	var currentReverseTd;
+	columnDefs.push({
+		aTargets: [13],
+		fnCreatedCell: function(nTd, sData, item, iRow, iCol) {
+			currentReverseTd = $(nTd).text("");
+		}
+	});
+	for(var i = 14; i < 24; i++) {
 		(function(index) {
 			columnDefs.push({
 				aTargets: [index],
@@ -143,11 +150,11 @@ $(document).ready(function() {
 		})(i);
 	}
 	columnDefs.push({
-		aTargets: [25],
+		aTargets: [24],
 		fnCreatedCell: function(nTd, sData, item, iRow, iCol) {
 			var value = "";
+			var arr = [];
 			if(item.date) {
-				var arr = [];
 				for(var i = 1; i < 50; i++) {
 					if(!isInArr(hms, i)) {
 						arr.push(i);
@@ -156,6 +163,52 @@ $(document).ready(function() {
 				value = arr.join(", ");
 			}
 			$(nTd).text(value);
+			
+			if(item.date) {
+				var lastNums = arr;
+				if(lastNums) {
+					if(item.specialNum) {
+						var yzField = "cr_yz";
+						var yzCountField = "cr_yz_count";
+						var restart = false;
+						for(var i in lastNums) {
+							var num = lastNums[i];
+							if(num == item.specialNum) {
+								itemYz[yzField] = 0;
+								restart = true;
+								if(!itemCount[yzCountField]) {
+									itemCount[yzCountField] = 1;
+								} else {
+									itemCount[yzCountField]++;
+								}
+								currentReverseTd.css("backgroundColor", "red").css("color", "white");
+								break;
+							}  
+						}
+						if(!restart && itemYz[yzField] >= 0) {
+							itemYz[yzField]++;
+						}
+						if(itemYz[yzField] >= 0) {
+							if(itemYz[yzField] > 0) {
+								currentReverseTd.css("backgroundColor", "#ffc");
+							}
+							currentReverseTd.text(itemYz[yzField]);
+						} else {
+							currentReverseTd.css("backgroundColor", "#ffc");
+							currentReverseTd.text("");
+						}
+					} else {
+						currentReverseTd.css("backgroundColor", "#ffc");
+						currentReverseTd.text("");
+					}
+				} else {
+					currentReverseTd.css("backgroundColor", "#ffc");
+					currentReverseTd.text("");
+				}
+			} else {
+				var yzCountField = "cr_yz_count";
+				currentReverseTd.text(itemCount[yzCountField]);
+			}
 		}
 	});
 	datatables.push(createDataTable({

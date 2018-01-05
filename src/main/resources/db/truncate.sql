@@ -100,3 +100,8 @@ TRUNCATE table `fx_sw10_yz`;
 TRUNCATE table `fx_sw11_yz`;
 TRUNCATE table `fx_sw12_yz`;
 TRUNCATE table `dsx_min_jy_jqb`;
+TRUNCATE table `dsx_min_jy_jdb`;
+TRUNCATE table `dsx_min_jy_jhb`;
+TRUNCATE table `dsx_max_jy_jqb`;
+TRUNCATE table `dsx_max_jy_jdb`;
+TRUNCATE table `dsx_max_jy_jhb`;
