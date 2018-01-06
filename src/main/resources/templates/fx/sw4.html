@@ -86,7 +86,7 @@
 					<button id="searchBtn" class="btn btn-primary">搜索</button>
 					<button id="showOrHideBtn" class="btn btn-primary">显示/隐藏</button>
 					<div class="clearfix"></div>
-					<form id="download" name="download" action="/mvc/yz/downloadFXSW" class="hidden">
+					<form id="download" name="download" action="/mvc/yz/downloadFXSW" method="post" class="hidden">
 						<input type="hidden" name="pos" value="4" />
 						<input id="size" type="hidden" name="size" />
 						<input id="endYear" type="hidden" name="year" />
@@ -96,6 +96,7 @@
 						<input id="counts01" type="hidden" name="counts01" />
 						<input id="countsTotals" type="hidden" name="countsTotals" />
 						<input id="fzNums" type="hidden" name="fzNums" />
+						<input id="fzArrs" type="hidden" name="fzArrs" />
 						<input id="continuosCounts" type="hidden" name="continuosCounts" />
 					</form>
 				</div>

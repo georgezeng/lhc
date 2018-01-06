@@ -105,6 +105,7 @@ public class YZ3Service extends YZ2Service {
 				unknownDataForJHB.setDate("unknown");
 				jhbRepository.save(unknownDataForJHB);
 			}
+			List<Future<Exception>> futures = new ArrayList<Future<Exception>>();
 			do {
 				result1 = repositories.fxsw1Repository.findAll(request);
 				result2 = repositories.fxsw2Repository.findAll(request);
@@ -119,134 +120,18 @@ public class YZ3Service extends YZ2Service {
 				result11 = repositories.fxsw11Repository.findAll(request);
 				result12 = repositories.fxsw12Repository.findAll(request);
 				if (result1 != null && result1.hasContent()) {
-					for (int i = 0; i < result1.getContent().size(); i++) {
-						FxSw temp = result1.getContent().get(i);
-						DsxJY jy = new DsxJY();
-						jy.setDate(temp.getDate());
-						jy.setYear(temp.getYear());
-						jy.setPhase(temp.getPhase());
-						KaiJiang kj = repositories.kaiJiangRepository.findByYearAndPhase(temp.getYear(), temp.getPhase());
-						Q jqb = jqbRepository.findByYearAndPhase(temp.getYear(), temp.getPhase());
-						if (jqb == null) {
-							jqb = jqbClass.newInstance();
-							jqb.setYear(temp.getYear());
-							jqb.setPhase(temp.getPhase());
-							jqb.setDate(temp.getDate());
-							jqb.setSpecialNum(kj.getSpecialNum());
-						}
-						D jdb = jdbRepository.findByYearAndPhase(temp.getYear(), temp.getPhase());
-						if (jdb == null) {
-							jdb = jdbClass.newInstance();
-							jdb.setYear(temp.getYear());
-							jdb.setPhase(temp.getPhase());
-							jdb.setDate(temp.getDate());
-							jdb.setSpecialNum(kj.getSpecialNum());
-						}
-						H jhb = jhbRepository.findByYearAndPhase(temp.getYear(), temp.getPhase());
-						if (jhb == null) {
-							jhb = jhbClass.newInstance();
-							jhb.setYear(temp.getYear());
-							jhb.setPhase(temp.getPhase());
-							jhb.setDate(temp.getDate());
-							jhb.setSpecialNum(kj.getSpecialNum());
-						}
-						List<FxSw> fxDatas = new ArrayList<FxSw>();
-						fxDatas.add(result1.getContent().get(i));
-						fxDatas.add(result2.getContent().get(i));
-						fxDatas.add(result3.getContent().get(i));
-						fxDatas.add(result4.getContent().get(i));
-						fxDatas.add(result5.getContent().get(i));
-						fxDatas.add(result6.getContent().get(i));
-						fxDatas.add(result7.getContent().get(i));
-						fxDatas.add(result8.getContent().get(i));
-						fxDatas.add(result9.getContent().get(i));
-						fxDatas.add(result10.getContent().get(i));
-						fxDatas.add(result11.getContent().get(i));
-						fxDatas.add(result12.getContent().get(i));
-						for (FxSw fxData : fxDatas) {
-							setFxSwData(jy, fxData, "Sx", max);
-							setFxSwData(jy, fxData, "Sxzf", max);
-							setFxSwData(jy, fxData, "Ds", max);
-							setFxSwData(jy, fxData, "Dszf", max);
-							setFxSwData(jy, fxData, "Sw", max);
-							setFxSwData(jy, fxData, "Swzf", max);
-							setFxSwData(jy, fxData, "Mw", max);
-							setFxSwData(jy, fxData, "Mwzf", max);
-							setFxSwData(jy, fxData, "Lh", max);
-							setFxSwData(jy, fxData, "Lhzf", max);
-							setFxSwData(jy, fxData, "Bs", max);
-							setFxSwData(jy, fxData, "Bszf", max);
-							setFxSwData(jy, fxData, "Zs", max);
-							setFxSwData(jy, fxData, "Zszf", max);
-							setFxSwData(jy, fxData, "Wx", max);
-							setFxSwData(jy, fxData, "Wxzf", max);
-							setFxSwData(jy, fxData, "Wxds", max);
-							setFxSwData(jy, fxData, "Wxdszf", max);
-							setFxSwData(jy, fxData, "Pd", max);
-							setFxSwData(jy, fxData, "Pdzf", max);
-							setFxSwData(jy, fxData, "Fd", max);
-							setFxSwData(jy, fxData, "Fdzf", max);
-							setFxSwData(jy, fxData, "Qq", max);
-							setFxSwData(jy, fxData, "Qqzf", max);
-							setFxSwData(jy, fxData, "Qiw", max);
-							setFxSwData(jy, fxData, "Qiwzf", max);
-							setFxSwData(jy, fxData, "Twelve", max);
-							setFxSwData(jy, fxData, "Twelvezf", max);
-							setFxSwData(jy, fxData, "Slq", max);
-							setFxSwData(jy, fxData, "Slqzf", max);
-							setFxSwData(jy, fxData, "Zx1", max);
-							setFxSwData(jy, fxData, "Zx1zf", max);
-							setFxSwData(jy, fxData, "Zx2", max);
-							setFxSwData(jy, fxData, "Zx2zf", max);
-							setFxSwData(jy, fxData, "Zx3", max);
-							setFxSwData(jy, fxData, "Zx3zf", max);
-							setFxSwData(jy, fxData, "Zx4", max);
-							setFxSwData(jy, fxData, "Zx4zf", max);
-							setFxSwData(jy, fxData, "Zx5", max);
-							setFxSwData(jy, fxData, "Zx5zf", max);
-							setFxSwData(jy, fxData, "Zx6", max);
-							setFxSwData(jy, fxData, "Zx6zf", max);
-							setFxSwData(jy, fxData, "Zx7", max);
-							setFxSwData(jy, fxData, "Zx7zf", max);
-							setFxSwData(jy, fxData, "Zx8", max);
-							setFxSwData(jy, fxData, "Zx8zf", max);
-							setFxSwData(jy, fxData, "Zx9", max);
-							setFxSwData(jy, fxData, "Zx9zf", max);
-							setFxSwData(jy, fxData, "Zx10", max);
-							setFxSwData(jy, fxData, "Zx10zf", max);
-							setFxSwData(jy, fxData, "Zx11", max);
-							setFxSwData(jy, fxData, "Zx11zf", max);
-							setFxSwData(jy, fxData, "Zx12", max);
-							setFxSwData(jy, fxData, "Zx12zf", max);
-							setFxSwData(jy, fxData, "Zx13", max);
-							setFxSwData(jy, fxData, "Zx13zf", max);
-							setFxSwData(jy, fxData, "Zx14", max);
-							setFxSwData(jy, fxData, "Zx14zf", max);
-							setFxSwData(jy, fxData, "Zx15", max);
-							setFxSwData(jy, fxData, "Zx15zf", max);
-							setFxSwData(jy, fxData, "Zx16", max);
-							setFxSwData(jy, fxData, "Zx16zf", max);
-							setFxSwData(jy, fxData, "Zx17", max);
-							setFxSwData(jy, fxData, "Zx17zf", max);
-							setFxSwData(jy, fxData, "Zx18", max);
-							setFxSwData(jy, fxData, "Zx18zf", max);
-						}
-						if (lastJY != null) {
-							calDsxJYForJQB(jqb, lastJY);
-							calDsxJYForJQB(jqb, lastJY, true);
-							calDsxJYForJQB(jqb, lastJY, false);
-							calDsxJYForJDB(jdb, lastJY);
-							calDsxJYForJDB(jdb, lastJY, true);
-							calDsxJYForJDB(jdb, lastJY, false);
-							calDsxJYForJHB(jhb, lastJY);
-							calDsxJYForJHB(jhb, lastJY, true);
-							calDsxJYForJHB(jhb, lastJY, false);
-						}
-						jqbRepository.save(jqb);
-						jdbRepository.save(jdb);
-						jhbRepository.save(jhb);
-						lastJY = jy;
-					}
+					futures.add(repositories.yzService.doCalDsxJY(jqbClass, jdbClass, jhbClass, jqbRepository, jdbRepository,
+							jhbRepository, max, result1, result2, result3, result4, result5, result6, result7, result8, result9,
+							result10, result11, result12, lastJY));
+
+					int i = result1.getContent().size() - 1;
+					FxSw temp = result1.getContent().get(i);
+					lastJY = new DsxJY();
+					lastJY.setDate(temp.getDate());
+					lastJY.setYear(temp.getYear());
+					lastJY.setPhase(temp.getPhase());
+					setFxSwDataForDsx(result1, result2, result3, result4, result5, result6, result7, result8, result9, result10,
+							result11, result12, lastJY, i, max);
 				}
 				request = request.next();
 			} while (result1 != null && result1.hasNext());
@@ -268,6 +153,7 @@ public class YZ3Service extends YZ2Service {
 				jhbRepository.save(unknownDataForJHB);
 			}
 			String str = max ? "Max" : "Min";
+			sleep(futures, 100);
 			logger.info("End of calDsx" + str + "RedCounts...");
 		} catch (Exception e) {
 			if (DataAccessException.class.isAssignableFrom(e.getClass())) {
@@ -276,6 +162,163 @@ public class YZ3Service extends YZ2Service {
 			t = e;
 		}
 		return new AsyncResult<Exception>(t);
+	}
+
+	@Async
+	public <Q extends DsxJyYz, D extends DsxJyYz, H extends DsxJyYz> Future<Exception> doCalDsxJY(Class<Q> jqbClass,
+			Class<D> jdbClass, Class<H> jhbClass, BaseYzRepository<Q> jqbRepository, BaseYzRepository<D> jdbRepository,
+			BaseYzRepository<H> jhbRepository, boolean max, Page<FxSw1> result1, Page<FxSw2> result2, Page<FxSw3> result3,
+			Page<FxSw4> result4, Page<FxSw5> result5, Page<FxSw6> result6, Page<FxSw7> result7, Page<FxSw8> result8,
+			Page<FxSw9> result9, Page<FxSw10> result10, Page<FxSw11> result11, Page<FxSw12> result12, DsxJY lastJY) {
+
+		Exception t = null;
+		try {
+			if (result1 != null && result1.hasContent()) {
+				for (int i = 0; i < result1.getContent().size(); i++) {
+					FxSw temp = result1.getContent().get(i);
+					DsxJY jy = new DsxJY();
+					jy.setDate(temp.getDate());
+					jy.setYear(temp.getYear());
+					jy.setPhase(temp.getPhase());
+					KaiJiang kj = repositories.kaiJiangRepository.findByYearAndPhase(temp.getYear(), temp.getPhase());
+					Q jqb = jqbRepository.findByYearAndPhase(temp.getYear(), temp.getPhase());
+					if (jqb == null) {
+						jqb = jqbClass.newInstance();
+						jqb.setYear(temp.getYear());
+						jqb.setPhase(temp.getPhase());
+						jqb.setDate(temp.getDate());
+						jqb.setSpecialNum(kj.getSpecialNum());
+					}
+					D jdb = jdbRepository.findByYearAndPhase(temp.getYear(), temp.getPhase());
+					if (jdb == null) {
+						jdb = jdbClass.newInstance();
+						jdb.setYear(temp.getYear());
+						jdb.setPhase(temp.getPhase());
+						jdb.setDate(temp.getDate());
+						jdb.setSpecialNum(kj.getSpecialNum());
+					}
+					H jhb = jhbRepository.findByYearAndPhase(temp.getYear(), temp.getPhase());
+					if (jhb == null) {
+						jhb = jhbClass.newInstance();
+						jhb.setYear(temp.getYear());
+						jhb.setPhase(temp.getPhase());
+						jhb.setDate(temp.getDate());
+						jhb.setSpecialNum(kj.getSpecialNum());
+					}
+					setFxSwDataForDsx(result1, result2, result3, result4, result5, result6, result7, result8, result9, result10,
+							result11, result12, jy, i, max);
+					if (lastJY != null) {
+						calDsxJYForJQB(jqb, lastJY);
+						calDsxJYForJQB(jqb, lastJY, true);
+						calDsxJYForJQB(jqb, lastJY, false);
+						calDsxJYForJDB(jdb, lastJY);
+						calDsxJYForJDB(jdb, lastJY, true);
+						calDsxJYForJDB(jdb, lastJY, false);
+						calDsxJYForJHB(jhb, lastJY);
+						calDsxJYForJHB(jhb, lastJY, true);
+						calDsxJYForJHB(jhb, lastJY, false);
+					}
+					jqbRepository.save(jqb);
+					jdbRepository.save(jdb);
+					jhbRepository.save(jhb);
+					lastJY = jy;
+				}
+			}
+		} catch (Exception e) {
+			if (DataAccessException.class.isAssignableFrom(e.getClass())) {
+				logger.error(e.getMessage(), e);
+			}
+			t = e;
+		}
+		return new AsyncResult<Exception>(t);
+
+	}
+
+	private void setFxSwDataForDsx(Page<FxSw1> result1, Page<FxSw2> result2, Page<FxSw3> result3, Page<FxSw4> result4,
+			Page<FxSw5> result5, Page<FxSw6> result6, Page<FxSw7> result7, Page<FxSw8> result8, Page<FxSw9> result9,
+			Page<FxSw10> result10, Page<FxSw11> result11, Page<FxSw12> result12, DsxJY jy, int i, boolean max)
+			throws Exception {
+		List<FxSw> fxDatas = new ArrayList<FxSw>();
+		fxDatas.add(result1.getContent().get(i));
+		fxDatas.add(result2.getContent().get(i));
+		fxDatas.add(result3.getContent().get(i));
+		fxDatas.add(result4.getContent().get(i));
+		fxDatas.add(result5.getContent().get(i));
+		fxDatas.add(result6.getContent().get(i));
+		fxDatas.add(result7.getContent().get(i));
+		fxDatas.add(result8.getContent().get(i));
+		fxDatas.add(result9.getContent().get(i));
+		fxDatas.add(result10.getContent().get(i));
+		fxDatas.add(result11.getContent().get(i));
+		fxDatas.add(result12.getContent().get(i));
+		for (FxSw fxData : fxDatas) {
+			setFxSwData(jy, fxData, "Sx", max);
+			setFxSwData(jy, fxData, "Sxzf", max);
+			setFxSwData(jy, fxData, "Ds", max);
+			setFxSwData(jy, fxData, "Dszf", max);
+			setFxSwData(jy, fxData, "Sw", max);
+			setFxSwData(jy, fxData, "Swzf", max);
+			setFxSwData(jy, fxData, "Mw", max);
+			setFxSwData(jy, fxData, "Mwzf", max);
+			setFxSwData(jy, fxData, "Lh", max);
+			setFxSwData(jy, fxData, "Lhzf", max);
+			setFxSwData(jy, fxData, "Bs", max);
+			setFxSwData(jy, fxData, "Bszf", max);
+			setFxSwData(jy, fxData, "Zs", max);
+			setFxSwData(jy, fxData, "Zszf", max);
+			setFxSwData(jy, fxData, "Wx", max);
+			setFxSwData(jy, fxData, "Wxzf", max);
+			setFxSwData(jy, fxData, "Wxds", max);
+			setFxSwData(jy, fxData, "Wxdszf", max);
+			setFxSwData(jy, fxData, "Pd", max);
+			setFxSwData(jy, fxData, "Pdzf", max);
+			setFxSwData(jy, fxData, "Fd", max);
+			setFxSwData(jy, fxData, "Fdzf", max);
+			setFxSwData(jy, fxData, "Qq", max);
+			setFxSwData(jy, fxData, "Qqzf", max);
+			setFxSwData(jy, fxData, "Qiw", max);
+			setFxSwData(jy, fxData, "Qiwzf", max);
+			setFxSwData(jy, fxData, "Twelve", max);
+			setFxSwData(jy, fxData, "Twelvezf", max);
+			setFxSwData(jy, fxData, "Slq", max);
+			setFxSwData(jy, fxData, "Slqzf", max);
+			setFxSwData(jy, fxData, "Zx1", max);
+			setFxSwData(jy, fxData, "Zx1zf", max);
+			setFxSwData(jy, fxData, "Zx2", max);
+			setFxSwData(jy, fxData, "Zx2zf", max);
+			setFxSwData(jy, fxData, "Zx3", max);
+			setFxSwData(jy, fxData, "Zx3zf", max);
+			setFxSwData(jy, fxData, "Zx4", max);
+			setFxSwData(jy, fxData, "Zx4zf", max);
+			setFxSwData(jy, fxData, "Zx5", max);
+			setFxSwData(jy, fxData, "Zx5zf", max);
+			setFxSwData(jy, fxData, "Zx6", max);
+			setFxSwData(jy, fxData, "Zx6zf", max);
+			setFxSwData(jy, fxData, "Zx7", max);
+			setFxSwData(jy, fxData, "Zx7zf", max);
+			setFxSwData(jy, fxData, "Zx8", max);
+			setFxSwData(jy, fxData, "Zx8zf", max);
+			setFxSwData(jy, fxData, "Zx9", max);
+			setFxSwData(jy, fxData, "Zx9zf", max);
+			setFxSwData(jy, fxData, "Zx10", max);
+			setFxSwData(jy, fxData, "Zx10zf", max);
+			setFxSwData(jy, fxData, "Zx11", max);
+			setFxSwData(jy, fxData, "Zx11zf", max);
+			setFxSwData(jy, fxData, "Zx12", max);
+			setFxSwData(jy, fxData, "Zx12zf", max);
+			setFxSwData(jy, fxData, "Zx13", max);
+			setFxSwData(jy, fxData, "Zx13zf", max);
+			setFxSwData(jy, fxData, "Zx14", max);
+			setFxSwData(jy, fxData, "Zx14zf", max);
+			setFxSwData(jy, fxData, "Zx15", max);
+			setFxSwData(jy, fxData, "Zx15zf", max);
+			setFxSwData(jy, fxData, "Zx16", max);
+			setFxSwData(jy, fxData, "Zx16zf", max);
+			setFxSwData(jy, fxData, "Zx17", max);
+			setFxSwData(jy, fxData, "Zx17zf", max);
+			setFxSwData(jy, fxData, "Zx18", max);
+			setFxSwData(jy, fxData, "Zx18zf", max);
+		}
 	}
 
 	protected void setFxSwData(DsxJY jy, FxSw data, String column, boolean max) throws Exception {

@@ -7347,19 +7347,17 @@ public abstract class YZ2Service extends YZService {
 	@Async
 	public <T extends FxSw> Future<Exception> calFxSwRedCountsForSw(BaseFxSwDao<T> dao, BaseYzRepository<T> repository) {
 		Exception t = null;
+		List<Future<Exception>> futures = new ArrayList<Future<Exception>>();
 		try {
-			int perSize = 160;
 			Pageable request = new PageRequest(0, 200, new Sort(Direction.ASC, "date"));
 			Page<T> result = null;
 			do {
 				result = repository.findAll(request);
-				if (result != null && result.hasContent()) {
-					for (T yz : result.getContent()) {
-						dao.countReds(yz.getYear(), yz.getPhase(), perSize);
-					}
-				}
+				futures.add(doCalFxSwRedCountsForSw(result, dao));
 				request = request.next();
 			} while (result != null && result.hasNext());
+			sleep(futures, 100);
+			logger.info("End of calFxSwForRedCounts...");
 		} catch (Exception e) {
 			if (DataAccessException.class.isAssignableFrom(e.getClass())) {
 				logger.error(e.getMessage(), e);
@@ -7368,4 +7366,23 @@ public abstract class YZ2Service extends YZService {
 		}
 		return new AsyncResult<Exception>(t);
 	}
+
+	@Async
+	public <T extends FxSw> Future<Exception> doCalFxSwRedCountsForSw(Page<T> result, BaseFxSwDao<T> dao) {
+		Exception t = null;
+		try {
+			if (result != null && result.hasContent()) {
+				for (T yz : result.getContent()) {
+					dao.countReds(yz.getYear(), yz.getPhase(), 100);
+				}
+			}
+		} catch (Exception e) {
+			if (DataAccessException.class.isAssignableFrom(e.getClass())) {
+				logger.error(e.getMessage(), e);
+			}
+			t = e;
+		}
+		return new AsyncResult<Exception>(t);
+	}
+
 }

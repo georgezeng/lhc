@@ -4,11 +4,16 @@ import java.util.ArrayList;
 import java.util.List;
 
 import javax.persistence.Query;
+import javax.transaction.Transactional;
+
+import org.springframework.scheduling.annotation.Async;
 
 import lhc.domain.FxSw;
 import lhc.util.QueryUtil;
 
+@Transactional
 public abstract class BaseFxSwDao<T extends FxSw> extends BaseYzDao<T> {
+	@Async
 	public void countReds(int startForwardFromYear, int startForwardFromPhase, int perSize) {
 		List<Object> args = new ArrayList<Object>();
 		StringBuilder sql = new StringBuilder();

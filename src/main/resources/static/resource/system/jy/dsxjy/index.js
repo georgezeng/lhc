@@ -4,6 +4,94 @@ $(document).ready(function() {
 	$("#qc").combobox();
 	$("#reverse").combobox();
 	
+	$("#downloadBtn").unbind().click(function() {
+		var years = [];
+		var phases = [];
+		var specialNums = [];
+		var c1 = [];
+		var c2 = [];
+		var c3 = [];
+		var c4 = [];
+		var c5 = [];
+		var c6 = [];
+		var c7 = [];
+		var c8 = [];
+		var c9 = [];
+		var c10 = [];
+		var c11 = [];
+		var c1n = [];
+		var c2n = [];
+		var c3n = [];
+		var c4n = [];
+		var c5n = [];
+		var c6n = [];
+		var c7n = [];
+		var c8n = [];
+		var c9n = [];
+		var c10n = [];
+		var c11n = [];
+		
+		var table = $("#dataTable");
+		table.find("tbody").find("tr").each(function() {
+			var tds = $(this).find("td");
+			if(tds.eq(0).attr("tj") == 'false') {
+				years.push(tds.eq(0).text());
+				phases.push(tds.eq(1).text());
+				specialNums.push(tds.eq(2).text());
+				c1.push(tds.eq(3).text() == '0' ? "1" : " ");
+				c2.push(tds.eq(4).text() == '0' ? "1" : " ");
+				c3.push(tds.eq(5).text() == '0' ? "1" : " ");
+				c4.push(tds.eq(6).text() == '0' ? "1" : " ");
+				c5.push(tds.eq(7).text() == '0' ? "1" : " ");
+				c6.push(tds.eq(8).text() == '0' ? "1" : " ");
+				c7.push(tds.eq(9).text() == '0' ? "1" : " ");
+				c8.push(tds.eq(10).text() == '0' ? "1" : " ");
+				c9.push(tds.eq(11).text() == '0' ? "1" : " ");
+				c10.push(tds.eq(12).text() == '0' ? "1" : " ");
+				c11.push(tds.eq(13).text() == '0' ? "1" : " ");
+				c1n.push(tds.eq(14).attr("nums"));
+				c2n.push(tds.eq(15).attr("nums"));
+				c3n.push(tds.eq(16).attr("nums"));
+				c4n.push(tds.eq(17).attr("nums"));
+				c5n.push(tds.eq(18).attr("nums"));
+				c6n.push(tds.eq(19).attr("nums"));
+				c7n.push(tds.eq(20).attr("nums"));
+				c8n.push(tds.eq(21).attr("nums"));
+				c9n.push(tds.eq(22).attr("nums"));
+				c10n.push(tds.eq(23).attr("nums"));
+				c11n.push(tds.eq(24).attr("nums"));
+			}
+		});
+		
+		$("#yearList").val(years.join(","));
+		$("#phaseList").val(phases.join(","));
+		$("#specialNums").val(specialNums.join(","));
+		$("#c1").val(c1.join(","));
+		$("#c2").val(c2.join(","));
+		$("#c3").val(c3.join(","));
+		$("#c4").val(c4.join(","));
+		$("#c5").val(c5.join(","));
+		$("#c6").val(c6.join(","));
+		$("#c7").val(c7.join(","));
+		$("#c8").val(c8.join(","));
+		$("#c9").val(c9.join(","));
+		$("#c10").val(c10.join(","));
+		$("#c11").val(c11.join(","));
+		$("#c1n").val(c1n.join(","));
+		$("#c2n").val(c2n.join(","));
+		$("#c3n").val(c3n.join(","));
+		$("#c4n").val(c4n.join(","));
+		$("#c5n").val(c5n.join(","));
+		$("#c6n").val(c6n.join(","));
+		$("#c7n").val(c7n.join(","));
+		$("#c8n").val(c8n.join(","));
+		$("#c9n").val(c9n.join(","));
+		$("#c10n").val(c10n.join(","));
+		$("#c11n").val(c11n.join(","));
+		
+		downloadForm.submit();
+	});
+	
 	var cols = ["year", "phase", "specialNum"];
 	for(var i=1; i < 12; i++) {
 		cols.push("phase");
@@ -31,8 +119,14 @@ $(document).ready(function() {
 			var value = "";
 			if(item.date) {
 				value = item.year;
+				if(item.date == "unknown") {
+					$(nTd).attr("tj", "true");
+				} else {
+					$(nTd).attr("tj", "false");
+				}
 			} else {
 				value = "个数";
+				$(nTd).attr("tj", "true");
 			}
 			$(nTd).text(value);
 		}
@@ -138,9 +232,9 @@ $(document).ready(function() {
 								}
 							}
 							var len = arr.length < 10 ? "&nbsp;&nbsp;" + arr.length : arr.length;
-							$(nTd).html("<span style='background-color:red;padding: 5px;color:white; margin-right: 10px;'>" + len + "</span>" + value);
+							$(nTd).attr("nums", arr.length).html("<span style='background-color:red;padding: 5px;color:white; margin-right: 10px;'>" + len + "</span>" + value);
 						} else {
-							$(nTd).text("");
+							$(nTd).attr("nums", " ").text("");
 						}
 					} else {
 						$(nTd).text("");
@@ -162,7 +256,11 @@ $(document).ready(function() {
 				}
 				value = arr.join(", ");
 			}
-			$(nTd).text(value);
+			if(arr.length > 0) {
+				$(nTd).attr("nums", arr.length).text(value);
+			} else {
+				$(nTd).attr("nums", " ");
+			}
 			
 			if(item.date) {
 				var lastNums = arr;

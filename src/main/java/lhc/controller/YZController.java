@@ -17,7 +17,6 @@ import javax.servlet.http.HttpServletResponse;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.util.ReflectionUtils;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -388,46 +387,26 @@ public class YZController {
 
 	public void calFXSW() throws Exception {
 		List<Future<Exception>> futures = new ArrayList<Future<Exception>>();
-		// repositories.yzService.clearFxSwData();
-		// futures.add(repositories.yzService.calFxSw1());
-		// futures.add(repositories.yzService.calFxSw2());
-		// repositories.yzService.sleep(futures, 100);
-		// repositories.yzService.saveFxSwData();
-		// repositories.yzService.clearFxSwData();
-		// futures.clear();
-		// futures.add(repositories.yzService.calFxSw3());
-		// futures.add(repositories.yzService.calFxSw4());
-		// repositories.yzService.sleep(futures, 100);
-		// repositories.yzService.saveFxSwData();
-		// repositories.yzService.clearFxSwData();
-		// futures.clear();
-		// futures.add(repositories.yzService.calFxSw5());
-		// futures.add(repositories.yzService.calFxSw6());
-		// repositories.yzService.sleep(futures, 100);
-		// repositories.yzService.saveFxSwData();
-		// repositories.yzService.clearFxSwData();
-		// futures.clear();
-		// futures.add(repositories.yzService.calFxSw7());
-		// futures.add(repositories.yzService.calFxSw8());
-		// repositories.yzService.sleep(futures, 100);
-		// repositories.yzService.saveFxSwData();
-		// repositories.yzService.clearFxSwData();
-		// futures.clear();
-		// futures.add(repositories.yzService.calFxSw9());
-		// futures.add(repositories.yzService.calFxSw10());
-		// repositories.yzService.sleep(futures, 100);
-		// repositories.yzService.saveFxSwData();
-		// repositories.yzService.clearFxSwData();
-		// futures.clear();
-		// futures.add(repositories.yzService.calFxSw11());
-		// futures.add(repositories.yzService.calFxSw12());
-		// repositories.yzService.sleep(futures, 100);
-		// repositories.yzService.saveFxSwData();
-		// repositories.yzService.clearFxSwData();
-		// futures.clear();
-		// futures.add(repositories.yzService.calFxSwRedCounts());
-		// repositories.yzService.sleep(futures, 100);
-		// futures.clear();
+		repositories.yzService.clearFxSwData();
+		futures.add(repositories.yzService.calFxSw1());
+		futures.add(repositories.yzService.calFxSw2());
+		futures.add(repositories.yzService.calFxSw3());
+		futures.add(repositories.yzService.calFxSw4());
+		futures.add(repositories.yzService.calFxSw5());
+		futures.add(repositories.yzService.calFxSw6());
+		futures.add(repositories.yzService.calFxSw7());
+		futures.add(repositories.yzService.calFxSw8());
+		futures.add(repositories.yzService.calFxSw9());
+		futures.add(repositories.yzService.calFxSw10());
+		futures.add(repositories.yzService.calFxSw11());
+		futures.add(repositories.yzService.calFxSw12());
+		repositories.yzService.sleep(futures, 100);
+		repositories.yzService.saveFxSwData();
+		repositories.yzService.clearFxSwData();
+		futures.clear();
+		futures.add(repositories.yzService.calFxSwRedCounts());
+		repositories.yzService.sleep(futures, 100);
+		futures.clear();
 		futures.add(repositories.yzService.calDsxMinJY());
 		futures.add(repositories.yzService.calDsxMaxJY());
 		repositories.yzService.sleep(futures, 100);
@@ -436,21 +415,21 @@ public class YZController {
 
 	@RequestMapping("/calYZ")
 	public BaseResult calYZ() throws Exception {
-		// calBS();
-		// calDS();
-		// calLH();
-		// calMW();
-		// calPD();
-		// calQiw();
-		// calQQ();
-		// calSLQ();
-		// calSX();
-		// calSW();
-		// calTM();
-		// calTwelve();
-		// calWX();
-		// calZS();
-		// calZX();
+		calBS();
+		calDS();
+		calLH();
+		calMW();
+		calPD();
+		calQiw();
+		calQQ();
+		calSLQ();
+		calSX();
+		calSW();
+		calTM();
+		calTwelve();
+		calWX();
+		calZS();
+		calZX();
 		calFXSW();
 		logger.info("Done calYZ...");
 		return BaseResult.EMPTY;
@@ -2270,20 +2249,108 @@ public class YZController {
 		writer.append("计数(0/1)").append(", ");
 		writer.append("计数").append(", ");
 		writer.append("连续计数(0/1)").append(", ");
-		writer.append("反转个数").append("\n");
+		writer.append("反转个数").append(", ");
+		writer.append("反转").append("\n");
 		String[] years = request.getParameter("years").split(",");
 		String[] phases = request.getParameter("phases").split(",");
 		String[] counts01 = request.getParameter("counts01").split(",");
 		String[] countsTotals = request.getParameter("countsTotals").split(",");
 		String[] continuosCounts = request.getParameter("continuosCounts").split(",");
 		String[] fzNums = request.getParameter("fzNums").split(",");
+		String[] fzArrs = request.getParameter("fzArrs").split(",");
 		for (int i = 0; i < years.length; i++) {
 			writer.append(years[i]).append(", ");
 			writer.append(phases[i]).append(", ");
 			writer.append(counts01[i]).append(", ");
 			writer.append(countsTotals[i]).append(", ");
 			writer.append(continuosCounts[i]).append(", ");
-			writer.append(fzNums[i]).append("\n");
+			writer.append(fzNums[i]).append(", ");
+			writer.append(fzArrs[i]).append("\n");
+		}
+		return null;
+	}
+
+	@RequestMapping("/downloadDSX")
+	public String downloadDSX(HttpServletRequest request, HttpServletResponse response) throws Exception {
+		response.setContentType("text/csv;charset=gbk;");
+		response.addHeader("Content-Disposition", "attachment;filename=dsx.csv");
+		Writer writer = response.getWriter();
+		writer.append("年份").append(", ");
+		writer.append("期数").append(", ");
+		writer.append("特码").append(", ");
+		writer.append("次数1").append(", ");
+		writer.append("次数2").append(", ");
+		writer.append("次数3").append(", ");
+		writer.append("次数4").append(", ");
+		writer.append("次数5").append(", ");
+		writer.append("次数6").append(", ");
+		writer.append("次数7").append(", ");
+		writer.append("次数8").append(", ");
+		writer.append("次数9").append(", ");
+		writer.append("次数10").append(", ");
+		writer.append("反转").append(", ");
+		writer.append("次数1(个数)").append(", ");
+		writer.append("次数2(个数)").append(", ");
+		writer.append("次数3(个数)").append(", ");
+		writer.append("次数4(个数)").append(", ");
+		writer.append("次数5(个数)").append(", ");
+		writer.append("次数6(个数)").append(", ");
+		writer.append("次数7(个数)").append(", ");
+		writer.append("次数8(个数)").append(", ");
+		writer.append("次数9(个数)").append(", ");
+		writer.append("次数10(个数)").append(", ");
+		writer.append("反转(个数)").append("\n");
+		String[] years = request.getParameter("years").split(",");
+		String[] phases = request.getParameter("phases").split(",");
+		String[] specialNums = request.getParameter("specialNums").split(",");
+		String[] c1 = request.getParameter("c1").split(",");
+		String[] c2 = request.getParameter("c2").split(",");
+		String[] c3 = request.getParameter("c3").split(",");
+		String[] c4 = request.getParameter("c4").split(",");
+		String[] c5 = request.getParameter("c5").split(",");
+		String[] c6 = request.getParameter("c6").split(",");
+		String[] c7 = request.getParameter("c7").split(",");
+		String[] c8 = request.getParameter("c8").split(",");
+		String[] c9 = request.getParameter("c9").split(",");
+		String[] c10 = request.getParameter("c10").split(",");
+		String[] c11 = request.getParameter("c11").split(",");
+		String[] c1n = request.getParameter("c1n").split(",");
+		String[] c2n = request.getParameter("c2n").split(",");
+		String[] c3n = request.getParameter("c3n").split(",");
+		String[] c4n = request.getParameter("c4n").split(",");
+		String[] c5n = request.getParameter("c5n").split(",");
+		String[] c6n = request.getParameter("c6n").split(",");
+		String[] c7n = request.getParameter("c7n").split(",");
+		String[] c8n = request.getParameter("c8n").split(",");
+		String[] c9n = request.getParameter("c9n").split(",");
+		String[] c10n = request.getParameter("c10n").split(",");
+		String[] c11n = request.getParameter("c11n").split(",");
+		for (int i = 0; i < years.length; i++) {
+			writer.append(years[i]).append(", ");
+			writer.append(phases[i]).append(", ");
+			writer.append(specialNums[i]).append(", ");
+			writer.append(c1[i]).append(", ");
+			writer.append(c2[i]).append(", ");
+			writer.append(c3[i]).append(", ");
+			writer.append(c4[i]).append(", ");
+			writer.append(c5[i]).append(", ");
+			writer.append(c6[i]).append(", ");
+			writer.append(c7[i]).append(", ");
+			writer.append(c8[i]).append(", ");
+			writer.append(c9[i]).append(", ");
+			writer.append(c10[i]).append(", ");
+			writer.append(c11[i]).append(", ");
+			writer.append(c1n[i]).append(", ");
+			writer.append(c2n[i]).append(", ");
+			writer.append(c3n[i]).append(", ");
+			writer.append(c4n[i]).append(", ");
+			writer.append(c5n[i]).append(", ");
+			writer.append(c6n[i]).append(", ");
+			writer.append(c7n[i]).append(", ");
+			writer.append(c8n[i]).append(", ");
+			writer.append(c9n[i]).append(", ");
+			writer.append(c10n[i]).append(", ");
+			writer.append(c11n[i]).append("\n");
 		}
 		return null;
 	}
@@ -3530,12 +3597,12 @@ public class YZController {
 			if (latest != null) {
 				result.getList().add(latest);
 			}
-//		} else if (queryInfo.getObject().getVersion().equalsIgnoreCase("jdbzs")) {
-//			result = repositories.dsxMinJyJDBDao.query(queryInfo);
-//			DsxJYViewBean latest = repositories.dsxMinJyJDBDao.findLatestOne(queryInfo);
-//			if (latest != null) {
-//				result.getList().add(latest);
-//			}
+			// } else if (queryInfo.getObject().getVersion().equalsIgnoreCase("jdbzs")) {
+			// result = repositories.dsxMinJyJDBDao.query(queryInfo);
+			// DsxJYViewBean latest = repositories.dsxMinJyJDBDao.findLatestOne(queryInfo);
+			// if (latest != null) {
+			// result.getList().add(latest);
+			// }
 		} else if (queryInfo.getObject().getVersion().equalsIgnoreCase("jhbzs")) {
 			result = repositories.dsxMinJyJHBDao.query(queryInfo);
 			DsxJYViewBean latest = repositories.dsxMinJyJHBDao.findLatestOne(queryInfo);
@@ -3543,25 +3610,25 @@ public class YZController {
 				result.getList().add(latest);
 			}
 		}
-//		} else if (queryInfo.getObject().getVersion().equalsIgnoreCase("jqbzd")) {
-//			result = repositories.dsxMaxJyJQBDao.query(queryInfo);
-//			DsxJYViewBean latest = repositories.dsxMaxJyJQBDao.findLatestOne(queryInfo);
-//			if (latest != null) {
-//				result.getList().add(latest);
-//			}
-//		} else if (queryInfo.getObject().getVersion().equalsIgnoreCase("jdbzd")) {
-//			result = repositories.dsxMaxJyJDBDao.query(queryInfo);
-//			DsxJYViewBean latest = repositories.dsxMaxJyJDBDao.findLatestOne(queryInfo);
-//			if (latest != null) {
-//				result.getList().add(latest);
-//			}
-//		} else if (queryInfo.getObject().getVersion().equalsIgnoreCase("jhbzd")) {
-//			result = repositories.dsxMaxJyJHBDao.query(queryInfo);
-//			DsxJYViewBean latest = repositories.dsxMaxJyJHBDao.findLatestOne(queryInfo);
-//			if (latest != null) {
-//				result.getList().add(latest);
-//			}
-//		}
+		// } else if (queryInfo.getObject().getVersion().equalsIgnoreCase("jqbzd")) {
+		// result = repositories.dsxMaxJyJQBDao.query(queryInfo);
+		// DsxJYViewBean latest = repositories.dsxMaxJyJQBDao.findLatestOne(queryInfo);
+		// if (latest != null) {
+		// result.getList().add(latest);
+		// }
+		// } else if (queryInfo.getObject().getVersion().equalsIgnoreCase("jdbzd")) {
+		// result = repositories.dsxMaxJyJDBDao.query(queryInfo);
+		// DsxJYViewBean latest = repositories.dsxMaxJyJDBDao.findLatestOne(queryInfo);
+		// if (latest != null) {
+		// result.getList().add(latest);
+		// }
+		// } else if (queryInfo.getObject().getVersion().equalsIgnoreCase("jhbzd")) {
+		// result = repositories.dsxMaxJyJHBDao.query(queryInfo);
+		// DsxJYViewBean latest = repositories.dsxMaxJyJHBDao.findLatestOne(queryInfo);
+		// if (latest != null) {
+		// result.getList().add(latest);
+		// }
+		// }
 		if (result != null && result.getTotal() > 0) {
 			result.getList().add(new DsxJYViewBean());
 		}

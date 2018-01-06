@@ -3331,6 +3331,7 @@ function createFXSW(url) {
 		var countsTotals = [];
 		var continuosCounts = [];
 		var fzNums = [];
+		var fzArrs = [];
 		
 		var table = $("#dataTable");
 		table.find("tbody").find("tr").each(function() {
@@ -3341,6 +3342,11 @@ function createFXSW(url) {
 			countsTotals.push(tds.eq(69).text());
 			continuosCounts.push(tds.eq(70).text());
 			fzNums.push(tds.eq(71).text());
+			var arr = tds.eq(72).text().replace(/,\s*/g, "|");
+			if(arr == "") {
+				arr = " ";
+			}
+			fzArrs.push(arr);
 		});
 		
 		$("#yearList").val(years.join(","));
@@ -3349,6 +3355,7 @@ function createFXSW(url) {
 		$("#countsTotals").val(countsTotals.join(","));
 		$("#continuosCounts").val(continuosCounts.join(","));
 		$("#fzNums").val(fzNums.join(","));
+		$("#fzArrs").val(fzArrs.join(","));
 		
 		downloadForm.submit();
 	});
