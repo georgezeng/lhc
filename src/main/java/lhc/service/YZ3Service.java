@@ -45,6 +45,7 @@ import lhc.domain.KaiJiang;
 import lhc.dto.DsxJY;
 import lhc.dto.XbwJYSub;
 import lhc.repository.jpa.BaseYzRepository;
+import lhc.util.CommonUtil;
 
 @Service
 @Transactional
@@ -153,7 +154,7 @@ public class YZ3Service extends YZ2Service {
 				jhbRepository.save(unknownDataForJHB);
 			}
 			String str = max ? "Max" : "Min";
-			sleep(futures, 100);
+			CommonUtil.sleep(futures, 100);
 			logger.info("End of calDsx" + str + "RedCounts...");
 		} catch (Exception e) {
 			if (DataAccessException.class.isAssignableFrom(e.getClass())) {
@@ -224,6 +225,8 @@ public class YZ3Service extends YZ2Service {
 					lastJY = jy;
 				}
 			}
+			String str = max ? "Max" : "Min";
+			logger.info("End of partition of Dsx" + str + "JY...");
 		} catch (Exception e) {
 			if (DataAccessException.class.isAssignableFrom(e.getClass())) {
 				logger.error(e.getMessage(), e);
@@ -338,9 +341,6 @@ public class YZ3Service extends YZ2Service {
 		if (redCountsForJY == null) {
 			toOverride = true;
 		} else if (redCountsForFx != null) {
-			if (redCountsForJY.compareTo(redCountsForFx) > 0) {
-				toOverride = true;
-			}
 			if (redCountsForJY.compareTo(redCountsForFx) == 0) {
 				Integer yzForJY = (Integer) gmForYzForJY.invoke(jy);
 				Integer yzForFx = (Integer) gmForYzForFx.invoke(data);

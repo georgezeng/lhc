@@ -254,17 +254,19 @@ $(document).ready(function() {
 						arr.push(i);
 					}
 				}
-				value = arr.join(", ");
+				if(arr.length > 0) {
+					value = arr.join(", ");
+				}
 			}
 			if(arr.length > 0) {
 				$(nTd).attr("nums", arr.length).text(value);
 			} else {
-				$(nTd).attr("nums", " ");
+				$(nTd).attr("nums", " ").text(value);
 			}
 			
 			if(item.date) {
 				var lastNums = arr;
-				if(lastNums) {
+				if(lastNums && lastNums.length > 0) {
 					if(item.specialNum) {
 						var yzField = "cr_yz";
 						var yzCountField = "cr_yz_count";

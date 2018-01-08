@@ -21,6 +21,7 @@ import org.springframework.data.domain.Sort;
 import org.springframework.data.domain.Sort.Direction;
 import org.springframework.scheduling.annotation.Async;
 import org.springframework.scheduling.annotation.AsyncResult;
+import org.springframework.transaction.annotation.Propagation;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.util.ReflectionUtils;
 
@@ -143,6 +144,7 @@ import lhc.dto.TmYzInfo;
 import lhc.enums.SX;
 import lhc.repository.jpa.BaseFxSwDao;
 import lhc.repository.jpa.BaseYzRepository;
+import lhc.util.CommonUtil;
 import lhc.util.DateUtil;
 
 @Transactional
@@ -6773,6 +6775,7 @@ public abstract class YZ2Service extends YZService {
 	}
 
 	@Async
+	@Transactional(propagation = Propagation.NEVER)
 	public Future<Exception> calFxSw1() {
 		Exception t = null;
 		try {
@@ -6810,7 +6813,7 @@ public abstract class YZ2Service extends YZService {
 			futures.add(repositories.yzService.calFxZx16Sw1());
 			futures.add(repositories.yzService.calFxZx17Sw1());
 			futures.add(repositories.yzService.calFxZx18Sw1());
-			sleep(futures, 10000);
+			CommonUtil.sleep(futures, 10000);
 			for (FxSw data : fxswMap.values()) {
 				if (data instanceof FxSw1) {
 					repositories.fxsw1Repository.save((FxSw1) data);
@@ -6826,6 +6829,7 @@ public abstract class YZ2Service extends YZService {
 	}
 
 	@Async
+	@Transactional(propagation = Propagation.NEVER)
 	public Future<Exception> calFxSw2() {
 		Exception t = null;
 		try {
@@ -6863,7 +6867,7 @@ public abstract class YZ2Service extends YZService {
 			futures.add(repositories.yzService.calFxZx16Sw2());
 			futures.add(repositories.yzService.calFxZx17Sw2());
 			futures.add(repositories.yzService.calFxZx18Sw2());
-			sleep(futures, 10000);
+			CommonUtil.sleep(futures, 10000);
 		} catch (Exception e) {
 			if (DataAccessException.class.isAssignableFrom(e.getClass())) {
 				logger.error(e.getMessage(), e);
@@ -6874,6 +6878,7 @@ public abstract class YZ2Service extends YZService {
 	}
 
 	@Async
+	@Transactional(propagation = Propagation.NEVER)
 	public Future<Exception> calFxSw3() {
 		Exception t = null;
 		try {
@@ -6911,7 +6916,7 @@ public abstract class YZ2Service extends YZService {
 			futures.add(repositories.yzService.calFxZx16Sw3());
 			futures.add(repositories.yzService.calFxZx17Sw3());
 			futures.add(repositories.yzService.calFxZx18Sw3());
-			sleep(futures, 10000);
+			CommonUtil.sleep(futures, 10000);
 		} catch (Exception e) {
 			if (DataAccessException.class.isAssignableFrom(e.getClass())) {
 				logger.error(e.getMessage(), e);
@@ -6922,6 +6927,7 @@ public abstract class YZ2Service extends YZService {
 	}
 
 	@Async
+	@Transactional(propagation = Propagation.NEVER)
 	public Future<Exception> calFxSw4() {
 		Exception t = null;
 		try {
@@ -6959,7 +6965,7 @@ public abstract class YZ2Service extends YZService {
 			futures.add(repositories.yzService.calFxZx16Sw4());
 			futures.add(repositories.yzService.calFxZx17Sw4());
 			futures.add(repositories.yzService.calFxZx18Sw4());
-			sleep(futures, 10000);
+			CommonUtil.sleep(futures, 10000);
 		} catch (Exception e) {
 			if (DataAccessException.class.isAssignableFrom(e.getClass())) {
 				logger.error(e.getMessage(), e);
@@ -6970,6 +6976,7 @@ public abstract class YZ2Service extends YZService {
 	}
 
 	@Async
+	@Transactional(propagation = Propagation.NEVER)
 	public Future<Exception> calFxSw5() {
 		Exception t = null;
 		try {
@@ -7007,7 +7014,7 @@ public abstract class YZ2Service extends YZService {
 			futures.add(repositories.yzService.calFxZx16Sw5());
 			futures.add(repositories.yzService.calFxZx17Sw5());
 			futures.add(repositories.yzService.calFxZx18Sw5());
-			sleep(futures, 10000);
+			CommonUtil.sleep(futures, 10000);
 		} catch (Exception e) {
 			if (DataAccessException.class.isAssignableFrom(e.getClass())) {
 				logger.error(e.getMessage(), e);
@@ -7018,6 +7025,7 @@ public abstract class YZ2Service extends YZService {
 	}
 
 	@Async
+	@Transactional(propagation = Propagation.NEVER)
 	public Future<Exception> calFxSw6() {
 		Exception t = null;
 		try {
@@ -7052,7 +7060,7 @@ public abstract class YZ2Service extends YZService {
 			futures.add(repositories.yzService.calFxZx16Sw6());
 			futures.add(repositories.yzService.calFxZx17Sw6());
 			futures.add(repositories.yzService.calFxZx18Sw6());
-			sleep(futures, 10000);
+			CommonUtil.sleep(futures, 10000);
 		} catch (Exception e) {
 			if (DataAccessException.class.isAssignableFrom(e.getClass())) {
 				logger.error(e.getMessage(), e);
@@ -7063,6 +7071,7 @@ public abstract class YZ2Service extends YZService {
 	}
 
 	@Async
+	@Transactional(propagation = Propagation.NEVER)
 	public Future<Exception> calFxSw7() {
 		Exception t = null;
 		try {
@@ -7097,7 +7106,7 @@ public abstract class YZ2Service extends YZService {
 			futures.add(repositories.yzService.calFxZx16Sw7());
 			futures.add(repositories.yzService.calFxZx17Sw7());
 			futures.add(repositories.yzService.calFxZx18Sw7());
-			sleep(futures, 10000);
+			CommonUtil.sleep(futures, 10000);
 		} catch (Exception e) {
 			if (DataAccessException.class.isAssignableFrom(e.getClass())) {
 				logger.error(e.getMessage(), e);
@@ -7108,6 +7117,7 @@ public abstract class YZ2Service extends YZService {
 	}
 
 	@Async
+	@Transactional(propagation = Propagation.NEVER)
 	public Future<Exception> calFxSw8() {
 		Exception t = null;
 		try {
@@ -7139,7 +7149,7 @@ public abstract class YZ2Service extends YZService {
 			futures.add(repositories.yzService.calFxZx16Sw8());
 			futures.add(repositories.yzService.calFxZx17Sw8());
 			futures.add(repositories.yzService.calFxZx18Sw8());
-			sleep(futures, 10000);
+			CommonUtil.sleep(futures, 10000);
 		} catch (Exception e) {
 			if (DataAccessException.class.isAssignableFrom(e.getClass())) {
 				logger.error(e.getMessage(), e);
@@ -7150,6 +7160,7 @@ public abstract class YZ2Service extends YZService {
 	}
 
 	@Async
+	@Transactional(propagation = Propagation.NEVER)
 	public Future<Exception> calFxSw9() {
 		Exception t = null;
 		try {
@@ -7181,7 +7192,7 @@ public abstract class YZ2Service extends YZService {
 			futures.add(repositories.yzService.calFxZx16Sw9());
 			futures.add(repositories.yzService.calFxZx17Sw9());
 			futures.add(repositories.yzService.calFxZx18Sw9());
-			sleep(futures, 10000);
+			CommonUtil.sleep(futures, 10000);
 		} catch (Exception e) {
 			if (DataAccessException.class.isAssignableFrom(e.getClass())) {
 				logger.error(e.getMessage(), e);
@@ -7192,6 +7203,7 @@ public abstract class YZ2Service extends YZService {
 	}
 
 	@Async
+	@Transactional(propagation = Propagation.NEVER)
 	public Future<Exception> calFxSw10() {
 		Exception t = null;
 		try {
@@ -7221,7 +7233,7 @@ public abstract class YZ2Service extends YZService {
 			futures.add(repositories.yzService.calFxZx16Sw10());
 			futures.add(repositories.yzService.calFxZx17Sw10());
 			futures.add(repositories.yzService.calFxZx18Sw10());
-			sleep(futures, 10000);
+			CommonUtil.sleep(futures, 10000);
 		} catch (Exception e) {
 			if (DataAccessException.class.isAssignableFrom(e.getClass())) {
 				logger.error(e.getMessage(), e);
@@ -7232,6 +7244,7 @@ public abstract class YZ2Service extends YZService {
 	}
 
 	@Async
+	@Transactional(propagation = Propagation.NEVER)
 	public Future<Exception> calFxSw11() {
 		Exception t = null;
 		try {
@@ -7255,7 +7268,7 @@ public abstract class YZ2Service extends YZService {
 			futures.add(repositories.yzService.calFxZx16Sw11());
 			futures.add(repositories.yzService.calFxZx17Sw11());
 			futures.add(repositories.yzService.calFxZx18Sw11());
-			sleep(futures, 10000);
+			CommonUtil.sleep(futures, 10000);
 		} catch (Exception e) {
 			if (DataAccessException.class.isAssignableFrom(e.getClass())) {
 				logger.error(e.getMessage(), e);
@@ -7266,6 +7279,7 @@ public abstract class YZ2Service extends YZService {
 	}
 
 	@Async
+	@Transactional(propagation = Propagation.NEVER)
 	public Future<Exception> calFxSw12() {
 		Exception t = null;
 		try {
@@ -7289,7 +7303,7 @@ public abstract class YZ2Service extends YZService {
 			futures.add(repositories.yzService.calFxZx16Sw12());
 			futures.add(repositories.yzService.calFxZx17Sw12());
 			futures.add(repositories.yzService.calFxZx18Sw12());
-			sleep(futures, 10000);
+			CommonUtil.sleep(futures, 10000);
 		} catch (Exception e) {
 			if (DataAccessException.class.isAssignableFrom(e.getClass())) {
 				logger.error(e.getMessage(), e);
@@ -7316,66 +7330,45 @@ public abstract class YZ2Service extends YZService {
 		}
 	}
 
-	@Async
-	public Future<Exception> calFxSwRedCounts() {
-		Exception t = null;
-		try {
-			List<Future<Exception>> futures = new ArrayList<Future<Exception>>();
-			futures.add(repositories.yzService.calFxSwRedCountsForSw(repositories.fxsw1Dao, repositories.fxsw1Repository));
-			futures.add(repositories.yzService.calFxSwRedCountsForSw(repositories.fxsw2Dao, repositories.fxsw2Repository));
-			futures.add(repositories.yzService.calFxSwRedCountsForSw(repositories.fxsw3Dao, repositories.fxsw3Repository));
-			futures.add(repositories.yzService.calFxSwRedCountsForSw(repositories.fxsw4Dao, repositories.fxsw4Repository));
-			futures.add(repositories.yzService.calFxSwRedCountsForSw(repositories.fxsw5Dao, repositories.fxsw5Repository));
-			futures.add(repositories.yzService.calFxSwRedCountsForSw(repositories.fxsw6Dao, repositories.fxsw6Repository));
-			futures.add(repositories.yzService.calFxSwRedCountsForSw(repositories.fxsw7Dao, repositories.fxsw7Repository));
-			futures.add(repositories.yzService.calFxSwRedCountsForSw(repositories.fxsw8Dao, repositories.fxsw8Repository));
-			futures.add(repositories.yzService.calFxSwRedCountsForSw(repositories.fxsw9Dao, repositories.fxsw9Repository));
-			futures.add(repositories.yzService.calFxSwRedCountsForSw(repositories.fxsw10Dao, repositories.fxsw10Repository));
-			futures.add(repositories.yzService.calFxSwRedCountsForSw(repositories.fxsw11Dao, repositories.fxsw11Repository));
-			futures.add(repositories.yzService.calFxSwRedCountsForSw(repositories.fxsw12Dao, repositories.fxsw12Repository));
-			repositories.yzService.sleep(futures, 100);
-			logger.info("End of calFXSWRedCounts...");
-		} catch (Exception e) {
-			if (DataAccessException.class.isAssignableFrom(e.getClass())) {
-				logger.error(e.getMessage(), e);
-			}
-			t = e;
-		}
-		return new AsyncResult<Exception>(t);
+	@Transactional(propagation = Propagation.NEVER)
+	public List<Future<Exception>> calFxSwRedCounts() throws Exception {
+		List<Future<Exception>> futures = new ArrayList<Future<Exception>>();
+		List<Future<Exception>> subFutures = new ArrayList<Future<Exception>>();
+		futures.add(repositories.yzService.calFxSwRedCountsForSw(subFutures, repositories.fxsw1Dao, repositories.fxsw1Repository));
+		futures.add(repositories.yzService.calFxSwRedCountsForSw(subFutures, repositories.fxsw2Dao, repositories.fxsw2Repository));
+		futures.add(repositories.yzService.calFxSwRedCountsForSw(subFutures, repositories.fxsw3Dao, repositories.fxsw3Repository));
+		futures.add(repositories.yzService.calFxSwRedCountsForSw(subFutures, repositories.fxsw4Dao, repositories.fxsw4Repository));
+		futures.add(repositories.yzService.calFxSwRedCountsForSw(subFutures, repositories.fxsw5Dao, repositories.fxsw5Repository));
+		futures.add(repositories.yzService.calFxSwRedCountsForSw(subFutures, repositories.fxsw6Dao, repositories.fxsw6Repository));
+		futures.add(repositories.yzService.calFxSwRedCountsForSw(subFutures, repositories.fxsw7Dao, repositories.fxsw7Repository));
+		futures.add(repositories.yzService.calFxSwRedCountsForSw(subFutures, repositories.fxsw8Dao, repositories.fxsw8Repository));
+		futures.add(repositories.yzService.calFxSwRedCountsForSw(subFutures, repositories.fxsw9Dao, repositories.fxsw9Repository));
+		futures.add(repositories.yzService.calFxSwRedCountsForSw(subFutures, repositories.fxsw10Dao, repositories.fxsw10Repository));
+		futures.add(repositories.yzService.calFxSwRedCountsForSw(subFutures, repositories.fxsw11Dao, repositories.fxsw11Repository));
+		futures.add(repositories.yzService.calFxSwRedCountsForSw(subFutures, repositories.fxsw12Dao, repositories.fxsw12Repository));
+		CommonUtil.sleep(futures, 100);
+		logger.info("Counting calFxSwRedCounts, total sub tasks: " + subFutures.size());
+		return subFutures;
 	}
 
 	@Async
-	public <T extends FxSw> Future<Exception> calFxSwRedCountsForSw(BaseFxSwDao<T> dao, BaseYzRepository<T> repository) {
+	@Transactional(propagation = Propagation.NEVER)
+	public <T extends FxSw> Future<Exception> calFxSwRedCountsForSw(List<Future<Exception>> futures, BaseFxSwDao<T> dao, BaseYzRepository<T> repository) {
 		Exception t = null;
-		List<Future<Exception>> futures = new ArrayList<Future<Exception>>();
 		try {
-			Pageable request = new PageRequest(0, 200, new Sort(Direction.ASC, "date"));
+			Pageable request = new PageRequest(0, 500, new Sort(Direction.ASC, "date"));
 			Page<T> result = null;
 			do {
 				result = repository.findAll(request);
-				futures.add(doCalFxSwRedCountsForSw(result, dao));
+				if (result != null && result.hasContent()) {
+					for (T yz : result.getContent()) {
+						synchronized (this) {
+							futures.add(dao.countReds(yz.getYear(), yz.getPhase(), 100));
+						}
+					}
+				}
 				request = request.next();
 			} while (result != null && result.hasNext());
-			sleep(futures, 100);
-			logger.info("End of calFxSwForRedCounts...");
-		} catch (Exception e) {
-			if (DataAccessException.class.isAssignableFrom(e.getClass())) {
-				logger.error(e.getMessage(), e);
-			}
-			t = e;
-		}
-		return new AsyncResult<Exception>(t);
-	}
-
-	@Async
-	public <T extends FxSw> Future<Exception> doCalFxSwRedCountsForSw(Page<T> result, BaseFxSwDao<T> dao) {
-		Exception t = null;
-		try {
-			if (result != null && result.hasContent()) {
-				for (T yz : result.getContent()) {
-					dao.countReds(yz.getYear(), yz.getPhase(), 100);
-				}
-			}
 		} catch (Exception e) {
 			if (DataAccessException.class.isAssignableFrom(e.getClass())) {
 				logger.error(e.getMessage(), e);

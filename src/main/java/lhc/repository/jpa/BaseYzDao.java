@@ -9,6 +9,8 @@ import javax.annotation.PostConstruct;
 import javax.persistence.EntityManager;
 import javax.persistence.Query;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.PageRequest;
 
@@ -23,6 +25,8 @@ import lhc.util.QueryUtil;
 
 @SuppressWarnings("unchecked")
 public abstract class BaseYzDao<T extends BaseYz> {
+	protected Logger logger = LoggerFactory.getLogger(getClass());
+	
 	@Autowired
 	protected EntityManager em;
 

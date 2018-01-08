@@ -49,6 +49,7 @@ import lhc.enums.SX;
 import lhc.repository.jpa.BaseYzDao;
 import lhc.repository.jpa.Repositories;
 import lhc.service.ParallelYzServiceWrapper;
+import lhc.util.CommonUtil;
 import lhc.util.DateUtil;
 
 @RestController
@@ -92,18 +93,18 @@ public class YZController {
 		futures.add(repositories.yzService.calSX());
 		futures.add(repositories.yzService.calSXDSYZ());
 		futures.add(repositories.yzService.calSQYZ());
-		repositories.yzService.sleep(futures, 100);
+		CommonUtil.sleep(futures, 100);
 		futures.clear();
 		futures.add(repositories.yzService.calSXCSYZ());
 		futures.add(parallelYzServiceWrapper.calAvg(repositories.sxyzRepository, "calSxyzAvg"));
 		futures.add(parallelYzServiceWrapper.calAvg(repositories.sxzfyz2Repository, "calSxzfAvg"));
-		repositories.yzService.sleep(futures, 100);
+		CommonUtil.sleep(futures, 100);
 		futures.clear();
 		futures.add(repositories.yzService.calSXLRYZ());
-		repositories.yzService.sleep(futures, 100);
+		CommonUtil.sleep(futures, 100);
 		futures.clear();
 		futures.add(parallelYzServiceWrapper.calAvg(repositories.sxlryzRepository, "calSxlrAvg"));
-		repositories.yzService.sleep(futures, 100);
+		CommonUtil.sleep(futures, 100);
 		logger.info("End of calSX stage...");
 	}
 
@@ -113,48 +114,48 @@ public class YZController {
 		futures.add(repositories.yzService.calTMYZ());
 		futures.add(repositories.yzService.calHMDSYZ());
 		futures.add(repositories.yzService.calPTYZ());
-		repositories.yzService.sleep(futures, 100);
+		CommonUtil.sleep(futures, 100);
 		futures.clear();
 		futures.add(repositories.yzService.calTM12FDYZ());
-		repositories.yzService.sleep(futures, 100);
+		CommonUtil.sleep(futures, 100);
 		futures.clear();
 		futures.add(parallelYzServiceWrapper.calAvg(repositories.tm12fdyzRepository, "calTm12fdyzAvg"));
 		futures.add(parallelYzServiceWrapper.calAvg(repositories.tm12fdzfyzRepository, "calTm12fdzfAvg"));
-		repositories.yzService.sleep(futures, 100);
+		CommonUtil.sleep(futures, 100);
 		futures.clear();
 		futures.add(repositories.yzService.calTM12FDLRYZ());
-		repositories.yzService.sleep(futures, 100);
+		CommonUtil.sleep(futures, 100);
 		futures.clear();
 		futures.add(parallelYzServiceWrapper.calAvg(repositories.tm12fdlryzRepository, "calTm12fdlrAvg"));
-		repositories.yzService.sleep(futures, 100);
+		CommonUtil.sleep(futures, 100);
 		logger.info("End of calTM stage...");
 	}
 
 	public void calSW() throws Exception {
 		List<Future<Exception>> futures = new ArrayList<Future<Exception>>();
 		futures.add(repositories.yzService.calSWYZ());
-		repositories.yzService.sleep(futures, 100);
+		CommonUtil.sleep(futures, 100);
 		futures.clear();
 		futures.add(parallelYzServiceWrapper.calAvg(repositories.swyzRepository, "calSwyzAvg"));
 		futures.add(parallelYzServiceWrapper.calAvg(repositories.swzfyzRepository, "calSwzfAvg"));
-		repositories.yzService.sleep(futures, 100);
+		CommonUtil.sleep(futures, 100);
 		logger.info("End of calSW stage...");
 	}
 
 	public void calMW() throws Exception {
 		List<Future<Exception>> futures = new ArrayList<Future<Exception>>();
 		futures.add(repositories.yzService.calMWYZ());
-		repositories.yzService.sleep(futures, 100);
+		CommonUtil.sleep(futures, 100);
 		futures.clear();
 		futures.add(parallelYzServiceWrapper.calAvg(repositories.mwyzRepository, "calMwyzAvg"));
 		futures.add(parallelYzServiceWrapper.calAvg(repositories.mwzfyzRepository, "calMwzfAvg"));
-		repositories.yzService.sleep(futures, 100);
+		CommonUtil.sleep(futures, 100);
 		futures.clear();
 		futures.add(repositories.yzService.calMWLRYZ());
-		repositories.yzService.sleep(futures, 100);
+		CommonUtil.sleep(futures, 100);
 		futures.clear();
 		futures.add(parallelYzServiceWrapper.calAvg(repositories.mwlryzRepository, "calMwlrAvg"));
-		repositories.yzService.sleep(futures, 100);
+		CommonUtil.sleep(futures, 100);
 		logger.info("End of calMW stage...");
 	}
 
@@ -162,39 +163,39 @@ public class YZController {
 		List<Future<Exception>> futures = new ArrayList<Future<Exception>>();
 		futures.add(repositories.yzService.calLHYZ());
 		futures.add(repositories.yzService.calLHDSYZ());
-		repositories.yzService.sleep(futures, 100);
+		CommonUtil.sleep(futures, 100);
 		futures.clear();
 		futures.add(parallelYzServiceWrapper.calAvg(repositories.lhyzRepository, "calLhyzAvg"));
 		futures.add(parallelYzServiceWrapper.calAvg(repositories.lhzfyzRepository, "calLhzfAvg"));
-		repositories.yzService.sleep(futures, 100);
+		CommonUtil.sleep(futures, 100);
 		futures.clear();
 		futures.add(repositories.yzService.calLHLRYZ());
-		repositories.yzService.sleep(futures, 100);
+		CommonUtil.sleep(futures, 100);
 		futures.clear();
 		futures.add(parallelYzServiceWrapper.calAvg(repositories.lhlryzRepository, "calLhlrAvg"));
-		repositories.yzService.sleep(futures, 100);
+		CommonUtil.sleep(futures, 100);
 		logger.info("End of calLH stage...");
 	}
 
 	public void calQQ() throws Exception {
 		List<Future<Exception>> futures = new ArrayList<Future<Exception>>();
 		futures.add(repositories.yzService.calQQYZ());
-		repositories.yzService.sleep(futures, 100);
+		CommonUtil.sleep(futures, 100);
 		futures.clear();
 		futures.add(parallelYzServiceWrapper.calAvg(repositories.qqyzRepository, "calQqyzAvg"));
 		futures.add(parallelYzServiceWrapper.calAvg(repositories.qqzfyzRepository, "calQqzfAvg"));
-		repositories.yzService.sleep(futures, 100);
+		CommonUtil.sleep(futures, 100);
 		logger.info("End of calQQ stage...");
 	}
 
 	public void calQiw() throws Exception {
 		List<Future<Exception>> futures = new ArrayList<Future<Exception>>();
 		futures.add(repositories.yzService.calQIWYZ());
-		repositories.yzService.sleep(futures, 100);
+		CommonUtil.sleep(futures, 100);
 		futures.clear();
 		futures.add(parallelYzServiceWrapper.calAvg(repositories.qiwYzRepository, "calQiwyzAvg"));
 		futures.add(parallelYzServiceWrapper.calAvg(repositories.qiwzfYzRepository, "calQiwzfAvg"));
-		repositories.yzService.sleep(futures, 100);
+		CommonUtil.sleep(futures, 100);
 		logger.info("End of calQiw stage...");
 	}
 
@@ -202,53 +203,53 @@ public class YZController {
 		List<Future<Exception>> futures = new ArrayList<Future<Exception>>();
 		futures.add(repositories.yzService.calBSYZ());
 		futures.add(repositories.yzService.calBS9QYZ());
-		repositories.yzService.sleep(futures, 100);
+		CommonUtil.sleep(futures, 100);
 		futures.clear();
 		futures.add(parallelYzServiceWrapper.calAvg(repositories.bsyzRepository, "calBsyzAvg"));
 		futures.add(parallelYzServiceWrapper.calAvg(repositories.bszfyzRepository, "calBszfAvg"));
 		futures.add(parallelYzServiceWrapper.calAvg(repositories.bs9qyzRepository, "calBs9qyzAvg"));
 		futures.add(parallelYzServiceWrapper.calAvg(repositories.bs9qzfyzRepository, "calBs9qzfAvg"));
-		repositories.yzService.sleep(futures, 100);
+		CommonUtil.sleep(futures, 100);
 		futures.clear();
 		futures.add(repositories.yzService.calBS9QLRYZ());
-		repositories.yzService.sleep(futures, 100);
+		CommonUtil.sleep(futures, 100);
 		futures.clear();
 		futures.add(parallelYzServiceWrapper.calAvg(repositories.bs9qlryzRepository, "calBs9qlrAvg"));
-		repositories.yzService.sleep(futures, 100);
+		CommonUtil.sleep(futures, 100);
 		logger.info("End of calBS stage...");
 	}
 
 	public void calDS() throws Exception {
 		List<Future<Exception>> futures = new ArrayList<Future<Exception>>();
 		futures.add(repositories.yzService.calDSYZ());
-		repositories.yzService.sleep(futures, 100);
+		CommonUtil.sleep(futures, 100);
 		futures.clear();
 		futures.add(parallelYzServiceWrapper.calAvg(repositories.dsyzRepository, "calDsyzAvg"));
 		futures.add(parallelYzServiceWrapper.calAvg(repositories.dszfyzRepository, "calDszfAvg"));
-		repositories.yzService.sleep(futures, 100);
+		CommonUtil.sleep(futures, 100);
 		futures.clear();
 		futures.add(repositories.yzService.calDSLRYZ());
-		repositories.yzService.sleep(futures, 100);
+		CommonUtil.sleep(futures, 100);
 		futures.clear();
 		futures.add(parallelYzServiceWrapper.calAvg(repositories.dslrYzRepository, "calDslrAvg"));
-		repositories.yzService.sleep(futures, 100);
+		CommonUtil.sleep(futures, 100);
 		logger.info("End of calDS stage...");
 	}
 
 	public void calZS() throws Exception {
 		List<Future<Exception>> futures = new ArrayList<Future<Exception>>();
 		futures.add(repositories.yzService.calZSYZ());
-		repositories.yzService.sleep(futures, 100);
+		CommonUtil.sleep(futures, 100);
 		futures.clear();
 		futures.add(parallelYzServiceWrapper.calAvg(repositories.zsyzRepository, "calZsyzAvg"));
 		futures.add(parallelYzServiceWrapper.calAvg(repositories.zszfyzRepository, "calZszfAvg"));
-		repositories.yzService.sleep(futures, 100);
+		CommonUtil.sleep(futures, 100);
 		futures.clear();
 		futures.add(repositories.yzService.calZSLRYZ());
-		repositories.yzService.sleep(futures, 100);
+		CommonUtil.sleep(futures, 100);
 		futures.clear();
 		futures.add(parallelYzServiceWrapper.calAvg(repositories.zslryzRepository, "calZslrAvg"));
-		repositories.yzService.sleep(futures, 100);
+		CommonUtil.sleep(futures, 100);
 		logger.info("End of calZS stage...");
 	}
 
@@ -256,70 +257,70 @@ public class YZController {
 		List<Future<Exception>> futures = new ArrayList<Future<Exception>>();
 		futures.add(repositories.yzService.calWXYZ());
 		futures.add(repositories.yzService.calWXDSYZ());
-		repositories.yzService.sleep(futures, 100);
+		CommonUtil.sleep(futures, 100);
 		futures.clear();
 		futures.add(parallelYzServiceWrapper.calAvg(repositories.wxyzRepository, "calWxyzAvg"));
 		futures.add(parallelYzServiceWrapper.calAvg(repositories.wxzfyzRepository, "calWxzfAvg"));
 		futures.add(parallelYzServiceWrapper.calAvg(repositories.wxdsyzRepository, "calWxdsyzAvg"));
 		futures.add(parallelYzServiceWrapper.calAvg(repositories.wxdszfyzRepository, "calWxdszfAvg"));
-		repositories.yzService.sleep(futures, 100);
+		CommonUtil.sleep(futures, 100);
 		futures.clear();
 		futures.add(repositories.yzService.calWXDSLRYZ());
-		repositories.yzService.sleep(futures, 100);
+		CommonUtil.sleep(futures, 100);
 		futures.clear();
 		futures.add(parallelYzServiceWrapper.calAvg(repositories.wxdslryzRepository, "calWxdslrAvg"));
-		repositories.yzService.sleep(futures, 100);
+		CommonUtil.sleep(futures, 100);
 		logger.info("End of calWX stage...");
 	}
 
 	public void calTwelve() throws Exception {
 		List<Future<Exception>> futures = new ArrayList<Future<Exception>>();
 		futures.add(repositories.yzService.calTwelveYZ());
-		repositories.yzService.sleep(futures, 100);
+		CommonUtil.sleep(futures, 100);
 		futures.clear();
 		futures.add(parallelYzServiceWrapper.calAvg(repositories.twelveyzRepository, "calTwelveyzAvg"));
 		futures.add(parallelYzServiceWrapper.calAvg(repositories.twelvezfyzRepository, "calTwelvezfAvg"));
-		repositories.yzService.sleep(futures, 100);
+		CommonUtil.sleep(futures, 100);
 		futures.clear();
 		futures.add(repositories.yzService.calTwelveLRYZ());
-		repositories.yzService.sleep(futures, 100);
+		CommonUtil.sleep(futures, 100);
 		futures.clear();
 		futures.add(parallelYzServiceWrapper.calAvg(repositories.twelvelryzRepository, "calTwelvelrAvg"));
-		repositories.yzService.sleep(futures, 100);
+		CommonUtil.sleep(futures, 100);
 		logger.info("End of calTwelve stage...");
 	}
 
 	public void calSLQ() throws Exception {
 		List<Future<Exception>> futures = new ArrayList<Future<Exception>>();
 		futures.add(repositories.yzService.calSLQYZ());
-		repositories.yzService.sleep(futures, 100);
+		CommonUtil.sleep(futures, 100);
 		futures.clear();
 		futures.add(parallelYzServiceWrapper.calAvg(repositories.slqyzRepository, "calSlqyzAvg"));
 		futures.add(parallelYzServiceWrapper.calAvg(repositories.slqzfyzRepository, "calSlqzfAvg"));
-		repositories.yzService.sleep(futures, 100);
+		CommonUtil.sleep(futures, 100);
 		futures.clear();
 		futures.add(repositories.yzService.calSLQLRYZ());
-		repositories.yzService.sleep(futures, 100);
+		CommonUtil.sleep(futures, 100);
 		futures.clear();
 		futures.add(parallelYzServiceWrapper.calAvg(repositories.slqlryzRepository, "calSlqlrAvg"));
-		repositories.yzService.sleep(futures, 100);
+		CommonUtil.sleep(futures, 100);
 		logger.info("End of calSLQ stage...");
 	}
 
 	public void calPD() throws Exception {
 		List<Future<Exception>> futures = new ArrayList<Future<Exception>>();
 		futures.add(repositories.yzService.calPDYZ());
-		repositories.yzService.sleep(futures, 100);
+		CommonUtil.sleep(futures, 100);
 		futures.clear();
 		futures.add(parallelYzServiceWrapper.calAvg(repositories.pdyzRepository, "calPdyzAvg"));
 		futures.add(parallelYzServiceWrapper.calAvg(repositories.pdzfyzRepository, "calPdzfAvg"));
-		repositories.yzService.sleep(futures, 100);
+		CommonUtil.sleep(futures, 100);
 		futures.clear();
 		futures.add(repositories.yzService.calPDLRYZ());
-		repositories.yzService.sleep(futures, 100);
+		CommonUtil.sleep(futures, 100);
 		futures.clear();
 		futures.add(parallelYzServiceWrapper.calAvg(repositories.pdlryzRepository, "calPdlrAvg"));
-		repositories.yzService.sleep(futures, 100);
+		CommonUtil.sleep(futures, 100);
 		logger.info("End of calPD stage...");
 	}
 
@@ -343,7 +344,7 @@ public class YZController {
 		futures.add(repositories.yzService.calZX16YZ());
 		futures.add(repositories.yzService.calZX17YZ());
 		futures.add(repositories.yzService.calZX18YZ());
-		repositories.yzService.sleep(futures, 100);
+		CommonUtil.sleep(futures, 100);
 		futures.clear();
 		futures.add(parallelYzServiceWrapper.calAvg(repositories.zx1yzRepository, "calZx1yzAvg"));
 		futures.add(parallelYzServiceWrapper.calAvg(repositories.zx1zfyzRepository, "calZx1zfAvg"));
@@ -381,7 +382,7 @@ public class YZController {
 		futures.add(parallelYzServiceWrapper.calAvg(repositories.zx17zfyzRepository, "calZx17zfAvg"));
 		futures.add(parallelYzServiceWrapper.calAvg(repositories.zx18yzRepository, "calZx18yzAvg"));
 		futures.add(parallelYzServiceWrapper.calAvg(repositories.zx18zfyzRepository, "calZx18zfAvg"));
-		repositories.yzService.sleep(futures, 100);
+		CommonUtil.sleep(futures, 100);
 		logger.info("End of calZX stage...");
 	}
 
@@ -400,16 +401,17 @@ public class YZController {
 		futures.add(repositories.yzService.calFxSw10());
 		futures.add(repositories.yzService.calFxSw11());
 		futures.add(repositories.yzService.calFxSw12());
-		repositories.yzService.sleep(futures, 100);
+		CommonUtil.sleep(futures, 100);
 		repositories.yzService.saveFxSwData();
 		repositories.yzService.clearFxSwData();
 		futures.clear();
-		futures.add(repositories.yzService.calFxSwRedCounts());
-		repositories.yzService.sleep(futures, 100);
+		futures = repositories.yzService.calFxSwRedCounts();
+		CommonUtil.sleep(futures, 100);
+		logger.info("End of calFxSwRedCounts...");
 		futures.clear();
 		futures.add(repositories.yzService.calDsxMinJY());
 		futures.add(repositories.yzService.calDsxMaxJY());
-		repositories.yzService.sleep(futures, 100);
+		CommonUtil.sleep(futures, 100);
 		logger.info("End of calFXSW stage...");
 	}
 
@@ -1425,7 +1427,7 @@ public class YZController {
 				fList.add(repositories.yzService.calSXCSYZForMax(subQueryInfo, data));
 			}
 			result.getList().add(new SxCsYz());
-			repositories.yzService.sleep(fList, 500);
+			CommonUtil.sleep(fList, 500);
 		}
 
 		return new BaseResult(result);
@@ -3597,38 +3599,37 @@ public class YZController {
 			if (latest != null) {
 				result.getList().add(latest);
 			}
-			// } else if (queryInfo.getObject().getVersion().equalsIgnoreCase("jdbzs")) {
-			// result = repositories.dsxMinJyJDBDao.query(queryInfo);
-			// DsxJYViewBean latest = repositories.dsxMinJyJDBDao.findLatestOne(queryInfo);
-			// if (latest != null) {
-			// result.getList().add(latest);
-			// }
+		} else if (queryInfo.getObject().getVersion().equalsIgnoreCase("jdbzs")) {
+			result = repositories.dsxMinJyJDBDao.query(queryInfo);
+			DsxJYViewBean latest = repositories.dsxMinJyJDBDao.findLatestOne(queryInfo);
+			if (latest != null) {
+				result.getList().add(latest);
+			}
 		} else if (queryInfo.getObject().getVersion().equalsIgnoreCase("jhbzs")) {
 			result = repositories.dsxMinJyJHBDao.query(queryInfo);
 			DsxJYViewBean latest = repositories.dsxMinJyJHBDao.findLatestOne(queryInfo);
 			if (latest != null) {
 				result.getList().add(latest);
 			}
+		} else if (queryInfo.getObject().getVersion().equalsIgnoreCase("jqbzd")) {
+			result = repositories.dsxMaxJyJQBDao.query(queryInfo);
+			DsxJYViewBean latest = repositories.dsxMaxJyJQBDao.findLatestOne(queryInfo);
+			if (latest != null) {
+				result.getList().add(latest);
+			}
+		} else if (queryInfo.getObject().getVersion().equalsIgnoreCase("jdbzd")) {
+			result = repositories.dsxMaxJyJDBDao.query(queryInfo);
+			DsxJYViewBean latest = repositories.dsxMaxJyJDBDao.findLatestOne(queryInfo);
+			if (latest != null) {
+				result.getList().add(latest);
+			}
+		} else if (queryInfo.getObject().getVersion().equalsIgnoreCase("jhbzd")) {
+			result = repositories.dsxMaxJyJHBDao.query(queryInfo);
+			DsxJYViewBean latest = repositories.dsxMaxJyJHBDao.findLatestOne(queryInfo);
+			if (latest != null) {
+				result.getList().add(latest);
+			}
 		}
-		// } else if (queryInfo.getObject().getVersion().equalsIgnoreCase("jqbzd")) {
-		// result = repositories.dsxMaxJyJQBDao.query(queryInfo);
-		// DsxJYViewBean latest = repositories.dsxMaxJyJQBDao.findLatestOne(queryInfo);
-		// if (latest != null) {
-		// result.getList().add(latest);
-		// }
-		// } else if (queryInfo.getObject().getVersion().equalsIgnoreCase("jdbzd")) {
-		// result = repositories.dsxMaxJyJDBDao.query(queryInfo);
-		// DsxJYViewBean latest = repositories.dsxMaxJyJDBDao.findLatestOne(queryInfo);
-		// if (latest != null) {
-		// result.getList().add(latest);
-		// }
-		// } else if (queryInfo.getObject().getVersion().equalsIgnoreCase("jhbzd")) {
-		// result = repositories.dsxMaxJyJHBDao.query(queryInfo);
-		// DsxJYViewBean latest = repositories.dsxMaxJyJHBDao.findLatestOne(queryInfo);
-		// if (latest != null) {
-		// result.getList().add(latest);
-		// }
-		// }
 		if (result != null && result.getTotal() > 0) {
 			result.getList().add(new DsxJYViewBean());
 		}

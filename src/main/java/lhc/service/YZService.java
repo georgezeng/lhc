@@ -150,6 +150,7 @@ import lhc.enums.Color;
 import lhc.enums.SX;
 import lhc.repository.jpa.BaseYzRepository;
 import lhc.repository.jpa.Repositories;
+import lhc.util.CommonUtil;
 import lhc.util.DateUtil;
 
 //@Service
@@ -2730,7 +2731,7 @@ public class YZService {
 		futures.add(calTwelveZfForD1(queryInfo, result));
 		futures.add(calSlqForD1(queryInfo, result));
 		futures.add(calSlqZfForD1(queryInfo, result));
-		sleep(futures, 100);
+		CommonUtil.sleep(futures, 100);
 		return result;
 	}
 
@@ -4455,28 +4456,8 @@ public class YZService {
 		for (J0Yz yz : result.getList()) {
 			futures.add(repositories.yzService.calForJ0(yz));
 		}
-		sleep(futures, 100);
+		CommonUtil.sleep(futures, 100);
 		return result;
-	}
-
-	public void sleep(List<Future<Exception>> futures, long time) throws Exception {
-		while (true) {
-			int count = 0;
-			for (Future<Exception> f : futures) {
-				if (f.isDone()) {
-					if (f.get() != null) {
-						throw f.get();
-					}
-					count++;
-				}
-			}
-			if (count == futures.size()) {
-				break;
-			}
-			if (time > 0) {
-				Thread.sleep(time);
-			}
-		}
 	}
 
 	@Async
@@ -4909,7 +4890,7 @@ public class YZService {
 			for (J0Yz yz : result.getList()) {
 				futures.add(calXbwJY0(yz, list));
 			}
-			sleep(futures, 10);
+			CommonUtil.sleep(futures, 10);
 		}
 		return new PageResult<XbwJY>(list, list.size(), queryInfo.getPageInfo());
 	}
@@ -4929,7 +4910,7 @@ public class YZService {
 			for (int i = 0; i < d1Result.getList().size(); i++) {
 				futures.add(calXbwJY1(d1Result.getList().get(i), list));
 			}
-			sleep(futures, 10);
+			CommonUtil.sleep(futures, 10);
 		}
 		return new PageResult<XbwJY>(list, list.size(), d1QueryInfo.getPageInfo());
 	}
@@ -4957,7 +4938,7 @@ public class YZService {
 			for (int i = 0; i < j0Result.getList().size(); i++) {
 				futures.add(calXbwJY2(j0Result.getList().get(i), d1Result.getList().get(i), list));
 			}
-			sleep(futures, 10);
+			CommonUtil.sleep(futures, 10);
 		}
 		return new PageResult<XbwJY>(list, list.size(), j0QueryInfo.getPageInfo());
 	}
@@ -4985,7 +4966,7 @@ public class YZService {
 			for (int i = 0; i < j0Result.getList().size(); i++) {
 				futures.add(calXbwJY3(j0Result.getList().get(i), d1Result.getList().get(i), list));
 			}
-			sleep(futures, 10);
+			CommonUtil.sleep(futures, 10);
 		}
 		return new PageResult<XbwJY>(list, list.size(), j0QueryInfo.getPageInfo());
 	}
