@@ -3271,12 +3271,12 @@ function createFXSW(url) {
 	
 	function countNumber() {
 		count = 0;
-		var table = $("#dataTable");
+		var table = $("#dataTable").find("tbody");
 		table.find("tr").each(function() {
 			var tr = $(this);
 			var subCount = 0;
 			tr.children().each(function() {
-				if($(this).attr("status") == "show" && $(this).text() == "0") {
+				if($(this).attr("status") == "show" && $(this).attr("red") == "true") {
 					count++;
 					subCount++;
 					return false;
@@ -3293,12 +3293,12 @@ function createFXSW(url) {
 	
 	function countTotalNumber() {
 		totalCount = 0;
-		var table = $("#dataTable");
+		var table = $("#dataTable").find("tbody");
 		table.find("tr").each(function() {
 			var tr = $(this);
 			var subCount = 0;
 			tr.children().each(function() {
-				if($(this).attr("status") == "show" && $(this).text() == "0") {
+				if($(this).attr("status") == "show" && $(this).attr("red") == "true") {
 					totalCount++;
 					subCount++;
 				}
@@ -3486,7 +3486,7 @@ function createFXSW(url) {
 						}
 						value = item[sxlist[index-2]];
 						if(value == 0) {
-							$(nTd).css("backgroundColor", "red").css("color", "white");
+							$(nTd).attr("red", "true").css("backgroundColor", "red").css("color", "white");
 							redCounts[index-2]++;
 							if(lastReds[index-2]) {
 								continueReds[index - 2] = 1;
