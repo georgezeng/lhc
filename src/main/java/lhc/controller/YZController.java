@@ -392,12 +392,24 @@ public class YZController {
 		futures.add(repositories.yzService.calFxSw1());
 		futures.add(repositories.yzService.calFxSw2());
 		futures.add(repositories.yzService.calFxSw3());
+		CommonUtil.sleep(futures, 100);
+		repositories.yzService.saveFxSwData();
+		repositories.yzService.clearFxSwData();
+		futures.clear();
 		futures.add(repositories.yzService.calFxSw4());
 		futures.add(repositories.yzService.calFxSw5());
 		futures.add(repositories.yzService.calFxSw6());
+		CommonUtil.sleep(futures, 100);
+		repositories.yzService.saveFxSwData();
+		repositories.yzService.clearFxSwData();
+		futures.clear();
 		futures.add(repositories.yzService.calFxSw7());
 		futures.add(repositories.yzService.calFxSw8());
 		futures.add(repositories.yzService.calFxSw9());
+		CommonUtil.sleep(futures, 100);
+		repositories.yzService.saveFxSwData();
+		repositories.yzService.clearFxSwData();
+		futures.clear();
 		futures.add(repositories.yzService.calFxSw10());
 		futures.add(repositories.yzService.calFxSw11());
 		futures.add(repositories.yzService.calFxSw12());
@@ -411,6 +423,9 @@ public class YZController {
 		futures.clear();
 		futures.add(repositories.yzService.calDsxMinJY());
 		futures.add(repositories.yzService.calDsxMaxJY());
+		CommonUtil.sleep(futures, 100);
+		futures.clear();
+		futures.add(repositories.yzService.calFxSwA());
 		CommonUtil.sleep(futures, 100);
 		logger.info("End of calFXSW stage...");
 	}

@@ -2,10 +2,13 @@ package lhc.service;
 
 import java.lang.reflect.Method;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.Collection;
 import java.util.Collections;
+import java.util.HashMap;
 import java.util.HashSet;
 import java.util.List;
+import java.util.Map;
 import java.util.Set;
 import java.util.concurrent.Future;
 
@@ -20,6 +23,8 @@ import org.springframework.scheduling.annotation.AsyncResult;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.util.ReflectionUtils;
+
+import com.google.common.base.Joiner;
 
 import lhc.domain.DsxJyYz;
 import lhc.domain.DsxMaxJyJDB;
@@ -41,6 +46,7 @@ import lhc.domain.FxSw6;
 import lhc.domain.FxSw7;
 import lhc.domain.FxSw8;
 import lhc.domain.FxSw9;
+import lhc.domain.FxSwA;
 import lhc.domain.KaiJiang;
 import lhc.dto.DsxJY;
 import lhc.dto.XbwJYSub;
@@ -700,4 +706,999 @@ public class YZ3Service extends YZ2Service {
 		}
 		data.assemble(qc, reverse);
 	}
+
+	@Async
+	public Future<Exception> calFxSwA() {
+		Exception t = null;
+		try {
+			Pageable request = new PageRequest(0, 200, new Sort(Direction.ASC, "date"));
+			Page<FxSw1> result1 = null;
+			Page<FxSw2> result2 = null;
+			Page<FxSw3> result3 = null;
+			Page<FxSw4> result4 = null;
+			Page<FxSw5> result5 = null;
+			Page<FxSw6> result6 = null;
+			Page<FxSw7> result7 = null;
+			Page<FxSw8> result8 = null;
+			Page<FxSw9> result9 = null;
+			Page<FxSw10> result10 = null;
+			Page<FxSw11> result11 = null;
+			Page<FxSw12> result12 = null;
+			List<Future<Exception>> futures = new ArrayList<Future<Exception>>();
+			do {
+				result1 = repositories.fxsw1Repository.findAll(request);
+				result2 = repositories.fxsw2Repository.findAll(request);
+				result3 = repositories.fxsw3Repository.findAll(request);
+				result4 = repositories.fxsw4Repository.findAll(request);
+				result5 = repositories.fxsw5Repository.findAll(request);
+				result6 = repositories.fxsw6Repository.findAll(request);
+				result7 = repositories.fxsw7Repository.findAll(request);
+				result8 = repositories.fxsw8Repository.findAll(request);
+				result9 = repositories.fxsw9Repository.findAll(request);
+				result10 = repositories.fxsw10Repository.findAll(request);
+				result11 = repositories.fxsw11Repository.findAll(request);
+				result12 = repositories.fxsw12Repository.findAll(request);
+				if (result1 != null && result1.hasContent()) {
+					for (int i = 0; i < result1.getContent().size(); i++) {
+						List<FxSw> fxDatas = new ArrayList<FxSw>();
+						fxDatas.add(result1.getContent().get(i));
+						fxDatas.add(result2.getContent().get(i));
+						fxDatas.add(result3.getContent().get(i));
+						fxDatas.add(result4.getContent().get(i));
+						fxDatas.add(result5.getContent().get(i));
+						fxDatas.add(result6.getContent().get(i));
+						fxDatas.add(result7.getContent().get(i));
+						fxDatas.add(result8.getContent().get(i));
+						fxDatas.add(result9.getContent().get(i));
+						fxDatas.add(result10.getContent().get(i));
+						fxDatas.add(result11.getContent().get(i));
+						fxDatas.add(result12.getContent().get(i));
+						futures.add(repositories.yzService.calFxSwAForSpecific(fxDatas));
+					}
+				}
+				request = request.next();
+			} while (result1 != null && result1.hasNext());
+			CommonUtil.sleep(futures, 100);
+			logger.info("End of calFxSwA...");
+		} catch (Exception e) {
+			if (DataAccessException.class.isAssignableFrom(e.getClass())) {
+				logger.error(e.getMessage(), e);
+			}
+			t = e;
+		}
+		return new AsyncResult<Exception>(t);
+	}
+
+	@Async
+	public Future<Exception> calFxSwAForSpecific(List<FxSw> fxDatas) {
+		Exception t = null;
+		try {
+			FxSw swData = fxDatas.get(0);
+			FxSwA data = repositories.fxSwARepository.findByYearAndPhase(swData.getYear(), swData.getPhase());
+			if (data == null) {
+				data = new FxSwA();
+				data.setYear(swData.getYear());
+				data.setPhase(swData.getPhase());
+				data.setDate(swData.getDate());
+			}
+			KaiJiang kj = repositories.kaiJiangRepository.findByYearAndPhase(swData.getYear(), swData.getPhase());
+			data.setSpecialNum(kj.getSpecialNum());
+
+			Map<String, Integer> mapForAll = new HashMap<String, Integer>();
+			Map<String, Integer> mapForAllYz = new HashMap<String, Integer>();
+			Map<String, Integer> mapForAllZf = new HashMap<String, Integer>();
+			Map<String, Integer> mapForAllNonWQ = new HashMap<String, Integer>();
+			Set<String> listForAllFz = new HashSet<String>();
+			Set<String> listForAllYzFz = new HashSet<String>();
+			Set<String> listForAllZfFz = new HashSet<String>();
+			Set<String> listForAllNonWQFz = new HashSet<String>();
+			int pos = 1;
+			for (FxSw fxData : fxDatas) {
+				Set<String> allNums = new HashSet<String>();
+				Set<String> allYzNums = new HashSet<String>();
+				Set<String> allZfNums = new HashSet<String>();
+				Set<String> allNonWQNums = new HashSet<String>();
+
+				List<String> nums = new ArrayList<String>();
+				if (fxData.getBsNums() != null) {
+					nums = Arrays.asList(fxData.getBsNums().split(",\\s*"));
+				}
+				if (pos < 12) {
+					allNums.addAll(nums);
+				}
+				if (pos < 11) {
+					allYzNums.addAll(nums);
+					allNonWQNums.addAll(nums);
+				}
+
+				nums = new ArrayList<String>();
+				if (fxData.getBszfNums() != null) {
+					nums = Arrays.asList(fxData.getBszfNums().split(",\\s*"));
+				}
+				if (pos < 12) {
+					allNums.addAll(nums);
+				}
+				if (pos < 11) {
+					allZfNums.addAll(nums);
+					allNonWQNums.addAll(nums);
+				}
+
+				nums = new ArrayList<String>();
+				if (fxData.getDsNums() != null) {
+					nums = Arrays.asList(fxData.getDsNums().split(",\\s*"));
+				}
+				if (pos < 12) {
+					allNums.addAll(nums);
+				}
+				if (pos < 11) {
+					allYzNums.addAll(nums);
+					allNonWQNums.addAll(nums);
+				}
+
+				nums = new ArrayList<String>();
+				if (fxData.getDszfNums() != null) {
+					nums = Arrays.asList(fxData.getDszfNums().split(",\\s*"));
+				}
+				if (pos < 12) {
+					allNums.addAll(nums);
+				}
+				if (pos < 11) {
+					allZfNums.addAll(nums);
+					allNonWQNums.addAll(nums);
+				}
+
+				nums = new ArrayList<String>();
+				if (fxData.getFdNums() != null) {
+					nums = Arrays.asList(fxData.getFdNums().split(",\\s*"));
+				}
+				if (pos < 12) {
+					allNums.addAll(nums);
+				}
+				if (pos < 11) {
+					allYzNums.addAll(nums);
+					allNonWQNums.addAll(nums);
+				}
+
+				nums = new ArrayList<String>();
+				if (fxData.getFdzfNums() != null) {
+					nums = Arrays.asList(fxData.getFdzfNums().split(",\\s*"));
+				}
+				if (pos < 12) {
+					allNums.addAll(nums);
+				}
+				if (pos < 11) {
+					allZfNums.addAll(nums);
+					allNonWQNums.addAll(nums);
+				}
+
+				nums = new ArrayList<String>();
+				if (fxData.getLhNums() != null) {
+					nums = Arrays.asList(fxData.getLhNums().split(",\\s*"));
+				}
+				if (pos < 12) {
+					allNums.addAll(nums);
+				}
+				if (pos < 11) {
+					allYzNums.addAll(nums);
+					allNonWQNums.addAll(nums);
+				}
+
+				nums = new ArrayList<String>();
+				if (fxData.getLhzfNums() != null) {
+					nums = Arrays.asList(fxData.getLhzfNums().split(",\\s*"));
+				}
+				if (pos < 12) {
+					allNums.addAll(nums);
+				}
+				if (pos < 11) {
+					allZfNums.addAll(nums);
+					allNonWQNums.addAll(nums);
+				}
+
+				nums = new ArrayList<String>();
+				if (fxData.getMwNums() != null) {
+					nums = Arrays.asList(fxData.getMwNums().split(",\\s*"));
+				}
+				if (pos < 12) {
+					allNums.addAll(nums);
+				}
+				if (pos < 11) {
+					allYzNums.addAll(nums);
+					allNonWQNums.addAll(nums);
+				}
+
+				nums = new ArrayList<String>();
+				if (fxData.getMwzfNums() != null) {
+					nums = Arrays.asList(fxData.getMwzfNums().split(",\\s*"));
+				}
+				if (pos < 12) {
+					allNums.addAll(nums);
+				}
+				if (pos < 11) {
+					allZfNums.addAll(nums);
+					allNonWQNums.addAll(nums);
+				}
+
+				nums = new ArrayList<String>();
+				if (fxData.getPdNums() != null) {
+					nums = Arrays.asList(fxData.getPdNums().split(",\\s*"));
+				}
+				if (pos < 12) {
+					allNums.addAll(nums);
+				}
+				if (pos < 11) {
+					allYzNums.addAll(nums);
+					allNonWQNums.addAll(nums);
+				}
+
+				nums = new ArrayList<String>();
+				if (fxData.getPdzfNums() != null) {
+					nums = Arrays.asList(fxData.getPdzfNums().split(",\\s*"));
+				}
+				if (pos < 12) {
+					allNums.addAll(nums);
+				}
+				if (pos < 11) {
+					allZfNums.addAll(nums);
+					allNonWQNums.addAll(nums);
+				}
+
+				nums = new ArrayList<String>();
+				if (fxData.getQiwNums() != null) {
+					nums = Arrays.asList(fxData.getQiwNums().split(",\\s*"));
+				}
+				if (pos < 12) {
+					allNums.addAll(nums);
+				}
+				if (pos < 11) {
+					allYzNums.addAll(nums);
+				}
+
+				nums = new ArrayList<String>();
+				if (fxData.getQiwzfNums() != null) {
+					nums = Arrays.asList(fxData.getQiwzfNums().split(",\\s*"));
+				}
+				if (pos < 12) {
+					allNums.addAll(nums);
+				}
+				if (pos < 11) {
+					allZfNums.addAll(nums);
+				}
+
+				nums = new ArrayList<String>();
+				if (fxData.getQqNums() != null) {
+					nums = Arrays.asList(fxData.getQqNums().split(",\\s*"));
+				}
+				if (pos < 12) {
+					allNums.addAll(nums);
+				}
+				if (pos < 11) {
+					allYzNums.addAll(nums);
+				}
+
+				nums = new ArrayList<String>();
+				if (fxData.getQqzfNums() != null) {
+					nums = Arrays.asList(fxData.getQqzfNums().split(",\\s*"));
+				}
+				if (pos < 12) {
+					allNums.addAll(nums);
+				}
+				if (pos < 11) {
+					allZfNums.addAll(nums);
+				}
+
+				nums = new ArrayList<String>();
+				if (fxData.getSlqNums() != null) {
+					nums = Arrays.asList(fxData.getSlqNums().split(",\\s*"));
+				}
+				if (pos < 12) {
+					allNums.addAll(nums);
+				}
+				if (pos < 11) {
+					allYzNums.addAll(nums);
+					allNonWQNums.addAll(nums);
+				}
+
+				nums = new ArrayList<String>();
+				if (fxData.getSlqzfNums() != null) {
+					nums = Arrays.asList(fxData.getSlqzfNums().split(",\\s*"));
+				}
+				if (pos < 12) {
+					allNums.addAll(nums);
+				}
+				if (pos < 11) {
+					allZfNums.addAll(nums);
+					allNonWQNums.addAll(nums);
+				}
+
+				nums = new ArrayList<String>();
+				if (fxData.getSwNums() != null) {
+					nums = Arrays.asList(fxData.getSwNums().split(",\\s*"));
+				}
+				if (pos < 12) {
+					allNums.addAll(nums);
+				}
+				if (pos < 11) {
+					allYzNums.addAll(nums);
+				}
+
+				nums = new ArrayList<String>();
+				if (fxData.getSwzfNums() != null) {
+					nums = Arrays.asList(fxData.getSwzfNums().split(",\\s*"));
+				}
+				if (pos < 12) {
+					allNums.addAll(nums);
+				}
+				if (pos < 11) {
+					allZfNums.addAll(nums);
+				}
+
+				nums = new ArrayList<String>();
+				if (fxData.getSxNums() != null) {
+					nums = Arrays.asList(fxData.getSxNums().split(",\\s*"));
+				}
+				if (pos < 12) {
+					allNums.addAll(nums);
+				}
+				if (pos < 11) {
+					allYzNums.addAll(nums);
+					allNonWQNums.addAll(nums);
+				}
+
+				nums = new ArrayList<String>();
+				if (fxData.getSxzfNums() != null) {
+					nums = Arrays.asList(fxData.getSxzfNums().split(",\\s*"));
+				}
+				if (pos < 12) {
+					allNums.addAll(nums);
+				}
+				if (pos < 11) {
+					allZfNums.addAll(nums);
+					allNonWQNums.addAll(nums);
+				}
+
+				nums = new ArrayList<String>();
+				if (fxData.getTwelveNums() != null) {
+					nums = Arrays.asList(fxData.getTwelveNums().split(",\\s*"));
+				}
+				if (pos < 12) {
+					allNums.addAll(nums);
+				}
+				if (pos < 11) {
+					allYzNums.addAll(nums);
+					allNonWQNums.addAll(nums);
+				}
+
+				nums = new ArrayList<String>();
+				if (fxData.getTwelvezfNums() != null) {
+					nums = Arrays.asList(fxData.getTwelvezfNums().split(",\\s*"));
+				}
+				if (pos < 12) {
+					allNums.addAll(nums);
+				}
+				if (pos < 11) {
+					allZfNums.addAll(nums);
+					allNonWQNums.addAll(nums);
+				}
+
+				nums = new ArrayList<String>();
+				if (fxData.getWxNums() != null) {
+					nums = Arrays.asList(fxData.getWxNums().split(",\\s*"));
+				}
+				if (pos < 12) {
+					allNums.addAll(nums);
+				}
+				if (pos < 11) {
+					allYzNums.addAll(nums);
+				}
+
+				nums = new ArrayList<String>();
+				if (fxData.getWxzfNums() != null) {
+					nums = Arrays.asList(fxData.getWxzfNums().split(",\\s*"));
+				}
+				if (pos < 12) {
+					allNums.addAll(nums);
+				}
+				if (pos < 11) {
+					allZfNums.addAll(nums);
+				}
+
+				nums = new ArrayList<String>();
+				if (fxData.getWxdsNums() != null) {
+					nums = Arrays.asList(fxData.getWxdsNums().split(",\\s*"));
+				}
+				if (pos < 12) {
+					allNums.addAll(nums);
+				}
+				if (pos < 11) {
+					allYzNums.addAll(nums);
+					allNonWQNums.addAll(nums);
+				}
+
+				nums = new ArrayList<String>();
+				if (fxData.getWxdszfNums() != null) {
+					nums = Arrays.asList(fxData.getWxdszfNums().split(",\\s*"));
+				}
+				if (pos < 12) {
+					allNums.addAll(nums);
+				}
+				if (pos < 11) {
+					allZfNums.addAll(nums);
+					allNonWQNums.addAll(nums);
+				}
+
+				nums = new ArrayList<String>();
+				if (fxData.getZsNums() != null) {
+					nums = Arrays.asList(fxData.getZsNums().split(",\\s*"));
+				}
+				if (pos < 12) {
+					allNums.addAll(nums);
+				}
+				if (pos < 11) {
+					allYzNums.addAll(nums);
+					allNonWQNums.addAll(nums);
+				}
+
+				nums = new ArrayList<String>();
+				if (fxData.getZszfNums() != null) {
+					nums = Arrays.asList(fxData.getZszfNums().split(",\\s*"));
+				}
+				if (pos < 12) {
+					allNums.addAll(nums);
+				}
+				if (pos < 11) {
+					allZfNums.addAll(nums);
+					allNonWQNums.addAll(nums);
+				}
+
+				nums = new ArrayList<String>();
+				if (fxData.getZx1Nums() != null) {
+					nums = Arrays.asList(fxData.getZx1Nums().split(",\\s*"));
+				}
+				if (pos < 12) {
+					allNums.addAll(nums);
+				}
+				if (pos < 11) {
+					allYzNums.addAll(nums);
+					allNonWQNums.addAll(nums);
+				}
+
+				nums = new ArrayList<String>();
+				if (fxData.getZx1zfNums() != null) {
+					nums = Arrays.asList(fxData.getZx1zfNums().split(",\\s*"));
+				}
+				if (pos < 12) {
+					allNums.addAll(nums);
+				}
+				if (pos < 11) {
+					allZfNums.addAll(nums);
+					allNonWQNums.addAll(nums);
+				}
+
+				nums = new ArrayList<String>();
+				if (fxData.getZx2Nums() != null) {
+					nums = Arrays.asList(fxData.getZx2Nums().split(",\\s*"));
+				}
+				if (pos < 12) {
+					allNums.addAll(nums);
+				}
+				if (pos < 11) {
+					allYzNums.addAll(nums);
+					allNonWQNums.addAll(nums);
+				}
+
+				nums = new ArrayList<String>();
+				if (fxData.getZx2zfNums() != null) {
+					nums = Arrays.asList(fxData.getZx2zfNums().split(",\\s*"));
+				}
+				if (pos < 12) {
+					allNums.addAll(nums);
+				}
+				if (pos < 11) {
+					allZfNums.addAll(nums);
+					allNonWQNums.addAll(nums);
+				}
+
+				nums = new ArrayList<String>();
+				if (fxData.getZx3Nums() != null) {
+					nums = Arrays.asList(fxData.getZx3Nums().split(",\\s*"));
+				}
+				if (pos < 12) {
+					allNums.addAll(nums);
+				}
+				if (pos < 11) {
+					allYzNums.addAll(nums);
+					allNonWQNums.addAll(nums);
+				}
+
+				nums = new ArrayList<String>();
+				if (fxData.getZx3zfNums() != null) {
+					nums = Arrays.asList(fxData.getZx3zfNums().split(",\\s*"));
+				}
+				if (pos < 12) {
+					allNums.addAll(nums);
+				}
+				if (pos < 11) {
+					allZfNums.addAll(nums);
+					allNonWQNums.addAll(nums);
+				}
+
+				nums = new ArrayList<String>();
+				if (fxData.getZx4Nums() != null) {
+					nums = Arrays.asList(fxData.getZx4Nums().split(",\\s*"));
+				}
+				if (pos < 12) {
+					allNums.addAll(nums);
+				}
+				if (pos < 11) {
+					allYzNums.addAll(nums);
+					allNonWQNums.addAll(nums);
+				}
+
+				nums = new ArrayList<String>();
+				if (fxData.getZx4zfNums() != null) {
+					nums = Arrays.asList(fxData.getZx4zfNums().split(",\\s*"));
+				}
+				if (pos < 12) {
+					allNums.addAll(nums);
+				}
+				if (pos < 11) {
+					allZfNums.addAll(nums);
+					allNonWQNums.addAll(nums);
+				}
+
+				nums = new ArrayList<String>();
+				if (fxData.getZx5Nums() != null) {
+					nums = Arrays.asList(fxData.getZx5Nums().split(",\\s*"));
+				}
+				if (pos < 12) {
+					allNums.addAll(nums);
+				}
+				if (pos < 11) {
+					allYzNums.addAll(nums);
+					allNonWQNums.addAll(nums);
+				}
+
+				nums = new ArrayList<String>();
+				if (fxData.getZx5zfNums() != null) {
+					nums = Arrays.asList(fxData.getZx5zfNums().split(",\\s*"));
+				}
+				if (pos < 12) {
+					allNums.addAll(nums);
+				}
+				if (pos < 11) {
+					allZfNums.addAll(nums);
+					allNonWQNums.addAll(nums);
+				}
+
+				nums = new ArrayList<String>();
+				if (fxData.getZx6Nums() != null) {
+					nums = Arrays.asList(fxData.getZx6Nums().split(",\\s*"));
+				}
+				if (pos < 12) {
+					allNums.addAll(nums);
+				}
+				if (pos < 11) {
+					allYzNums.addAll(nums);
+					allNonWQNums.addAll(nums);
+				}
+
+				nums = new ArrayList<String>();
+				if (fxData.getZx6zfNums() != null) {
+					nums = Arrays.asList(fxData.getZx6zfNums().split(",\\s*"));
+				}
+				if (pos < 12) {
+					allNums.addAll(nums);
+				}
+				if (pos < 11) {
+					allZfNums.addAll(nums);
+					allNonWQNums.addAll(nums);
+				}
+
+				nums = new ArrayList<String>();
+				if (fxData.getZx7Nums() != null) {
+					nums = Arrays.asList(fxData.getZx7Nums().split(",\\s*"));
+				}
+				if (pos < 12) {
+					allNums.addAll(nums);
+				}
+				if (pos < 11) {
+					allYzNums.addAll(nums);
+					allNonWQNums.addAll(nums);
+				}
+
+				nums = new ArrayList<String>();
+				if (fxData.getZx7zfNums() != null) {
+					nums = Arrays.asList(fxData.getZx7zfNums().split(",\\s*"));
+				}
+				if (pos < 12) {
+					allNums.addAll(nums);
+				}
+				if (pos < 11) {
+					allZfNums.addAll(nums);
+					allNonWQNums.addAll(nums);
+				}
+
+				nums = new ArrayList<String>();
+				if (fxData.getZx8Nums() != null) {
+					nums = Arrays.asList(fxData.getZx8Nums().split(",\\s*"));
+				}
+				if (pos < 12) {
+					allNums.addAll(nums);
+				}
+				if (pos < 11) {
+					allYzNums.addAll(nums);
+					allNonWQNums.addAll(nums);
+				}
+
+				nums = new ArrayList<String>();
+				if (fxData.getZx8zfNums() != null) {
+					nums = Arrays.asList(fxData.getZx8zfNums().split(",\\s*"));
+				}
+				if (pos < 12) {
+					allNums.addAll(nums);
+				}
+				if (pos < 11) {
+					allZfNums.addAll(nums);
+					allNonWQNums.addAll(nums);
+				}
+
+				nums = new ArrayList<String>();
+				if (fxData.getZx9Nums() != null) {
+					nums = Arrays.asList(fxData.getZx9Nums().split(",\\s*"));
+				}
+				if (pos < 12) {
+					allNums.addAll(nums);
+				}
+				if (pos < 11) {
+					allYzNums.addAll(nums);
+				}
+
+				nums = new ArrayList<String>();
+				if (fxData.getZx9zfNums() != null) {
+					nums = Arrays.asList(fxData.getZx9zfNums().split(",\\s*"));
+				}
+				if (pos < 12) {
+					allNums.addAll(nums);
+				}
+				if (pos < 11) {
+					allZfNums.addAll(nums);
+				}
+
+				nums = new ArrayList<String>();
+				if (fxData.getZx10Nums() != null) {
+					nums = Arrays.asList(fxData.getZx10Nums().split(",\\s*"));
+				}
+				if (pos < 12) {
+					allNums.addAll(nums);
+				}
+				if (pos < 11) {
+					allYzNums.addAll(nums);
+				}
+
+				nums = new ArrayList<String>();
+				if (fxData.getZx10zfNums() != null) {
+					nums = Arrays.asList(fxData.getZx10zfNums().split(",\\s*"));
+				}
+				if (pos < 12) {
+					allNums.addAll(nums);
+				}
+				if (pos < 11) {
+					allZfNums.addAll(nums);
+				}
+
+				nums = new ArrayList<String>();
+				if (fxData.getZx11Nums() != null) {
+					nums = Arrays.asList(fxData.getZx11Nums().split(",\\s*"));
+				}
+				if (pos < 12) {
+					allNums.addAll(nums);
+				}
+				if (pos < 11) {
+					allYzNums.addAll(nums);
+					allNonWQNums.addAll(nums);
+				}
+
+				nums = new ArrayList<String>();
+				if (fxData.getZx11zfNums() != null) {
+					nums = Arrays.asList(fxData.getZx11zfNums().split(",\\s*"));
+				}
+				if (pos < 12) {
+					allNums.addAll(nums);
+				}
+				if (pos < 11) {
+					allZfNums.addAll(nums);
+					allNonWQNums.addAll(nums);
+				}
+
+				nums = new ArrayList<String>();
+				if (fxData.getZx12Nums() != null) {
+					nums = Arrays.asList(fxData.getZx12Nums().split(",\\s*"));
+				}
+				if (pos < 12) {
+					allNums.addAll(nums);
+				}
+				if (pos < 11) {
+					allYzNums.addAll(nums);
+					allNonWQNums.addAll(nums);
+				}
+
+				nums = new ArrayList<String>();
+				if (fxData.getZx12zfNums() != null) {
+					nums = Arrays.asList(fxData.getZx12zfNums().split(",\\s*"));
+				}
+				if (pos < 12) {
+					allNums.addAll(nums);
+				}
+				if (pos < 11) {
+					allZfNums.addAll(nums);
+					allNonWQNums.addAll(nums);
+				}
+
+				nums = new ArrayList<String>();
+				if (fxData.getZx13Nums() != null) {
+					nums = Arrays.asList(fxData.getZx13Nums().split(",\\s*"));
+				}
+				if (pos < 12) {
+					allNums.addAll(nums);
+				}
+				if (pos < 11) {
+					allYzNums.addAll(nums);
+					allNonWQNums.addAll(nums);
+				}
+
+				nums = new ArrayList<String>();
+				if (fxData.getZx13zfNums() != null) {
+					nums = Arrays.asList(fxData.getZx13zfNums().split(",\\s*"));
+				}
+				if (pos < 12) {
+					allNums.addAll(nums);
+				}
+				if (pos < 11) {
+					allZfNums.addAll(nums);
+					allNonWQNums.addAll(nums);
+				}
+
+				nums = new ArrayList<String>();
+				if (fxData.getZx14Nums() != null) {
+					nums = Arrays.asList(fxData.getZx14Nums().split(",\\s*"));
+				}
+				if (pos < 12) {
+					allNums.addAll(nums);
+				}
+				if (pos < 11) {
+					allYzNums.addAll(nums);
+					allNonWQNums.addAll(nums);
+				}
+
+				nums = new ArrayList<String>();
+				if (fxData.getZx14zfNums() != null) {
+					nums = Arrays.asList(fxData.getZx14zfNums().split(",\\s*"));
+				}
+				if (pos < 12) {
+					allNums.addAll(nums);
+				}
+				if (pos < 11) {
+					allZfNums.addAll(nums);
+					allNonWQNums.addAll(nums);
+				}
+
+				nums = new ArrayList<String>();
+				if (fxData.getZx15Nums() != null) {
+					nums = Arrays.asList(fxData.getZx15Nums().split(",\\s*"));
+				}
+				if (pos < 12) {
+					allNums.addAll(nums);
+				}
+				if (pos < 11) {
+					allYzNums.addAll(nums);
+					allNonWQNums.addAll(nums);
+				}
+
+				nums = new ArrayList<String>();
+				if (fxData.getZx15zfNums() != null) {
+					nums = Arrays.asList(fxData.getZx15zfNums().split(",\\s*"));
+				}
+				if (pos < 12) {
+					allNums.addAll(nums);
+				}
+				if (pos < 11) {
+					allZfNums.addAll(nums);
+					allNonWQNums.addAll(nums);
+				}
+
+				nums = new ArrayList<String>();
+				if (fxData.getZx16Nums() != null) {
+					nums = Arrays.asList(fxData.getZx16Nums().split(",\\s*"));
+				}
+				if (pos < 12) {
+					allNums.addAll(nums);
+				}
+				if (pos < 11) {
+					allYzNums.addAll(nums);
+					allNonWQNums.addAll(nums);
+				}
+
+				nums = new ArrayList<String>();
+				if (fxData.getZx16zfNums() != null) {
+					nums = Arrays.asList(fxData.getZx16zfNums().split(",\\s*"));
+				}
+				if (pos < 12) {
+					allNums.addAll(nums);
+				}
+				if (pos < 11) {
+					allZfNums.addAll(nums);
+					allNonWQNums.addAll(nums);
+				}
+
+				nums = new ArrayList<String>();
+				if (fxData.getZx17Nums() != null) {
+					nums = Arrays.asList(fxData.getZx17Nums().split(",\\s*"));
+				}
+				if (pos < 12) {
+					allNums.addAll(nums);
+				}
+				if (pos < 11) {
+					allYzNums.addAll(nums);
+					allNonWQNums.addAll(nums);
+				}
+
+				nums = new ArrayList<String>();
+				if (fxData.getZx17zfNums() != null) {
+					nums = Arrays.asList(fxData.getZx17zfNums().split(",\\s*"));
+				}
+				if (pos < 12) {
+					allNums.addAll(nums);
+				}
+				if (pos < 11) {
+					allZfNums.addAll(nums);
+					allNonWQNums.addAll(nums);
+				}
+
+				nums = new ArrayList<String>();
+				if (fxData.getZx18Nums() != null) {
+					nums = Arrays.asList(fxData.getZx18Nums().split(",\\s*"));
+				}
+				if (pos < 12) {
+					allNums.addAll(nums);
+				}
+				if (pos < 11) {
+					allYzNums.addAll(nums);
+					allNonWQNums.addAll(nums);
+				}
+
+				nums = new ArrayList<String>();
+				if (fxData.getZx18zfNums() != null) {
+					nums = Arrays.asList(fxData.getZx18zfNums().split(",\\s*"));
+				}
+				if (pos < 12) {
+					allNums.addAll(nums);
+				}
+				if (pos < 11) {
+					allZfNums.addAll(nums);
+					allNonWQNums.addAll(nums);
+				}
+
+				if (pos < 12) {
+					calAllFzForFxSwA(mapForAll, allNums);
+					listForAllFz.addAll(allNums);
+				}
+
+				if (pos < 11) {
+					calAllFzForFxSwA(mapForAllYz, allYzNums);
+					listForAllYzFz.addAll(allYzNums);
+
+					calAllFzForFxSwA(mapForAllZf, allZfNums);
+					listForAllZfFz.addAll(allZfNums);
+
+					calAllFzForFxSwA(mapForAllNonWQ, allNonWQNums);
+					listForAllNonWQFz.addAll(allNonWQNums);
+				}
+
+				pos++;
+			}
+
+			FxSwA temp = getTempDataForFxSwA(mapForAll, listForAllFz);
+			data.setA1NumsForAll(temp.getA1NumsForAll());
+			data.setA2NumsForAll(temp.getA2NumsForAll());
+			data.setA3NumsForAll(temp.getA3NumsForAll());
+			data.setA3pNumsForAll(temp.getA3pNumsForAll());
+			data.setArNumsForAll(temp.getArNumsForAll());
+
+			temp = getTempDataForFxSwA(mapForAllYz, listForAllYzFz);
+			data.setA1NumsForAllYz(temp.getA1NumsForAll());
+			data.setA2NumsForAllYz(temp.getA2NumsForAll());
+			data.setA3NumsForAllYz(temp.getA3NumsForAll());
+			data.setA3pNumsForAllYz(temp.getA3pNumsForAll());
+			data.setArNumsForAllYz(temp.getArNumsForAll());
+
+			temp = getTempDataForFxSwA(mapForAllZf, listForAllZfFz);
+			data.setA1NumsForAllZf(temp.getA1NumsForAll());
+			data.setA2NumsForAllZf(temp.getA2NumsForAll());
+			data.setA3NumsForAllZf(temp.getA3NumsForAll());
+			data.setA3pNumsForAllZf(temp.getA3pNumsForAll());
+			data.setArNumsForAllZf(temp.getArNumsForAll());
+
+			temp = getTempDataForFxSwA(mapForAllNonWQ, listForAllNonWQFz);
+			data.setA1NumsForNonWQ(temp.getA1NumsForAll());
+			data.setA2NumsForNonWQ(temp.getA2NumsForAll());
+			data.setA3NumsForNonWQ(temp.getA3NumsForAll());
+			data.setA3pNumsForNonWQ(temp.getA3pNumsForAll());
+			data.setArNumsForNonWQ(temp.getArNumsForAll());
+
+			repositories.fxSwARepository.save(data);
+		} catch (Exception e) {
+			if (DataAccessException.class.isAssignableFrom(e.getClass())) {
+				logger.error(e.getMessage(), e);
+			}
+			t = e;
+		}
+		return new AsyncResult<Exception>(t);
+	}
+
+	protected Set<String> getFzForFxSwA(Set<String> allNums) {
+		Set<String> allFzNums = new HashSet<String>();
+		for (int i = 1; i < 50; i++) {
+			String num = String.valueOf(i);
+			if (!allNums.contains(num)) {
+				allFzNums.add(num);
+			}
+		}
+		return allFzNums;
+	}
+
+	protected void calAllFzForFxSwA(Map<String, Integer> map, Set<String> allNums) {
+		for (String num : getFzForFxSwA(allNums)) {
+			Integer count = map.get(num);
+			if (count == null) {
+				map.put(num, 1);
+			} else {
+				map.put(num, count + 1);
+			}
+		}
+	}
+
+	protected FxSwA getTempDataForFxSwA(Map<String, Integer> map, Set<String> list) {
+		List<String> a1Nums = new ArrayList<String>();
+		List<String> a2Nums = new ArrayList<String>();
+		List<String> a3Nums = new ArrayList<String>();
+		List<String> a3pNums = new ArrayList<String>();
+		List<String> arNums = new ArrayList<String>(getFzForFxSwA(list));
+		Set<String> a2a3a3pNums = new HashSet<String>(a2Nums);
+		a2a3a3pNums.addAll(a3Nums);
+		a2a3a3pNums.addAll(a3pNums);
+		List<String> arA2A3A3PNums = new ArrayList<String>(getFzForFxSwA(a2a3a3pNums));
+		for (Map.Entry<String, Integer> entry : map.entrySet()) {
+			switch (entry.getValue()) {
+			case 1:
+				a1Nums.add(entry.getKey());
+				break;
+			case 2:
+				a2Nums.add(entry.getKey());
+				break;
+			case 3:
+				a3Nums.add(entry.getKey());
+				break;
+			default:
+				a3pNums.add(entry.getKey());
+				break;
+			}
+		}
+		Collections.sort(a1Nums);
+		Collections.sort(a2Nums);
+		Collections.sort(a3Nums);
+		Collections.sort(a3pNums);
+		Collections.sort(arNums);
+		Collections.sort(arA2A3A3PNums);
+
+		FxSwA data = new FxSwA();
+		data.setA1NumsForAll(Joiner.on(",").join(a1Nums));
+		data.setA2NumsForAll(Joiner.on(",").join(a2Nums));
+		data.setA3NumsForAll(Joiner.on(",").join(a3Nums));
+		data.setA3pNumsForAll(Joiner.on(",").join(a3pNums));
+		data.setArNumsForAll(Joiner.on(",").join(arNums));
+		data.setArA2A3A3PNumsForAll(Joiner.on(",").join(arA2A3A3PNums));
+		return data;
+	}
+
 }

@@ -70,7 +70,7 @@ public abstract class FxSw extends BaseYz {
 	private Integer redCountsForZx17zf;
 	private Integer redCountsForZx18;
 	private Integer redCountsForZx18zf;
-	
+
 	private Integer sx;
 	private String sxDW;
 	private String sxNums;

@@ -391,6 +391,9 @@ public abstract class YZ2Service extends YZService {
 			}
 			yzpos = yzpos + zf;
 			int len = getLength(fds);
+			if (zf == len) {
+				yzpos++;
+			}
 			if (yzpos > len) {
 				yzpos -= len;
 			}
@@ -605,6 +608,9 @@ public abstract class YZ2Service extends YZService {
 						SxYz sxyz = yzRepository.findByYearAndPhase(data.getYear(), data.getPhase());
 						int sxpos = sxyz.getCurrentSx().getPos() + zf;
 						int len = SX.seq().length;
+						if (zf == len) {
+							sxpos++;
+						}
 						if (sxpos > len) {
 							sxpos -= len;
 						}
@@ -649,6 +655,9 @@ public abstract class YZ2Service extends YZService {
 
 						int fdpos = currentPos + zf;
 						int len = 12;
+						if (zf == len) {
+							fdpos++;
+						}
 						if (fdpos >= len) {
 							fdpos -= len;
 						}

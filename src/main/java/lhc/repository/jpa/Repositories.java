@@ -657,6 +657,12 @@ public class Repositories {
 	
 	@Autowired
 	public DsxMaxJYJDBDao dsxMaxJyJDBDao;
+	
+	@Autowired
+	public FxSwADao fxSwADao;
+	
+	@Autowired
+	public FxSwARepository fxSwARepository;
 
 	@Autowired
 	public CommonDao commonDao;
