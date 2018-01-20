@@ -1604,6 +1604,7 @@ public class YZ3Service extends YZ2Service {
 			data.setA3NumsForAll(temp.getA3NumsForAll());
 			data.setA3pNumsForAll(temp.getA3pNumsForAll());
 			data.setArNumsForAll(temp.getArNumsForAll());
+			data.setArA2A3A3PNumsForAll(temp.getArA2A3A3PNumsForAll());
 
 			temp = getTempDataForFxSwA(mapForAllYz, listForAllYzFz);
 			data.setA1NumsForAllYz(temp.getA1NumsForAll());
@@ -1611,6 +1612,7 @@ public class YZ3Service extends YZ2Service {
 			data.setA3NumsForAllYz(temp.getA3NumsForAll());
 			data.setA3pNumsForAllYz(temp.getA3pNumsForAll());
 			data.setArNumsForAllYz(temp.getArNumsForAll());
+			data.setArA2A3A3PNumsForAllYz(temp.getArA2A3A3PNumsForAll());
 
 			temp = getTempDataForFxSwA(mapForAllZf, listForAllZfFz);
 			data.setA1NumsForAllZf(temp.getA1NumsForAll());
@@ -1618,6 +1620,7 @@ public class YZ3Service extends YZ2Service {
 			data.setA3NumsForAllZf(temp.getA3NumsForAll());
 			data.setA3pNumsForAllZf(temp.getA3pNumsForAll());
 			data.setArNumsForAllZf(temp.getArNumsForAll());
+			data.setArA2A3A3PNumsForAllZf(temp.getArA2A3A3PNumsForAll());
 
 			temp = getTempDataForFxSwA(mapForAllNonWQ, listForAllNonWQFz);
 			data.setA1NumsForNonWQ(temp.getA1NumsForAll());
@@ -1625,6 +1628,7 @@ public class YZ3Service extends YZ2Service {
 			data.setA3NumsForNonWQ(temp.getA3NumsForAll());
 			data.setA3pNumsForNonWQ(temp.getA3pNumsForAll());
 			data.setArNumsForNonWQ(temp.getArNumsForAll());
+			data.setArA2A3A3PNumsForNonWQ(temp.getArA2A3A3PNumsForAll());
 
 			repositories.fxSwARepository.save(data);
 		} catch (Exception e) {
@@ -1664,10 +1668,6 @@ public class YZ3Service extends YZ2Service {
 		List<String> a3Nums = new ArrayList<String>();
 		List<String> a3pNums = new ArrayList<String>();
 		List<String> arNums = new ArrayList<String>(getFzForFxSwA(list));
-		Set<String> a2a3a3pNums = new HashSet<String>(a2Nums);
-		a2a3a3pNums.addAll(a3Nums);
-		a2a3a3pNums.addAll(a3pNums);
-		List<String> arA2A3A3PNums = new ArrayList<String>(getFzForFxSwA(a2a3a3pNums));
 		for (Map.Entry<String, Integer> entry : map.entrySet()) {
 			switch (entry.getValue()) {
 			case 1:
@@ -1684,6 +1684,11 @@ public class YZ3Service extends YZ2Service {
 				break;
 			}
 		}
+		Set<String> a2a3a3pNums = new HashSet<String>(a2Nums);
+		a2a3a3pNums.addAll(a3Nums);
+		a2a3a3pNums.addAll(a3pNums);
+		List<String> arA2A3A3PNums = new ArrayList<String>(getFzForFxSwA(a2a3a3pNums));
+
 		Collections.sort(a1Nums);
 		Collections.sort(a2Nums);
 		Collections.sort(a3Nums);

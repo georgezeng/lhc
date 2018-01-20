@@ -1,7 +1,6 @@
 package lhc.dto;
 
 import java.math.BigDecimal;
-import java.util.Date;
 
 public class PmDTO {
 	private String date;

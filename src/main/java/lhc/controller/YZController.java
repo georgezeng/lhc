@@ -34,6 +34,7 @@ import lhc.dto.DownloadDTO;
 import lhc.dto.DownloadPrepareTZ;
 import lhc.dto.DsxJYCondition;
 import lhc.dto.DsxJYViewBean;
+import lhc.dto.FxSwADTO;
 import lhc.dto.J0Yz;
 import lhc.dto.PmDTO;
 import lhc.dto.PmNum;
@@ -3651,4 +3652,8 @@ public class YZController {
 		return new BaseResult(result);
 	}
 
+	@RequestMapping("/listFXSWA")
+	public BaseResult listFXSWA(@RequestBody QueryInfo<FxSwADTO> queryInfo) throws Exception {
+		return new BaseResult(repositories.commonDao.findFxSwAList(queryInfo));
+	}
 }

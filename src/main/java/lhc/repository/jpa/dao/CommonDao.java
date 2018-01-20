@@ -11,6 +11,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.stereotype.Repository;
 
+import lhc.dto.FxSwADTO;
 import lhc.dto.J0Yz;
 import lhc.dto.query.PageInfo;
 import lhc.dto.query.PageResult;
@@ -189,5 +190,90 @@ public class CommonDao {
 			return new PageResult<J0Yz>(list, count, queryInfo.getPageInfo());
 		}
 		return new PageResult<J0Yz>(new ArrayList<J0Yz>(), 0, queryInfo.getPageInfo());
+	}
+
+	public PageResult<FxSwADTO> findFxSwAList(QueryInfo<FxSwADTO> queryInfo) {
+		PageRequest pageRequest = null;
+		if (queryInfo.getPageInfo() != null) {
+			if (!queryInfo.getPageInfo().isToSort()) {
+				List<SortInfo> sorts = new ArrayList<SortInfo>();
+				sorts.add(new SortInfo("d.date", SortOrder.DESC));
+				queryInfo.getPageInfo().setSorts(sorts);
+			}
+			pageRequest = queryInfo.getPageInfo().toPageRequest();
+		}
+		List<Object> args = new ArrayList<Object>();
+		StringBuilder condition = new StringBuilder();
+		condition.append("from").append("\n");
+		if (queryInfo.getObject() != null) {
+			condition.append("(select yp.date from fx_sw_a yp").append("\n");
+			condition.append("where yp.year = ?").append("\n");
+			condition.append("and yp.phase = ?) t,").append("\n");
+			FxSwADTO yz = queryInfo.getObject();
+			args.add(yz.getYear());
+			args.add(yz.getPhase());
+		}
+		condition.append("fx_sw_a d").append("\n");
+		condition.append("where 1=1").append("\n");
+		if (queryInfo.getObject() != null) {
+			condition.append("and d.date<=t.date").append("\n");
+		}
+		StringBuilder countSql = new StringBuilder("select count(d.id)").append("\n");
+		countSql.append(condition);
+		Query countQuery = em.createNativeQuery(countSql.toString());
+		QueryUtil.setArgs(args, countQuery);
+		long count = DatabaseUtil.getCount(countQuery.getSingleResult());
+		if (count > 0) {
+			StringBuilder sql = new StringBuilder("select").append("\n");
+			if(queryInfo.getObject().getType().equals("all")) {
+				sql.append("d.a1nums_for_all as a1Nums,").append("\n");
+				sql.append("d.a2nums_for_all as a2Nums,").append("\n");
+				sql.append("d.a3nums_for_all as a3Nums,").append("\n");
+				sql.append("d.a3p_nums_for_all as a3pNums,").append("\n");
+				sql.append("d.ar_nums_for_all as arNums,").append("\n");
+				sql.append("d.ara2a3a3pnums_for_all as arA2A3A3PNums,").append("\n");
+			} else if(queryInfo.getObject().getType().equals("allYz")) {
+				sql.append("d.a1nums_for_all_yz as a1Nums,").append("\n");
+				sql.append("d.a2nums_for_all_yz as a2Nums,").append("\n");
+				sql.append("d.a3nums_for_all_yz as a3Nums,").append("\n");
+				sql.append("d.a3p_nums_for_all_yz as a3pNums,").append("\n");
+				sql.append("d.ar_nums_for_all_yz as arNums,").append("\n");
+				sql.append("d.ara2a3a3pnums_for_all_yz as arA2A3A3PNums,").append("\n");
+			} else if(queryInfo.getObject().getType().equals("allZf")) {
+				sql.append("d.a1nums_for_all_zf as a1Nums,").append("\n");
+				sql.append("d.a2nums_for_all_zf as a2Nums,").append("\n");
+				sql.append("d.a3nums_for_all_zf as a3Nums,").append("\n");
+				sql.append("d.a3p_nums_for_all_zf as a3pNums,").append("\n");
+				sql.append("d.ar_nums_for_all_zf as arNums,").append("\n");
+				sql.append("d.ara2a3a3pnums_for_all_zf as arA2A3A3PNums,").append("\n");
+			} else if(queryInfo.getObject().getType().equals("allNonWQ")) {
+				sql.append("d.a1nums_for_nonwq as a1Nums,").append("\n");
+				sql.append("d.a2nums_for_nonwq as a2Nums,").append("\n");
+				sql.append("d.a3nums_for_nonwq as a3Nums,").append("\n");
+				sql.append("d.a3p_nums_for_nonwq as a3pNums,").append("\n");
+				sql.append("d.ar_nums_for_nonwq as arNums,").append("\n");
+				sql.append("d.ara2a3a3pnums_for_nonwq as arA2A3A3PNums,").append("\n");
+			} else {
+				throw new RuntimeException("查询参数有误");
+			}
+			sql.append("d.year, d.phase, d.date, d.special_num as specialNum").append("\n");
+			sql.append(condition);
+			if (pageRequest != null) {
+				QueryUtil.setOrder(sql, pageRequest);
+			}
+			Query query = em.createNativeQuery(sql.toString(), "FxSwA");
+			QueryUtil.setArgs(args, query);
+			if (pageRequest != null) {
+				QueryUtil.setPage(pageRequest, query);
+			} else {
+				queryInfo.setPageInfo(new PageInfo(1, 1));
+			}
+			List<FxSwADTO> list = query.getResultList();
+			if (queryInfo.isToReverse()) {
+				Collections.reverse(list);
+			}
+			return new PageResult<FxSwADTO>(list, count, queryInfo.getPageInfo());
+		}
+		return new PageResult<FxSwADTO>(new ArrayList<FxSwADTO>(), 0, queryInfo.getPageInfo());
 	}
 }
