@@ -81,31 +81,33 @@ $(document).ready(function() {
 					aTargets: [index],
 					fnCreatedCell: function(nTd, sData, item, iRow, iCol) {
 						var value = "0";
-						var idx = (index - 3)/2;
-						if(item.year) {
-							if(!redCounts[idx]) {
-								redCounts[idx] = 0;
-							}
-							var nums = null;
-							switch(index) {
-							case 3: nums = item.a1Nums ? item.a1Nums.split(/,\s*/) : null; break;
-							case 5: nums = item.a2Nums ? item.a2Nums.split(/,\s*/) : null; break;
-							case 7: nums = item.a3Nums ? item.a3Nums.split(/,\s*/) : null; break;
-							case 9: nums = item.a3pNums ? item.a3pNums.split(/,\s*/) : null; break;
-							case 11: nums = item.arNums ? item.arNums.split(/,\s*/) : null; break;
-							case 13: nums = item.arA2A3A3PNums ? item.arA2A3A3PNums.split(/,\s*/) : null; break;
-							}
-							if(nums != null && nums.length > 0) {
-								for(var i = 0; i < nums.length; i++) {
-									if(parseInt(nums[i]) == item.specialNum) {
-										value = "1";
-										redCounts[idx] += 1;
-										break;
+						if(lastItem) {
+							var idx = (index - 3)/2;
+							if(item.year) {
+								if(!redCounts[idx]) {
+									redCounts[idx] = 0;
+								}
+								var nums = null;
+								switch(index) {
+								case 3: nums = lastItem.a1Nums ? lastItem.a1Nums.split(/,\s*/) : null; break;
+								case 5: nums = lastItem.a2Nums ? lastItem.a2Nums.split(/,\s*/) : null; break;
+								case 7: nums = lastItem.a3Nums ? lastItem.a3Nums.split(/,\s*/) : null; break;
+								case 9: nums = lastItem.a3pNums ? lastItem.a3pNums.split(/,\s*/) : null; break;
+								case 11: nums = lastItem.arNums ? lastItem.arNums.split(/,\s*/) : null; break;
+								case 13: nums = lastItem.arA2A3A3PNums ? lastItem.arA2A3A3PNums.split(/,\s*/) : null; break;
+								}
+								if(nums != null && nums.length > 0) {
+									for(var i = 0; i < nums.length; i++) {
+										if(parseInt(nums[i]) == item.specialNum) {
+											value = "1";
+											redCounts[idx] += 1;
+											break;
+										}
 									}
 								}
+							} else {
+								value = redCounts[idx];
 							}
-						} else {
-							value = redCounts[idx];
 						}
 						$(nTd).text(value);
 					}

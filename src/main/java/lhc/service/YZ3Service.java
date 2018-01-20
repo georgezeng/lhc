@@ -1578,17 +1578,17 @@ public class YZ3Service extends YZ2Service {
 				}
 
 				if (pos < 12) {
-					calAllFzForFxSwA(mapForAll, allNums);
+					calAllFzForFxSwA(mapForAll, getFz(allNums));
 				}
 
 				if (pos < 11) {
-					calAllFzForFxSwA(mapForAllYz, allYzNums);
-					calAllFzForFxSwA(mapForAllZf, allZfNums);
-					calAllFzForFxSwA(mapForAllNonWQ, allNonWQNums);
+					calAllFzForFxSwA(mapForAllYz, getFz(allYzNums));
+					calAllFzForFxSwA(mapForAllZf, getFz(allZfNums));
+					calAllFzForFxSwA(mapForAllNonWQ, getFz(allNonWQNums));
 
-					Set<String> numSet = new HashSet<String>(allYzNums);
-					numSet.addAll(allZfNums);
-					numSet.addAll(allNonWQNums);
+					Set<String> numSet = new HashSet<String>(getFz(allYzNums));
+					numSet.addAll(getFz(allZfNums));
+					numSet.addAll(getFz(allNonWQNums));
 					calAllFzForFxSwA(mapForA, numSet);
 				}
 
@@ -1657,7 +1657,7 @@ public class YZ3Service extends YZ2Service {
 	}
 
 	protected void calAllFzForFxSwA(Map<String, Integer> map, Collection<String> allNums) {
-		for (String num : getFz(allNums)) {
+		for (String num : allNums) {
 			Integer count = map.get(num);
 			if (count == null) {
 				map.put(num, 1);
