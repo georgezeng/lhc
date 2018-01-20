@@ -81,12 +81,10 @@ $(document).ready(function() {
 					aTargets: [index],
 					fnCreatedCell: function(nTd, sData, item, iRow, iCol) {
 						var value = "0";
+						var idx = (index - 3)/2;
 						if(item.year) {
-							if(!redCounts[iRow]) {
-								redCounts[iRow] = [];
-							}
-							if(!redCounts[iRow][index - 3]) {
-								redCounts[iRow][index - 3] = 0;
+							if(!redCounts[idx]) {
+								redCounts[idx] = 0;
 							}
 							var nums = null;
 							switch(index) {
@@ -101,13 +99,13 @@ $(document).ready(function() {
 								for(var i = 0; i < nums.length; i++) {
 									if(parseInt(nums[i]) == item.specialNum) {
 										value = "1";
-										redCounts[iRow][index - 3] += 1;
+										redCounts[idx] += 1;
 										break;
 									}
 								}
 							}
 						} else {
-							value = redCounts[iRow][index - 3];
+							value = redCounts[idx];
 						}
 						$(nTd).text(value);
 					}
