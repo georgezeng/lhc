@@ -253,6 +253,13 @@ public class CommonDao {
 				sql.append("d.a3p_nums_for_nonwq as a3pNums,").append("\n");
 				sql.append("d.ar_nums_for_nonwq as arNums,").append("\n");
 				sql.append("d.ara2a3a3pnums_for_nonwq as arA2A3A3PNums,").append("\n");
+			} else if(queryInfo.getObject().getType().equals("allJh")) {
+				sql.append("d.a1nums_for_jh as a1Nums,").append("\n");
+				sql.append("d.a2nums_for_jh as a2Nums,").append("\n");
+				sql.append("d.a3nums_for_jh as a3Nums,").append("\n");
+				sql.append("d.a3p_nums_for_jh as a3pNums,").append("\n");
+				sql.append("d.ar_nums_for_jh as arNums,").append("\n");
+				sql.append("d.ara2a3a3pnums_for_jh as arA2A3A3PNums,").append("\n");
 			} else {
 				throw new RuntimeException("查询参数有误");
 			}

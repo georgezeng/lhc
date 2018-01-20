@@ -3654,6 +3654,10 @@ public class YZController {
 
 	@RequestMapping("/listFXSWA")
 	public BaseResult listFXSWA(@RequestBody QueryInfo<FxSwADTO> queryInfo) throws Exception {
-		return new BaseResult(repositories.commonDao.findFxSwAList(queryInfo));
+		PageResult<FxSwADTO> result = repositories.commonDao.findFxSwAList(queryInfo);
+		if (result != null && result.getTotal() > 0) {
+			result.getList().add(new FxSwADTO());
+		}
+		return new BaseResult(result);
 	}
 }

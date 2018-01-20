@@ -36,6 +36,61 @@ public class FxSwA extends BaseYz {
 	private String arNumsForNonWQ;
 	private String arA2A3A3PNumsForNonWQ;
 
+	private String a1NumsForJh;
+	private String a2NumsForJh;
+	private String a3NumsForJh;
+	private String a3pNumsForJh;
+	private String arNumsForJh;
+	private String arA2A3A3PNumsForJh;
+
+	public String getA1NumsForJh() {
+		return a1NumsForJh;
+	}
+
+	public void setA1NumsForJh(String a1NumsForJh) {
+		this.a1NumsForJh = a1NumsForJh;
+	}
+
+	public String getA2NumsForJh() {
+		return a2NumsForJh;
+	}
+
+	public void setA2NumsForJh(String a2NumsForJh) {
+		this.a2NumsForJh = a2NumsForJh;
+	}
+
+	public String getA3NumsForJh() {
+		return a3NumsForJh;
+	}
+
+	public void setA3NumsForJh(String a3NumsForJh) {
+		this.a3NumsForJh = a3NumsForJh;
+	}
+
+	public String getA3pNumsForJh() {
+		return a3pNumsForJh;
+	}
+
+	public void setA3pNumsForJh(String a3pNumsForJh) {
+		this.a3pNumsForJh = a3pNumsForJh;
+	}
+
+	public String getArNumsForJh() {
+		return arNumsForJh;
+	}
+
+	public void setArNumsForJh(String arNumsForJh) {
+		this.arNumsForJh = arNumsForJh;
+	}
+
+	public String getArA2A3A3PNumsForJh() {
+		return arA2A3A3PNumsForJh;
+	}
+
+	public void setArA2A3A3PNumsForJh(String arA2A3A3PNumsForJh) {
+		this.arA2A3A3PNumsForJh = arA2A3A3PNumsForJh;
+	}
+
 	public String getArA2A3A3PNumsForAll() {
 		return arA2A3A3PNumsForAll;
 	}

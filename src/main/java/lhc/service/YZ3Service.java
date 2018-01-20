@@ -5,6 +5,7 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Collection;
 import java.util.Collections;
+import java.util.Comparator;
 import java.util.HashMap;
 import java.util.HashSet;
 import java.util.List;
@@ -784,14 +785,11 @@ public class YZ3Service extends YZ2Service {
 			KaiJiang kj = repositories.kaiJiangRepository.findByYearAndPhase(swData.getYear(), swData.getPhase());
 			data.setSpecialNum(kj.getSpecialNum());
 
+			Map<String, Integer> mapForA = new HashMap<String, Integer>();
 			Map<String, Integer> mapForAll = new HashMap<String, Integer>();
 			Map<String, Integer> mapForAllYz = new HashMap<String, Integer>();
 			Map<String, Integer> mapForAllZf = new HashMap<String, Integer>();
 			Map<String, Integer> mapForAllNonWQ = new HashMap<String, Integer>();
-			Set<String> listForAllFz = new HashSet<String>();
-			Set<String> listForAllYzFz = new HashSet<String>();
-			Set<String> listForAllZfFz = new HashSet<String>();
-			Set<String> listForAllNonWQFz = new HashSet<String>();
 			int pos = 1;
 			for (FxSw fxData : fxDatas) {
 				Set<String> allNums = new HashSet<String>();
@@ -1581,24 +1579,23 @@ public class YZ3Service extends YZ2Service {
 
 				if (pos < 12) {
 					calAllFzForFxSwA(mapForAll, allNums);
-					listForAllFz.addAll(allNums);
 				}
 
 				if (pos < 11) {
 					calAllFzForFxSwA(mapForAllYz, allYzNums);
-					listForAllYzFz.addAll(allYzNums);
-
 					calAllFzForFxSwA(mapForAllZf, allZfNums);
-					listForAllZfFz.addAll(allZfNums);
-
 					calAllFzForFxSwA(mapForAllNonWQ, allNonWQNums);
-					listForAllNonWQFz.addAll(allNonWQNums);
+
+					Set<String> numSet = new HashSet<String>(allYzNums);
+					numSet.addAll(allZfNums);
+					numSet.addAll(allNonWQNums);
+					calAllFzForFxSwA(mapForA, numSet);
 				}
 
 				pos++;
 			}
 
-			FxSwA temp = getTempDataForFxSwA(mapForAll, listForAllFz);
+			FxSwA temp = getTempDataForFxSwA(mapForAll);
 			data.setA1NumsForAll(temp.getA1NumsForAll());
 			data.setA2NumsForAll(temp.getA2NumsForAll());
 			data.setA3NumsForAll(temp.getA3NumsForAll());
@@ -1606,7 +1603,7 @@ public class YZ3Service extends YZ2Service {
 			data.setArNumsForAll(temp.getArNumsForAll());
 			data.setArA2A3A3PNumsForAll(temp.getArA2A3A3PNumsForAll());
 
-			temp = getTempDataForFxSwA(mapForAllYz, listForAllYzFz);
+			temp = getTempDataForFxSwA(mapForAllYz);
 			data.setA1NumsForAllYz(temp.getA1NumsForAll());
 			data.setA2NumsForAllYz(temp.getA2NumsForAll());
 			data.setA3NumsForAllYz(temp.getA3NumsForAll());
@@ -1614,7 +1611,7 @@ public class YZ3Service extends YZ2Service {
 			data.setArNumsForAllYz(temp.getArNumsForAll());
 			data.setArA2A3A3PNumsForAllYz(temp.getArA2A3A3PNumsForAll());
 
-			temp = getTempDataForFxSwA(mapForAllZf, listForAllZfFz);
+			temp = getTempDataForFxSwA(mapForAllZf);
 			data.setA1NumsForAllZf(temp.getA1NumsForAll());
 			data.setA2NumsForAllZf(temp.getA2NumsForAll());
 			data.setA3NumsForAllZf(temp.getA3NumsForAll());
@@ -1622,13 +1619,21 @@ public class YZ3Service extends YZ2Service {
 			data.setArNumsForAllZf(temp.getArNumsForAll());
 			data.setArA2A3A3PNumsForAllZf(temp.getArA2A3A3PNumsForAll());
 
-			temp = getTempDataForFxSwA(mapForAllNonWQ, listForAllNonWQFz);
+			temp = getTempDataForFxSwA(mapForAllNonWQ);
 			data.setA1NumsForNonWQ(temp.getA1NumsForAll());
 			data.setA2NumsForNonWQ(temp.getA2NumsForAll());
 			data.setA3NumsForNonWQ(temp.getA3NumsForAll());
 			data.setA3pNumsForNonWQ(temp.getA3pNumsForAll());
 			data.setArNumsForNonWQ(temp.getArNumsForAll());
 			data.setArA2A3A3PNumsForNonWQ(temp.getArA2A3A3PNumsForAll());
+
+			temp = getTempDataForFxSwA(mapForA);
+			data.setA1NumsForJh(temp.getA1NumsForAll());
+			data.setA2NumsForJh(temp.getA2NumsForAll());
+			data.setA3NumsForJh(temp.getA3NumsForAll());
+			data.setA3pNumsForJh(temp.getA3pNumsForAll());
+			data.setArNumsForJh(temp.getArNumsForAll());
+			data.setArA2A3A3PNumsForJh(temp.getArA2A3A3PNumsForAll());
 
 			repositories.fxSwARepository.save(data);
 		} catch (Exception e) {
@@ -1640,7 +1645,7 @@ public class YZ3Service extends YZ2Service {
 		return new AsyncResult<Exception>(t);
 	}
 
-	protected Set<String> getFzForFxSwA(Set<String> allNums) {
+	protected Set<String> getFz(Collection<String> allNums) {
 		Set<String> allFzNums = new HashSet<String>();
 		for (int i = 1; i < 50; i++) {
 			String num = String.valueOf(i);
@@ -1651,8 +1656,8 @@ public class YZ3Service extends YZ2Service {
 		return allFzNums;
 	}
 
-	protected void calAllFzForFxSwA(Map<String, Integer> map, Set<String> allNums) {
-		for (String num : getFzForFxSwA(allNums)) {
+	protected void calAllFzForFxSwA(Map<String, Integer> map, Collection<String> allNums) {
+		for (String num : getFz(allNums)) {
 			Integer count = map.get(num);
 			if (count == null) {
 				map.put(num, 1);
@@ -1662,12 +1667,11 @@ public class YZ3Service extends YZ2Service {
 		}
 	}
 
-	protected FxSwA getTempDataForFxSwA(Map<String, Integer> map, Set<String> list) {
+	protected FxSwA getTempDataForFxSwA(Map<String, Integer> map) {
 		List<String> a1Nums = new ArrayList<String>();
 		List<String> a2Nums = new ArrayList<String>();
 		List<String> a3Nums = new ArrayList<String>();
 		List<String> a3pNums = new ArrayList<String>();
-		List<String> arNums = new ArrayList<String>(getFzForFxSwA(list));
 		for (Map.Entry<String, Integer> entry : map.entrySet()) {
 			switch (entry.getValue()) {
 			case 1:
@@ -1684,17 +1688,26 @@ public class YZ3Service extends YZ2Service {
 				break;
 			}
 		}
+		List<String> arNums = new ArrayList<String>(getFz(map.keySet()));
 		Set<String> a2a3a3pNums = new HashSet<String>(a2Nums);
 		a2a3a3pNums.addAll(a3Nums);
 		a2a3a3pNums.addAll(a3pNums);
-		List<String> arA2A3A3PNums = new ArrayList<String>(getFzForFxSwA(a2a3a3pNums));
+		List<String> arA2A3A3PNums = new ArrayList<String>(getFz(a2a3a3pNums));
 
-		Collections.sort(a1Nums);
-		Collections.sort(a2Nums);
-		Collections.sort(a3Nums);
-		Collections.sort(a3pNums);
-		Collections.sort(arNums);
-		Collections.sort(arA2A3A3PNums);
+		Comparator<String> comparator = new Comparator<String>() {
+
+			@Override
+			public int compare(String o1, String o2) {
+				return Integer.valueOf(o1).compareTo(Integer.valueOf(o2));
+			}
+		};
+
+		Collections.sort(a1Nums, comparator);
+		Collections.sort(a2Nums, comparator);
+		Collections.sort(a3Nums, comparator);
+		Collections.sort(a3pNums, comparator);
+		Collections.sort(arNums, comparator);
+		Collections.sort(arA2A3A3PNums, comparator);
 
 		FxSwA data = new FxSwA();
 		data.setA1NumsForAll(Joiner.on(",").join(a1Nums));
