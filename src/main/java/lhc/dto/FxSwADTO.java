@@ -12,7 +12,8 @@ import javax.persistence.Transient;
 		@ColumnResult(name = "phase", type = Integer.class), @ColumnResult(name = "specialNum", type = Integer.class),
 		@ColumnResult(name = "a1Nums", type = String.class), @ColumnResult(name = "a2Nums", type = String.class),
 		@ColumnResult(name = "a3Nums", type = String.class), @ColumnResult(name = "a3pNums", type = String.class),
-		@ColumnResult(name = "arNums", type = String.class), @ColumnResult(name = "arA2A3A3PNums", type = String.class) }))
+		@ColumnResult(name = "arNums", type = String.class), @ColumnResult(name = "arA2A3A3PNums", type = String.class),
+		@ColumnResult(name = "a1a2a3Nums", type = String.class) }))
 @Entity
 public class FxSwADTO {
 	@Id
@@ -27,6 +28,7 @@ public class FxSwADTO {
 	private String a3pNums;
 	private String arNums;
 	private String arA2A3A3PNums;
+	private String a1a2a3Nums;
 	@Transient
 	private String type;
 
@@ -35,7 +37,7 @@ public class FxSwADTO {
 	}
 
 	public FxSwADTO(String date, Integer year, Integer phase, Integer specialNum, String a1Nums, String a2Nums,
-			String a3Nums, String a3pNums, String arNums, String arA2A3A3PNums) {
+			String a3Nums, String a3pNums, String arNums, String arA2A3A3PNums, String a1a2a3Nums) {
 		this.date = date;
 		this.year = year;
 		this.phase = phase;
@@ -46,6 +48,15 @@ public class FxSwADTO {
 		this.a3pNums = a3pNums;
 		this.arNums = arNums;
 		this.arA2A3A3PNums = arA2A3A3PNums;
+		this.a1a2a3Nums = a1a2a3Nums;
+	}
+
+	public String getA1a2a3Nums() {
+		return a1a2a3Nums;
+	}
+
+	public void setA1a2a3Nums(String a1a2a3Nums) {
+		this.a1a2a3Nums = a1a2a3Nums;
 	}
 
 	public Long getId() {

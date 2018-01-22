@@ -99,6 +99,7 @@
 	<include file="/db/v92.sql" />
 	<include file="/db/v93.sql" />
 	<include file="/db/v94.sql" />
-	-->
 	<include file="/db/v95.sql" />
+	-->
+	<include file="/db/v96.sql" />
 </databaseChangeLog>

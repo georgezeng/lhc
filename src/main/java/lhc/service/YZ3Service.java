@@ -770,6 +770,54 @@ public class YZ3Service extends YZ2Service {
 		return new AsyncResult<Exception>(t);
 	}
 
+	protected void calListForFxSwA(FxSw fxData, int pos, String field, Set<String> allNums, Set<String> allNonWQNums,
+			Set<String> allYzNums, Set<String> allZfNums, Set<String> allYzNumsForJh147, Set<String> allYzNumsForJh258,
+			Set<String> allYzNumsForJh369, Set<String> allZfNumsForJh147, Set<String> allZfNumsForJh258,
+			Set<String> allZfNumsForJh369, Set<String> allNonWQNumsForJh1, Set<String> allNonWQNumsForJh2,
+			Set<String> allNonWQNumsForJh3, Set<String> allNonWQNumsForJh4, Set<String> allNonWQNumsForJh5,
+			Set<String> allNonWQNumsForJh6, Set<String> allNonWQNumsForJh7, Set<String> allNonWQNumsForJh8,
+			Set<String> allNonWQNumsForJh9) throws Exception {
+		List<String> nums = new ArrayList<String>();
+		String numsStr = (String) ReflectionUtils.findMethod(FxSw.class, "get" + field + "Nums").invoke(fxData);
+		if (numsStr != null) {
+			nums = Arrays.asList(numsStr.split(",\\s*"));
+		}
+		if (pos < 12) {
+			allNums.addAll(nums);
+		}
+		if (pos < 11) {
+			if (allNonWQNums != null) {
+				allNonWQNums.addAll(nums);
+			}
+			allYzNumsForJh147.addAll(nums);
+			allZfNumsForJh147.addAll(nums);
+		}
+		if (pos < 10) {
+			if (allYzNums != null) {
+				allYzNums.addAll(nums);
+			} else if (allZfNums != null) {
+				allZfNums.addAll(nums);
+			}
+			allYzNumsForJh258.addAll(nums);
+			allZfNumsForJh258.addAll(nums);
+			allNonWQNumsForJh1.addAll(nums);
+			allNonWQNumsForJh4.addAll(nums);
+			allNonWQNumsForJh7.addAll(nums);
+		}
+		if (pos < 9) {
+			allYzNumsForJh369.addAll(nums);
+			allZfNumsForJh369.addAll(nums);
+			allNonWQNumsForJh2.addAll(nums);
+			allNonWQNumsForJh5.addAll(nums);
+			allNonWQNumsForJh8.addAll(nums);
+		}
+		if (pos < 8) {
+			allNonWQNumsForJh3.addAll(nums);
+			allNonWQNumsForJh6.addAll(nums);
+			allNonWQNumsForJh9.addAll(nums);
+		}
+	}
+
 	@Async
 	public Future<Exception> calFxSwAForSpecific(List<FxSw> fxDatas) {
 		Exception t = null;
@@ -785,7 +833,16 @@ public class YZ3Service extends YZ2Service {
 			KaiJiang kj = repositories.kaiJiangRepository.findByYearAndPhase(swData.getYear(), swData.getPhase());
 			data.setSpecialNum(kj.getSpecialNum());
 
-			Map<String, Integer> mapForA = new HashMap<String, Integer>();
+			Map<String, Integer> mapForAForJH = new HashMap<String, Integer>();
+			Map<String, Integer> mapForAForJH1 = new HashMap<String, Integer>();
+			Map<String, Integer> mapForAForJH2 = new HashMap<String, Integer>();
+			Map<String, Integer> mapForAForJH3 = new HashMap<String, Integer>();
+			Map<String, Integer> mapForAForJH4 = new HashMap<String, Integer>();
+			Map<String, Integer> mapForAForJH5 = new HashMap<String, Integer>();
+			Map<String, Integer> mapForAForJH6 = new HashMap<String, Integer>();
+			Map<String, Integer> mapForAForJH7 = new HashMap<String, Integer>();
+			Map<String, Integer> mapForAForJH8 = new HashMap<String, Integer>();
+			Map<String, Integer> mapForAForJH9 = new HashMap<String, Integer>();
 			Map<String, Integer> mapForAll = new HashMap<String, Integer>();
 			Map<String, Integer> mapForAllYz = new HashMap<String, Integer>();
 			Map<String, Integer> mapForAllZf = new HashMap<String, Integer>();
@@ -796,802 +853,356 @@ public class YZ3Service extends YZ2Service {
 				Set<String> allYzNums = new HashSet<String>();
 				Set<String> allZfNums = new HashSet<String>();
 				Set<String> allNonWQNums = new HashSet<String>();
-
-				List<String> nums = new ArrayList<String>();
-				if (fxData.getBsNums() != null) {
-					nums = Arrays.asList(fxData.getBsNums().split(",\\s*"));
-				}
-				if (pos < 12) {
-					allNums.addAll(nums);
-				}
-				if (pos < 11) {
-					allYzNums.addAll(nums);
-					allNonWQNums.addAll(nums);
-				}
-
-				nums = new ArrayList<String>();
-				if (fxData.getBszfNums() != null) {
-					nums = Arrays.asList(fxData.getBszfNums().split(",\\s*"));
-				}
-				if (pos < 12) {
-					allNums.addAll(nums);
-				}
-				if (pos < 11) {
-					allZfNums.addAll(nums);
-					allNonWQNums.addAll(nums);
-				}
-
-				nums = new ArrayList<String>();
-				if (fxData.getDsNums() != null) {
-					nums = Arrays.asList(fxData.getDsNums().split(",\\s*"));
-				}
-				if (pos < 12) {
-					allNums.addAll(nums);
-				}
-				if (pos < 11) {
-					allYzNums.addAll(nums);
-					allNonWQNums.addAll(nums);
-				}
-
-				nums = new ArrayList<String>();
-				if (fxData.getDszfNums() != null) {
-					nums = Arrays.asList(fxData.getDszfNums().split(",\\s*"));
-				}
-				if (pos < 12) {
-					allNums.addAll(nums);
-				}
-				if (pos < 11) {
-					allZfNums.addAll(nums);
-					allNonWQNums.addAll(nums);
-				}
-
-				nums = new ArrayList<String>();
-				if (fxData.getFdNums() != null) {
-					nums = Arrays.asList(fxData.getFdNums().split(",\\s*"));
-				}
-				if (pos < 12) {
-					allNums.addAll(nums);
-				}
-				if (pos < 11) {
-					allYzNums.addAll(nums);
-					allNonWQNums.addAll(nums);
-				}
-
-				nums = new ArrayList<String>();
-				if (fxData.getFdzfNums() != null) {
-					nums = Arrays.asList(fxData.getFdzfNums().split(",\\s*"));
-				}
-				if (pos < 12) {
-					allNums.addAll(nums);
-				}
-				if (pos < 11) {
-					allZfNums.addAll(nums);
-					allNonWQNums.addAll(nums);
-				}
-
-				nums = new ArrayList<String>();
-				if (fxData.getLhNums() != null) {
-					nums = Arrays.asList(fxData.getLhNums().split(",\\s*"));
-				}
-				if (pos < 12) {
-					allNums.addAll(nums);
-				}
-				if (pos < 11) {
-					allYzNums.addAll(nums);
-					allNonWQNums.addAll(nums);
-				}
-
-				nums = new ArrayList<String>();
-				if (fxData.getLhzfNums() != null) {
-					nums = Arrays.asList(fxData.getLhzfNums().split(",\\s*"));
-				}
-				if (pos < 12) {
-					allNums.addAll(nums);
-				}
-				if (pos < 11) {
-					allZfNums.addAll(nums);
-					allNonWQNums.addAll(nums);
-				}
-
-				nums = new ArrayList<String>();
-				if (fxData.getMwNums() != null) {
-					nums = Arrays.asList(fxData.getMwNums().split(",\\s*"));
-				}
-				if (pos < 12) {
-					allNums.addAll(nums);
-				}
-				if (pos < 11) {
-					allYzNums.addAll(nums);
-					allNonWQNums.addAll(nums);
-				}
-
-				nums = new ArrayList<String>();
-				if (fxData.getMwzfNums() != null) {
-					nums = Arrays.asList(fxData.getMwzfNums().split(",\\s*"));
-				}
-				if (pos < 12) {
-					allNums.addAll(nums);
-				}
-				if (pos < 11) {
-					allZfNums.addAll(nums);
-					allNonWQNums.addAll(nums);
-				}
-
-				nums = new ArrayList<String>();
-				if (fxData.getPdNums() != null) {
-					nums = Arrays.asList(fxData.getPdNums().split(",\\s*"));
-				}
-				if (pos < 12) {
-					allNums.addAll(nums);
-				}
-				if (pos < 11) {
-					allYzNums.addAll(nums);
-					allNonWQNums.addAll(nums);
-				}
-
-				nums = new ArrayList<String>();
-				if (fxData.getPdzfNums() != null) {
-					nums = Arrays.asList(fxData.getPdzfNums().split(",\\s*"));
-				}
-				if (pos < 12) {
-					allNums.addAll(nums);
-				}
-				if (pos < 11) {
-					allZfNums.addAll(nums);
-					allNonWQNums.addAll(nums);
-				}
-
-				nums = new ArrayList<String>();
-				if (fxData.getQiwNums() != null) {
-					nums = Arrays.asList(fxData.getQiwNums().split(",\\s*"));
-				}
-				if (pos < 12) {
-					allNums.addAll(nums);
-				}
-				if (pos < 11) {
-					allYzNums.addAll(nums);
-				}
-
-				nums = new ArrayList<String>();
-				if (fxData.getQiwzfNums() != null) {
-					nums = Arrays.asList(fxData.getQiwzfNums().split(",\\s*"));
-				}
-				if (pos < 12) {
-					allNums.addAll(nums);
-				}
-				if (pos < 11) {
-					allZfNums.addAll(nums);
-				}
-
-				nums = new ArrayList<String>();
-				if (fxData.getQqNums() != null) {
-					nums = Arrays.asList(fxData.getQqNums().split(",\\s*"));
-				}
-				if (pos < 12) {
-					allNums.addAll(nums);
-				}
-				if (pos < 11) {
-					allYzNums.addAll(nums);
-				}
-
-				nums = new ArrayList<String>();
-				if (fxData.getQqzfNums() != null) {
-					nums = Arrays.asList(fxData.getQqzfNums().split(",\\s*"));
-				}
-				if (pos < 12) {
-					allNums.addAll(nums);
-				}
-				if (pos < 11) {
-					allZfNums.addAll(nums);
-				}
-
-				nums = new ArrayList<String>();
-				if (fxData.getSlqNums() != null) {
-					nums = Arrays.asList(fxData.getSlqNums().split(",\\s*"));
-				}
-				if (pos < 12) {
-					allNums.addAll(nums);
-				}
-				if (pos < 11) {
-					allYzNums.addAll(nums);
-					allNonWQNums.addAll(nums);
-				}
-
-				nums = new ArrayList<String>();
-				if (fxData.getSlqzfNums() != null) {
-					nums = Arrays.asList(fxData.getSlqzfNums().split(",\\s*"));
-				}
-				if (pos < 12) {
-					allNums.addAll(nums);
-				}
-				if (pos < 11) {
-					allZfNums.addAll(nums);
-					allNonWQNums.addAll(nums);
-				}
-
-				nums = new ArrayList<String>();
-				if (fxData.getSwNums() != null) {
-					nums = Arrays.asList(fxData.getSwNums().split(",\\s*"));
-				}
-				if (pos < 12) {
-					allNums.addAll(nums);
-				}
-				if (pos < 11) {
-					allYzNums.addAll(nums);
-				}
-
-				nums = new ArrayList<String>();
-				if (fxData.getSwzfNums() != null) {
-					nums = Arrays.asList(fxData.getSwzfNums().split(",\\s*"));
-				}
-				if (pos < 12) {
-					allNums.addAll(nums);
-				}
-				if (pos < 11) {
-					allZfNums.addAll(nums);
-				}
-
-				nums = new ArrayList<String>();
-				if (fxData.getSxNums() != null) {
-					nums = Arrays.asList(fxData.getSxNums().split(",\\s*"));
-				}
-				if (pos < 12) {
-					allNums.addAll(nums);
-				}
-				if (pos < 11) {
-					allYzNums.addAll(nums);
-					allNonWQNums.addAll(nums);
-				}
-
-				nums = new ArrayList<String>();
-				if (fxData.getSxzfNums() != null) {
-					nums = Arrays.asList(fxData.getSxzfNums().split(",\\s*"));
-				}
-				if (pos < 12) {
-					allNums.addAll(nums);
-				}
-				if (pos < 11) {
-					allZfNums.addAll(nums);
-					allNonWQNums.addAll(nums);
-				}
-
-				nums = new ArrayList<String>();
-				if (fxData.getTwelveNums() != null) {
-					nums = Arrays.asList(fxData.getTwelveNums().split(",\\s*"));
-				}
-				if (pos < 12) {
-					allNums.addAll(nums);
-				}
-				if (pos < 11) {
-					allYzNums.addAll(nums);
-					allNonWQNums.addAll(nums);
-				}
-
-				nums = new ArrayList<String>();
-				if (fxData.getTwelvezfNums() != null) {
-					nums = Arrays.asList(fxData.getTwelvezfNums().split(",\\s*"));
-				}
-				if (pos < 12) {
-					allNums.addAll(nums);
-				}
-				if (pos < 11) {
-					allZfNums.addAll(nums);
-					allNonWQNums.addAll(nums);
-				}
-
-				nums = new ArrayList<String>();
-				if (fxData.getWxNums() != null) {
-					nums = Arrays.asList(fxData.getWxNums().split(",\\s*"));
-				}
-				if (pos < 12) {
-					allNums.addAll(nums);
-				}
-				if (pos < 11) {
-					allYzNums.addAll(nums);
-				}
-
-				nums = new ArrayList<String>();
-				if (fxData.getWxzfNums() != null) {
-					nums = Arrays.asList(fxData.getWxzfNums().split(",\\s*"));
-				}
-				if (pos < 12) {
-					allNums.addAll(nums);
-				}
-				if (pos < 11) {
-					allZfNums.addAll(nums);
-				}
-
-				nums = new ArrayList<String>();
-				if (fxData.getWxdsNums() != null) {
-					nums = Arrays.asList(fxData.getWxdsNums().split(",\\s*"));
-				}
-				if (pos < 12) {
-					allNums.addAll(nums);
-				}
-				if (pos < 11) {
-					allYzNums.addAll(nums);
-					allNonWQNums.addAll(nums);
-				}
-
-				nums = new ArrayList<String>();
-				if (fxData.getWxdszfNums() != null) {
-					nums = Arrays.asList(fxData.getWxdszfNums().split(",\\s*"));
-				}
-				if (pos < 12) {
-					allNums.addAll(nums);
-				}
-				if (pos < 11) {
-					allZfNums.addAll(nums);
-					allNonWQNums.addAll(nums);
-				}
-
-				nums = new ArrayList<String>();
-				if (fxData.getZsNums() != null) {
-					nums = Arrays.asList(fxData.getZsNums().split(",\\s*"));
-				}
-				if (pos < 12) {
-					allNums.addAll(nums);
-				}
-				if (pos < 11) {
-					allYzNums.addAll(nums);
-					allNonWQNums.addAll(nums);
-				}
-
-				nums = new ArrayList<String>();
-				if (fxData.getZszfNums() != null) {
-					nums = Arrays.asList(fxData.getZszfNums().split(",\\s*"));
-				}
-				if (pos < 12) {
-					allNums.addAll(nums);
-				}
-				if (pos < 11) {
-					allZfNums.addAll(nums);
-					allNonWQNums.addAll(nums);
-				}
-
-				nums = new ArrayList<String>();
-				if (fxData.getZx1Nums() != null) {
-					nums = Arrays.asList(fxData.getZx1Nums().split(",\\s*"));
-				}
-				if (pos < 12) {
-					allNums.addAll(nums);
-				}
-				if (pos < 11) {
-					allYzNums.addAll(nums);
-					allNonWQNums.addAll(nums);
-				}
-
-				nums = new ArrayList<String>();
-				if (fxData.getZx1zfNums() != null) {
-					nums = Arrays.asList(fxData.getZx1zfNums().split(",\\s*"));
-				}
-				if (pos < 12) {
-					allNums.addAll(nums);
-				}
-				if (pos < 11) {
-					allZfNums.addAll(nums);
-					allNonWQNums.addAll(nums);
-				}
-
-				nums = new ArrayList<String>();
-				if (fxData.getZx2Nums() != null) {
-					nums = Arrays.asList(fxData.getZx2Nums().split(",\\s*"));
-				}
-				if (pos < 12) {
-					allNums.addAll(nums);
-				}
-				if (pos < 11) {
-					allYzNums.addAll(nums);
-					allNonWQNums.addAll(nums);
-				}
-
-				nums = new ArrayList<String>();
-				if (fxData.getZx2zfNums() != null) {
-					nums = Arrays.asList(fxData.getZx2zfNums().split(",\\s*"));
-				}
-				if (pos < 12) {
-					allNums.addAll(nums);
-				}
-				if (pos < 11) {
-					allZfNums.addAll(nums);
-					allNonWQNums.addAll(nums);
-				}
-
-				nums = new ArrayList<String>();
-				if (fxData.getZx3Nums() != null) {
-					nums = Arrays.asList(fxData.getZx3Nums().split(",\\s*"));
-				}
-				if (pos < 12) {
-					allNums.addAll(nums);
-				}
-				if (pos < 11) {
-					allYzNums.addAll(nums);
-					allNonWQNums.addAll(nums);
-				}
-
-				nums = new ArrayList<String>();
-				if (fxData.getZx3zfNums() != null) {
-					nums = Arrays.asList(fxData.getZx3zfNums().split(",\\s*"));
-				}
-				if (pos < 12) {
-					allNums.addAll(nums);
-				}
-				if (pos < 11) {
-					allZfNums.addAll(nums);
-					allNonWQNums.addAll(nums);
-				}
-
-				nums = new ArrayList<String>();
-				if (fxData.getZx4Nums() != null) {
-					nums = Arrays.asList(fxData.getZx4Nums().split(",\\s*"));
-				}
-				if (pos < 12) {
-					allNums.addAll(nums);
-				}
-				if (pos < 11) {
-					allYzNums.addAll(nums);
-					allNonWQNums.addAll(nums);
-				}
-
-				nums = new ArrayList<String>();
-				if (fxData.getZx4zfNums() != null) {
-					nums = Arrays.asList(fxData.getZx4zfNums().split(",\\s*"));
-				}
-				if (pos < 12) {
-					allNums.addAll(nums);
-				}
-				if (pos < 11) {
-					allZfNums.addAll(nums);
-					allNonWQNums.addAll(nums);
-				}
-
-				nums = new ArrayList<String>();
-				if (fxData.getZx5Nums() != null) {
-					nums = Arrays.asList(fxData.getZx5Nums().split(",\\s*"));
-				}
-				if (pos < 12) {
-					allNums.addAll(nums);
-				}
-				if (pos < 11) {
-					allYzNums.addAll(nums);
-					allNonWQNums.addAll(nums);
-				}
-
-				nums = new ArrayList<String>();
-				if (fxData.getZx5zfNums() != null) {
-					nums = Arrays.asList(fxData.getZx5zfNums().split(",\\s*"));
-				}
-				if (pos < 12) {
-					allNums.addAll(nums);
-				}
-				if (pos < 11) {
-					allZfNums.addAll(nums);
-					allNonWQNums.addAll(nums);
-				}
-
-				nums = new ArrayList<String>();
-				if (fxData.getZx6Nums() != null) {
-					nums = Arrays.asList(fxData.getZx6Nums().split(",\\s*"));
-				}
-				if (pos < 12) {
-					allNums.addAll(nums);
-				}
-				if (pos < 11) {
-					allYzNums.addAll(nums);
-					allNonWQNums.addAll(nums);
-				}
-
-				nums = new ArrayList<String>();
-				if (fxData.getZx6zfNums() != null) {
-					nums = Arrays.asList(fxData.getZx6zfNums().split(",\\s*"));
-				}
-				if (pos < 12) {
-					allNums.addAll(nums);
-				}
-				if (pos < 11) {
-					allZfNums.addAll(nums);
-					allNonWQNums.addAll(nums);
-				}
-
-				nums = new ArrayList<String>();
-				if (fxData.getZx7Nums() != null) {
-					nums = Arrays.asList(fxData.getZx7Nums().split(",\\s*"));
-				}
-				if (pos < 12) {
-					allNums.addAll(nums);
-				}
-				if (pos < 11) {
-					allYzNums.addAll(nums);
-					allNonWQNums.addAll(nums);
-				}
-
-				nums = new ArrayList<String>();
-				if (fxData.getZx7zfNums() != null) {
-					nums = Arrays.asList(fxData.getZx7zfNums().split(",\\s*"));
-				}
-				if (pos < 12) {
-					allNums.addAll(nums);
-				}
-				if (pos < 11) {
-					allZfNums.addAll(nums);
-					allNonWQNums.addAll(nums);
-				}
-
-				nums = new ArrayList<String>();
-				if (fxData.getZx8Nums() != null) {
-					nums = Arrays.asList(fxData.getZx8Nums().split(",\\s*"));
-				}
-				if (pos < 12) {
-					allNums.addAll(nums);
-				}
-				if (pos < 11) {
-					allYzNums.addAll(nums);
-					allNonWQNums.addAll(nums);
-				}
-
-				nums = new ArrayList<String>();
-				if (fxData.getZx8zfNums() != null) {
-					nums = Arrays.asList(fxData.getZx8zfNums().split(",\\s*"));
-				}
-				if (pos < 12) {
-					allNums.addAll(nums);
-				}
-				if (pos < 11) {
-					allZfNums.addAll(nums);
-					allNonWQNums.addAll(nums);
-				}
-
-				nums = new ArrayList<String>();
-				if (fxData.getZx9Nums() != null) {
-					nums = Arrays.asList(fxData.getZx9Nums().split(",\\s*"));
-				}
-				if (pos < 12) {
-					allNums.addAll(nums);
-				}
-				if (pos < 11) {
-					allYzNums.addAll(nums);
-				}
-
-				nums = new ArrayList<String>();
-				if (fxData.getZx9zfNums() != null) {
-					nums = Arrays.asList(fxData.getZx9zfNums().split(",\\s*"));
-				}
-				if (pos < 12) {
-					allNums.addAll(nums);
-				}
-				if (pos < 11) {
-					allZfNums.addAll(nums);
-				}
-
-				nums = new ArrayList<String>();
-				if (fxData.getZx10Nums() != null) {
-					nums = Arrays.asList(fxData.getZx10Nums().split(",\\s*"));
-				}
-				if (pos < 12) {
-					allNums.addAll(nums);
-				}
-				if (pos < 11) {
-					allYzNums.addAll(nums);
-				}
-
-				nums = new ArrayList<String>();
-				if (fxData.getZx10zfNums() != null) {
-					nums = Arrays.asList(fxData.getZx10zfNums().split(",\\s*"));
-				}
-				if (pos < 12) {
-					allNums.addAll(nums);
-				}
-				if (pos < 11) {
-					allZfNums.addAll(nums);
-				}
-
-				nums = new ArrayList<String>();
-				if (fxData.getZx11Nums() != null) {
-					nums = Arrays.asList(fxData.getZx11Nums().split(",\\s*"));
-				}
-				if (pos < 12) {
-					allNums.addAll(nums);
-				}
-				if (pos < 11) {
-					allYzNums.addAll(nums);
-					allNonWQNums.addAll(nums);
-				}
-
-				nums = new ArrayList<String>();
-				if (fxData.getZx11zfNums() != null) {
-					nums = Arrays.asList(fxData.getZx11zfNums().split(",\\s*"));
-				}
-				if (pos < 12) {
-					allNums.addAll(nums);
-				}
-				if (pos < 11) {
-					allZfNums.addAll(nums);
-					allNonWQNums.addAll(nums);
-				}
-
-				nums = new ArrayList<String>();
-				if (fxData.getZx12Nums() != null) {
-					nums = Arrays.asList(fxData.getZx12Nums().split(",\\s*"));
-				}
-				if (pos < 12) {
-					allNums.addAll(nums);
-				}
-				if (pos < 11) {
-					allYzNums.addAll(nums);
-					allNonWQNums.addAll(nums);
-				}
-
-				nums = new ArrayList<String>();
-				if (fxData.getZx12zfNums() != null) {
-					nums = Arrays.asList(fxData.getZx12zfNums().split(",\\s*"));
-				}
-				if (pos < 12) {
-					allNums.addAll(nums);
-				}
-				if (pos < 11) {
-					allZfNums.addAll(nums);
-					allNonWQNums.addAll(nums);
-				}
-
-				nums = new ArrayList<String>();
-				if (fxData.getZx13Nums() != null) {
-					nums = Arrays.asList(fxData.getZx13Nums().split(",\\s*"));
-				}
-				if (pos < 12) {
-					allNums.addAll(nums);
-				}
-				if (pos < 11) {
-					allYzNums.addAll(nums);
-					allNonWQNums.addAll(nums);
-				}
-
-				nums = new ArrayList<String>();
-				if (fxData.getZx13zfNums() != null) {
-					nums = Arrays.asList(fxData.getZx13zfNums().split(",\\s*"));
-				}
-				if (pos < 12) {
-					allNums.addAll(nums);
-				}
-				if (pos < 11) {
-					allZfNums.addAll(nums);
-					allNonWQNums.addAll(nums);
-				}
-
-				nums = new ArrayList<String>();
-				if (fxData.getZx14Nums() != null) {
-					nums = Arrays.asList(fxData.getZx14Nums().split(",\\s*"));
-				}
-				if (pos < 12) {
-					allNums.addAll(nums);
-				}
-				if (pos < 11) {
-					allYzNums.addAll(nums);
-					allNonWQNums.addAll(nums);
-				}
-
-				nums = new ArrayList<String>();
-				if (fxData.getZx14zfNums() != null) {
-					nums = Arrays.asList(fxData.getZx14zfNums().split(",\\s*"));
-				}
-				if (pos < 12) {
-					allNums.addAll(nums);
-				}
-				if (pos < 11) {
-					allZfNums.addAll(nums);
-					allNonWQNums.addAll(nums);
-				}
-
-				nums = new ArrayList<String>();
-				if (fxData.getZx15Nums() != null) {
-					nums = Arrays.asList(fxData.getZx15Nums().split(",\\s*"));
-				}
-				if (pos < 12) {
-					allNums.addAll(nums);
-				}
-				if (pos < 11) {
-					allYzNums.addAll(nums);
-					allNonWQNums.addAll(nums);
-				}
-
-				nums = new ArrayList<String>();
-				if (fxData.getZx15zfNums() != null) {
-					nums = Arrays.asList(fxData.getZx15zfNums().split(",\\s*"));
-				}
-				if (pos < 12) {
-					allNums.addAll(nums);
-				}
-				if (pos < 11) {
-					allZfNums.addAll(nums);
-					allNonWQNums.addAll(nums);
-				}
-
-				nums = new ArrayList<String>();
-				if (fxData.getZx16Nums() != null) {
-					nums = Arrays.asList(fxData.getZx16Nums().split(",\\s*"));
-				}
-				if (pos < 12) {
-					allNums.addAll(nums);
-				}
-				if (pos < 11) {
-					allYzNums.addAll(nums);
-					allNonWQNums.addAll(nums);
-				}
-
-				nums = new ArrayList<String>();
-				if (fxData.getZx16zfNums() != null) {
-					nums = Arrays.asList(fxData.getZx16zfNums().split(",\\s*"));
-				}
-				if (pos < 12) {
-					allNums.addAll(nums);
-				}
-				if (pos < 11) {
-					allZfNums.addAll(nums);
-					allNonWQNums.addAll(nums);
-				}
-
-				nums = new ArrayList<String>();
-				if (fxData.getZx17Nums() != null) {
-					nums = Arrays.asList(fxData.getZx17Nums().split(",\\s*"));
-				}
-				if (pos < 12) {
-					allNums.addAll(nums);
-				}
-				if (pos < 11) {
-					allYzNums.addAll(nums);
-					allNonWQNums.addAll(nums);
-				}
-
-				nums = new ArrayList<String>();
-				if (fxData.getZx17zfNums() != null) {
-					nums = Arrays.asList(fxData.getZx17zfNums().split(",\\s*"));
-				}
-				if (pos < 12) {
-					allNums.addAll(nums);
-				}
-				if (pos < 11) {
-					allZfNums.addAll(nums);
-					allNonWQNums.addAll(nums);
-				}
-
-				nums = new ArrayList<String>();
-				if (fxData.getZx18Nums() != null) {
-					nums = Arrays.asList(fxData.getZx18Nums().split(",\\s*"));
-				}
-				if (pos < 12) {
-					allNums.addAll(nums);
-				}
-				if (pos < 11) {
-					allYzNums.addAll(nums);
-					allNonWQNums.addAll(nums);
-				}
-
-				nums = new ArrayList<String>();
-				if (fxData.getZx18zfNums() != null) {
-					nums = Arrays.asList(fxData.getZx18zfNums().split(",\\s*"));
-				}
-				if (pos < 12) {
-					allNums.addAll(nums);
-				}
-				if (pos < 11) {
-					allZfNums.addAll(nums);
-					allNonWQNums.addAll(nums);
-				}
+				Set<String> allYzNumsForJh147 = new HashSet<String>();
+				Set<String> allYzNumsForJh258 = new HashSet<String>();
+				Set<String> allYzNumsForJh369 = new HashSet<String>();
+				Set<String> allZfNumsForJh147 = new HashSet<String>();
+				Set<String> allZfNumsForJh258 = new HashSet<String>();
+				Set<String> allZfNumsForJh369 = new HashSet<String>();
+				Set<String> allNonWQNumsForJh1 = new HashSet<String>();
+				Set<String> allNonWQNumsForJh2 = new HashSet<String>();
+				Set<String> allNonWQNumsForJh3 = new HashSet<String>();
+				Set<String> allNonWQNumsForJh4 = new HashSet<String>();
+				Set<String> allNonWQNumsForJh5 = new HashSet<String>();
+				Set<String> allNonWQNumsForJh6 = new HashSet<String>();
+				Set<String> allNonWQNumsForJh7 = new HashSet<String>();
+				Set<String> allNonWQNumsForJh8 = new HashSet<String>();
+				Set<String> allNonWQNumsForJh9 = new HashSet<String>();
+
+				calListForFxSwA(fxData, pos, "Bs", allNums, allNonWQNums, allYzNums, null, allYzNumsForJh147, allYzNumsForJh258,
+						allYzNumsForJh369, allZfNumsForJh147, allZfNumsForJh258, allZfNumsForJh369, allNonWQNumsForJh1,
+						allNonWQNumsForJh2, allNonWQNumsForJh3, allNonWQNumsForJh4, allNonWQNumsForJh5, allNonWQNumsForJh6,
+						allNonWQNumsForJh7, allNonWQNumsForJh8, allNonWQNumsForJh9);
+				calListForFxSwA(fxData, pos, "Bszf", allNums, allNonWQNums, null, allZfNums, allYzNumsForJh147,
+						allYzNumsForJh258, allYzNumsForJh369, allZfNumsForJh147, allZfNumsForJh258, allZfNumsForJh369,
+						allNonWQNumsForJh1, allNonWQNumsForJh2, allNonWQNumsForJh3, allNonWQNumsForJh4, allNonWQNumsForJh5,
+						allNonWQNumsForJh6, allNonWQNumsForJh7, allNonWQNumsForJh8, allNonWQNumsForJh9);
+				calListForFxSwA(fxData, pos, "Ds", allNums, allNonWQNums, allYzNums, null, allYzNumsForJh147, allYzNumsForJh258,
+						allYzNumsForJh369, allZfNumsForJh147, allZfNumsForJh258, allZfNumsForJh369, allNonWQNumsForJh1,
+						allNonWQNumsForJh2, allNonWQNumsForJh3, allNonWQNumsForJh4, allNonWQNumsForJh5, allNonWQNumsForJh6,
+						allNonWQNumsForJh7, allNonWQNumsForJh8, allNonWQNumsForJh9);
+				calListForFxSwA(fxData, pos, "Dszf", allNums, allNonWQNums, null, allZfNums, allYzNumsForJh147,
+						allYzNumsForJh258, allYzNumsForJh369, allZfNumsForJh147, allZfNumsForJh258, allZfNumsForJh369,
+						allNonWQNumsForJh1, allNonWQNumsForJh2, allNonWQNumsForJh3, allNonWQNumsForJh4, allNonWQNumsForJh5,
+						allNonWQNumsForJh6, allNonWQNumsForJh7, allNonWQNumsForJh8, allNonWQNumsForJh9);
+				calListForFxSwA(fxData, pos, "Fd", allNums, allNonWQNums, allYzNums, null, allYzNumsForJh147, allYzNumsForJh258,
+						allYzNumsForJh369, allZfNumsForJh147, allZfNumsForJh258, allZfNumsForJh369, allNonWQNumsForJh1,
+						allNonWQNumsForJh2, allNonWQNumsForJh3, allNonWQNumsForJh4, allNonWQNumsForJh5, allNonWQNumsForJh6,
+						allNonWQNumsForJh7, allNonWQNumsForJh8, allNonWQNumsForJh9);
+				calListForFxSwA(fxData, pos, "Fdzf", allNums, allNonWQNums, null, allZfNums, allYzNumsForJh147,
+						allYzNumsForJh258, allYzNumsForJh369, allZfNumsForJh147, allZfNumsForJh258, allZfNumsForJh369,
+						allNonWQNumsForJh1, allNonWQNumsForJh2, allNonWQNumsForJh3, allNonWQNumsForJh4, allNonWQNumsForJh5,
+						allNonWQNumsForJh6, allNonWQNumsForJh7, allNonWQNumsForJh8, allNonWQNumsForJh9);
+				calListForFxSwA(fxData, pos, "Lh", allNums, allNonWQNums, allYzNums, null, allYzNumsForJh147, allYzNumsForJh258,
+						allYzNumsForJh369, allZfNumsForJh147, allZfNumsForJh258, allZfNumsForJh369, allNonWQNumsForJh1,
+						allNonWQNumsForJh2, allNonWQNumsForJh3, allNonWQNumsForJh4, allNonWQNumsForJh5, allNonWQNumsForJh6,
+						allNonWQNumsForJh7, allNonWQNumsForJh8, allNonWQNumsForJh9);
+				calListForFxSwA(fxData, pos, "Lhzf", allNums, allNonWQNums, null, allZfNums, allYzNumsForJh147,
+						allYzNumsForJh258, allYzNumsForJh369, allZfNumsForJh147, allZfNumsForJh258, allZfNumsForJh369,
+						allNonWQNumsForJh1, allNonWQNumsForJh2, allNonWQNumsForJh3, allNonWQNumsForJh4, allNonWQNumsForJh5,
+						allNonWQNumsForJh6, allNonWQNumsForJh7, allNonWQNumsForJh8, allNonWQNumsForJh9);
+				calListForFxSwA(fxData, pos, "Mw", allNums, allNonWQNums, allYzNums, null, allYzNumsForJh147, allYzNumsForJh258,
+						allYzNumsForJh369, allZfNumsForJh147, allZfNumsForJh258, allZfNumsForJh369, allNonWQNumsForJh1,
+						allNonWQNumsForJh2, allNonWQNumsForJh3, allNonWQNumsForJh4, allNonWQNumsForJh5, allNonWQNumsForJh6,
+						allNonWQNumsForJh7, allNonWQNumsForJh8, allNonWQNumsForJh9);
+				calListForFxSwA(fxData, pos, "Mwzf", allNums, allNonWQNums, null, allZfNums, allYzNumsForJh147,
+						allYzNumsForJh258, allYzNumsForJh369, allZfNumsForJh147, allZfNumsForJh258, allZfNumsForJh369,
+						allNonWQNumsForJh1, allNonWQNumsForJh2, allNonWQNumsForJh3, allNonWQNumsForJh4, allNonWQNumsForJh5,
+						allNonWQNumsForJh6, allNonWQNumsForJh7, allNonWQNumsForJh8, allNonWQNumsForJh9);
+				calListForFxSwA(fxData, pos, "Pd", allNums, allNonWQNums, allYzNums, null, allYzNumsForJh147, allYzNumsForJh258,
+						allYzNumsForJh369, allZfNumsForJh147, allZfNumsForJh258, allZfNumsForJh369, allNonWQNumsForJh1,
+						allNonWQNumsForJh2, allNonWQNumsForJh3, allNonWQNumsForJh4, allNonWQNumsForJh5, allNonWQNumsForJh6,
+						allNonWQNumsForJh7, allNonWQNumsForJh8, allNonWQNumsForJh9);
+				calListForFxSwA(fxData, pos, "Pdzf", allNums, allNonWQNums, null, allZfNums, allYzNumsForJh147,
+						allYzNumsForJh258, allYzNumsForJh369, allZfNumsForJh147, allZfNumsForJh258, allZfNumsForJh369,
+						allNonWQNumsForJh1, allNonWQNumsForJh2, allNonWQNumsForJh3, allNonWQNumsForJh4, allNonWQNumsForJh5,
+						allNonWQNumsForJh6, allNonWQNumsForJh7, allNonWQNumsForJh8, allNonWQNumsForJh9);
+				calListForFxSwA(fxData, pos, "Qiw", allNums, null, allYzNums, null, allYzNumsForJh147, allYzNumsForJh258,
+						allYzNumsForJh369, allZfNumsForJh147, allZfNumsForJh258, allZfNumsForJh369, allNonWQNumsForJh1,
+						allNonWQNumsForJh2, allNonWQNumsForJh3, allNonWQNumsForJh4, allNonWQNumsForJh5, allNonWQNumsForJh6,
+						allNonWQNumsForJh7, allNonWQNumsForJh8, allNonWQNumsForJh9);
+				calListForFxSwA(fxData, pos, "Qiwzf", allNums, null, null, allZfNums, allYzNumsForJh147, allYzNumsForJh258,
+						allYzNumsForJh369, allZfNumsForJh147, allZfNumsForJh258, allZfNumsForJh369, allNonWQNumsForJh1,
+						allNonWQNumsForJh2, allNonWQNumsForJh3, allNonWQNumsForJh4, allNonWQNumsForJh5, allNonWQNumsForJh6,
+						allNonWQNumsForJh7, allNonWQNumsForJh8, allNonWQNumsForJh9);
+				calListForFxSwA(fxData, pos, "Qq", allNums, null, allYzNums, null, allYzNumsForJh147, allYzNumsForJh258,
+						allYzNumsForJh369, allZfNumsForJh147, allZfNumsForJh258, allZfNumsForJh369, allNonWQNumsForJh1,
+						allNonWQNumsForJh2, allNonWQNumsForJh3, allNonWQNumsForJh4, allNonWQNumsForJh5, allNonWQNumsForJh6,
+						allNonWQNumsForJh7, allNonWQNumsForJh8, allNonWQNumsForJh9);
+				calListForFxSwA(fxData, pos, "Qqzf", allNums, null, null, allZfNums, allYzNumsForJh147, allYzNumsForJh258,
+						allYzNumsForJh369, allZfNumsForJh147, allZfNumsForJh258, allZfNumsForJh369, allNonWQNumsForJh1,
+						allNonWQNumsForJh2, allNonWQNumsForJh3, allNonWQNumsForJh4, allNonWQNumsForJh5, allNonWQNumsForJh6,
+						allNonWQNumsForJh7, allNonWQNumsForJh8, allNonWQNumsForJh9);
+				calListForFxSwA(fxData, pos, "Slq", allNums, allNonWQNums, allYzNums, null, allYzNumsForJh147,
+						allYzNumsForJh258, allYzNumsForJh369, allZfNumsForJh147, allZfNumsForJh258, allZfNumsForJh369,
+						allNonWQNumsForJh1, allNonWQNumsForJh2, allNonWQNumsForJh3, allNonWQNumsForJh4, allNonWQNumsForJh5,
+						allNonWQNumsForJh6, allNonWQNumsForJh7, allNonWQNumsForJh8, allNonWQNumsForJh9);
+				calListForFxSwA(fxData, pos, "Slqzf", allNums, allNonWQNums, null, allZfNums, allYzNumsForJh147,
+						allYzNumsForJh258, allYzNumsForJh369, allZfNumsForJh147, allZfNumsForJh258, allZfNumsForJh369,
+						allNonWQNumsForJh1, allNonWQNumsForJh2, allNonWQNumsForJh3, allNonWQNumsForJh4, allNonWQNumsForJh5,
+						allNonWQNumsForJh6, allNonWQNumsForJh7, allNonWQNumsForJh8, allNonWQNumsForJh9);
+				calListForFxSwA(fxData, pos, "Sw", allNums, null, allYzNums, null, allYzNumsForJh147, allYzNumsForJh258,
+						allYzNumsForJh369, allZfNumsForJh147, allZfNumsForJh258, allZfNumsForJh369, allNonWQNumsForJh1,
+						allNonWQNumsForJh2, allNonWQNumsForJh3, allNonWQNumsForJh4, allNonWQNumsForJh5, allNonWQNumsForJh6,
+						allNonWQNumsForJh7, allNonWQNumsForJh8, allNonWQNumsForJh9);
+				calListForFxSwA(fxData, pos, "Swzf", allNums, null, null, allZfNums, allYzNumsForJh147, allYzNumsForJh258,
+						allYzNumsForJh369, allZfNumsForJh147, allZfNumsForJh258, allZfNumsForJh369, allNonWQNumsForJh1,
+						allNonWQNumsForJh2, allNonWQNumsForJh3, allNonWQNumsForJh4, allNonWQNumsForJh5, allNonWQNumsForJh6,
+						allNonWQNumsForJh7, allNonWQNumsForJh8, allNonWQNumsForJh9);
+				calListForFxSwA(fxData, pos, "Sx", allNums, allNonWQNums, allYzNums, null, allYzNumsForJh147, allYzNumsForJh258,
+						allYzNumsForJh369, allZfNumsForJh147, allZfNumsForJh258, allZfNumsForJh369, allNonWQNumsForJh1,
+						allNonWQNumsForJh2, allNonWQNumsForJh3, allNonWQNumsForJh4, allNonWQNumsForJh5, allNonWQNumsForJh6,
+						allNonWQNumsForJh7, allNonWQNumsForJh8, allNonWQNumsForJh9);
+				calListForFxSwA(fxData, pos, "Sxzf", allNums, allNonWQNums, null, allZfNums, allYzNumsForJh147,
+						allYzNumsForJh258, allYzNumsForJh369, allZfNumsForJh147, allZfNumsForJh258, allZfNumsForJh369,
+						allNonWQNumsForJh1, allNonWQNumsForJh2, allNonWQNumsForJh3, allNonWQNumsForJh4, allNonWQNumsForJh5,
+						allNonWQNumsForJh6, allNonWQNumsForJh7, allNonWQNumsForJh8, allNonWQNumsForJh9);
+				calListForFxSwA(fxData, pos, "Twelve", allNums, allNonWQNums, allYzNums, null, allYzNumsForJh147,
+						allYzNumsForJh258, allYzNumsForJh369, allZfNumsForJh147, allZfNumsForJh258, allZfNumsForJh369,
+						allNonWQNumsForJh1, allNonWQNumsForJh2, allNonWQNumsForJh3, allNonWQNumsForJh4, allNonWQNumsForJh5,
+						allNonWQNumsForJh6, allNonWQNumsForJh7, allNonWQNumsForJh8, allNonWQNumsForJh9);
+				calListForFxSwA(fxData, pos, "Twelvezf", allNums, allNonWQNums, null, allZfNums, allYzNumsForJh147,
+						allYzNumsForJh258, allYzNumsForJh369, allZfNumsForJh147, allZfNumsForJh258, allZfNumsForJh369,
+						allNonWQNumsForJh1, allNonWQNumsForJh2, allNonWQNumsForJh3, allNonWQNumsForJh4, allNonWQNumsForJh5,
+						allNonWQNumsForJh6, allNonWQNumsForJh7, allNonWQNumsForJh8, allNonWQNumsForJh9);
+				calListForFxSwA(fxData, pos, "Wx", allNums, null, allYzNums, null, allYzNumsForJh147, allYzNumsForJh258,
+						allYzNumsForJh369, allZfNumsForJh147, allZfNumsForJh258, allZfNumsForJh369, allNonWQNumsForJh1,
+						allNonWQNumsForJh2, allNonWQNumsForJh3, allNonWQNumsForJh4, allNonWQNumsForJh5, allNonWQNumsForJh6,
+						allNonWQNumsForJh7, allNonWQNumsForJh8, allNonWQNumsForJh9);
+				calListForFxSwA(fxData, pos, "Wxzf", allNums, null, null, allZfNums, allYzNumsForJh147, allYzNumsForJh258,
+						allYzNumsForJh369, allZfNumsForJh147, allZfNumsForJh258, allZfNumsForJh369, allNonWQNumsForJh1,
+						allNonWQNumsForJh2, allNonWQNumsForJh3, allNonWQNumsForJh4, allNonWQNumsForJh5, allNonWQNumsForJh6,
+						allNonWQNumsForJh7, allNonWQNumsForJh8, allNonWQNumsForJh9);
+				calListForFxSwA(fxData, pos, "Wxds", allNums, allNonWQNums, allYzNums, null, allYzNumsForJh147,
+						allYzNumsForJh258, allYzNumsForJh369, allZfNumsForJh147, allZfNumsForJh258, allZfNumsForJh369,
+						allNonWQNumsForJh1, allNonWQNumsForJh2, allNonWQNumsForJh3, allNonWQNumsForJh4, allNonWQNumsForJh5,
+						allNonWQNumsForJh6, allNonWQNumsForJh7, allNonWQNumsForJh8, allNonWQNumsForJh9);
+				calListForFxSwA(fxData, pos, "Wxdszf", allNums, allNonWQNums, null, allZfNums, allYzNumsForJh147,
+						allYzNumsForJh258, allYzNumsForJh369, allZfNumsForJh147, allZfNumsForJh258, allZfNumsForJh369,
+						allNonWQNumsForJh1, allNonWQNumsForJh2, allNonWQNumsForJh3, allNonWQNumsForJh4, allNonWQNumsForJh5,
+						allNonWQNumsForJh6, allNonWQNumsForJh7, allNonWQNumsForJh8, allNonWQNumsForJh9);
+				calListForFxSwA(fxData, pos, "Zs", allNums, allNonWQNums, allYzNums, null, allYzNumsForJh147, allYzNumsForJh258,
+						allYzNumsForJh369, allZfNumsForJh147, allZfNumsForJh258, allZfNumsForJh369, allNonWQNumsForJh1,
+						allNonWQNumsForJh2, allNonWQNumsForJh3, allNonWQNumsForJh4, allNonWQNumsForJh5, allNonWQNumsForJh6,
+						allNonWQNumsForJh7, allNonWQNumsForJh8, allNonWQNumsForJh9);
+				calListForFxSwA(fxData, pos, "Zszf", allNums, allNonWQNums, null, allZfNums, allYzNumsForJh147,
+						allYzNumsForJh258, allYzNumsForJh369, allZfNumsForJh147, allZfNumsForJh258, allZfNumsForJh369,
+						allNonWQNumsForJh1, allNonWQNumsForJh2, allNonWQNumsForJh3, allNonWQNumsForJh4, allNonWQNumsForJh5,
+						allNonWQNumsForJh6, allNonWQNumsForJh7, allNonWQNumsForJh8, allNonWQNumsForJh9);
+				calListForFxSwA(fxData, pos, "Zx1", allNums, allNonWQNums, allYzNums, null, allYzNumsForJh147,
+						allYzNumsForJh258, allYzNumsForJh369, allZfNumsForJh147, allZfNumsForJh258, allZfNumsForJh369,
+						allNonWQNumsForJh1, allNonWQNumsForJh2, allNonWQNumsForJh3, allNonWQNumsForJh4, allNonWQNumsForJh5,
+						allNonWQNumsForJh6, allNonWQNumsForJh7, allNonWQNumsForJh8, allNonWQNumsForJh9);
+				calListForFxSwA(fxData, pos, "Zx1zf", allNums, allNonWQNums, null, allZfNums, allYzNumsForJh147,
+						allYzNumsForJh258, allYzNumsForJh369, allZfNumsForJh147, allZfNumsForJh258, allZfNumsForJh369,
+						allNonWQNumsForJh1, allNonWQNumsForJh2, allNonWQNumsForJh3, allNonWQNumsForJh4, allNonWQNumsForJh5,
+						allNonWQNumsForJh6, allNonWQNumsForJh7, allNonWQNumsForJh8, allNonWQNumsForJh9);
+				calListForFxSwA(fxData, pos, "Zx2", allNums, allNonWQNums, allYzNums, null, allYzNumsForJh147,
+						allYzNumsForJh258, allYzNumsForJh369, allZfNumsForJh147, allZfNumsForJh258, allZfNumsForJh369,
+						allNonWQNumsForJh1, allNonWQNumsForJh2, allNonWQNumsForJh3, allNonWQNumsForJh4, allNonWQNumsForJh5,
+						allNonWQNumsForJh6, allNonWQNumsForJh7, allNonWQNumsForJh8, allNonWQNumsForJh9);
+				calListForFxSwA(fxData, pos, "Zx2zf", allNums, allNonWQNums, null, allZfNums, allYzNumsForJh147,
+						allYzNumsForJh258, allYzNumsForJh369, allZfNumsForJh147, allZfNumsForJh258, allZfNumsForJh369,
+						allNonWQNumsForJh1, allNonWQNumsForJh2, allNonWQNumsForJh3, allNonWQNumsForJh4, allNonWQNumsForJh5,
+						allNonWQNumsForJh6, allNonWQNumsForJh7, allNonWQNumsForJh8, allNonWQNumsForJh9);
+				calListForFxSwA(fxData, pos, "Zx3", allNums, allNonWQNums, allYzNums, null, allYzNumsForJh147,
+						allYzNumsForJh258, allYzNumsForJh369, allZfNumsForJh147, allZfNumsForJh258, allZfNumsForJh369,
+						allNonWQNumsForJh1, allNonWQNumsForJh2, allNonWQNumsForJh3, allNonWQNumsForJh4, allNonWQNumsForJh5,
+						allNonWQNumsForJh6, allNonWQNumsForJh7, allNonWQNumsForJh8, allNonWQNumsForJh9);
+				calListForFxSwA(fxData, pos, "Zx3zf", allNums, allNonWQNums, null, allZfNums, allYzNumsForJh147,
+						allYzNumsForJh258, allYzNumsForJh369, allZfNumsForJh147, allZfNumsForJh258, allZfNumsForJh369,
+						allNonWQNumsForJh1, allNonWQNumsForJh2, allNonWQNumsForJh3, allNonWQNumsForJh4, allNonWQNumsForJh5,
+						allNonWQNumsForJh6, allNonWQNumsForJh7, allNonWQNumsForJh8, allNonWQNumsForJh9);
+				calListForFxSwA(fxData, pos, "Zx4", allNums, allNonWQNums, allYzNums, null, allYzNumsForJh147,
+						allYzNumsForJh258, allYzNumsForJh369, allZfNumsForJh147, allZfNumsForJh258, allZfNumsForJh369,
+						allNonWQNumsForJh1, allNonWQNumsForJh2, allNonWQNumsForJh3, allNonWQNumsForJh4, allNonWQNumsForJh5,
+						allNonWQNumsForJh6, allNonWQNumsForJh7, allNonWQNumsForJh8, allNonWQNumsForJh9);
+				calListForFxSwA(fxData, pos, "Zx4zf", allNums, allNonWQNums, null, allZfNums, allYzNumsForJh147,
+						allYzNumsForJh258, allYzNumsForJh369, allZfNumsForJh147, allZfNumsForJh258, allZfNumsForJh369,
+						allNonWQNumsForJh1, allNonWQNumsForJh2, allNonWQNumsForJh3, allNonWQNumsForJh4, allNonWQNumsForJh5,
+						allNonWQNumsForJh6, allNonWQNumsForJh7, allNonWQNumsForJh8, allNonWQNumsForJh9);
+				calListForFxSwA(fxData, pos, "Zx5", allNums, allNonWQNums, allYzNums, null, allYzNumsForJh147,
+						allYzNumsForJh258, allYzNumsForJh369, allZfNumsForJh147, allZfNumsForJh258, allZfNumsForJh369,
+						allNonWQNumsForJh1, allNonWQNumsForJh2, allNonWQNumsForJh3, allNonWQNumsForJh4, allNonWQNumsForJh5,
+						allNonWQNumsForJh6, allNonWQNumsForJh7, allNonWQNumsForJh8, allNonWQNumsForJh9);
+				calListForFxSwA(fxData, pos, "Zx5zf", allNums, allNonWQNums, null, allZfNums, allYzNumsForJh147,
+						allYzNumsForJh258, allYzNumsForJh369, allZfNumsForJh147, allZfNumsForJh258, allZfNumsForJh369,
+						allNonWQNumsForJh1, allNonWQNumsForJh2, allNonWQNumsForJh3, allNonWQNumsForJh4, allNonWQNumsForJh5,
+						allNonWQNumsForJh6, allNonWQNumsForJh7, allNonWQNumsForJh8, allNonWQNumsForJh9);
+				calListForFxSwA(fxData, pos, "Zx6", allNums, allNonWQNums, allYzNums, null, allYzNumsForJh147,
+						allYzNumsForJh258, allYzNumsForJh369, allZfNumsForJh147, allZfNumsForJh258, allZfNumsForJh369,
+						allNonWQNumsForJh1, allNonWQNumsForJh2, allNonWQNumsForJh3, allNonWQNumsForJh4, allNonWQNumsForJh5,
+						allNonWQNumsForJh6, allNonWQNumsForJh7, allNonWQNumsForJh8, allNonWQNumsForJh9);
+				calListForFxSwA(fxData, pos, "Zx6zf", allNums, allNonWQNums, null, allZfNums, allYzNumsForJh147,
+						allYzNumsForJh258, allYzNumsForJh369, allZfNumsForJh147, allZfNumsForJh258, allZfNumsForJh369,
+						allNonWQNumsForJh1, allNonWQNumsForJh2, allNonWQNumsForJh3, allNonWQNumsForJh4, allNonWQNumsForJh5,
+						allNonWQNumsForJh6, allNonWQNumsForJh7, allNonWQNumsForJh8, allNonWQNumsForJh9);
+				calListForFxSwA(fxData, pos, "Zx7", allNums, allNonWQNums, allYzNums, null, allYzNumsForJh147,
+						allYzNumsForJh258, allYzNumsForJh369, allZfNumsForJh147, allZfNumsForJh258, allZfNumsForJh369,
+						allNonWQNumsForJh1, allNonWQNumsForJh2, allNonWQNumsForJh3, allNonWQNumsForJh4, allNonWQNumsForJh5,
+						allNonWQNumsForJh6, allNonWQNumsForJh7, allNonWQNumsForJh8, allNonWQNumsForJh9);
+				calListForFxSwA(fxData, pos, "Zx7zf", allNums, allNonWQNums, null, allZfNums, allYzNumsForJh147,
+						allYzNumsForJh258, allYzNumsForJh369, allZfNumsForJh147, allZfNumsForJh258, allZfNumsForJh369,
+						allNonWQNumsForJh1, allNonWQNumsForJh2, allNonWQNumsForJh3, allNonWQNumsForJh4, allNonWQNumsForJh5,
+						allNonWQNumsForJh6, allNonWQNumsForJh7, allNonWQNumsForJh8, allNonWQNumsForJh9);
+				calListForFxSwA(fxData, pos, "Zx8", allNums, allNonWQNums, allYzNums, null, allYzNumsForJh147,
+						allYzNumsForJh258, allYzNumsForJh369, allZfNumsForJh147, allZfNumsForJh258, allZfNumsForJh369,
+						allNonWQNumsForJh1, allNonWQNumsForJh2, allNonWQNumsForJh3, allNonWQNumsForJh4, allNonWQNumsForJh5,
+						allNonWQNumsForJh6, allNonWQNumsForJh7, allNonWQNumsForJh8, allNonWQNumsForJh9);
+				calListForFxSwA(fxData, pos, "Zx8zf", allNums, allNonWQNums, null, allZfNums, allYzNumsForJh147,
+						allYzNumsForJh258, allYzNumsForJh369, allZfNumsForJh147, allZfNumsForJh258, allZfNumsForJh369,
+						allNonWQNumsForJh1, allNonWQNumsForJh2, allNonWQNumsForJh3, allNonWQNumsForJh4, allNonWQNumsForJh5,
+						allNonWQNumsForJh6, allNonWQNumsForJh7, allNonWQNumsForJh8, allNonWQNumsForJh9);
+				calListForFxSwA(fxData, pos, "Zx9", allNums, null, allYzNums, null, allYzNumsForJh147, allYzNumsForJh258,
+						allYzNumsForJh369, allZfNumsForJh147, allZfNumsForJh258, allZfNumsForJh369, allNonWQNumsForJh1,
+						allNonWQNumsForJh2, allNonWQNumsForJh3, allNonWQNumsForJh4, allNonWQNumsForJh5, allNonWQNumsForJh6,
+						allNonWQNumsForJh7, allNonWQNumsForJh8, allNonWQNumsForJh9);
+				calListForFxSwA(fxData, pos, "Zx9zf", allNums, null, null, allZfNums, allYzNumsForJh147, allYzNumsForJh258,
+						allYzNumsForJh369, allZfNumsForJh147, allZfNumsForJh258, allZfNumsForJh369, allNonWQNumsForJh1,
+						allNonWQNumsForJh2, allNonWQNumsForJh3, allNonWQNumsForJh4, allNonWQNumsForJh5, allNonWQNumsForJh6,
+						allNonWQNumsForJh7, allNonWQNumsForJh8, allNonWQNumsForJh9);
+				calListForFxSwA(fxData, pos, "Zx10", allNums, null, allYzNums, null, allYzNumsForJh147, allYzNumsForJh258,
+						allYzNumsForJh369, allZfNumsForJh147, allZfNumsForJh258, allZfNumsForJh369, allNonWQNumsForJh1,
+						allNonWQNumsForJh2, allNonWQNumsForJh3, allNonWQNumsForJh4, allNonWQNumsForJh5, allNonWQNumsForJh6,
+						allNonWQNumsForJh7, allNonWQNumsForJh8, allNonWQNumsForJh9);
+				calListForFxSwA(fxData, pos, "Zx10zf", allNums, null, null, allZfNums, allYzNumsForJh147, allYzNumsForJh258,
+						allYzNumsForJh369, allZfNumsForJh147, allZfNumsForJh258, allZfNumsForJh369, allNonWQNumsForJh1,
+						allNonWQNumsForJh2, allNonWQNumsForJh3, allNonWQNumsForJh4, allNonWQNumsForJh5, allNonWQNumsForJh6,
+						allNonWQNumsForJh7, allNonWQNumsForJh8, allNonWQNumsForJh9);
+				calListForFxSwA(fxData, pos, "Zx11", allNums, allNonWQNums, allYzNums, null, allYzNumsForJh147,
+						allYzNumsForJh258, allYzNumsForJh369, allZfNumsForJh147, allZfNumsForJh258, allZfNumsForJh369,
+						allNonWQNumsForJh1, allNonWQNumsForJh2, allNonWQNumsForJh3, allNonWQNumsForJh4, allNonWQNumsForJh5,
+						allNonWQNumsForJh6, allNonWQNumsForJh7, allNonWQNumsForJh8, allNonWQNumsForJh9);
+				calListForFxSwA(fxData, pos, "Zx11zf", allNums, allNonWQNums, null, allZfNums, allYzNumsForJh147,
+						allYzNumsForJh258, allYzNumsForJh369, allZfNumsForJh147, allZfNumsForJh258, allZfNumsForJh369,
+						allNonWQNumsForJh1, allNonWQNumsForJh2, allNonWQNumsForJh3, allNonWQNumsForJh4, allNonWQNumsForJh5,
+						allNonWQNumsForJh6, allNonWQNumsForJh7, allNonWQNumsForJh8, allNonWQNumsForJh9);
+				calListForFxSwA(fxData, pos, "Zx12", allNums, allNonWQNums, allYzNums, null, allYzNumsForJh147,
+						allYzNumsForJh258, allYzNumsForJh369, allZfNumsForJh147, allZfNumsForJh258, allZfNumsForJh369,
+						allNonWQNumsForJh1, allNonWQNumsForJh2, allNonWQNumsForJh3, allNonWQNumsForJh4, allNonWQNumsForJh5,
+						allNonWQNumsForJh6, allNonWQNumsForJh7, allNonWQNumsForJh8, allNonWQNumsForJh9);
+				calListForFxSwA(fxData, pos, "Zx12zf", allNums, allNonWQNums, null, allZfNums, allYzNumsForJh147,
+						allYzNumsForJh258, allYzNumsForJh369, allZfNumsForJh147, allZfNumsForJh258, allZfNumsForJh369,
+						allNonWQNumsForJh1, allNonWQNumsForJh2, allNonWQNumsForJh3, allNonWQNumsForJh4, allNonWQNumsForJh5,
+						allNonWQNumsForJh6, allNonWQNumsForJh7, allNonWQNumsForJh8, allNonWQNumsForJh9);
+				calListForFxSwA(fxData, pos, "Zx13", allNums, allNonWQNums, allYzNums, null, allYzNumsForJh147,
+						allYzNumsForJh258, allYzNumsForJh369, allZfNumsForJh147, allZfNumsForJh258, allZfNumsForJh369,
+						allNonWQNumsForJh1, allNonWQNumsForJh2, allNonWQNumsForJh3, allNonWQNumsForJh4, allNonWQNumsForJh5,
+						allNonWQNumsForJh6, allNonWQNumsForJh7, allNonWQNumsForJh8, allNonWQNumsForJh9);
+				calListForFxSwA(fxData, pos, "Zx13zf", allNums, allNonWQNums, null, allZfNums, allYzNumsForJh147,
+						allYzNumsForJh258, allYzNumsForJh369, allZfNumsForJh147, allZfNumsForJh258, allZfNumsForJh369,
+						allNonWQNumsForJh1, allNonWQNumsForJh2, allNonWQNumsForJh3, allNonWQNumsForJh4, allNonWQNumsForJh5,
+						allNonWQNumsForJh6, allNonWQNumsForJh7, allNonWQNumsForJh8, allNonWQNumsForJh9);
+				calListForFxSwA(fxData, pos, "Zx14", allNums, allNonWQNums, allYzNums, null, allYzNumsForJh147,
+						allYzNumsForJh258, allYzNumsForJh369, allZfNumsForJh147, allZfNumsForJh258, allZfNumsForJh369,
+						allNonWQNumsForJh1, allNonWQNumsForJh2, allNonWQNumsForJh3, allNonWQNumsForJh4, allNonWQNumsForJh5,
+						allNonWQNumsForJh6, allNonWQNumsForJh7, allNonWQNumsForJh8, allNonWQNumsForJh9);
+				calListForFxSwA(fxData, pos, "Zx14zf", allNums, allNonWQNums, null, allZfNums, allYzNumsForJh147,
+						allYzNumsForJh258, allYzNumsForJh369, allZfNumsForJh147, allZfNumsForJh258, allZfNumsForJh369,
+						allNonWQNumsForJh1, allNonWQNumsForJh2, allNonWQNumsForJh3, allNonWQNumsForJh4, allNonWQNumsForJh5,
+						allNonWQNumsForJh6, allNonWQNumsForJh7, allNonWQNumsForJh8, allNonWQNumsForJh9);
+				calListForFxSwA(fxData, pos, "Zx15", allNums, allNonWQNums, allYzNums, null, allYzNumsForJh147,
+						allYzNumsForJh258, allYzNumsForJh369, allZfNumsForJh147, allZfNumsForJh258, allZfNumsForJh369,
+						allNonWQNumsForJh1, allNonWQNumsForJh2, allNonWQNumsForJh3, allNonWQNumsForJh4, allNonWQNumsForJh5,
+						allNonWQNumsForJh6, allNonWQNumsForJh7, allNonWQNumsForJh8, allNonWQNumsForJh9);
+				calListForFxSwA(fxData, pos, "Zx15zf", allNums, allNonWQNums, null, allZfNums, allYzNumsForJh147,
+						allYzNumsForJh258, allYzNumsForJh369, allZfNumsForJh147, allZfNumsForJh258, allZfNumsForJh369,
+						allNonWQNumsForJh1, allNonWQNumsForJh2, allNonWQNumsForJh3, allNonWQNumsForJh4, allNonWQNumsForJh5,
+						allNonWQNumsForJh6, allNonWQNumsForJh7, allNonWQNumsForJh8, allNonWQNumsForJh9);
+				calListForFxSwA(fxData, pos, "Zx16", allNums, allNonWQNums, allYzNums, null, allYzNumsForJh147,
+						allYzNumsForJh258, allYzNumsForJh369, allZfNumsForJh147, allZfNumsForJh258, allZfNumsForJh369,
+						allNonWQNumsForJh1, allNonWQNumsForJh2, allNonWQNumsForJh3, allNonWQNumsForJh4, allNonWQNumsForJh5,
+						allNonWQNumsForJh6, allNonWQNumsForJh7, allNonWQNumsForJh8, allNonWQNumsForJh9);
+				calListForFxSwA(fxData, pos, "Zx16zf", allNums, allNonWQNums, null, allZfNums, allYzNumsForJh147,
+						allYzNumsForJh258, allYzNumsForJh369, allZfNumsForJh147, allZfNumsForJh258, allZfNumsForJh369,
+						allNonWQNumsForJh1, allNonWQNumsForJh2, allNonWQNumsForJh3, allNonWQNumsForJh4, allNonWQNumsForJh5,
+						allNonWQNumsForJh6, allNonWQNumsForJh7, allNonWQNumsForJh8, allNonWQNumsForJh9);
+				calListForFxSwA(fxData, pos, "Zx17", allNums, allNonWQNums, allYzNums, null, allYzNumsForJh147,
+						allYzNumsForJh258, allYzNumsForJh369, allZfNumsForJh147, allZfNumsForJh258, allZfNumsForJh369,
+						allNonWQNumsForJh1, allNonWQNumsForJh2, allNonWQNumsForJh3, allNonWQNumsForJh4, allNonWQNumsForJh5,
+						allNonWQNumsForJh6, allNonWQNumsForJh7, allNonWQNumsForJh8, allNonWQNumsForJh9);
+				calListForFxSwA(fxData, pos, "Zx17zf", allNums, allNonWQNums, null, allZfNums, allYzNumsForJh147,
+						allYzNumsForJh258, allYzNumsForJh369, allZfNumsForJh147, allZfNumsForJh258, allZfNumsForJh369,
+						allNonWQNumsForJh1, allNonWQNumsForJh2, allNonWQNumsForJh3, allNonWQNumsForJh4, allNonWQNumsForJh5,
+						allNonWQNumsForJh6, allNonWQNumsForJh7, allNonWQNumsForJh8, allNonWQNumsForJh9);
+				calListForFxSwA(fxData, pos, "Zx18", allNums, allNonWQNums, allYzNums, null, allYzNumsForJh147,
+						allYzNumsForJh258, allYzNumsForJh369, allZfNumsForJh147, allZfNumsForJh258, allZfNumsForJh369,
+						allNonWQNumsForJh1, allNonWQNumsForJh2, allNonWQNumsForJh3, allNonWQNumsForJh4, allNonWQNumsForJh5,
+						allNonWQNumsForJh6, allNonWQNumsForJh7, allNonWQNumsForJh8, allNonWQNumsForJh9);
+				calListForFxSwA(fxData, pos, "Zx18zf", allNums, allNonWQNums, null, allZfNums, allYzNumsForJh147,
+						allYzNumsForJh258, allYzNumsForJh369, allZfNumsForJh147, allZfNumsForJh258, allZfNumsForJh369,
+						allNonWQNumsForJh1, allNonWQNumsForJh2, allNonWQNumsForJh3, allNonWQNumsForJh4, allNonWQNumsForJh5,
+						allNonWQNumsForJh6, allNonWQNumsForJh7, allNonWQNumsForJh8, allNonWQNumsForJh9);
 
 				if (pos < 12) {
 					calAllFzForFxSwA(mapForAll, getFz(allNums));
 				}
 
+				Set<String> numSetForJh = new HashSet<String>();
+				Set<String> numSetForJh1 = new HashSet<String>();
+				Set<String> numSetForJh2 = new HashSet<String>();
+				Set<String> numSetForJh3 = new HashSet<String>();
+				Set<String> numSetForJh4 = new HashSet<String>();
+				Set<String> numSetForJh5 = new HashSet<String>();
+				Set<String> numSetForJh6 = new HashSet<String>();
+				Set<String> numSetForJh7 = new HashSet<String>();
+				Set<String> numSetForJh8 = new HashSet<String>();
+				Set<String> numSetForJh9 = new HashSet<String>();
 				if (pos < 11) {
-					calAllFzForFxSwA(mapForAllYz, getFz(allYzNums));
-					calAllFzForFxSwA(mapForAllZf, getFz(allZfNums));
 					calAllFzForFxSwA(mapForAllNonWQ, getFz(allNonWQNums));
-
-					Set<String> numSet = new HashSet<String>(getFz(allYzNums));
-					numSet.addAll(getFz(allZfNums));
-					numSet.addAll(getFz(allNonWQNums));
-					calAllFzForFxSwA(mapForA, numSet);
+					numSetForJh.addAll(getFz(allNonWQNums));
+					numSetForJh1.addAll(getFz(allYzNumsForJh147));
+					numSetForJh1.addAll(getFz(allZfNumsForJh147));
+					numSetForJh4.addAll(getFz(allYzNumsForJh147));
+					numSetForJh4.addAll(getFz(allZfNumsForJh147));
+					numSetForJh7.addAll(getFz(allYzNumsForJh147));
+					numSetForJh7.addAll(getFz(allZfNumsForJh147));
 				}
 
+				if (pos < 10) {
+					calAllFzForFxSwA(mapForAllYz, getFz(allYzNums));
+					calAllFzForFxSwA(mapForAllZf, getFz(allZfNums));
+					numSetForJh.addAll(getFz(allYzNums));
+					numSetForJh.addAll(getFz(allZfNums));
+					numSetForJh1.addAll(getFz(allNonWQNumsForJh1));
+					numSetForJh4.addAll(getFz(allNonWQNumsForJh4));
+					numSetForJh7.addAll(getFz(allNonWQNumsForJh7));
+					numSetForJh2.addAll(getFz(allYzNumsForJh258));
+					numSetForJh2.addAll(getFz(allZfNumsForJh258));
+					numSetForJh5.addAll(getFz(allYzNumsForJh258));
+					numSetForJh5.addAll(getFz(allZfNumsForJh258));
+					numSetForJh8.addAll(getFz(allYzNumsForJh258));
+					numSetForJh8.addAll(getFz(allZfNumsForJh258));
+				}
+
+				if (pos < 9) {
+					numSetForJh2.addAll(getFz(allNonWQNumsForJh2));
+					numSetForJh5.addAll(getFz(allNonWQNumsForJh5));
+					numSetForJh8.addAll(getFz(allNonWQNumsForJh8));
+					numSetForJh3.addAll(getFz(allYzNumsForJh369));
+					numSetForJh3.addAll(getFz(allZfNumsForJh369));
+					numSetForJh6.addAll(getFz(allYzNumsForJh369));
+					numSetForJh6.addAll(getFz(allZfNumsForJh369));
+					numSetForJh9.addAll(getFz(allYzNumsForJh369));
+					numSetForJh9.addAll(getFz(allZfNumsForJh369));
+				}
+
+				if (pos < 8) {
+					numSetForJh3.addAll(getFz(allNonWQNumsForJh3));
+					numSetForJh6.addAll(getFz(allNonWQNumsForJh6));
+					numSetForJh9.addAll(getFz(allNonWQNumsForJh9));
+				}
+
+				calAllFzForFxSwA(mapForAForJH, numSetForJh);
+				calAllFzForFxSwA(mapForAForJH1, numSetForJh1); // yz 10, zf 10, nonWQ 9
+				calAllFzForFxSwA(mapForAForJH2, numSetForJh2); // yz 10, zf 10, nonWQ 8
+				calAllFzForFxSwA(mapForAForJH3, numSetForJh3); // yz 10, zf 10, nonWQ 7
+				calAllFzForFxSwA(mapForAForJH4, numSetForJh4); // yz 9, zf 9, nonWQ 9
+				calAllFzForFxSwA(mapForAForJH5, numSetForJh5); // yz 9, zf 9, nonWQ 8
+				calAllFzForFxSwA(mapForAForJH6, numSetForJh6); // yz 9, zf 9, nonWQ 7
+				calAllFzForFxSwA(mapForAForJH7, numSetForJh7); // yz 8, zf 8, nonWQ 9
+				calAllFzForFxSwA(mapForAForJH8, numSetForJh8); // yz 8, zf 8, nonWQ 8
+				calAllFzForFxSwA(mapForAForJH9, numSetForJh9); // yz 8, zf 8, nonWQ 7
 				pos++;
 			}
 
@@ -1602,6 +1213,7 @@ public class YZ3Service extends YZ2Service {
 			data.setA3pNumsForAll(temp.getA3pNumsForAll());
 			data.setArNumsForAll(temp.getArNumsForAll());
 			data.setArA2A3A3PNumsForAll(temp.getArA2A3A3PNumsForAll());
+			data.setA1A2A3NumsForAll(temp.getA1A2A3NumsForAll());
 
 			temp = getTempDataForFxSwA(mapForAllYz);
 			data.setA1NumsForAllYz(temp.getA1NumsForAll());
@@ -1610,6 +1222,7 @@ public class YZ3Service extends YZ2Service {
 			data.setA3pNumsForAllYz(temp.getA3pNumsForAll());
 			data.setArNumsForAllYz(temp.getArNumsForAll());
 			data.setArA2A3A3PNumsForAllYz(temp.getArA2A3A3PNumsForAll());
+			data.setA1A2A3NumsForAllYz(temp.getA1A2A3NumsForAll());
 
 			temp = getTempDataForFxSwA(mapForAllZf);
 			data.setA1NumsForAllZf(temp.getA1NumsForAll());
@@ -1618,6 +1231,7 @@ public class YZ3Service extends YZ2Service {
 			data.setA3pNumsForAllZf(temp.getA3pNumsForAll());
 			data.setArNumsForAllZf(temp.getArNumsForAll());
 			data.setArA2A3A3PNumsForAllZf(temp.getArA2A3A3PNumsForAll());
+			data.setA1A2A3NumsForAllZf(temp.getA1A2A3NumsForAll());
 
 			temp = getTempDataForFxSwA(mapForAllNonWQ);
 			data.setA1NumsForNonWQ(temp.getA1NumsForAll());
@@ -1626,14 +1240,97 @@ public class YZ3Service extends YZ2Service {
 			data.setA3pNumsForNonWQ(temp.getA3pNumsForAll());
 			data.setArNumsForNonWQ(temp.getArNumsForAll());
 			data.setArA2A3A3PNumsForNonWQ(temp.getArA2A3A3PNumsForAll());
+			data.setA1A2A3NumsForNonWQ(temp.getA1A2A3NumsForAll());
 
-			temp = getTempDataForFxSwA(mapForA);
+			temp = getTempDataForFxSwA(mapForAForJH);
 			data.setA1NumsForJh(temp.getA1NumsForAll());
 			data.setA2NumsForJh(temp.getA2NumsForAll());
 			data.setA3NumsForJh(temp.getA3NumsForAll());
 			data.setA3pNumsForJh(temp.getA3pNumsForAll());
 			data.setArNumsForJh(temp.getArNumsForAll());
 			data.setArA2A3A3PNumsForJh(temp.getArA2A3A3PNumsForAll());
+			data.setA1A2A3NumsForJh(temp.getA1A2A3NumsForAll());
+
+			temp = getTempDataForFxSwA(mapForAForJH1);
+			data.setA1NumsForJh1(temp.getA1NumsForAll());
+			data.setA2NumsForJh1(temp.getA2NumsForAll());
+			data.setA3NumsForJh1(temp.getA3NumsForAll());
+			data.setA3pNumsForJh1(temp.getA3pNumsForAll());
+			data.setArNumsForJh1(temp.getArNumsForAll());
+			data.setArA2A3A3PNumsForJh1(temp.getArA2A3A3PNumsForAll());
+			data.setA1A2A3NumsForJh1(temp.getA1A2A3NumsForAll());
+
+			temp = getTempDataForFxSwA(mapForAForJH2);
+			data.setA1NumsForJh2(temp.getA1NumsForAll());
+			data.setA2NumsForJh2(temp.getA2NumsForAll());
+			data.setA3NumsForJh2(temp.getA3NumsForAll());
+			data.setA3pNumsForJh2(temp.getA3pNumsForAll());
+			data.setArNumsForJh2(temp.getArNumsForAll());
+			data.setArA2A3A3PNumsForJh2(temp.getArA2A3A3PNumsForAll());
+			data.setA1A2A3NumsForJh2(temp.getA1A2A3NumsForAll());
+
+			temp = getTempDataForFxSwA(mapForAForJH3);
+			data.setA1NumsForJh3(temp.getA1NumsForAll());
+			data.setA2NumsForJh3(temp.getA2NumsForAll());
+			data.setA3NumsForJh3(temp.getA3NumsForAll());
+			data.setA3pNumsForJh3(temp.getA3pNumsForAll());
+			data.setArNumsForJh3(temp.getArNumsForAll());
+			data.setArA2A3A3PNumsForJh3(temp.getArA2A3A3PNumsForAll());
+			data.setA1A2A3NumsForJh3(temp.getA1A2A3NumsForAll());
+
+			temp = getTempDataForFxSwA(mapForAForJH4);
+			data.setA1NumsForJh4(temp.getA1NumsForAll());
+			data.setA2NumsForJh4(temp.getA2NumsForAll());
+			data.setA3NumsForJh4(temp.getA3NumsForAll());
+			data.setA3pNumsForJh4(temp.getA3pNumsForAll());
+			data.setArNumsForJh4(temp.getArNumsForAll());
+			data.setArA2A3A3PNumsForJh4(temp.getArA2A3A3PNumsForAll());
+			data.setA1A2A3NumsForJh4(temp.getA1A2A3NumsForAll());
+
+			temp = getTempDataForFxSwA(mapForAForJH5);
+			data.setA1NumsForJh5(temp.getA1NumsForAll());
+			data.setA2NumsForJh5(temp.getA2NumsForAll());
+			data.setA3NumsForJh5(temp.getA3NumsForAll());
+			data.setA3pNumsForJh5(temp.getA3pNumsForAll());
+			data.setArNumsForJh5(temp.getArNumsForAll());
+			data.setArA2A3A3PNumsForJh5(temp.getArA2A3A3PNumsForAll());
+			data.setA1A2A3NumsForJh5(temp.getA1A2A3NumsForAll());
+
+			temp = getTempDataForFxSwA(mapForAForJH6);
+			data.setA1NumsForJh6(temp.getA1NumsForAll());
+			data.setA2NumsForJh6(temp.getA2NumsForAll());
+			data.setA3NumsForJh6(temp.getA3NumsForAll());
+			data.setA3pNumsForJh6(temp.getA3pNumsForAll());
+			data.setArNumsForJh6(temp.getArNumsForAll());
+			data.setArA2A3A3PNumsForJh6(temp.getArA2A3A3PNumsForAll());
+			data.setA1A2A3NumsForJh6(temp.getA1A2A3NumsForAll());
+
+			temp = getTempDataForFxSwA(mapForAForJH7);
+			data.setA1NumsForJh7(temp.getA1NumsForAll());
+			data.setA2NumsForJh7(temp.getA2NumsForAll());
+			data.setA3NumsForJh7(temp.getA3NumsForAll());
+			data.setA3pNumsForJh7(temp.getA3pNumsForAll());
+			data.setArNumsForJh7(temp.getArNumsForAll());
+			data.setArA2A3A3PNumsForJh7(temp.getArA2A3A3PNumsForAll());
+			data.setA1A2A3NumsForJh7(temp.getA1A2A3NumsForAll());
+
+			temp = getTempDataForFxSwA(mapForAForJH8);
+			data.setA1NumsForJh8(temp.getA1NumsForAll());
+			data.setA2NumsForJh8(temp.getA2NumsForAll());
+			data.setA3NumsForJh8(temp.getA3NumsForAll());
+			data.setA3pNumsForJh8(temp.getA3pNumsForAll());
+			data.setArNumsForJh8(temp.getArNumsForAll());
+			data.setArA2A3A3PNumsForJh8(temp.getArA2A3A3PNumsForAll());
+			data.setA1A2A3NumsForJh8(temp.getA1A2A3NumsForAll());
+
+			temp = getTempDataForFxSwA(mapForAForJH9);
+			data.setA1NumsForJh9(temp.getA1NumsForAll());
+			data.setA2NumsForJh9(temp.getA2NumsForAll());
+			data.setA3NumsForJh9(temp.getA3NumsForAll());
+			data.setA3pNumsForJh9(temp.getA3pNumsForAll());
+			data.setArNumsForJh9(temp.getArNumsForAll());
+			data.setArA2A3A3PNumsForJh9(temp.getArA2A3A3PNumsForAll());
+			data.setA1A2A3NumsForJh9(temp.getA1A2A3NumsForAll());
 
 			repositories.fxSwARepository.save(data);
 		} catch (Exception e) {
@@ -1688,6 +1385,9 @@ public class YZ3Service extends YZ2Service {
 				break;
 			}
 		}
+		List<String> a1a2a3Nums = new ArrayList<String>(a1Nums);
+		a1a2a3Nums.addAll(a2Nums);
+		a1a2a3Nums.addAll(a3Nums);
 		List<String> arNums = new ArrayList<String>(getFz(map.keySet()));
 		Set<String> a2a3a3pNums = new HashSet<String>(a2Nums);
 		a2a3a3pNums.addAll(a3Nums);
@@ -1708,6 +1408,7 @@ public class YZ3Service extends YZ2Service {
 		Collections.sort(a3pNums, comparator);
 		Collections.sort(arNums, comparator);
 		Collections.sort(arA2A3A3PNums, comparator);
+		Collections.sort(a1a2a3Nums, comparator);
 
 		FxSwA data = new FxSwA();
 		data.setA1NumsForAll(Joiner.on(",").join(a1Nums));
@@ -1716,6 +1417,7 @@ public class YZ3Service extends YZ2Service {
 		data.setA3pNumsForAll(Joiner.on(",").join(a3pNums));
 		data.setArNumsForAll(Joiner.on(",").join(arNums));
 		data.setArA2A3A3PNumsForAll(Joiner.on(",").join(arA2A3A3PNums));
+		data.setA1A2A3NumsForAll(Joiner.on(",").join(a1a2a3Nums));
 		return data;
 	}
 

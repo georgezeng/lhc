@@ -225,41 +225,118 @@ public class CommonDao {
 		long count = DatabaseUtil.getCount(countQuery.getSingleResult());
 		if (count > 0) {
 			StringBuilder sql = new StringBuilder("select").append("\n");
-			if(queryInfo.getObject().getType().equals("all")) {
+			if (queryInfo.getObject().getType().equals("all")) {
 				sql.append("d.a1nums_for_all as a1Nums,").append("\n");
 				sql.append("d.a2nums_for_all as a2Nums,").append("\n");
 				sql.append("d.a3nums_for_all as a3Nums,").append("\n");
 				sql.append("d.a3p_nums_for_all as a3pNums,").append("\n");
 				sql.append("d.ar_nums_for_all as arNums,").append("\n");
 				sql.append("d.ara2a3a3pnums_for_all as arA2A3A3PNums,").append("\n");
-			} else if(queryInfo.getObject().getType().equals("allYz")) {
+				sql.append("d.a1a2a3nums_for_all as a1a2a3Nums,").append("\n");
+			} else if (queryInfo.getObject().getType().equals("allYz")) {
 				sql.append("d.a1nums_for_all_yz as a1Nums,").append("\n");
 				sql.append("d.a2nums_for_all_yz as a2Nums,").append("\n");
 				sql.append("d.a3nums_for_all_yz as a3Nums,").append("\n");
 				sql.append("d.a3p_nums_for_all_yz as a3pNums,").append("\n");
 				sql.append("d.ar_nums_for_all_yz as arNums,").append("\n");
 				sql.append("d.ara2a3a3pnums_for_all_yz as arA2A3A3PNums,").append("\n");
-			} else if(queryInfo.getObject().getType().equals("allZf")) {
+				sql.append("d.a1a2a3nums_for_all_yz as a1a2a3Nums,").append("\n");
+			} else if (queryInfo.getObject().getType().equals("allZf")) {
 				sql.append("d.a1nums_for_all_zf as a1Nums,").append("\n");
 				sql.append("d.a2nums_for_all_zf as a2Nums,").append("\n");
 				sql.append("d.a3nums_for_all_zf as a3Nums,").append("\n");
 				sql.append("d.a3p_nums_for_all_zf as a3pNums,").append("\n");
 				sql.append("d.ar_nums_for_all_zf as arNums,").append("\n");
 				sql.append("d.ara2a3a3pnums_for_all_zf as arA2A3A3PNums,").append("\n");
-			} else if(queryInfo.getObject().getType().equals("allNonWQ")) {
+				sql.append("d.a1a2a3nums_for_all_zf as a1a2a3Nums,").append("\n");
+			} else if (queryInfo.getObject().getType().equals("allNonWQ")) {
 				sql.append("d.a1nums_for_nonwq as a1Nums,").append("\n");
 				sql.append("d.a2nums_for_nonwq as a2Nums,").append("\n");
 				sql.append("d.a3nums_for_nonwq as a3Nums,").append("\n");
 				sql.append("d.a3p_nums_for_nonwq as a3pNums,").append("\n");
 				sql.append("d.ar_nums_for_nonwq as arNums,").append("\n");
 				sql.append("d.ara2a3a3pnums_for_nonwq as arA2A3A3PNums,").append("\n");
-			} else if(queryInfo.getObject().getType().equals("allJh")) {
+				sql.append("d.a1a2a3nums_for_nonwq as a1a2a3Nums,").append("\n");
+			} else if (queryInfo.getObject().getType().equals("allJh")) {
 				sql.append("d.a1nums_for_jh as a1Nums,").append("\n");
 				sql.append("d.a2nums_for_jh as a2Nums,").append("\n");
 				sql.append("d.a3nums_for_jh as a3Nums,").append("\n");
 				sql.append("d.a3p_nums_for_jh as a3pNums,").append("\n");
 				sql.append("d.ar_nums_for_jh as arNums,").append("\n");
 				sql.append("d.ara2a3a3pnums_for_jh as arA2A3A3PNums,").append("\n");
+				sql.append("d.a1a2a3nums_for_jh as a1a2a3Nums,").append("\n");
+			} else if (queryInfo.getObject().getType().equals("allJh1")) {
+				sql.append("d.a1nums_for_jh1 as a1Nums,").append("\n");
+				sql.append("d.a2nums_for_jh1 as a2Nums,").append("\n");
+				sql.append("d.a3nums_for_jh1 as a3Nums,").append("\n");
+				sql.append("d.a3p_nums_for_jh1 as a3pNums,").append("\n");
+				sql.append("d.ar_nums_for_jh1 as arNums,").append("\n");
+				sql.append("d.ara2a3a3pnums_for_jh1 as arA2A3A3PNums,").append("\n");
+				sql.append("d.a1a2a3nums_for_jh1 as a1a2a3Nums,").append("\n");
+			} else if (queryInfo.getObject().getType().equals("allJh2")) {
+				sql.append("d.a1nums_for_jh2 as a1Nums,").append("\n");
+				sql.append("d.a2nums_for_jh2 as a2Nums,").append("\n");
+				sql.append("d.a3nums_for_jh2 as a3Nums,").append("\n");
+				sql.append("d.a3p_nums_for_jh2 as a3pNums,").append("\n");
+				sql.append("d.ar_nums_for_jh2 as arNums,").append("\n");
+				sql.append("d.ara2a3a3pnums_for_jh2 as arA2A3A3PNums,").append("\n");
+				sql.append("d.a1a2a3nums_for_jh2 as a1a2a3Nums,").append("\n");
+			} else if (queryInfo.getObject().getType().equals("allJh3")) {
+				sql.append("d.a1nums_for_jh3 as a1Nums,").append("\n");
+				sql.append("d.a2nums_for_jh3 as a2Nums,").append("\n");
+				sql.append("d.a3nums_for_jh3 as a3Nums,").append("\n");
+				sql.append("d.a3p_nums_for_jh3 as a3pNums,").append("\n");
+				sql.append("d.ar_nums_for_jh3 as arNums,").append("\n");
+				sql.append("d.ara2a3a3pnums_for_jh3 as arA2A3A3PNums,").append("\n");
+				sql.append("d.a1a2a3nums_for_jh3 as a1a2a3Nums,").append("\n");
+			} else if (queryInfo.getObject().getType().equals("allJh4")) {
+				sql.append("d.a1nums_for_jh4 as a1Nums,").append("\n");
+				sql.append("d.a2nums_for_jh4 as a2Nums,").append("\n");
+				sql.append("d.a3nums_for_jh4 as a3Nums,").append("\n");
+				sql.append("d.a3p_nums_for_jh4 as a3pNums,").append("\n");
+				sql.append("d.ar_nums_for_jh4 as arNums,").append("\n");
+				sql.append("d.ara2a3a3pnums_for_jh4 as arA2A3A3PNums,").append("\n");
+				sql.append("d.a1a2a3nums_for_jh4 as a1a2a3Nums,").append("\n");
+			} else if (queryInfo.getObject().getType().equals("allJh5")) {
+				sql.append("d.a1nums_for_jh5 as a1Nums,").append("\n");
+				sql.append("d.a2nums_for_jh5 as a2Nums,").append("\n");
+				sql.append("d.a3nums_for_jh5 as a3Nums,").append("\n");
+				sql.append("d.a3p_nums_for_jh5 as a3pNums,").append("\n");
+				sql.append("d.ar_nums_for_jh5 as arNums,").append("\n");
+				sql.append("d.ara2a3a3pnums_for_jh5 as arA2A3A3PNums,").append("\n");
+				sql.append("d.a1a2a3nums_for_jh5 as a1a2a3Nums,").append("\n");
+			} else if (queryInfo.getObject().getType().equals("allJh6")) {
+				sql.append("d.a1nums_for_jh6 as a1Nums,").append("\n");
+				sql.append("d.a2nums_for_jh6 as a2Nums,").append("\n");
+				sql.append("d.a3nums_for_jh6 as a3Nums,").append("\n");
+				sql.append("d.a3p_nums_for_jh6 as a3pNums,").append("\n");
+				sql.append("d.ar_nums_for_jh6 as arNums,").append("\n");
+				sql.append("d.ara2a3a3pnums_for_jh6 as arA2A3A3PNums,").append("\n");
+				sql.append("d.a1a2a3nums_for_jh6 as a1a2a3Nums,").append("\n");
+			} else if (queryInfo.getObject().getType().equals("allJh7")) {
+				sql.append("d.a1nums_for_jh7 as a1Nums,").append("\n");
+				sql.append("d.a2nums_for_jh7 as a2Nums,").append("\n");
+				sql.append("d.a3nums_for_jh7 as a3Nums,").append("\n");
+				sql.append("d.a3p_nums_for_jh7 as a3pNums,").append("\n");
+				sql.append("d.ar_nums_for_jh7 as arNums,").append("\n");
+				sql.append("d.ara2a3a3pnums_for_jh7 as arA2A3A3PNums,").append("\n");
+				sql.append("d.a1a2a3nums_for_jh7 as a1a2a3Nums,").append("\n");
+			} else if (queryInfo.getObject().getType().equals("allJh8")) {
+				sql.append("d.a1nums_for_jh8 as a1Nums,").append("\n");
+				sql.append("d.a2nums_for_jh8 as a2Nums,").append("\n");
+				sql.append("d.a3nums_for_jh8 as a3Nums,").append("\n");
+				sql.append("d.a3p_nums_for_jh8 as a3pNums,").append("\n");
+				sql.append("d.ar_nums_for_jh8 as arNums,").append("\n");
+				sql.append("d.ara2a3a3pnums_for_jh8 as arA2A3A3PNums,").append("\n");
+				sql.append("d.a1a2a3nums_for_jh8 as a1a2a3Nums,").append("\n");
+			} else if (queryInfo.getObject().getType().equals("allJh9")) {
+				sql.append("d.a1nums_for_jh9 as a1Nums,").append("\n");
+				sql.append("d.a2nums_for_jh9 as a2Nums,").append("\n");
+				sql.append("d.a3nums_for_jh9 as a3Nums,").append("\n");
+				sql.append("d.a3p_nums_for_jh9 as a3pNums,").append("\n");
+				sql.append("d.ar_nums_for_jh9 as arNums,").append("\n");
+				sql.append("d.ara2a3a3pnums_for_jh9 as arA2A3A3PNums,").append("\n");
+				sql.append("d.a1a2a3nums_for_jh9 as a1a2a3Nums,").append("\n");
 			} else {
 				throw new RuntimeException("查询参数有误");
 			}
