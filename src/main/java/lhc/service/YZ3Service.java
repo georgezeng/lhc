@@ -21,7 +21,6 @@ import org.springframework.data.domain.Sort;
 import org.springframework.data.domain.Sort.Direction;
 import org.springframework.scheduling.annotation.Async;
 import org.springframework.scheduling.annotation.AsyncResult;
-import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.util.ReflectionUtils;
 
@@ -54,7 +53,6 @@ import lhc.dto.XbwJYSub;
 import lhc.repository.jpa.BaseYzRepository;
 import lhc.util.CommonUtil;
 
-@Service
 @Transactional
 @SuppressWarnings("unchecked")
 public class YZ3Service extends YZ2Service {
@@ -128,9 +126,9 @@ public class YZ3Service extends YZ2Service {
 				result11 = repositories.fxsw11Repository.findAll(request);
 				result12 = repositories.fxsw12Repository.findAll(request);
 				if (result1 != null && result1.hasContent()) {
-					futures.add(repositories.yzService.doCalDsxJY(jqbClass, jdbClass, jhbClass, jqbRepository, jdbRepository,
-							jhbRepository, max, result1, result2, result3, result4, result5, result6, result7, result8, result9,
-							result10, result11, result12, lastJY));
+					futures.add(repositories.yzService.doCalDsxJY(jqbClass, jdbClass, jhbClass, jqbRepository,
+							jdbRepository, jhbRepository, max, result1, result2, result3, result4, result5, result6,
+							result7, result8, result9, result10, result11, result12, lastJY));
 
 					int i = result1.getContent().size() - 1;
 					FxSw temp = result1.getContent().get(i);
@@ -138,8 +136,8 @@ public class YZ3Service extends YZ2Service {
 					lastJY.setDate(temp.getDate());
 					lastJY.setYear(temp.getYear());
 					lastJY.setPhase(temp.getPhase());
-					setFxSwDataForDsx(result1, result2, result3, result4, result5, result6, result7, result8, result9, result10,
-							result11, result12, lastJY, i, max);
+					setFxSwDataForDsx(result1, result2, result3, result4, result5, result6, result7, result8, result9,
+							result10, result11, result12, lastJY, i, max);
 				}
 				request = request.next();
 			} while (result1 != null && result1.hasNext());
@@ -175,9 +173,10 @@ public class YZ3Service extends YZ2Service {
 	@Async
 	public <Q extends DsxJyYz, D extends DsxJyYz, H extends DsxJyYz> Future<Exception> doCalDsxJY(Class<Q> jqbClass,
 			Class<D> jdbClass, Class<H> jhbClass, BaseYzRepository<Q> jqbRepository, BaseYzRepository<D> jdbRepository,
-			BaseYzRepository<H> jhbRepository, boolean max, Page<FxSw1> result1, Page<FxSw2> result2, Page<FxSw3> result3,
-			Page<FxSw4> result4, Page<FxSw5> result5, Page<FxSw6> result6, Page<FxSw7> result7, Page<FxSw8> result8,
-			Page<FxSw9> result9, Page<FxSw10> result10, Page<FxSw11> result11, Page<FxSw12> result12, DsxJY lastJY) {
+			BaseYzRepository<H> jhbRepository, boolean max, Page<FxSw1> result1, Page<FxSw2> result2,
+			Page<FxSw3> result3, Page<FxSw4> result4, Page<FxSw5> result5, Page<FxSw6> result6, Page<FxSw7> result7,
+			Page<FxSw8> result8, Page<FxSw9> result9, Page<FxSw10> result10, Page<FxSw11> result11,
+			Page<FxSw12> result12, DsxJY lastJY) {
 
 		Exception t = null;
 		try {
@@ -213,8 +212,8 @@ public class YZ3Service extends YZ2Service {
 						jhb.setDate(temp.getDate());
 						jhb.setSpecialNum(kj.getSpecialNum());
 					}
-					setFxSwDataForDsx(result1, result2, result3, result4, result5, result6, result7, result8, result9, result10,
-							result11, result12, jy, i, max);
+					setFxSwDataForDsx(result1, result2, result3, result4, result5, result6, result7, result8, result9,
+							result10, result11, result12, jy, i, max);
 					if (lastJY != null) {
 						calDsxJYForJQB(jqb, lastJY);
 						calDsxJYForJQB(jqb, lastJY, true);
@@ -244,7 +243,7 @@ public class YZ3Service extends YZ2Service {
 
 	}
 
-	private void setFxSwDataForDsx(Page<FxSw1> result1, Page<FxSw2> result2, Page<FxSw3> result3, Page<FxSw4> result4,
+	protected void setFxSwDataForDsx(Page<FxSw1> result1, Page<FxSw2> result2, Page<FxSw3> result3, Page<FxSw4> result4,
 			Page<FxSw5> result5, Page<FxSw6> result6, Page<FxSw7> result7, Page<FxSw8> result8, Page<FxSw9> result9,
 			Page<FxSw10> result10, Page<FxSw11> result11, Page<FxSw12> result12, DsxJY jy, int i, boolean max)
 			throws Exception {
@@ -674,7 +673,8 @@ public class YZ3Service extends YZ2Service {
 		assembleDsxJY(data, nums, true, reverse);
 	}
 
-	protected void assembleDsxJY(DsxJyYz data, Collection<Integer>[] arr, boolean qc, boolean reverse) throws Exception {
+	protected void assembleDsxJY(DsxJyYz data, Collection<Integer>[] arr, boolean qc, boolean reverse)
+			throws Exception {
 		List<XbwJYSub> all = new ArrayList<XbwJYSub>();
 		for (int i = 0; i < arr.length; i++) {
 			for (int num : arr[i]) {
@@ -899,250 +899,255 @@ public class YZ3Service extends YZ2Service {
 				Set<String> allNonWQNumsForJh8 = new HashSet<String>();
 				Set<String> allNonWQNumsForJh9 = new HashSet<String>();
 
-				calListForFxSwA(fxData, pos, "Bs", allNums, allNonWQNums, allYzNums, null, allYzNumsForJh147, allYzNumsForJh258,
-						allYzNumsForJh369, null, null, null, allNonWQNumsForJh1, allNonWQNumsForJh2, allNonWQNumsForJh3,
-						allNonWQNumsForJh4, allNonWQNumsForJh5, allNonWQNumsForJh6, allNonWQNumsForJh7, allNonWQNumsForJh8,
-						allNonWQNumsForJh9);
+				calListForFxSwA(fxData, pos, "Bs", allNums, allNonWQNums, allYzNums, null, allYzNumsForJh147,
+						allYzNumsForJh258, allYzNumsForJh369, null, null, null, allNonWQNumsForJh1, allNonWQNumsForJh2,
+						allNonWQNumsForJh3, allNonWQNumsForJh4, allNonWQNumsForJh5, allNonWQNumsForJh6,
+						allNonWQNumsForJh7, allNonWQNumsForJh8, allNonWQNumsForJh9);
 				calListForFxSwA(fxData, pos, "Bszf", allNums, allNonWQNums, null, null, null, null, allYzNumsForJh369,
 						allZfNumsForJh147, allZfNumsForJh258, allZfNumsForJh369, allNonWQNumsForJh1, allNonWQNumsForJh2,
-						allNonWQNumsForJh3, allNonWQNumsForJh4, allNonWQNumsForJh5, allNonWQNumsForJh6, allNonWQNumsForJh7,
-						allNonWQNumsForJh8, allNonWQNumsForJh9);
-				calListForFxSwA(fxData, pos, "Ds", allNums, allNonWQNums, allYzNums, null, allYzNumsForJh147, allYzNumsForJh258,
-						allYzNumsForJh369, null, null, null, allNonWQNumsForJh1, allNonWQNumsForJh2, allNonWQNumsForJh3,
-						allNonWQNumsForJh4, allNonWQNumsForJh5, allNonWQNumsForJh6, allNonWQNumsForJh7, allNonWQNumsForJh8,
-						allNonWQNumsForJh9);
+						allNonWQNumsForJh3, allNonWQNumsForJh4, allNonWQNumsForJh5, allNonWQNumsForJh6,
+						allNonWQNumsForJh7, allNonWQNumsForJh8, allNonWQNumsForJh9);
+				calListForFxSwA(fxData, pos, "Ds", allNums, allNonWQNums, allYzNums, null, allYzNumsForJh147,
+						allYzNumsForJh258, allYzNumsForJh369, null, null, null, allNonWQNumsForJh1, allNonWQNumsForJh2,
+						allNonWQNumsForJh3, allNonWQNumsForJh4, allNonWQNumsForJh5, allNonWQNumsForJh6,
+						allNonWQNumsForJh7, allNonWQNumsForJh8, allNonWQNumsForJh9);
 				calListForFxSwA(fxData, pos, "Dszf", allNums, allNonWQNums, null, allZfNums, null, null, null,
 						allZfNumsForJh147, allZfNumsForJh258, allZfNumsForJh369, allNonWQNumsForJh1, allNonWQNumsForJh2,
-						allNonWQNumsForJh3, allNonWQNumsForJh4, allNonWQNumsForJh5, allNonWQNumsForJh6, allNonWQNumsForJh7,
-						allNonWQNumsForJh8, allNonWQNumsForJh9);
-				calListForFxSwA(fxData, pos, "Fd", allNums, allNonWQNums, allYzNums, null, allYzNumsForJh147, allYzNumsForJh258,
-						allYzNumsForJh369, null, null, null, allNonWQNumsForJh1, allNonWQNumsForJh2, allNonWQNumsForJh3,
-						allNonWQNumsForJh4, allNonWQNumsForJh5, allNonWQNumsForJh6, allNonWQNumsForJh7, allNonWQNumsForJh8,
-						allNonWQNumsForJh9);
+						allNonWQNumsForJh3, allNonWQNumsForJh4, allNonWQNumsForJh5, allNonWQNumsForJh6,
+						allNonWQNumsForJh7, allNonWQNumsForJh8, allNonWQNumsForJh9);
+				calListForFxSwA(fxData, pos, "Fd", allNums, allNonWQNums, allYzNums, null, allYzNumsForJh147,
+						allYzNumsForJh258, allYzNumsForJh369, null, null, null, allNonWQNumsForJh1, allNonWQNumsForJh2,
+						allNonWQNumsForJh3, allNonWQNumsForJh4, allNonWQNumsForJh5, allNonWQNumsForJh6,
+						allNonWQNumsForJh7, allNonWQNumsForJh8, allNonWQNumsForJh9);
 				calListForFxSwA(fxData, pos, "Fdzf", allNums, allNonWQNums, null, allZfNums, null, null, null,
 						allZfNumsForJh147, allZfNumsForJh258, allZfNumsForJh369, allNonWQNumsForJh1, allNonWQNumsForJh2,
-						allNonWQNumsForJh3, allNonWQNumsForJh4, allNonWQNumsForJh5, allNonWQNumsForJh6, allNonWQNumsForJh7,
-						allNonWQNumsForJh8, allNonWQNumsForJh9);
-				calListForFxSwA(fxData, pos, "Lh", allNums, allNonWQNums, allYzNums, null, allYzNumsForJh147, allYzNumsForJh258,
-						allYzNumsForJh369, null, null, null, allNonWQNumsForJh1, allNonWQNumsForJh2, allNonWQNumsForJh3,
-						allNonWQNumsForJh4, allNonWQNumsForJh5, allNonWQNumsForJh6, allNonWQNumsForJh7, allNonWQNumsForJh8,
-						allNonWQNumsForJh9);
+						allNonWQNumsForJh3, allNonWQNumsForJh4, allNonWQNumsForJh5, allNonWQNumsForJh6,
+						allNonWQNumsForJh7, allNonWQNumsForJh8, allNonWQNumsForJh9);
+				calListForFxSwA(fxData, pos, "Lh", allNums, allNonWQNums, allYzNums, null, allYzNumsForJh147,
+						allYzNumsForJh258, allYzNumsForJh369, null, null, null, allNonWQNumsForJh1, allNonWQNumsForJh2,
+						allNonWQNumsForJh3, allNonWQNumsForJh4, allNonWQNumsForJh5, allNonWQNumsForJh6,
+						allNonWQNumsForJh7, allNonWQNumsForJh8, allNonWQNumsForJh9);
 				calListForFxSwA(fxData, pos, "Lhzf", allNums, allNonWQNums, null, allZfNums, null, null, null,
 						allZfNumsForJh147, allZfNumsForJh258, allZfNumsForJh369, allNonWQNumsForJh1, allNonWQNumsForJh2,
-						allNonWQNumsForJh3, allNonWQNumsForJh4, allNonWQNumsForJh5, allNonWQNumsForJh6, allNonWQNumsForJh7,
-						allNonWQNumsForJh8, allNonWQNumsForJh9);
-				calListForFxSwA(fxData, pos, "Mw", allNums, allNonWQNums, allYzNums, null, allYzNumsForJh147, allYzNumsForJh258,
-						allYzNumsForJh369, null, null, null, allNonWQNumsForJh1, allNonWQNumsForJh2, allNonWQNumsForJh3,
-						allNonWQNumsForJh4, allNonWQNumsForJh5, allNonWQNumsForJh6, allNonWQNumsForJh7, allNonWQNumsForJh8,
-						allNonWQNumsForJh9);
+						allNonWQNumsForJh3, allNonWQNumsForJh4, allNonWQNumsForJh5, allNonWQNumsForJh6,
+						allNonWQNumsForJh7, allNonWQNumsForJh8, allNonWQNumsForJh9);
+				calListForFxSwA(fxData, pos, "Mw", allNums, allNonWQNums, allYzNums, null, allYzNumsForJh147,
+						allYzNumsForJh258, allYzNumsForJh369, null, null, null, allNonWQNumsForJh1, allNonWQNumsForJh2,
+						allNonWQNumsForJh3, allNonWQNumsForJh4, allNonWQNumsForJh5, allNonWQNumsForJh6,
+						allNonWQNumsForJh7, allNonWQNumsForJh8, allNonWQNumsForJh9);
 				calListForFxSwA(fxData, pos, "Mwzf", allNums, allNonWQNums, null, allZfNums, null, null, null,
 						allZfNumsForJh147, allZfNumsForJh258, allZfNumsForJh369, allNonWQNumsForJh1, allNonWQNumsForJh2,
-						allNonWQNumsForJh3, allNonWQNumsForJh4, allNonWQNumsForJh5, allNonWQNumsForJh6, allNonWQNumsForJh7,
-						allNonWQNumsForJh8, allNonWQNumsForJh9);
-				calListForFxSwA(fxData, pos, "Pd", allNums, allNonWQNums, allYzNums, null, allYzNumsForJh147, allYzNumsForJh258,
-						allYzNumsForJh369, null, null, null, allNonWQNumsForJh1, allNonWQNumsForJh2, allNonWQNumsForJh3,
-						allNonWQNumsForJh4, allNonWQNumsForJh5, allNonWQNumsForJh6, allNonWQNumsForJh7, allNonWQNumsForJh8,
-						allNonWQNumsForJh9);
+						allNonWQNumsForJh3, allNonWQNumsForJh4, allNonWQNumsForJh5, allNonWQNumsForJh6,
+						allNonWQNumsForJh7, allNonWQNumsForJh8, allNonWQNumsForJh9);
+				calListForFxSwA(fxData, pos, "Pd", allNums, allNonWQNums, allYzNums, null, allYzNumsForJh147,
+						allYzNumsForJh258, allYzNumsForJh369, null, null, null, allNonWQNumsForJh1, allNonWQNumsForJh2,
+						allNonWQNumsForJh3, allNonWQNumsForJh4, allNonWQNumsForJh5, allNonWQNumsForJh6,
+						allNonWQNumsForJh7, allNonWQNumsForJh8, allNonWQNumsForJh9);
 				calListForFxSwA(fxData, pos, "Pdzf", allNums, allNonWQNums, null, allZfNums, null, null, null,
 						allZfNumsForJh147, allZfNumsForJh258, allZfNumsForJh369, allNonWQNumsForJh1, allNonWQNumsForJh2,
-						allNonWQNumsForJh3, allNonWQNumsForJh4, allNonWQNumsForJh5, allNonWQNumsForJh6, allNonWQNumsForJh7,
-						allNonWQNumsForJh8, allNonWQNumsForJh9);
-				calListForFxSwA(fxData, pos, "Qiw", allNums, null, allYzNums, null, allYzNumsForJh147, allYzNumsForJh258,
-						allYzNumsForJh369, null, null, null, null, null, null, null, null, null, null, null, null);
-				calListForFxSwA(fxData, pos, "Qiwzf", allNums, null, null, allZfNums, null, null, null, allZfNumsForJh147,
-						allZfNumsForJh258, allZfNumsForJh369, null, null, null, null, null, null, null, null, null);
+						allNonWQNumsForJh3, allNonWQNumsForJh4, allNonWQNumsForJh5, allNonWQNumsForJh6,
+						allNonWQNumsForJh7, allNonWQNumsForJh8, allNonWQNumsForJh9);
+				calListForFxSwA(fxData, pos, "Qiw", allNums, null, allYzNums, null, allYzNumsForJh147,
+						allYzNumsForJh258, allYzNumsForJh369, null, null, null, null, null, null, null, null, null,
+						null, null, null);
+				calListForFxSwA(fxData, pos, "Qiwzf", allNums, null, null, allZfNums, null, null, null,
+						allZfNumsForJh147, allZfNumsForJh258, allZfNumsForJh369, null, null, null, null, null, null,
+						null, null, null);
 				calListForFxSwA(fxData, pos, "Qq", allNums, null, allYzNums, null, allYzNumsForJh147, allYzNumsForJh258,
 						allYzNumsForJh369, null, null, null, null, null, null, null, null, null, null, null, null);
-				calListForFxSwA(fxData, pos, "Qqzf", allNums, null, null, allZfNums, null, null, null, allZfNumsForJh147,
-						allZfNumsForJh258, allZfNumsForJh369, null, null, null, null, null, null, null, null, null);
+				calListForFxSwA(fxData, pos, "Qqzf", allNums, null, null, allZfNums, null, null, null,
+						allZfNumsForJh147, allZfNumsForJh258, allZfNumsForJh369, null, null, null, null, null, null,
+						null, null, null);
 				calListForFxSwA(fxData, pos, "Slq", allNums, allNonWQNums, allYzNums, null, allYzNumsForJh147,
 						allYzNumsForJh258, allYzNumsForJh369, null, null, null, allNonWQNumsForJh1, allNonWQNumsForJh2,
-						allNonWQNumsForJh3, allNonWQNumsForJh4, allNonWQNumsForJh5, allNonWQNumsForJh6, allNonWQNumsForJh7,
-						allNonWQNumsForJh8, allNonWQNumsForJh9);
+						allNonWQNumsForJh3, allNonWQNumsForJh4, allNonWQNumsForJh5, allNonWQNumsForJh6,
+						allNonWQNumsForJh7, allNonWQNumsForJh8, allNonWQNumsForJh9);
 				calListForFxSwA(fxData, pos, "Slqzf", allNums, allNonWQNums, null, allZfNums, null, null, null,
 						allZfNumsForJh147, allZfNumsForJh258, allZfNumsForJh369, allNonWQNumsForJh1, allNonWQNumsForJh2,
-						allNonWQNumsForJh3, allNonWQNumsForJh4, allNonWQNumsForJh5, allNonWQNumsForJh6, allNonWQNumsForJh7,
-						allNonWQNumsForJh8, allNonWQNumsForJh9);
+						allNonWQNumsForJh3, allNonWQNumsForJh4, allNonWQNumsForJh5, allNonWQNumsForJh6,
+						allNonWQNumsForJh7, allNonWQNumsForJh8, allNonWQNumsForJh9);
 				calListForFxSwA(fxData, pos, "Sw", allNums, null, allYzNums, null, allYzNumsForJh147, allYzNumsForJh258,
 						allYzNumsForJh369, null, null, null, null, null, null, null, null, null, null, null, null);
-				calListForFxSwA(fxData, pos, "Swzf", allNums, null, null, allZfNums, null, null, null, allZfNumsForJh147,
-						allZfNumsForJh258, allZfNumsForJh369, null, null, null, null, null, null, null, null, null);
-				calListForFxSwA(fxData, pos, "Sx", allNums, allNonWQNums, allYzNums, null, allYzNumsForJh147, allYzNumsForJh258,
-						allYzNumsForJh369, null, null, null, allNonWQNumsForJh1, allNonWQNumsForJh2, allNonWQNumsForJh3,
-						allNonWQNumsForJh4, allNonWQNumsForJh5, allNonWQNumsForJh6, allNonWQNumsForJh7, allNonWQNumsForJh8,
-						allNonWQNumsForJh9);
+				calListForFxSwA(fxData, pos, "Swzf", allNums, null, null, allZfNums, null, null, null,
+						allZfNumsForJh147, allZfNumsForJh258, allZfNumsForJh369, null, null, null, null, null, null,
+						null, null, null);
+				calListForFxSwA(fxData, pos, "Sx", allNums, allNonWQNums, allYzNums, null, allYzNumsForJh147,
+						allYzNumsForJh258, allYzNumsForJh369, null, null, null, allNonWQNumsForJh1, allNonWQNumsForJh2,
+						allNonWQNumsForJh3, allNonWQNumsForJh4, allNonWQNumsForJh5, allNonWQNumsForJh6,
+						allNonWQNumsForJh7, allNonWQNumsForJh8, allNonWQNumsForJh9);
 				calListForFxSwA(fxData, pos, "Sxzf", allNums, allNonWQNums, null, allZfNums, null, null, null,
 						allZfNumsForJh147, allZfNumsForJh258, allZfNumsForJh369, allNonWQNumsForJh1, allNonWQNumsForJh2,
-						allNonWQNumsForJh3, allNonWQNumsForJh4, allNonWQNumsForJh5, allNonWQNumsForJh6, allNonWQNumsForJh7,
-						allNonWQNumsForJh8, allNonWQNumsForJh9);
+						allNonWQNumsForJh3, allNonWQNumsForJh4, allNonWQNumsForJh5, allNonWQNumsForJh6,
+						allNonWQNumsForJh7, allNonWQNumsForJh8, allNonWQNumsForJh9);
 				calListForFxSwA(fxData, pos, "Twelve", allNums, allNonWQNums, allYzNums, null, allYzNumsForJh147,
 						allYzNumsForJh258, allYzNumsForJh369, null, null, null, allNonWQNumsForJh1, allNonWQNumsForJh2,
-						allNonWQNumsForJh3, allNonWQNumsForJh4, allNonWQNumsForJh5, allNonWQNumsForJh6, allNonWQNumsForJh7,
-						allNonWQNumsForJh8, allNonWQNumsForJh9);
+						allNonWQNumsForJh3, allNonWQNumsForJh4, allNonWQNumsForJh5, allNonWQNumsForJh6,
+						allNonWQNumsForJh7, allNonWQNumsForJh8, allNonWQNumsForJh9);
 				calListForFxSwA(fxData, pos, "Twelvezf", allNums, allNonWQNums, null, allZfNums, null, null, null,
 						allZfNumsForJh147, allZfNumsForJh258, allZfNumsForJh369, allNonWQNumsForJh1, allNonWQNumsForJh2,
-						allNonWQNumsForJh3, allNonWQNumsForJh4, allNonWQNumsForJh5, allNonWQNumsForJh6, allNonWQNumsForJh7,
-						allNonWQNumsForJh8, allNonWQNumsForJh9);
+						allNonWQNumsForJh3, allNonWQNumsForJh4, allNonWQNumsForJh5, allNonWQNumsForJh6,
+						allNonWQNumsForJh7, allNonWQNumsForJh8, allNonWQNumsForJh9);
 				calListForFxSwA(fxData, pos, "Wx", allNums, null, allYzNums, null, allYzNumsForJh147, allYzNumsForJh258,
 						allYzNumsForJh369, null, null, null, null, null, null, null, null, null, null, null, null);
-				calListForFxSwA(fxData, pos, "Wxzf", allNums, null, null, allZfNums, null, null, null, allZfNumsForJh147,
-						allZfNumsForJh258, allZfNumsForJh369, null, null, null, null, null, null, null, null, null);
+				calListForFxSwA(fxData, pos, "Wxzf", allNums, null, null, allZfNums, null, null, null,
+						allZfNumsForJh147, allZfNumsForJh258, allZfNumsForJh369, null, null, null, null, null, null,
+						null, null, null);
 				calListForFxSwA(fxData, pos, "Wxds", allNums, allNonWQNums, allYzNums, null, allYzNumsForJh147,
 						allYzNumsForJh258, allYzNumsForJh369, null, null, null, allNonWQNumsForJh1, allNonWQNumsForJh2,
-						allNonWQNumsForJh3, allNonWQNumsForJh4, allNonWQNumsForJh5, allNonWQNumsForJh6, allNonWQNumsForJh7,
-						allNonWQNumsForJh8, allNonWQNumsForJh9);
+						allNonWQNumsForJh3, allNonWQNumsForJh4, allNonWQNumsForJh5, allNonWQNumsForJh6,
+						allNonWQNumsForJh7, allNonWQNumsForJh8, allNonWQNumsForJh9);
 				calListForFxSwA(fxData, pos, "Wxdszf", allNums, allNonWQNums, null, allZfNums, null, null, null,
 						allZfNumsForJh147, allZfNumsForJh258, allZfNumsForJh369, allNonWQNumsForJh1, allNonWQNumsForJh2,
-						allNonWQNumsForJh3, allNonWQNumsForJh4, allNonWQNumsForJh5, allNonWQNumsForJh6, allNonWQNumsForJh7,
-						allNonWQNumsForJh8, allNonWQNumsForJh9);
-				calListForFxSwA(fxData, pos, "Zs", allNums, allNonWQNums, allYzNums, null, allYzNumsForJh147, allYzNumsForJh258,
-						allYzNumsForJh369, null, null, null, allNonWQNumsForJh1, allNonWQNumsForJh2, allNonWQNumsForJh3,
-						allNonWQNumsForJh4, allNonWQNumsForJh5, allNonWQNumsForJh6, allNonWQNumsForJh7, allNonWQNumsForJh8,
-						allNonWQNumsForJh9);
+						allNonWQNumsForJh3, allNonWQNumsForJh4, allNonWQNumsForJh5, allNonWQNumsForJh6,
+						allNonWQNumsForJh7, allNonWQNumsForJh8, allNonWQNumsForJh9);
+				calListForFxSwA(fxData, pos, "Zs", allNums, allNonWQNums, allYzNums, null, allYzNumsForJh147,
+						allYzNumsForJh258, allYzNumsForJh369, null, null, null, allNonWQNumsForJh1, allNonWQNumsForJh2,
+						allNonWQNumsForJh3, allNonWQNumsForJh4, allNonWQNumsForJh5, allNonWQNumsForJh6,
+						allNonWQNumsForJh7, allNonWQNumsForJh8, allNonWQNumsForJh9);
 				calListForFxSwA(fxData, pos, "Zszf", allNums, allNonWQNums, null, allZfNums, null, null, null,
 						allZfNumsForJh147, allZfNumsForJh258, allZfNumsForJh369, allNonWQNumsForJh1, allNonWQNumsForJh2,
-						allNonWQNumsForJh3, allNonWQNumsForJh4, allNonWQNumsForJh5, allNonWQNumsForJh6, allNonWQNumsForJh7,
-						allNonWQNumsForJh8, allNonWQNumsForJh9);
+						allNonWQNumsForJh3, allNonWQNumsForJh4, allNonWQNumsForJh5, allNonWQNumsForJh6,
+						allNonWQNumsForJh7, allNonWQNumsForJh8, allNonWQNumsForJh9);
 				calListForFxSwA(fxData, pos, "Zx1", allNums, allNonWQNums, allYzNums, null, allYzNumsForJh147,
 						allYzNumsForJh258, allYzNumsForJh369, null, null, null, allNonWQNumsForJh1, allNonWQNumsForJh2,
-						allNonWQNumsForJh3, allNonWQNumsForJh4, allNonWQNumsForJh5, allNonWQNumsForJh6, allNonWQNumsForJh7,
-						allNonWQNumsForJh8, allNonWQNumsForJh9);
+						allNonWQNumsForJh3, allNonWQNumsForJh4, allNonWQNumsForJh5, allNonWQNumsForJh6,
+						allNonWQNumsForJh7, allNonWQNumsForJh8, allNonWQNumsForJh9);
 				calListForFxSwA(fxData, pos, "Zx1zf", allNums, allNonWQNums, null, allZfNums, null, null, null,
 						allZfNumsForJh147, allZfNumsForJh258, allZfNumsForJh369, allNonWQNumsForJh1, allNonWQNumsForJh2,
-						allNonWQNumsForJh3, allNonWQNumsForJh4, allNonWQNumsForJh5, allNonWQNumsForJh6, allNonWQNumsForJh7,
-						allNonWQNumsForJh8, allNonWQNumsForJh9);
+						allNonWQNumsForJh3, allNonWQNumsForJh4, allNonWQNumsForJh5, allNonWQNumsForJh6,
+						allNonWQNumsForJh7, allNonWQNumsForJh8, allNonWQNumsForJh9);
 				calListForFxSwA(fxData, pos, "Zx2", allNums, allNonWQNums, allYzNums, null, allYzNumsForJh147,
 						allYzNumsForJh258, allYzNumsForJh369, null, null, null, allNonWQNumsForJh1, allNonWQNumsForJh2,
-						allNonWQNumsForJh3, allNonWQNumsForJh4, allNonWQNumsForJh5, allNonWQNumsForJh6, allNonWQNumsForJh7,
-						allNonWQNumsForJh8, allNonWQNumsForJh9);
+						allNonWQNumsForJh3, allNonWQNumsForJh4, allNonWQNumsForJh5, allNonWQNumsForJh6,
+						allNonWQNumsForJh7, allNonWQNumsForJh8, allNonWQNumsForJh9);
 				calListForFxSwA(fxData, pos, "Zx2zf", allNums, allNonWQNums, null, allZfNums, null, null, null,
 						allZfNumsForJh147, allZfNumsForJh258, allZfNumsForJh369, allNonWQNumsForJh1, allNonWQNumsForJh2,
-						allNonWQNumsForJh3, allNonWQNumsForJh4, allNonWQNumsForJh5, allNonWQNumsForJh6, allNonWQNumsForJh7,
-						allNonWQNumsForJh8, allNonWQNumsForJh9);
+						allNonWQNumsForJh3, allNonWQNumsForJh4, allNonWQNumsForJh5, allNonWQNumsForJh6,
+						allNonWQNumsForJh7, allNonWQNumsForJh8, allNonWQNumsForJh9);
 				calListForFxSwA(fxData, pos, "Zx3", allNums, allNonWQNums, allYzNums, null, allYzNumsForJh147,
 						allYzNumsForJh258, allYzNumsForJh369, null, null, null, allNonWQNumsForJh1, allNonWQNumsForJh2,
-						allNonWQNumsForJh3, allNonWQNumsForJh4, allNonWQNumsForJh5, allNonWQNumsForJh6, allNonWQNumsForJh7,
-						allNonWQNumsForJh8, allNonWQNumsForJh9);
+						allNonWQNumsForJh3, allNonWQNumsForJh4, allNonWQNumsForJh5, allNonWQNumsForJh6,
+						allNonWQNumsForJh7, allNonWQNumsForJh8, allNonWQNumsForJh9);
 				calListForFxSwA(fxData, pos, "Zx3zf", allNums, allNonWQNums, null, allZfNums, null, null, null,
 						allZfNumsForJh147, allZfNumsForJh258, allZfNumsForJh369, allNonWQNumsForJh1, allNonWQNumsForJh2,
-						allNonWQNumsForJh3, allNonWQNumsForJh4, allNonWQNumsForJh5, allNonWQNumsForJh6, allNonWQNumsForJh7,
-						allNonWQNumsForJh8, allNonWQNumsForJh9);
+						allNonWQNumsForJh3, allNonWQNumsForJh4, allNonWQNumsForJh5, allNonWQNumsForJh6,
+						allNonWQNumsForJh7, allNonWQNumsForJh8, allNonWQNumsForJh9);
 				calListForFxSwA(fxData, pos, "Zx4", allNums, allNonWQNums, allYzNums, null, allYzNumsForJh147,
 						allYzNumsForJh258, allYzNumsForJh369, null, null, null, allNonWQNumsForJh1, allNonWQNumsForJh2,
-						allNonWQNumsForJh3, allNonWQNumsForJh4, allNonWQNumsForJh5, allNonWQNumsForJh6, allNonWQNumsForJh7,
-						allNonWQNumsForJh8, allNonWQNumsForJh9);
+						allNonWQNumsForJh3, allNonWQNumsForJh4, allNonWQNumsForJh5, allNonWQNumsForJh6,
+						allNonWQNumsForJh7, allNonWQNumsForJh8, allNonWQNumsForJh9);
 				calListForFxSwA(fxData, pos, "Zx4zf", allNums, allNonWQNums, null, allZfNums, null, null, null,
 						allZfNumsForJh147, allZfNumsForJh258, allZfNumsForJh369, allNonWQNumsForJh1, allNonWQNumsForJh2,
-						allNonWQNumsForJh3, allNonWQNumsForJh4, allNonWQNumsForJh5, allNonWQNumsForJh6, allNonWQNumsForJh7,
-						allNonWQNumsForJh8, allNonWQNumsForJh9);
+						allNonWQNumsForJh3, allNonWQNumsForJh4, allNonWQNumsForJh5, allNonWQNumsForJh6,
+						allNonWQNumsForJh7, allNonWQNumsForJh8, allNonWQNumsForJh9);
 				calListForFxSwA(fxData, pos, "Zx5", allNums, allNonWQNums, allYzNums, null, allYzNumsForJh147,
 						allYzNumsForJh258, allYzNumsForJh369, null, null, null, allNonWQNumsForJh1, allNonWQNumsForJh2,
-						allNonWQNumsForJh3, allNonWQNumsForJh4, allNonWQNumsForJh5, allNonWQNumsForJh6, allNonWQNumsForJh7,
-						allNonWQNumsForJh8, allNonWQNumsForJh9);
+						allNonWQNumsForJh3, allNonWQNumsForJh4, allNonWQNumsForJh5, allNonWQNumsForJh6,
+						allNonWQNumsForJh7, allNonWQNumsForJh8, allNonWQNumsForJh9);
 				calListForFxSwA(fxData, pos, "Zx5zf", allNums, allNonWQNums, null, allZfNums, null, null, null,
 						allZfNumsForJh147, allZfNumsForJh258, allZfNumsForJh369, allNonWQNumsForJh1, allNonWQNumsForJh2,
-						allNonWQNumsForJh3, allNonWQNumsForJh4, allNonWQNumsForJh5, allNonWQNumsForJh6, allNonWQNumsForJh7,
-						allNonWQNumsForJh8, allNonWQNumsForJh9);
+						allNonWQNumsForJh3, allNonWQNumsForJh4, allNonWQNumsForJh5, allNonWQNumsForJh6,
+						allNonWQNumsForJh7, allNonWQNumsForJh8, allNonWQNumsForJh9);
 				calListForFxSwA(fxData, pos, "Zx6", allNums, allNonWQNums, allYzNums, null, allYzNumsForJh147,
 						allYzNumsForJh258, allYzNumsForJh369, null, null, null, allNonWQNumsForJh1, allNonWQNumsForJh2,
-						allNonWQNumsForJh3, allNonWQNumsForJh4, allNonWQNumsForJh5, allNonWQNumsForJh6, allNonWQNumsForJh7,
-						allNonWQNumsForJh8, allNonWQNumsForJh9);
+						allNonWQNumsForJh3, allNonWQNumsForJh4, allNonWQNumsForJh5, allNonWQNumsForJh6,
+						allNonWQNumsForJh7, allNonWQNumsForJh8, allNonWQNumsForJh9);
 				calListForFxSwA(fxData, pos, "Zx6zf", allNums, allNonWQNums, null, allZfNums, null, null, null,
 						allZfNumsForJh147, allZfNumsForJh258, allZfNumsForJh369, allNonWQNumsForJh1, allNonWQNumsForJh2,
-						allNonWQNumsForJh3, allNonWQNumsForJh4, allNonWQNumsForJh5, allNonWQNumsForJh6, allNonWQNumsForJh7,
-						allNonWQNumsForJh8, allNonWQNumsForJh9);
+						allNonWQNumsForJh3, allNonWQNumsForJh4, allNonWQNumsForJh5, allNonWQNumsForJh6,
+						allNonWQNumsForJh7, allNonWQNumsForJh8, allNonWQNumsForJh9);
 				calListForFxSwA(fxData, pos, "Zx7", allNums, allNonWQNums, allYzNums, null, allYzNumsForJh147,
 						allYzNumsForJh258, allYzNumsForJh369, null, null, null, allNonWQNumsForJh1, allNonWQNumsForJh2,
-						allNonWQNumsForJh3, allNonWQNumsForJh4, allNonWQNumsForJh5, allNonWQNumsForJh6, allNonWQNumsForJh7,
-						allNonWQNumsForJh8, allNonWQNumsForJh9);
+						allNonWQNumsForJh3, allNonWQNumsForJh4, allNonWQNumsForJh5, allNonWQNumsForJh6,
+						allNonWQNumsForJh7, allNonWQNumsForJh8, allNonWQNumsForJh9);
 				calListForFxSwA(fxData, pos, "Zx7zf", allNums, allNonWQNums, null, allZfNums, null, null, null,
 						allZfNumsForJh147, allZfNumsForJh258, allZfNumsForJh369, allNonWQNumsForJh1, allNonWQNumsForJh2,
-						allNonWQNumsForJh3, allNonWQNumsForJh4, allNonWQNumsForJh5, allNonWQNumsForJh6, allNonWQNumsForJh7,
-						allNonWQNumsForJh8, allNonWQNumsForJh9);
+						allNonWQNumsForJh3, allNonWQNumsForJh4, allNonWQNumsForJh5, allNonWQNumsForJh6,
+						allNonWQNumsForJh7, allNonWQNumsForJh8, allNonWQNumsForJh9);
 				calListForFxSwA(fxData, pos, "Zx8", allNums, allNonWQNums, allYzNums, null, allYzNumsForJh147,
 						allYzNumsForJh258, allYzNumsForJh369, null, null, null, allNonWQNumsForJh1, allNonWQNumsForJh2,
-						allNonWQNumsForJh3, allNonWQNumsForJh4, allNonWQNumsForJh5, allNonWQNumsForJh6, allNonWQNumsForJh7,
-						allNonWQNumsForJh8, allNonWQNumsForJh9);
+						allNonWQNumsForJh3, allNonWQNumsForJh4, allNonWQNumsForJh5, allNonWQNumsForJh6,
+						allNonWQNumsForJh7, allNonWQNumsForJh8, allNonWQNumsForJh9);
 				calListForFxSwA(fxData, pos, "Zx8zf", allNums, allNonWQNums, null, allZfNums, null, null, null,
 						allZfNumsForJh147, allZfNumsForJh258, allZfNumsForJh369, allNonWQNumsForJh1, allNonWQNumsForJh2,
-						allNonWQNumsForJh3, allNonWQNumsForJh4, allNonWQNumsForJh5, allNonWQNumsForJh6, allNonWQNumsForJh7,
-						allNonWQNumsForJh8, allNonWQNumsForJh9);
+						allNonWQNumsForJh3, allNonWQNumsForJh4, allNonWQNumsForJh5, allNonWQNumsForJh6,
+						allNonWQNumsForJh7, allNonWQNumsForJh8, allNonWQNumsForJh9);
 				calListForFxSwA(fxData, pos, "Zx9", allNums, allNonWQNums, allYzNums, null, allYzNumsForJh147,
-						allYzNumsForJh258, allYzNumsForJh369, null, null, null, null, null, null, null, null, null, null, null,
-						null);
+						allYzNumsForJh258, allYzNumsForJh369, null, null, null, null, null, null, null, null, null,
+						null, null, null);
 				calListForFxSwA(fxData, pos, "Zx9zf", allNums, allNonWQNums, null, allZfNums, null, null, null,
-						allZfNumsForJh147, allZfNumsForJh258, allZfNumsForJh369, null, null, null, null, null, null, null, null,
-						null);
+						allZfNumsForJh147, allZfNumsForJh258, allZfNumsForJh369, null, null, null, null, null, null,
+						null, null, null);
 				calListForFxSwA(fxData, pos, "Zx10", allNums, allNonWQNums, allYzNums, null, allYzNumsForJh147,
-						allYzNumsForJh258, allYzNumsForJh369, null, null, null, null, null, null, null, null, null, null, null,
-						null);
+						allYzNumsForJh258, allYzNumsForJh369, null, null, null, null, null, null, null, null, null,
+						null, null, null);
 				calListForFxSwA(fxData, pos, "Zx10zf", allNums, allNonWQNums, null, allZfNums, null, null, null,
-						allZfNumsForJh147, allZfNumsForJh258, allZfNumsForJh369, null, null, null, null, null, null, null, null,
-						null);
+						allZfNumsForJh147, allZfNumsForJh258, allZfNumsForJh369, null, null, null, null, null, null,
+						null, null, null);
 				calListForFxSwA(fxData, pos, "Zx11", allNums, allNonWQNums, allYzNums, null, allYzNumsForJh147,
 						allYzNumsForJh258, allYzNumsForJh369, null, null, null, allNonWQNumsForJh1, allNonWQNumsForJh2,
-						allNonWQNumsForJh3, allNonWQNumsForJh4, allNonWQNumsForJh5, allNonWQNumsForJh6, allNonWQNumsForJh7,
-						allNonWQNumsForJh8, allNonWQNumsForJh9);
+						allNonWQNumsForJh3, allNonWQNumsForJh4, allNonWQNumsForJh5, allNonWQNumsForJh6,
+						allNonWQNumsForJh7, allNonWQNumsForJh8, allNonWQNumsForJh9);
 				calListForFxSwA(fxData, pos, "Zx11zf", allNums, allNonWQNums, null, allZfNums, null, null, null,
 						allZfNumsForJh147, allZfNumsForJh258, allZfNumsForJh369, allNonWQNumsForJh1, allNonWQNumsForJh2,
-						allNonWQNumsForJh3, allNonWQNumsForJh4, allNonWQNumsForJh5, allNonWQNumsForJh6, allNonWQNumsForJh7,
-						allNonWQNumsForJh8, allNonWQNumsForJh9);
+						allNonWQNumsForJh3, allNonWQNumsForJh4, allNonWQNumsForJh5, allNonWQNumsForJh6,
+						allNonWQNumsForJh7, allNonWQNumsForJh8, allNonWQNumsForJh9);
 				calListForFxSwA(fxData, pos, "Zx12", allNums, allNonWQNums, allYzNums, null, allYzNumsForJh147,
 						allYzNumsForJh258, allYzNumsForJh369, null, null, null, allNonWQNumsForJh1, allNonWQNumsForJh2,
-						allNonWQNumsForJh3, allNonWQNumsForJh4, allNonWQNumsForJh5, allNonWQNumsForJh6, allNonWQNumsForJh7,
-						allNonWQNumsForJh8, allNonWQNumsForJh9);
+						allNonWQNumsForJh3, allNonWQNumsForJh4, allNonWQNumsForJh5, allNonWQNumsForJh6,
+						allNonWQNumsForJh7, allNonWQNumsForJh8, allNonWQNumsForJh9);
 				calListForFxSwA(fxData, pos, "Zx12zf", allNums, allNonWQNums, null, allZfNums, null, null, null,
 						allZfNumsForJh147, allZfNumsForJh258, allZfNumsForJh369, allNonWQNumsForJh1, allNonWQNumsForJh2,
-						allNonWQNumsForJh3, allNonWQNumsForJh4, allNonWQNumsForJh5, allNonWQNumsForJh6, allNonWQNumsForJh7,
-						allNonWQNumsForJh8, allNonWQNumsForJh9);
+						allNonWQNumsForJh3, allNonWQNumsForJh4, allNonWQNumsForJh5, allNonWQNumsForJh6,
+						allNonWQNumsForJh7, allNonWQNumsForJh8, allNonWQNumsForJh9);
 				calListForFxSwA(fxData, pos, "Zx13", allNums, allNonWQNums, allYzNums, null, allYzNumsForJh147,
 						allYzNumsForJh258, allYzNumsForJh369, null, null, null, allNonWQNumsForJh1, allNonWQNumsForJh2,
-						allNonWQNumsForJh3, allNonWQNumsForJh4, allNonWQNumsForJh5, allNonWQNumsForJh6, allNonWQNumsForJh7,
-						allNonWQNumsForJh8, allNonWQNumsForJh9);
+						allNonWQNumsForJh3, allNonWQNumsForJh4, allNonWQNumsForJh5, allNonWQNumsForJh6,
+						allNonWQNumsForJh7, allNonWQNumsForJh8, allNonWQNumsForJh9);
 				calListForFxSwA(fxData, pos, "Zx13zf", allNums, allNonWQNums, null, allZfNums, null, null, null,
 						allZfNumsForJh147, allZfNumsForJh258, allZfNumsForJh369, allNonWQNumsForJh1, allNonWQNumsForJh2,
-						allNonWQNumsForJh3, allNonWQNumsForJh4, allNonWQNumsForJh5, allNonWQNumsForJh6, allNonWQNumsForJh7,
-						allNonWQNumsForJh8, allNonWQNumsForJh9);
+						allNonWQNumsForJh3, allNonWQNumsForJh4, allNonWQNumsForJh5, allNonWQNumsForJh6,
+						allNonWQNumsForJh7, allNonWQNumsForJh8, allNonWQNumsForJh9);
 				calListForFxSwA(fxData, pos, "Zx14", allNums, allNonWQNums, allYzNums, null, allYzNumsForJh147,
 						allYzNumsForJh258, allYzNumsForJh369, null, null, null, allNonWQNumsForJh1, allNonWQNumsForJh2,
-						allNonWQNumsForJh3, allNonWQNumsForJh4, allNonWQNumsForJh5, allNonWQNumsForJh6, allNonWQNumsForJh7,
-						allNonWQNumsForJh8, allNonWQNumsForJh9);
+						allNonWQNumsForJh3, allNonWQNumsForJh4, allNonWQNumsForJh5, allNonWQNumsForJh6,
+						allNonWQNumsForJh7, allNonWQNumsForJh8, allNonWQNumsForJh9);
 				calListForFxSwA(fxData, pos, "Zx14zf", allNums, allNonWQNums, null, allZfNums, null, null, null,
 						allZfNumsForJh147, allZfNumsForJh258, allZfNumsForJh369, allNonWQNumsForJh1, allNonWQNumsForJh2,
-						allNonWQNumsForJh3, allNonWQNumsForJh4, allNonWQNumsForJh5, allNonWQNumsForJh6, allNonWQNumsForJh7,
-						allNonWQNumsForJh8, allNonWQNumsForJh9);
+						allNonWQNumsForJh3, allNonWQNumsForJh4, allNonWQNumsForJh5, allNonWQNumsForJh6,
+						allNonWQNumsForJh7, allNonWQNumsForJh8, allNonWQNumsForJh9);
 				calListForFxSwA(fxData, pos, "Zx15", allNums, allNonWQNums, allYzNums, null, allYzNumsForJh147,
 						allYzNumsForJh258, allYzNumsForJh369, null, null, null, allNonWQNumsForJh1, allNonWQNumsForJh2,
-						allNonWQNumsForJh3, allNonWQNumsForJh4, allNonWQNumsForJh5, allNonWQNumsForJh6, allNonWQNumsForJh7,
-						allNonWQNumsForJh8, allNonWQNumsForJh9);
+						allNonWQNumsForJh3, allNonWQNumsForJh4, allNonWQNumsForJh5, allNonWQNumsForJh6,
+						allNonWQNumsForJh7, allNonWQNumsForJh8, allNonWQNumsForJh9);
 				calListForFxSwA(fxData, pos, "Zx15zf", allNums, allNonWQNums, null, allZfNums, null, null, null,
 						allZfNumsForJh147, allZfNumsForJh258, allZfNumsForJh369, allNonWQNumsForJh1, allNonWQNumsForJh2,
-						allNonWQNumsForJh3, allNonWQNumsForJh4, allNonWQNumsForJh5, allNonWQNumsForJh6, allNonWQNumsForJh7,
-						allNonWQNumsForJh8, allNonWQNumsForJh9);
+						allNonWQNumsForJh3, allNonWQNumsForJh4, allNonWQNumsForJh5, allNonWQNumsForJh6,
+						allNonWQNumsForJh7, allNonWQNumsForJh8, allNonWQNumsForJh9);
 				calListForFxSwA(fxData, pos, "Zx16", allNums, allNonWQNums, allYzNums, null, allYzNumsForJh147,
 						allYzNumsForJh258, allYzNumsForJh369, null, null, null, allNonWQNumsForJh1, allNonWQNumsForJh2,
-						allNonWQNumsForJh3, allNonWQNumsForJh4, allNonWQNumsForJh5, allNonWQNumsForJh6, allNonWQNumsForJh7,
-						allNonWQNumsForJh8, allNonWQNumsForJh9);
+						allNonWQNumsForJh3, allNonWQNumsForJh4, allNonWQNumsForJh5, allNonWQNumsForJh6,
+						allNonWQNumsForJh7, allNonWQNumsForJh8, allNonWQNumsForJh9);
 				calListForFxSwA(fxData, pos, "Zx16zf", allNums, allNonWQNums, null, allZfNums, null, null, null,
 						allZfNumsForJh147, allZfNumsForJh258, allZfNumsForJh369, allNonWQNumsForJh1, allNonWQNumsForJh2,
-						allNonWQNumsForJh3, allNonWQNumsForJh4, allNonWQNumsForJh5, allNonWQNumsForJh6, allNonWQNumsForJh7,
-						allNonWQNumsForJh8, allNonWQNumsForJh9);
+						allNonWQNumsForJh3, allNonWQNumsForJh4, allNonWQNumsForJh5, allNonWQNumsForJh6,
+						allNonWQNumsForJh7, allNonWQNumsForJh8, allNonWQNumsForJh9);
 				calListForFxSwA(fxData, pos, "Zx17", allNums, allNonWQNums, allYzNums, null, allYzNumsForJh147,
 						allYzNumsForJh258, allYzNumsForJh369, null, null, null, allNonWQNumsForJh1, allNonWQNumsForJh2,
-						allNonWQNumsForJh3, allNonWQNumsForJh4, allNonWQNumsForJh5, allNonWQNumsForJh6, allNonWQNumsForJh7,
-						allNonWQNumsForJh8, allNonWQNumsForJh9);
+						allNonWQNumsForJh3, allNonWQNumsForJh4, allNonWQNumsForJh5, allNonWQNumsForJh6,
+						allNonWQNumsForJh7, allNonWQNumsForJh8, allNonWQNumsForJh9);
 				calListForFxSwA(fxData, pos, "Zx17zf", allNums, allNonWQNums, null, allZfNums, null, null, null,
 						allZfNumsForJh147, allZfNumsForJh258, allZfNumsForJh369, allNonWQNumsForJh1, allNonWQNumsForJh2,
-						allNonWQNumsForJh3, allNonWQNumsForJh4, allNonWQNumsForJh5, allNonWQNumsForJh6, allNonWQNumsForJh7,
-						allNonWQNumsForJh8, allNonWQNumsForJh9);
+						allNonWQNumsForJh3, allNonWQNumsForJh4, allNonWQNumsForJh5, allNonWQNumsForJh6,
+						allNonWQNumsForJh7, allNonWQNumsForJh8, allNonWQNumsForJh9);
 				calListForFxSwA(fxData, pos, "Zx18", allNums, allNonWQNums, allYzNums, null, allYzNumsForJh147,
 						allYzNumsForJh258, allYzNumsForJh369, null, null, null, allNonWQNumsForJh1, allNonWQNumsForJh2,
-						allNonWQNumsForJh3, allNonWQNumsForJh4, allNonWQNumsForJh5, allNonWQNumsForJh6, allNonWQNumsForJh7,
-						allNonWQNumsForJh8, allNonWQNumsForJh9);
+						allNonWQNumsForJh3, allNonWQNumsForJh4, allNonWQNumsForJh5, allNonWQNumsForJh6,
+						allNonWQNumsForJh7, allNonWQNumsForJh8, allNonWQNumsForJh9);
 				calListForFxSwA(fxData, pos, "Zx18zf", allNums, allNonWQNums, null, allZfNums, null, null, null,
 						allZfNumsForJh147, allZfNumsForJh258, allZfNumsForJh369, allNonWQNumsForJh1, allNonWQNumsForJh2,
-						allNonWQNumsForJh3, allNonWQNumsForJh4, allNonWQNumsForJh5, allNonWQNumsForJh6, allNonWQNumsForJh7,
-						allNonWQNumsForJh8, allNonWQNumsForJh9);
+						allNonWQNumsForJh3, allNonWQNumsForJh4, allNonWQNumsForJh5, allNonWQNumsForJh6,
+						allNonWQNumsForJh7, allNonWQNumsForJh8, allNonWQNumsForJh9);
 
 				if (pos < 12) {
 					calAllFzForFxSwA(mapForAll, getFz(allNums));
@@ -1430,5 +1435,6 @@ public class YZ3Service extends YZ2Service {
 		data.setA1A2A3NumsForAll(Joiner.on(",").join(a1a2a3Nums));
 		return data;
 	}
+
 
 }

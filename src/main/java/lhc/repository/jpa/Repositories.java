@@ -5,7 +5,7 @@ import org.springframework.stereotype.Service;
 
 import lhc.repository.jpa.api.*;
 import lhc.repository.jpa.dao.*;
-import lhc.service.YZ3Service;
+import lhc.service.YZ4Service;
 
 @Service
 public class Repositories {
@@ -659,6 +659,42 @@ public class Repositories {
 	public DsxMaxJYJDBDao dsxMaxJyJDBDao;
 	
 	@Autowired
+	public DmgMinJyJQBRepository dmgMinJyJQBRepository;
+	
+	@Autowired
+	public DmgMinJYJQBDao dmgMinJyJQBDao;
+	
+	@Autowired
+	public DmgMinJyJHBRepository dmgMinJyJHBRepository;
+	
+	@Autowired
+	public DmgMinJYJHBDao dmgMinJyJHBDao;
+	
+	@Autowired
+	public DmgMinJyJDBRepository dmgMinJyJDBRepository;
+	
+	@Autowired
+	public DmgMinJYJDBDao dmgMinJyJDBDao;
+	
+	@Autowired
+	public DmgMaxJyJQBRepository dmgMaxJyJQBRepository;
+	
+	@Autowired
+	public DmgMaxJYJQBDao dmgMaxJyJQBDao;
+	
+	@Autowired
+	public DmgMaxJyJHBRepository dmgMaxJyJHBRepository;
+	
+	@Autowired
+	public DmgMaxJYJHBDao dmgMaxJyJHBDao;
+	
+	@Autowired
+	public DmgMaxJyJDBRepository dmgMaxJyJDBRepository;
+	
+	@Autowired
+	public DmgMaxJYJDBDao dmgMaxJyJDBDao;
+	
+	@Autowired
 	public FxSwADao fxSwADao;
 	
 	@Autowired
@@ -668,5 +704,5 @@ public class Repositories {
 	public CommonDao commonDao;
 
 	@Autowired
-	public YZ3Service yzService;
+	public YZ4Service yzService;
 }

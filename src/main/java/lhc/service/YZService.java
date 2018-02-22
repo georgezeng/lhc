@@ -168,8 +168,10 @@ public class YZService {
 				new YzHandler<SxYz, KaiJiang>() {
 
 					@Override
-					public List<Integer> process(SxYz yz, SxYz lastYZ, KaiJiang data, KaiJiang lastData) throws Exception {
-						Method method = ReflectionUtils.findMethod(SxYz.class, "set" + data.getSpecialSx().name(), Integer.class);
+					public List<Integer> process(SxYz yz, SxYz lastYZ, KaiJiang data, KaiJiang lastData)
+							throws Exception {
+						Method method = ReflectionUtils.findMethod(SxYz.class, "set" + data.getSpecialSx().name(),
+								Integer.class);
 						method.invoke(yz, 0);
 						yz.setCurrentSx(data.getSpecialSx());
 
@@ -279,15 +281,18 @@ public class YZService {
 								repositories.sxzfyz2Repository, new ZFPosHandler<SxZfYz2, SxYz>() {
 
 									@Override
-									Integer process(SxZfYz2 zfYz, SxZfYz2 lastZFYZ, SxYz data, SxYz lastYZ, Class<SxYz> yzClazz,
-											Class<SxZfYz2> yzzfClazz, int zfLength) throws Exception {
+									Integer process(SxZfYz2 zfYz, SxZfYz2 lastZFYZ, SxYz data, SxYz lastYZ,
+											Class<SxYz> yzClazz, Class<SxZfYz2> yzzfClazz, int zfLength)
+											throws Exception {
 										Integer pos = null;
 										if (lastYZ != null) {
-											pos = zfLength - lastYZ.getCurrentSx().getPos() + data.getCurrentSx().getPos();
+											pos = zfLength - lastYZ.getCurrentSx().getPos()
+													+ data.getCurrentSx().getPos();
 											if (pos >= zfLength) {
 												pos -= zfLength;
 											}
-											Method m = ReflectionUtils.findMethod(SxZfYz2.class, "setZf" + pos, Integer.class);
+											Method m = ReflectionUtils.findMethod(SxZfYz2.class, "setZf" + pos,
+													Integer.class);
 											m.invoke(zfYz, 0);
 										}
 										zfYz.setCurrentPos(pos);
@@ -321,7 +326,8 @@ public class YZService {
 
 						Integer pos = null;
 						if (lastYZ != null) {
-							pos = new BigDecimal(data.getCurrentSx().getPos() - lastYZ.getCurrentSx().getPos()).abs().intValue();
+							pos = new BigDecimal(data.getCurrentSx().getPos() - lastYZ.getCurrentSx().getPos()).abs()
+									.intValue();
 							Method m = ReflectionUtils.findMethod(SxZfYz.class, "setZf" + pos, Integer.class);
 							m.invoke(zfYz, 0);
 						}
@@ -473,8 +479,8 @@ public class YZService {
 
 			@Override
 			public void process() {
-				calZF(SwNums.FDS.length, SwYz.class, SwZfYz.class, repositories.swyzRepository, repositories.swzfyzRepository,
-						new GetSuffixHandler<SwZfYz, SwYz>() {
+				calZF(SwNums.FDS.length, SwYz.class, SwZfYz.class, repositories.swyzRepository,
+						repositories.swzfyzRepository, new GetSuffixHandler<SwZfYz, SwYz>() {
 
 							@Override
 							public String process(int index) {
@@ -494,8 +500,8 @@ public class YZService {
 
 			@Override
 			public void process() {
-				calZF(MwNums.FDS.length, MwYz.class, MwZfYz.class, repositories.mwyzRepository, repositories.mwzfyzRepository,
-						new GetSuffixHandler<MwZfYz, MwYz>() {
+				calZF(MwNums.FDS.length, MwYz.class, MwZfYz.class, repositories.mwyzRepository,
+						repositories.mwzfyzRepository, new GetSuffixHandler<MwZfYz, MwYz>() {
 
 							@Override
 							public String process(int index) {
@@ -768,8 +774,8 @@ public class YZService {
 
 			@Override
 			public void process() {
-				calZF(LhNums.FDS.length, LhYz.class, LhZfYz.class, repositories.lhyzRepository, repositories.lhzfyzRepository,
-						new GetSuffixHandler<LhZfYz, LhYz>() {
+				calZF(LhNums.FDS.length, LhYz.class, LhZfYz.class, repositories.lhyzRepository,
+						repositories.lhzfyzRepository, new GetSuffixHandler<LhZfYz, LhYz>() {
 
 							@Override
 							public String process(int index) {
@@ -802,8 +808,8 @@ public class YZService {
 
 			@Override
 			public void process() {
-				calZF(QqNums.FDS.length, QqYz.class, QqZfYz.class, repositories.qqyzRepository, repositories.qqzfyzRepository,
-						new GetSuffixHandler<QqZfYz, QqYz>() {
+				calZF(QqNums.FDS.length, QqYz.class, QqZfYz.class, repositories.qqyzRepository,
+						repositories.qqzfyzRepository, new GetSuffixHandler<QqZfYz, QqYz>() {
 
 							@Override
 							public String process(int index) {
@@ -842,8 +848,8 @@ public class YZService {
 
 			@Override
 			public void process() {
-				calZF(BsNums.FDS.length, BsYz.class, BsZfYz.class, repositories.bsyzRepository, repositories.bszfyzRepository,
-						new GetSuffixHandler<BsZfYz, BsYz>() {
+				calZF(BsNums.FDS.length, BsYz.class, BsZfYz.class, repositories.bsyzRepository,
+						repositories.bszfyzRepository, new GetSuffixHandler<BsZfYz, BsYz>() {
 
 							@Override
 							public String process(int index) {
@@ -895,8 +901,8 @@ public class YZService {
 
 			@Override
 			public void process() {
-				calZF(PdNums.FDS.length, PdYz.class, PdZfYz.class, repositories.pdyzRepository, repositories.pdzfyzRepository,
-						new GetSuffixHandler<PdZfYz, PdYz>() {
+				calZF(PdNums.FDS.length, PdYz.class, PdZfYz.class, repositories.pdyzRepository,
+						repositories.pdzfyzRepository, new GetSuffixHandler<PdZfYz, PdYz>() {
 
 							@Override
 							public String process(int index) {
@@ -927,8 +933,8 @@ public class YZService {
 
 			@Override
 			public void process() {
-				calZF(WxNums.FDS.length, WxYz.class, WxZfYz.class, repositories.wxyzRepository, repositories.wxzfyzRepository,
-						new GetSuffixHandler<WxZfYz, WxYz>() {
+				calZF(WxNums.FDS.length, WxYz.class, WxZfYz.class, repositories.wxyzRepository,
+						repositories.wxzfyzRepository, new GetSuffixHandler<WxZfYz, WxYz>() {
 
 							@Override
 							public String process(int index) {
@@ -1690,8 +1696,8 @@ public class YZService {
 				}
 
 			});
-			calZF(12, Tm12FdYz.class, Tm12FdZfYz.class, repositories.tm12fdyzRepository, repositories.tm12fdzfyzRepository,
-					new GetSuffixHandler<Tm12FdZfYz, Tm12FdYz>() {
+			calZF(12, Tm12FdYz.class, Tm12FdZfYz.class, repositories.tm12fdyzRepository,
+					repositories.tm12fdzfyzRepository, new GetSuffixHandler<Tm12FdZfYz, Tm12FdYz>() {
 
 						@Override
 						public String process(int index) {
@@ -1733,8 +1739,8 @@ public class YZService {
 
 			@Override
 			public void process() {
-				calZF(ZsNums.FDS.length, ZsYz.class, ZsZfYz.class, repositories.zsyzRepository, repositories.zszfyzRepository,
-						new GetSuffixHandler<ZsZfYz, ZsYz>() {
+				calZF(ZsNums.FDS.length, ZsYz.class, ZsZfYz.class, repositories.zsyzRepository,
+						repositories.zszfyzRepository, new GetSuffixHandler<ZsZfYz, ZsYz>() {
 
 							@Override
 							public String process(int index) {
@@ -1766,8 +1772,8 @@ public class YZService {
 
 			@Override
 			public void process() {
-				calZF(DsNums.FDS.length, DsYz.class, DsZfYz.class, repositories.dsyzRepository, repositories.dszfyzRepository,
-						new GetSuffixHandler<DsZfYz, DsYz>() {
+				calZF(DsNums.FDS.length, DsYz.class, DsZfYz.class, repositories.dsyzRepository,
+						repositories.dszfyzRepository, new GetSuffixHandler<DsZfYz, DsYz>() {
 
 							@Override
 							public String process(int index) {
@@ -1865,8 +1871,8 @@ public class YZService {
 
 	protected static abstract class ZFPosHandler<T extends Avg, R extends Avg> {
 
-		abstract Integer process(T zfYz, T lastZFYZ, R data, R lastYZ, Class<R> yzClazz, Class<T> yzzfClazz, int zfLength)
-				throws Exception;
+		abstract Integer process(T zfYz, T lastZFYZ, R data, R lastYZ, Class<R> yzClazz, Class<T> yzzfClazz,
+				int zfLength) throws Exception;
 	}
 
 	protected <T extends Avg, R extends Avg> void calZF(int zfLength, Class<R> yzClazz, Class<T> yzzfClazz,
@@ -2173,7 +2179,8 @@ public class YZService {
 	protected <T extends Avg> Future<Exception> calFDYZ(final Class<T> clazz, final Class<?> numsClass,
 			final BaseYzRepository<T> repository, final CommonHandler handler) {
 		try {
-			return calYZ(clazz, repository, repositories.kaiJiangRepository, new FDYZHandler<T>(clazz, numsClass, handler));
+			return calYZ(clazz, repository, repositories.kaiJiangRepository,
+					new FDYZHandler<T>(clazz, numsClass, handler));
 		} catch (Exception e) {
 			throw new RuntimeException(e.getMessage(), e);
 		}
@@ -2338,8 +2345,8 @@ public class YZService {
 	}
 
 	public <T extends BaseYz, C extends BaseCsYz> Map<String, Object> calCSYZ(PageInfo page, PageResult<T> result,
-			BaseYzRepository<C> repository, C lastYZ, String[] fds, Class<C> clazz, Class<T> yzClazz, CSHandler<C> handler)
-			throws Exception {
+			BaseYzRepository<C> repository, C lastYZ, String[] fds, Class<C> clazz, Class<T> yzClazz,
+			CSHandler<C> handler) throws Exception {
 		Map<String, Object> map = new HashMap<String, Object>();
 		PageResult<C> pResult = null;
 		if (result != null && result.getTotal() > 0) {
@@ -2591,13 +2598,14 @@ public class YZService {
 
 	@Async
 	public Future<Exception> calSLQLRYZ() {
-		return calLRYZ(SlqLrYz.class, repositories.slqlryzRepository, repositories.slqyzRepository, new CommonHandler() {
+		return calLRYZ(SlqLrYz.class, repositories.slqlryzRepository, repositories.slqyzRepository,
+				new CommonHandler() {
 
-			@Override
-			public void process() {
-				logger.info("End of calSLQLRYZ...");
-			}
-		});
+					@Override
+					public void process() {
+						logger.info("End of calSLQLRYZ...");
+					}
+				});
 
 	}
 
@@ -2676,25 +2684,27 @@ public class YZService {
 
 	@Async
 	public Future<Exception> calBS9QLRYZ() {
-		return calLRYZ(Bs9qLrYz.class, repositories.bs9qlryzRepository, repositories.bs9qyzRepository, new CommonHandler() {
+		return calLRYZ(Bs9qLrYz.class, repositories.bs9qlryzRepository, repositories.bs9qyzRepository,
+				new CommonHandler() {
 
-			@Override
-			public void process() {
-				logger.info("End of calBS9QLRYZ...");
-			}
-		});
+					@Override
+					public void process() {
+						logger.info("End of calBS9QLRYZ...");
+					}
+				});
 
 	}
 
 	@Async
 	public Future<Exception> calWXDSLRYZ() {
-		return calLRYZ(WxdsLrYz.class, repositories.wxdslryzRepository, repositories.wxdsyzRepository, new CommonHandler() {
+		return calLRYZ(WxdsLrYz.class, repositories.wxdslryzRepository, repositories.wxdsyzRepository,
+				new CommonHandler() {
 
-			@Override
-			public void process() {
-				logger.info("End of calWXDSLRYZ...");
-			}
-		});
+					@Override
+					public void process() {
+						logger.info("End of calWXDSLRYZ...");
+					}
+				});
 
 	}
 
@@ -2771,8 +2781,8 @@ public class YZService {
 					SX bmnSX = DateUtil.getSxByYear(data.getDate());
 					yz.setSxNums(getSxNums(bmnSX, data.getCurrentSx()));
 
-					int pos = data.getCurrentSx().getPos()
-							+ repositories.sxzfyz2Repository.findByYearAndPhase(data.getYear(), data.getPhase()).getCurrentPos();
+					int pos = data.getCurrentSx().getPos() + repositories.sxzfyz2Repository
+							.findByYearAndPhase(data.getYear(), data.getPhase()).getCurrentPos();
 					if (pos >= SX.values().length) {
 						pos = pos - SX.values().length;
 					}
@@ -4668,8 +4678,8 @@ public class YZService {
 	protected void calWxdsForJ0(J0Yz yz) throws Exception {
 		WxdsYz wxdsYz = repositories.wxdsyzRepository.findByYearAndPhase(yz.getYear(), yz.getPhase());
 		int currentPos = 0;
-		String[] arr = new String[] { "JinOdd", "JinEven", "MuOdd", "MuEven", "ShuiOdd", "ShuiEven", "HuoOdd", "HuoEven",
-				"TuOdd", "TuEven" };
+		String[] arr = new String[] { "JinOdd", "JinEven", "MuOdd", "MuEven", "ShuiOdd", "ShuiEven", "HuoOdd",
+				"HuoEven", "TuOdd", "TuEven" };
 		for (int i = 0; i < arr.length; i++) {
 			currentPos = i;
 			Method m = WxdsYz.class.getDeclaredMethod("get" + arr[i]);
@@ -5261,7 +5271,9 @@ public class YZService {
 	}
 
 	protected void addNumsToConditionList(Set<Integer> conditionSet, Set<Integer> nums) {
-		addNumsToConditionList(conditionSet, new ArrayList<Integer>(nums));
+		if (nums != null) {
+			addNumsToConditionList(conditionSet, new ArrayList<Integer>(nums));
+		}
 	}
 
 	protected Set<Integer> combineConditionList(Set<Integer> a1, Set<Integer> a2, Set<Integer> a3, Set<Integer> a4,
@@ -5328,8 +5340,8 @@ public class YZService {
 				new XbwOptionYzHandler<SxYz>() {
 
 					@Override
-					protected List<XbwInfo> getInfos(SxYz current, Class<SxYz> clazz, Class<?> numsClass, String textPrefix)
-							throws Exception {
+					protected List<XbwInfo> getInfos(SxYz current, Class<SxYz> clazz, Class<?> numsClass,
+							String textPrefix) throws Exception {
 						List<XbwInfo> infos = new ArrayList<XbwInfo>();
 						for (SX sx : SX.seq()) {
 							Method m = ReflectionUtils.findMethod(SxYz.class, "get" + sx.name());
@@ -5438,16 +5450,16 @@ public class YZService {
 		nums.add(calXbwOptionForYz("质数", "B", condition, ZsYz.class, ZsNums.class, repositories.zsyzRepository));
 		nums.add(calXbwOptionForWxYz("B", condition, new XbwOptionYzHandlerForGetInfos<WxdsYz>()));
 		nums.add(calXbwOptionForBsYz("B", condition, new XbwOptionYzHandlerForGetInfos<Bs9qYz>()));
-		nums.add(
-				calXbwOptionForYz("十二区", "B", condition, TwelveYz.class, TwelveNums.class, repositories.twelveyzRepository));
+		nums.add(calXbwOptionForYz("十二区", "B", condition, TwelveYz.class, TwelveNums.class,
+				repositories.twelveyzRepository));
 		nums.add(calXbwOptionForYz("十六区", "B", condition, SlqYz.class, SlqNums.class, repositories.slqyzRepository));
 		return nums;
 	}
 
 	protected XbwJY2Sub calXbwOptionForWxYz(String fdRange, XbwJYCondition condition,
 			XbwOptionYzHandlerForGetInfos<WxdsYz> infoHandler) throws Exception {
-		return calXbwOptionForYz("五行单双", fdRange, condition, WxdsYz.class, WxDsNums.class, repositories.wxdsyzRepository,
-				new XbwOptionYzHandler<WxdsYz>() {
+		return calXbwOptionForYz("五行单双", fdRange, condition, WxdsYz.class, WxDsNums.class,
+				repositories.wxdsyzRepository, new XbwOptionYzHandler<WxdsYz>() {
 					@Override
 					protected String getText(String textPrefix, String fd) {
 						if (fd.equalsIgnoreCase("JinOdd")) {
@@ -5559,7 +5571,8 @@ public class YZService {
 					@Override
 					protected XbwJY2Sub getNums(int pos, SxZfYz2 current) throws Exception {
 						int currentPos = pos;
-						SxYz data = repositories.sxyzRepository.findByYearAndPhase(current.getYear(), current.getPhase());
+						SxYz data = repositories.sxyzRepository.findByYearAndPhase(current.getYear(),
+								current.getPhase());
 						pos += data.getCurrentSx().getPos();
 						int len = getLength();
 						if (pos > len) {
@@ -5737,7 +5750,8 @@ public class YZService {
 
 					@Override
 					protected XbwJY2Sub getNums(int pos, Tm12FdZfYz current) throws Exception {
-						TmYz tmData = repositories.tmyzRepository.findByYearAndPhase(current.getYear(), current.getPhase());
+						TmYz tmData = repositories.tmyzRepository.findByYearAndPhase(current.getYear(),
+								current.getPhase());
 						List<TmYzInfo> infos = getTMFDList(tmData, false);
 						List<List<Integer>> nums = new ArrayList<List<Integer>>();
 						int length = 12;
@@ -5763,7 +5777,8 @@ public class YZService {
 							nums.add(subNums);
 						}
 						int currentPos = pos;
-						Tm12FdYz data = repositories.tm12fdyzRepository.findByYearAndPhase(current.getYear(), current.getPhase());
+						Tm12FdYz data = repositories.tm12fdyzRepository.findByYearAndPhase(current.getYear(),
+								current.getPhase());
 						for (int i = 1; i < 13; i++) {
 							Method m = ReflectionUtils.findMethod(Tm12FdYz.class, "getW" + i);
 							Integer value = (Integer) m.invoke(data);
@@ -6125,7 +6140,8 @@ public class YZService {
 		nums.add(calXbwOptionForQqzf("H", condition, new XbwOptionYzHandlerForGetPos<QqZfYz>()));
 		nums.add(calXbwOptionForYz("杂项6", "H", condition, Zx6Yz.class, Zx6Nums.class, repositories.zx6yzRepository));
 		nums.add(calXbwOptionForYz("杂项8", "H", condition, Zx8Yz.class, Zx8Nums.class, repositories.zx8yzRepository));
-		nums.add(calXbwOptionForYz("杂项10", "H", condition, Zx10Yz.class, Zx10Nums.class, repositories.zx10yzRepository));
+		nums.add(
+				calXbwOptionForYz("杂项10", "H", condition, Zx10Yz.class, Zx10Nums.class, repositories.zx10yzRepository));
 		return nums;
 	}
 
@@ -6189,8 +6205,8 @@ public class YZService {
 			List<XbwInfo> infos = new ArrayList<XbwInfo>();
 			for (String fd : (String[]) numsClass.getDeclaredField("FDS").get(null)) {
 				Method m = ReflectionUtils.findMethod(clazz, "get" + fd);
-				infos.add(new XbwInfo(getText(textPrefix, fd), ReflectionUtils.findField(numsClass, fd.toUpperCase()).get(null),
-						(Integer) m.invoke(current)));
+				infos.add(new XbwInfo(getText(textPrefix, fd),
+						ReflectionUtils.findField(numsClass, fd.toUpperCase()).get(null), (Integer) m.invoke(current)));
 			}
 			return infos;
 		}
@@ -6210,8 +6226,8 @@ public class YZService {
 
 	protected <T extends Avg> XbwJY2Sub calXbwOptionForYz(String textPrefix, String range, XbwJYCondition condition,
 			Class<T> clazz, Class<?> numsClass, BaseYzRepository<T> repository) throws Exception {
-		return calXbwOptionForYz(textPrefix, range, condition, clazz, numsClass, repository, new XbwOptionYzHandler<T>(),
-				new XbwOptionYzHandlerForGetInfos<T>());
+		return calXbwOptionForYz(textPrefix, range, condition, clazz, numsClass, repository,
+				new XbwOptionYzHandler<T>(), new XbwOptionYzHandlerForGetInfos<T>());
 	}
 
 	protected <T extends Avg> XbwJY2Sub calXbwOptionForYz(String textPrefix, String range, XbwJYCondition condition,
@@ -6573,8 +6589,8 @@ public class YZService {
 		nums.add(calXbwOptionForYz("质数", "B", condition, ZsYz.class, ZsNums.class, repositories.zsyzRepository));
 		nums.add(calXbwOptionForYz("杂项2", "B", condition, Zx2Yz.class, Zx2Nums.class, repositories.zx2yzRepository));
 		nums.add(calXbwOptionForBsYz("B", condition, new XbwOptionYzHandlerForGetInfos<Bs9qYz>()));
-		nums.add(
-				calXbwOptionForYz("十二区", "B", condition, TwelveYz.class, TwelveNums.class, repositories.twelveyzRepository));
+		nums.add(calXbwOptionForYz("十二区", "B", condition, TwelveYz.class, TwelveNums.class,
+				repositories.twelveyzRepository));
 		nums.add(calXbwOptionForYz("十六区", "B", condition, SlqYz.class, SlqNums.class, repositories.slqyzRepository));
 		return nums;
 	}
@@ -6583,8 +6599,8 @@ public class YZService {
 		List<XbwJY2Sub> nums = new ArrayList<XbwJY2Sub>();
 		nums.add(calXbwOptionForYz("质数", "B", condition, ZsYz.class, ZsNums.class, repositories.zsyzRepository));
 		nums.add(calXbwOptionForBsYz("B", condition, new XbwOptionYzHandlerForGetInfos<Bs9qYz>()));
-		nums.add(
-				calXbwOptionForYz("十二区", "B", condition, TwelveYz.class, TwelveNums.class, repositories.twelveyzRepository));
+		nums.add(calXbwOptionForYz("十二区", "B", condition, TwelveYz.class, TwelveNums.class,
+				repositories.twelveyzRepository));
 		nums.add(calXbwOptionForYz("十六区", "B", condition, SlqYz.class, SlqNums.class, repositories.slqyzRepository));
 		return nums;
 	}
@@ -6613,11 +6629,12 @@ public class YZService {
 				return currentInfos.get(0);
 			}
 		}));
-		nums.add(calXbwOptionForYz("十二区", "B", condition, TwelveYz.class, TwelveNums.class, repositories.twelveyzRepository,
-				new XbwOptionYzHandler<TwelveYz>(), new XbwOptionYzHandlerForGetInfos<TwelveYz>() {
+		nums.add(calXbwOptionForYz("十二区", "B", condition, TwelveYz.class, TwelveNums.class,
+				repositories.twelveyzRepository, new XbwOptionYzHandler<TwelveYz>(),
+				new XbwOptionYzHandlerForGetInfos<TwelveYz>() {
 					@Override
-					protected XbwInfo getInfo(TwelveYz current, TwelveYz last, Class<TwelveYz> clazz, Class<?> numsClass,
-							List<XbwInfo> currentInfos, int len) throws Exception {
+					protected XbwInfo getInfo(TwelveYz current, TwelveYz last, Class<TwelveYz> clazz,
+							Class<?> numsClass, List<XbwInfo> currentInfos, int len) throws Exception {
 						return currentInfos.get(0);
 					}
 				}));
@@ -6657,11 +6674,12 @@ public class YZService {
 				return currentInfos.get(0);
 			}
 		}));
-		nums.add(calXbwOptionForYz("十二区", "B", condition, TwelveYz.class, TwelveNums.class, repositories.twelveyzRepository,
-				new XbwOptionYzHandler<TwelveYz>(), new XbwOptionYzHandlerForGetInfos<TwelveYz>() {
+		nums.add(calXbwOptionForYz("十二区", "B", condition, TwelveYz.class, TwelveNums.class,
+				repositories.twelveyzRepository, new XbwOptionYzHandler<TwelveYz>(),
+				new XbwOptionYzHandlerForGetInfos<TwelveYz>() {
 					@Override
-					protected XbwInfo getInfo(TwelveYz current, TwelveYz last, Class<TwelveYz> clazz, Class<?> numsClass,
-							List<XbwInfo> currentInfos, int len) throws Exception {
+					protected XbwInfo getInfo(TwelveYz current, TwelveYz last, Class<TwelveYz> clazz,
+							Class<?> numsClass, List<XbwInfo> currentInfos, int len) throws Exception {
 						return currentInfos.get(0);
 					}
 				}));
@@ -6693,11 +6711,12 @@ public class YZService {
 				return currentInfos.get(0);
 			}
 		}));
-		nums.add(calXbwOptionForYz("十二区", "B", condition, TwelveYz.class, TwelveNums.class, repositories.twelveyzRepository,
-				new XbwOptionYzHandler<TwelveYz>(), new XbwOptionYzHandlerForGetInfos<TwelveYz>() {
+		nums.add(calXbwOptionForYz("十二区", "B", condition, TwelveYz.class, TwelveNums.class,
+				repositories.twelveyzRepository, new XbwOptionYzHandler<TwelveYz>(),
+				new XbwOptionYzHandlerForGetInfos<TwelveYz>() {
 					@Override
-					protected XbwInfo getInfo(TwelveYz current, TwelveYz last, Class<TwelveYz> clazz, Class<?> numsClass,
-							List<XbwInfo> currentInfos, int len) throws Exception {
+					protected XbwInfo getInfo(TwelveYz current, TwelveYz last, Class<TwelveYz> clazz,
+							Class<?> numsClass, List<XbwInfo> currentInfos, int len) throws Exception {
 						return currentInfos.get(0);
 					}
 				}));
@@ -6736,11 +6755,12 @@ public class YZService {
 				return currentInfos.get(currentInfos.size() - 1);
 			}
 		}));
-		nums.add(calXbwOptionForYz("十二区", "B", condition, TwelveYz.class, TwelveNums.class, repositories.twelveyzRepository,
-				new XbwOptionYzHandler<TwelveYz>(), new XbwOptionYzHandlerForGetInfos<TwelveYz>() {
+		nums.add(calXbwOptionForYz("十二区", "B", condition, TwelveYz.class, TwelveNums.class,
+				repositories.twelveyzRepository, new XbwOptionYzHandler<TwelveYz>(),
+				new XbwOptionYzHandlerForGetInfos<TwelveYz>() {
 					@Override
-					protected XbwInfo getInfo(TwelveYz current, TwelveYz last, Class<TwelveYz> clazz, Class<?> numsClass,
-							List<XbwInfo> currentInfos, int len) throws Exception {
+					protected XbwInfo getInfo(TwelveYz current, TwelveYz last, Class<TwelveYz> clazz,
+							Class<?> numsClass, List<XbwInfo> currentInfos, int len) throws Exception {
 						return currentInfos.get(currentInfos.size() - 1);
 					}
 				}));
@@ -6780,11 +6800,12 @@ public class YZService {
 				return currentInfos.get(currentInfos.size() - 1);
 			}
 		}));
-		nums.add(calXbwOptionForYz("十二区", "B", condition, TwelveYz.class, TwelveNums.class, repositories.twelveyzRepository,
-				new XbwOptionYzHandler<TwelveYz>(), new XbwOptionYzHandlerForGetInfos<TwelveYz>() {
+		nums.add(calXbwOptionForYz("十二区", "B", condition, TwelveYz.class, TwelveNums.class,
+				repositories.twelveyzRepository, new XbwOptionYzHandler<TwelveYz>(),
+				new XbwOptionYzHandlerForGetInfos<TwelveYz>() {
 					@Override
-					protected XbwInfo getInfo(TwelveYz current, TwelveYz last, Class<TwelveYz> clazz, Class<?> numsClass,
-							List<XbwInfo> currentInfos, int len) throws Exception {
+					protected XbwInfo getInfo(TwelveYz current, TwelveYz last, Class<TwelveYz> clazz,
+							Class<?> numsClass, List<XbwInfo> currentInfos, int len) throws Exception {
 						return currentInfos.get(currentInfos.size() - 1);
 					}
 				}));
@@ -6816,11 +6837,12 @@ public class YZService {
 				return currentInfos.get(currentInfos.size() - 1);
 			}
 		}));
-		nums.add(calXbwOptionForYz("十二区", "B", condition, TwelveYz.class, TwelveNums.class, repositories.twelveyzRepository,
-				new XbwOptionYzHandler<TwelveYz>(), new XbwOptionYzHandlerForGetInfos<TwelveYz>() {
+		nums.add(calXbwOptionForYz("十二区", "B", condition, TwelveYz.class, TwelveNums.class,
+				repositories.twelveyzRepository, new XbwOptionYzHandler<TwelveYz>(),
+				new XbwOptionYzHandlerForGetInfos<TwelveYz>() {
 					@Override
-					protected XbwInfo getInfo(TwelveYz current, TwelveYz last, Class<TwelveYz> clazz, Class<?> numsClass,
-							List<XbwInfo> currentInfos, int len) throws Exception {
+					protected XbwInfo getInfo(TwelveYz current, TwelveYz last, Class<TwelveYz> clazz,
+							Class<?> numsClass, List<XbwInfo> currentInfos, int len) throws Exception {
 						return currentInfos.get(currentInfos.size() - 1);
 					}
 				}));
@@ -7905,7 +7927,8 @@ public class YZService {
 		List<XbwJY2Sub> nums = new ArrayList<XbwJY2Sub>();
 		nums.add(calXbwOptionForWxzf("H", condition, new XbwOptionYzHandlerForGetPos<WxZfYz>()));
 		nums.add(calXbwOptionForYz("杂项6", "H", condition, Zx6Yz.class, Zx6Nums.class, repositories.zx6yzRepository));
-		nums.add(calXbwOptionForYz("杂项10", "H", condition, Zx10Yz.class, Zx10Nums.class, repositories.zx10yzRepository));
+		nums.add(
+				calXbwOptionForYz("杂项10", "H", condition, Zx10Yz.class, Zx10Nums.class, repositories.zx10yzRepository));
 		return nums;
 	}
 
@@ -7913,7 +7936,8 @@ public class YZService {
 		List<XbwJY2Sub> nums = new ArrayList<XbwJY2Sub>();
 		nums.add(calXbwOptionForWxzf("H", condition, new XbwOptionYzHandlerForGetPos<WxZfYz>()));
 		nums.add(calXbwOptionForYz("杂项5", "H", condition, Zx5Yz.class, Zx5Nums.class, repositories.zx5yzRepository));
-		nums.add(calXbwOptionForYz("杂项10", "H", condition, Zx10Yz.class, Zx10Nums.class, repositories.zx10yzRepository));
+		nums.add(
+				calXbwOptionForYz("杂项10", "H", condition, Zx10Yz.class, Zx10Nums.class, repositories.zx10yzRepository));
 		return nums;
 	}
 
