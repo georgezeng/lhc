@@ -4,7 +4,7 @@
 	<div id="page-wrapper" th:fragment="content">
 		<div class="row">
 			<div class="col-lg-12">
-				<h3 class="page-header">检验-金玉满堂</h3>
+				<h3 class="page-header">检验-日进斗金</h3>
 				<div class="buttonArea">
 					<span class="title">截止年份:</span><select id="years"></select>
 					<span class="title">截止期数:</span><select id="phases"></select>
@@ -16,11 +16,10 @@
 						<option value="jdbzd">经典版-最多红点</option>
 						<option value="jhbzs">精华版-最少红点</option>
 						<option value="jhbzd">精华版-最多红点</option>
-					</select>
-					<span class="title">是否去重:</span>
-					<select id="qc">
-						<option value="true">是</option>
-						<option value="false">否</option>
+						<option value="sjbzs">删减版-最少红点</option>
+						<option value="sjbzd">删减版-最多红点</option>
+						<option value="dbzs">单版-最少红点</option>
+						<option value="dbzd">单版-最多红点</option>
 					</select>
 					<span class="title">是否反转:</span>
 					<select id="reverse">
@@ -34,7 +33,7 @@
 					<button id="calYZBtn" class="btn btn-info">遗值计算</button>
 					<button id="searchBtn" class="btn btn-primary">搜索</button>
 				</div>
-				<form id="downloadForm" name="download" action="/mvc/yz/downloadDSX" method="post" class="hidden">
+				<form id="downloadForm" name="download" action="/mvc/yz/downloadDSY" method="post" class="hidden">
 					<input type="hidden" name="pos" value="9" />
 					<input id="size" type="hidden" name="size" />
 					<input id="endYear" type="hidden" name="year" />

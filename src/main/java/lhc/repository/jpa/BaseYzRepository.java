@@ -10,4 +10,5 @@ public interface BaseYzRepository<T extends BaseYz> extends PagingAndSortingRepo
 	T findByDate(String date);
 
 	T findByYearAndPhase(int year, int phase);
+
 }

@@ -35,6 +35,7 @@ import lhc.dto.DownloadDTO;
 import lhc.dto.DownloadPrepareTZ;
 import lhc.dto.DsxJYCondition;
 import lhc.dto.DsxJYViewBean;
+import lhc.dto.DsyJYViewBean;
 import lhc.dto.FxSwADTO;
 import lhc.dto.J0Yz;
 import lhc.dto.PmDTO;
@@ -68,13 +69,7 @@ public class YZController {
 
 	@RequestMapping("/years")
 	public BaseResult years() {
-		List<KaiJiang> list = repositories.kaiJiangRepository.findGroupByYear();
-		List<Integer> years = new ArrayList<Integer>();
-		if (list != null && !list.isEmpty()) {
-			for (KaiJiang data : list) {
-				years.add(data.getYear());
-			}
-		}
+		List<Integer> years = repositories.kaiJiangRepository.findGroupByYear();
 		return new BaseResult(years);
 	}
 
@@ -426,10 +421,17 @@ public class YZController {
 		futures.add(repositories.yzService.calDsxMinJY());
 		futures.add(repositories.yzService.calDsxMaxJY());
 		CommonUtil.sleep(futures, 100);
+		logger.info("End of calDsxJY...");
 		futures.clear();
 		futures.add(repositories.yzService.calDmgMinJY());
 		futures.add(repositories.yzService.calDmgMaxJY());
 		CommonUtil.sleep(futures, 100);
+		logger.info("End of calDmgJY...");
+		futures.clear();
+		futures.add(repositories.yzService.calDsyMinJY());
+		futures.add(repositories.yzService.calDsyMaxJY());
+		CommonUtil.sleep(futures, 100);
+		logger.info("End of calDsyJY...");
 		futures.clear();
 		futures.add(repositories.yzService.calFxSwA());
 		CommonUtil.sleep(futures, 100);
@@ -1217,8 +1219,7 @@ public class YZController {
 					if (i > 0) {
 						next = result.getList().get(i - 1);
 						next.setLastSx(data.getCurrentSx());
-						Method sm = ReflectionUtils.findMethod(SxYz.class, "set" + next.getCurrentSx().name(),
-								Integer.class);
+						Method sm = ReflectionUtils.findMethod(SxYz.class, "set" + next.getCurrentSx().name(), Integer.class);
 						Method gm = ReflectionUtils.findMethod(SxYz.class, "get" + next.getCurrentSx().name());
 						Integer count = (Integer) gm.invoke(totalLine);
 						if (count == null) {
@@ -1287,8 +1288,7 @@ public class YZController {
 						sm.invoke(data, value);
 					}
 					if (current.getCurrentPos() != null && last.getCurrentPos() != null) {
-						BigDecimal pos = new BigDecimal(current.getCurrentPos())
-								.subtract(new BigDecimal(last.getCurrentPos())).abs();
+						BigDecimal pos = new BigDecimal(current.getCurrentPos()).subtract(new BigDecimal(last.getCurrentPos())).abs();
 						Method gm = ReflectionUtils.findMethod(SxZfYz.class, "getZf" + pos.intValue());
 						Integer value = (Integer) gm.invoke(data);
 						if (value == null) {
@@ -1661,8 +1661,7 @@ public class YZController {
 		return countJZ(queryInfo, repositories.tm12fdzfYzDao, Tm12FdZfYz.class);
 	}
 
-	private <T extends BaseYz> BaseResult countJZ(QueryInfo<T> queryInfo, BaseYzDao<T> dao, Class<T> clazz)
-			throws Exception {
+	private <T extends BaseYz> BaseResult countJZ(QueryInfo<T> queryInfo, BaseYzDao<T> dao, Class<T> clazz) throws Exception {
 		PageResult<T> result = dao.query(queryInfo);
 		return countJZ(result, clazz);
 	}
@@ -1745,8 +1744,7 @@ public class YZController {
 					if (k > -1 && k < result.getList().size()) {
 						int num = result.getList().get(k).getSpecialNum();
 						for (String fd : fds) {
-							List<Integer> nums = (List<Integer>) ReflectionUtils.findField(clazz, fd.toUpperCase())
-									.get(null);
+							List<Integer> nums = (List<Integer>) ReflectionUtils.findField(clazz, fd.toUpperCase()).get(null);
 							if (nums.contains(num)) {
 								data.getLastYzList()[j] = fd;
 								break;
@@ -1758,8 +1756,7 @@ public class YZController {
 				if (i < result.getList().size() - 1) {
 					int num = result.getList().get(k).getSpecialNum();
 					for (String fd : fds) {
-						List<Integer> nums = (List<Integer>) ReflectionUtils.findField(clazz, fd.toUpperCase())
-								.get(null);
+						List<Integer> nums = (List<Integer>) ReflectionUtils.findField(clazz, fd.toUpperCase()).get(null);
 						if (nums.contains(num)) {
 							data.getLastYzList()[11] = fd;
 							break;
@@ -1865,9 +1862,8 @@ public class YZController {
 					Method tpGm = ReflectionUtils.findMethod(PmDTO.class, "getTp" + k);
 					Method tpSm = ReflectionUtils.findMethod(PmDTO.class, "setTp" + k, BigDecimal.class);
 					BigDecimal total = (BigDecimal) tpGm.invoke(totalDTO);
-					tpSm.invoke(totalDTO,
-							total.divide(new BigDecimal(result.getPage().getPageSize()), 4, RoundingMode.HALF_UP)
-									.multiply(new BigDecimal(100)).setScale(2, RoundingMode.HALF_UP));
+					tpSm.invoke(totalDTO, total.divide(new BigDecimal(result.getPage().getPageSize()), 4, RoundingMode.HALF_UP)
+							.multiply(new BigDecimal(100)).setScale(2, RoundingMode.HALF_UP));
 				}
 				list.add(totalDTO);
 			}
@@ -1928,9 +1924,8 @@ public class YZController {
 		PageResult<QwYz> pResult = repositories.qwYzDao.query(queryInfo);
 		if (pResult != null && pResult.getList() != null && !pResult.getList().isEmpty()) {
 			List<QwYz> list = new ArrayList<QwYz>();
-			int[][] pairs = { { 0, 0 }, { 0, 1 }, { 1, 0 }, { 1, 2 }, { 2, 0 }, { 2, 3 }, { 3, 0 }, { 3, 4 }, { 4, 0 },
-					{ 4, 5 }, { 5, 0 }, { 5, 6 }, { 6, 0 }, { 6, 7 }, { 7, 0 }, { 7, 8 }, { 8, 0 }, { 8, 9 }, { 9, 0 },
-					{ 9, 10 } };
+			int[][] pairs = { { 0, 0 }, { 0, 1 }, { 1, 0 }, { 1, 2 }, { 2, 0 }, { 2, 3 }, { 3, 0 }, { 3, 4 }, { 4, 0 }, { 4, 5 }, { 5, 0 }, { 5, 6 },
+					{ 6, 0 }, { 6, 7 }, { 7, 0 }, { 7, 8 }, { 8, 0 }, { 8, 9 }, { 9, 0 }, { 9, 10 } };
 			QwYz totalLine = new QwYz();
 			for (int k = 0; k < pairs.length; k++) {
 				int[] pair = pairs[k];
@@ -1942,8 +1937,7 @@ public class YZController {
 						QwYz last = pResult.getList().get(i - 1);
 						Method gm = ReflectionUtils.findMethod(QwYz.class, "getW" + j);
 						Integer[] currentPair = { (Integer) gm.invoke(last), (Integer) gm.invoke(current) };
-						if (currentPair[0] != null && currentPair[1] != null && currentPair[0] == pair[0]
-								&& currentPair[1] == pair[1]) {
+						if (currentPair[0] != null && currentPair[1] != null && currentPair[0] == pair[0] && currentPair[1] == pair[1]) {
 							Method sm = ReflectionUtils.findMethod(QwYz.class, "setW" + j, Integer.class);
 							Integer value = (Integer) gm.invoke(data);
 							if (value == null) {
@@ -2064,8 +2058,7 @@ public class YZController {
 			for (Map<String, Object> data : list) {
 				if (lastData != null) {
 					List<Integer> comparor = (List<Integer>) lastData.get("jg0");
-					String[] arr = new String[] { "min1", "add1", "jg0", "jg1", "jg2", "jg3", "jg4", "jg5", "jg6",
-							"jg6Plus" };
+					String[] arr = new String[] { "min1", "add1", "jg0", "jg1", "jg2", "jg3", "jg4", "jg5", "jg6", "jg6Plus" };
 					for (String key : arr) {
 						List<Integer> comparee = (List<Integer>) data.get(key);
 						List<Integer> darks = new ArrayList<Integer>();
@@ -2122,13 +2115,13 @@ public class YZController {
 		return new BaseResult(result);
 	}
 
-	private <T extends Avg> String downloadYZ(String filename, Class<T> clazz, DownloadDTO dto,
-			HttpServletResponse response, BaseYzDao<T> dao) throws Exception {
+	private <T extends Avg> String downloadYZ(String filename, Class<T> clazz, DownloadDTO dto, HttpServletResponse response, BaseYzDao<T> dao)
+			throws Exception {
 		return downloadYZ(filename, clazz, dto, response, dao, null, null);
 	}
 
-	private <T extends Avg> String downloadYZ(String filename, Class<T> clazz, DownloadDTO dto,
-			HttpServletResponse response, BaseYzDao<T> dao, String extraFieldTxt, String extraField) throws Exception {
+	private <T extends Avg> String downloadYZ(String filename, Class<T> clazz, DownloadDTO dto, HttpServletResponse response, BaseYzDao<T> dao,
+			String extraFieldTxt, String extraField) throws Exception {
 		response.setContentType("text/csv;charset=gbk;");
 		response.addHeader("Content-Disposition", "attachment;filename=" + filename + ".csv");
 		QueryInfo<T> queryInfo = new QueryInfo<T>();
@@ -2148,8 +2141,8 @@ public class YZController {
 				writer.append(extraFieldTxt + ", ");
 			}
 
-			writer.append("倒1, 倒2, 倒3, 倒4, 倒5, " + "间0, 间1, 间2, 间3, 间4, 间5, 间6, 间7, 间8, 间9, 间10, "
-					+ "间11, 间12, 间13, 间14, 间15, 间16, 间17, 间18, 间19").append("\n");
+			writer.append("倒1, 倒2, 倒3, 倒4, 倒5, " + "间0, 间1, 间2, 间3, 间4, 间5, 间6, 间7, 间8, 间9, 间10, " + "间11, 间12, 间13, 间14, 间15, 间16, 间17, 间18, 间19")
+					.append("\n");
 			for (T data : result.getList()) {
 				writer.append(data.getDate()).append(", ");
 				writer.append(data.getYear() + "").append(", ");
@@ -2158,8 +2151,7 @@ public class YZController {
 				writer.append(data.getLastYz() + "").append(",");
 				writer.append(data.getTotal() + "").append(", ");
 				if (extraField != null) {
-					writer.append(ReflectionUtils.findMethod(clazz, "get" + extraField).invoke(data).toString())
-							.append(", ");
+					writer.append(ReflectionUtils.findMethod(clazz, "get" + extraField).invoke(data).toString()).append(", ");
 				}
 				for (int i = 0; i < 5; i++) {
 					Method m = ReflectionUtils.findMethod(Avg.class, "getTop" + i);
@@ -2235,9 +2227,8 @@ public class YZController {
 		queryInfo.setPageInfo(new PageInfo(1, Integer.valueOf(request.getParameter("size"))));
 		PageResult<J0Yz> result = repositories.yzService.getJ0List(queryInfo);
 		if (result != null && result.getTotal() > 0) {
-			String[] fds = new String[] { "Sx", "Sxzf", "Ds", "Dszf", "Sw", "Swzf", "Mw", "Mwzf", "Lh", "Lhzf", "Bs",
-					"Bszf", "Zs", "Zszf", "Wx", "Wxzf", "Wxds", "Wxdszf", "Pd", "Pdzf", "Fd", "Fdzf", "Qq", "Qqzf",
-					"Qiw", "Qiwzf", "Twelve", "Twelvezf", "Slq", "Slqzf" };
+			String[] fds = new String[] { "Sx", "Sxzf", "Ds", "Dszf", "Sw", "Swzf", "Mw", "Mwzf", "Lh", "Lhzf", "Bs", "Bszf", "Zs", "Zszf", "Wx",
+					"Wxzf", "Wxds", "Wxdszf", "Pd", "Pdzf", "Fd", "Fdzf", "Qq", "Qqzf", "Qiw", "Qiwzf", "Twelve", "Twelvezf", "Slq", "Slqzf" };
 			for (J0Yz yz : result.getList()) {
 				writer.append(yz.getYear() + "").append(", ");
 				writer.append(yz.getPhase() + "").append(", ");
@@ -2429,8 +2420,7 @@ public class YZController {
 		queryInfo.setPageInfo(new PageInfo(1, Integer.valueOf(request.getParameter("size"))));
 		PageResult<D1Yz> result = repositories.yzService.getD1List(queryInfo);
 		if (result != null && result.getTotal() > 0) {
-			String[] fds = new String[] { "Sx", "Ds", "Sw", "Mw", "Lh", "Bs", "Zs", "Wx", "Wxds", "Pd", "Fd", "Qq",
-					"Qiw", "Twelve", "Slq" };
+			String[] fds = new String[] { "Sx", "Ds", "Sw", "Mw", "Lh", "Bs", "Zs", "Wx", "Wxds", "Pd", "Fd", "Qq", "Qiw", "Twelve", "Slq" };
 			for (D1Yz yz : result.getList()) {
 				writer.append(yz.getYear() + "").append(", ");
 				writer.append(yz.getPhase() + "").append(", ");
@@ -2658,9 +2648,8 @@ public class YZController {
 		Integer totalResult = Integer.valueOf(request.getParameter("totalResult"));
 		String[] fds = new String[] { "ABCD", "EFGH", "EBCD", "AFCD", "ABGD", "ABCH", "AFGH", "EBGH", "EFCH", "EFGD" };
 		if ("3".equals(request.getParameter("compositeSize"))) {
-			fds = new String[] { "ABCD", "EFGH", "IJKL", "EBCD", "AFCD", "ABGD", "ABCH", "EJKL", "IFKL", "IJGL", "IJKH",
-					"AFGH", "EBGH", "EFCH", "EFGD", "AJKL", "IBKL", "IJCL", "IJKD", "IBCD", "AJCD", "ABKD", "ABCL",
-					"IFGH", "EJGH", "EFKH", "EFGL" };
+			fds = new String[] { "ABCD", "EFGH", "IJKL", "EBCD", "AFCD", "ABGD", "ABCH", "EJKL", "IFKL", "IJGL", "IJKH", "AFGH", "EBGH", "EFCH",
+					"EFGD", "AJKL", "IBKL", "IJCL", "IJKD", "IBCD", "AJCD", "ABKD", "ABCL", "IFGH", "EJGH", "EFKH", "EFGL" };
 		}
 		for (int i = 0; i < totalResult; i++) {
 			for (int j = 0; j < fds.length; j++) {
@@ -3160,8 +3149,7 @@ public class YZController {
 				writer.append(data.getNum4().getNum() + "").append(", ");
 				writer.append(data.getNum5().getNum() + "").append(", ");
 				writer.append(data.getNum6().getNum() + "").append(", ");
-				writer.append((data.getSpecialNum().getDelta() != null ? data.getSpecialNum().getDelta() : "") + "")
-						.append("\n");
+				writer.append((data.getSpecialNum().getDelta() != null ? data.getSpecialNum().getDelta() : "") + "").append("\n");
 			}
 		}
 		return null;
@@ -3268,8 +3256,8 @@ public class YZController {
 		return downloadDSYZ(dto, LhDsYz.class, repositories.lhdsYzDao, "lhdsyz", response);
 	}
 
-	private <T extends BaseDsYz> String downloadDSYZ(DownloadDTO dto, Class<T> clazz, BaseYzDao<T> dao, String filename,
-			HttpServletResponse response) throws Exception {
+	private <T extends BaseDsYz> String downloadDSYZ(DownloadDTO dto, Class<T> clazz, BaseYzDao<T> dao, String filename, HttpServletResponse response)
+			throws Exception {
 		response.setContentType("text/csv;charset=gbk;");
 		response.addHeader("Content-Disposition", "attachment;filename=" + filename + ".csv");
 		QueryInfo<T> queryInfo = new QueryInfo<T>();
@@ -3659,6 +3647,76 @@ public class YZController {
 		}
 		if (result != null && result.getTotal() > 0) {
 			result.getList().add(new DsxJYViewBean());
+		}
+		return new BaseResult(result);
+	}
+
+	@RequestMapping("/listDsyJY")
+	public BaseResult listDsyJY(@RequestBody QueryInfo<DsxJYCondition> queryInfo) throws Exception {
+		PageResult<DsyJYViewBean> result = null;
+		if (queryInfo.getObject().getVersion().equalsIgnoreCase("dbzs")) {
+			result = repositories.dsyMinJyDBDao.query(queryInfo);
+			DsyJYViewBean latest = repositories.dsyMinJyDBDao.findLatestOne(queryInfo);
+			if (latest != null) {
+				result.getList().add(latest);
+			}
+		} else if (queryInfo.getObject().getVersion().equalsIgnoreCase("sjbzs")) {
+			result = repositories.dsyMinJySJBDao.query(queryInfo);
+			DsyJYViewBean latest = repositories.dsyMinJySJBDao.findLatestOne(queryInfo);
+			if (latest != null) {
+				result.getList().add(latest);
+			}
+		} else if (queryInfo.getObject().getVersion().equalsIgnoreCase("jqbzs")) {
+			result = repositories.dsyMinJyJQBDao.query(queryInfo);
+			DsyJYViewBean latest = repositories.dsyMinJyJQBDao.findLatestOne(queryInfo);
+			if (latest != null) {
+				result.getList().add(latest);
+			}
+		} else if (queryInfo.getObject().getVersion().equalsIgnoreCase("jdbzs")) {
+			result = repositories.dsyMinJyJDBDao.query(queryInfo);
+			DsyJYViewBean latest = repositories.dsyMinJyJDBDao.findLatestOne(queryInfo);
+			if (latest != null) {
+				result.getList().add(latest);
+			}
+		} else if (queryInfo.getObject().getVersion().equalsIgnoreCase("jhbzs")) {
+			result = repositories.dsyMinJyJHBDao.query(queryInfo);
+			DsyJYViewBean latest = repositories.dsyMinJyJHBDao.findLatestOne(queryInfo);
+			if (latest != null) {
+				result.getList().add(latest);
+			}
+		} else if (queryInfo.getObject().getVersion().equalsIgnoreCase("dbzd")) {
+			result = repositories.dsyMaxJyDBDao.query(queryInfo);
+			DsyJYViewBean latest = repositories.dsyMaxJyDBDao.findLatestOne(queryInfo);
+			if (latest != null) {
+				result.getList().add(latest);
+			}
+		} else if (queryInfo.getObject().getVersion().equalsIgnoreCase("sjbzd")) {
+			result = repositories.dsyMaxJySJBDao.query(queryInfo);
+			DsyJYViewBean latest = repositories.dsyMaxJySJBDao.findLatestOne(queryInfo);
+			if (latest != null) {
+				result.getList().add(latest);
+			}
+		} else if (queryInfo.getObject().getVersion().equalsIgnoreCase("jqbzd")) {
+			result = repositories.dsyMaxJyJQBDao.query(queryInfo);
+			DsyJYViewBean latest = repositories.dsyMaxJyJQBDao.findLatestOne(queryInfo);
+			if (latest != null) {
+				result.getList().add(latest);
+			}
+		} else if (queryInfo.getObject().getVersion().equalsIgnoreCase("jdbzd")) {
+			result = repositories.dsyMaxJyJDBDao.query(queryInfo);
+			DsyJYViewBean latest = repositories.dsyMaxJyJDBDao.findLatestOne(queryInfo);
+			if (latest != null) {
+				result.getList().add(latest);
+			}
+		} else if (queryInfo.getObject().getVersion().equalsIgnoreCase("jhbzd")) {
+			result = repositories.dsyMaxJyJHBDao.query(queryInfo);
+			DsyJYViewBean latest = repositories.dsyMaxJyJHBDao.findLatestOne(queryInfo);
+			if (latest != null) {
+				result.getList().add(latest);
+			}
+		}
+		if (result != null && result.getTotal() > 0) {
+			result.getList().add(new DsyJYViewBean());
 		}
 		return new BaseResult(result);
 	}

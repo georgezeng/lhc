@@ -5,7 +5,7 @@ import org.springframework.stereotype.Service;
 
 import lhc.repository.jpa.api.*;
 import lhc.repository.jpa.dao.*;
-import lhc.service.YZ4Service;
+import lhc.service.YZ5Service;
 
 @Service
 public class Repositories {
@@ -555,148 +555,208 @@ public class Repositories {
 
 	@Autowired
 	public FxSw1Dao fxsw1Dao;
-	
+
 	@Autowired
 	public FxSw2Repository fxsw2Repository;
-	
+
 	@Autowired
 	public FxSw2Dao fxsw2Dao;
-	
+
 	@Autowired
 	public FxSw3Repository fxsw3Repository;
-	
+
 	@Autowired
 	public FxSw3Dao fxsw3Dao;
-	
+
 	@Autowired
 	public FxSw4Repository fxsw4Repository;
-	
+
 	@Autowired
 	public FxSw4Dao fxsw4Dao;
-	
+
 	@Autowired
 	public FxSw5Repository fxsw5Repository;
-	
+
 	@Autowired
 	public FxSw5Dao fxsw5Dao;
-	
+
 	@Autowired
 	public FxSw6Repository fxsw6Repository;
-	
+
 	@Autowired
 	public FxSw6Dao fxsw6Dao;
-	
+
 	@Autowired
 	public FxSw7Repository fxsw7Repository;
-	
+
 	@Autowired
 	public FxSw7Dao fxsw7Dao;
-	
+
 	@Autowired
 	public FxSw8Repository fxsw8Repository;
-	
+
 	@Autowired
 	public FxSw8Dao fxsw8Dao;
-	
+
 	@Autowired
 	public FxSw9Repository fxsw9Repository;
-	
+
 	@Autowired
 	public FxSw9Dao fxsw9Dao;
-	
+
 	@Autowired
 	public FxSw10Repository fxsw10Repository;
-	
+
 	@Autowired
 	public FxSw10Dao fxsw10Dao;
-	
+
 	@Autowired
 	public FxSw11Repository fxsw11Repository;
-	
+
 	@Autowired
 	public FxSw11Dao fxsw11Dao;
-	
+
 	@Autowired
 	public FxSw12Repository fxsw12Repository;
-	
+
 	@Autowired
 	public FxSw12Dao fxsw12Dao;
-	
+
 	@Autowired
 	public DsxMinJyJQBRepository dsxMinJyJQBRepository;
-	
+
 	@Autowired
 	public DsxMinJYJQBDao dsxMinJyJQBDao;
-	
+
 	@Autowired
 	public DsxMinJyJHBRepository dsxMinJyJHBRepository;
-	
+
 	@Autowired
 	public DsxMinJYJHBDao dsxMinJyJHBDao;
-	
+
 	@Autowired
 	public DsxMinJyJDBRepository dsxMinJyJDBRepository;
-	
+
 	@Autowired
 	public DsxMinJYJDBDao dsxMinJyJDBDao;
-	
+
 	@Autowired
 	public DsxMaxJyJQBRepository dsxMaxJyJQBRepository;
-	
+
 	@Autowired
 	public DsxMaxJYJQBDao dsxMaxJyJQBDao;
-	
+
 	@Autowired
 	public DsxMaxJyJHBRepository dsxMaxJyJHBRepository;
-	
+
 	@Autowired
 	public DsxMaxJYJHBDao dsxMaxJyJHBDao;
-	
+
 	@Autowired
 	public DsxMaxJyJDBRepository dsxMaxJyJDBRepository;
-	
+
 	@Autowired
 	public DsxMaxJYJDBDao dsxMaxJyJDBDao;
-	
+
+	@Autowired
+	public DsyMinJyJQBRepository dsyMinJyJQBRepository;
+
+	@Autowired
+	public DsyMinJYJQBDao dsyMinJyJQBDao;
+
+	@Autowired
+	public DsyMinJyJHBRepository dsyMinJyJHBRepository;
+
+	@Autowired
+	public DsyMinJYJHBDao dsyMinJyJHBDao;
+
+	@Autowired
+	public DsyMinJyJDBRepository dsyMinJyJDBRepository;
+
+	@Autowired
+	public DsyMinJYJDBDao dsyMinJyJDBDao;
+
+	@Autowired
+	public DsyMaxJyJQBRepository dsyMaxJyJQBRepository;
+
+	@Autowired
+	public DsyMaxJYJQBDao dsyMaxJyJQBDao;
+
+	@Autowired
+	public DsyMaxJyJHBRepository dsyMaxJyJHBRepository;
+
+	@Autowired
+	public DsyMaxJYJHBDao dsyMaxJyJHBDao;
+
+	@Autowired
+	public DsyMaxJyJDBRepository dsyMaxJyJDBRepository;
+
+	@Autowired
+	public DsyMaxJYJDBDao dsyMaxJyJDBDao;
+
+	@Autowired
+	public DsyMaxJyDBRepository dsyMaxJyDBRepository;
+
+	@Autowired
+	public DsyMaxJYDBDao dsyMaxJyDBDao;
+
+	@Autowired
+	public DsyMaxJySJBRepository dsyMaxJySJBRepository;
+
+	@Autowired
+	public DsyMaxJYSJBDao dsyMaxJySJBDao;
+
+	@Autowired
+	public DsyMinJyDBRepository dsyMinJyDBRepository;
+
+	@Autowired
+	public DsyMinJYDBDao dsyMinJyDBDao;
+
+	@Autowired
+	public DsyMinJySJBRepository dsyMinJySJBRepository;
+
+	@Autowired
+	public DsyMinJYSJBDao dsyMinJySJBDao;
+
 	@Autowired
 	public DmgMinJyJQBRepository dmgMinJyJQBRepository;
-	
+
 	@Autowired
 	public DmgMinJYJQBDao dmgMinJyJQBDao;
-	
+
 	@Autowired
 	public DmgMinJyJHBRepository dmgMinJyJHBRepository;
-	
+
 	@Autowired
 	public DmgMinJYJHBDao dmgMinJyJHBDao;
-	
+
 	@Autowired
 	public DmgMinJyJDBRepository dmgMinJyJDBRepository;
-	
+
 	@Autowired
 	public DmgMinJYJDBDao dmgMinJyJDBDao;
-	
+
 	@Autowired
 	public DmgMaxJyJQBRepository dmgMaxJyJQBRepository;
-	
+
 	@Autowired
 	public DmgMaxJYJQBDao dmgMaxJyJQBDao;
-	
+
 	@Autowired
 	public DmgMaxJyJHBRepository dmgMaxJyJHBRepository;
-	
+
 	@Autowired
 	public DmgMaxJYJHBDao dmgMaxJyJHBDao;
-	
+
 	@Autowired
 	public DmgMaxJyJDBRepository dmgMaxJyJDBRepository;
-	
+
 	@Autowired
 	public DmgMaxJYJDBDao dmgMaxJyJDBDao;
-	
+
 	@Autowired
 	public FxSwADao fxSwADao;
-	
+
 	@Autowired
 	public FxSwARepository fxSwARepository;
 
@@ -704,5 +764,5 @@ public class Repositories {
 	public CommonDao commonDao;
 
 	@Autowired
-	public YZ4Service yzService;
+	public YZ5Service yzService;
 }

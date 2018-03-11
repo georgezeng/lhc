@@ -15,7 +15,6 @@ import org.springframework.data.domain.Sort;
 import org.springframework.data.domain.Sort.Direction;
 import org.springframework.scheduling.annotation.Async;
 import org.springframework.scheduling.annotation.AsyncResult;
-import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import lhc.domain.DmgJyYz;
@@ -43,7 +42,6 @@ import lhc.dto.DsxJY;
 import lhc.repository.jpa.BaseYzRepository;
 import lhc.util.CommonUtil;
 
-@Service
 @Transactional
 @SuppressWarnings("unchecked")
 public class YZ4Service extends YZ3Service {
@@ -59,9 +57,8 @@ public class YZ4Service extends YZ3Service {
 				repositories.dmgMaxJyJDBRepository, repositories.dmgMaxJyJHBRepository, true);
 	}
 
-	public <Q extends DmgJyYz, D extends DmgJyYz, H extends DmgJyYz> Future<Exception> calDmgJY(Class<Q> jqbClass,
-			Class<D> jdbClass, Class<H> jhbClass, BaseYzRepository<Q> jqbRepository, BaseYzRepository<D> jdbRepository,
-			BaseYzRepository<H> jhbRepository, boolean max) {
+	public <Q extends DmgJyYz, D extends DmgJyYz, H extends DmgJyYz> Future<Exception> calDmgJY(Class<Q> jqbClass, Class<D> jdbClass,
+			Class<H> jhbClass, BaseYzRepository<Q> jqbRepository, BaseYzRepository<D> jdbRepository, BaseYzRepository<H> jhbRepository, boolean max) {
 		Exception t = null;
 		try {
 			Pageable request = new PageRequest(0, 200, new Sort(Direction.ASC, "date"));
@@ -77,7 +74,6 @@ public class YZ4Service extends YZ3Service {
 			Page<FxSw10> result10 = null;
 			Page<FxSw11> result11 = null;
 			Page<FxSw12> result12 = null;
-			DsxJY lastJY = null;
 			Q unknownDataForJQB = jqbRepository.findByYearAndPhase(0, 0);
 			D unknownDataForJDB = jdbRepository.findByYearAndPhase(0, 0);
 			H unknownDataForJHB = jhbRepository.findByYearAndPhase(0, 0);
@@ -102,7 +98,7 @@ public class YZ4Service extends YZ3Service {
 				unknownDataForJHB.setDate("unknown");
 				jhbRepository.save(unknownDataForJHB);
 			}
-			List<Future<Exception>> futures = new ArrayList<Future<Exception>>();
+			List<Future<DsxJY>> jys = new ArrayList<Future<DsxJY>>();
 			do {
 				result1 = repositories.fxsw1Repository.findAll(request);
 				result2 = repositories.fxsw2Repository.findAll(request);
@@ -117,38 +113,36 @@ public class YZ4Service extends YZ3Service {
 				result11 = repositories.fxsw11Repository.findAll(request);
 				result12 = repositories.fxsw12Repository.findAll(request);
 				if (result1 != null && result1.hasContent()) {
-					futures.add(repositories.yzService.doCalDmgJY(jqbClass, jdbClass, jhbClass, jqbRepository,
-							jdbRepository, jhbRepository, max, result1, result2, result3, result4, result5, result6,
-							result7, result8, result9, result10, result11, result12, lastJY));
-
-					int i = result1.getContent().size() - 1;
-					FxSw temp = result1.getContent().get(i);
-					lastJY = new DsxJY();
-					lastJY.setDate(temp.getDate());
-					lastJY.setYear(temp.getYear());
-					lastJY.setPhase(temp.getPhase());
-					setFxSwDataForDsx(result1, result2, result3, result4, result5, result6, result7, result8, result9,
-							result10, result11, result12, lastJY, i, max);
+					for (int i = 0; i < result1.getContent().size(); i++) {
+						jys.add(repositories.yzService.doCalDmgJY(result1, result2, result3, result4, result5, result6, result7, result8, result9,
+								result10, result11, result12, i, max));
+					}
 				}
 				request = request.next();
 			} while (result1 != null && result1.hasNext());
+			List<DsxJY> list = CommonUtil.getAsyncResults(jys, 100);
+			List<Future<Exception>> futures = new ArrayList<Future<Exception>>();
+			DsxJY lastJY = null;
+			for (DsxJY jy : list) {
+				if (lastJY != null) {
+					futures.add(repositories.yzService.doCalDmgJY(jqbClass, jdbClass, jhbClass, jqbRepository, jdbRepository, jhbRepository, jy, lastJY));
+				}
+				lastJY = jy;
+			}
+			CommonUtil.sleep(futures, 100);
 			if (lastJY != null) {
-				unknownDataForJQB.reset();
 				calDmgJYForJQB(unknownDataForJQB, lastJY, true);
 				calDmgJYForJQB(unknownDataForJQB, lastJY, false);
 				jqbRepository.save(unknownDataForJQB);
-				unknownDataForJDB.reset();
+
 				calDmgJYForJDB(unknownDataForJDB, lastJY, true);
 				calDmgJYForJDB(unknownDataForJDB, lastJY, false);
 				jdbRepository.save(unknownDataForJDB);
-				unknownDataForJHB.reset();
+
 				calDmgJYForJHB(unknownDataForJHB, lastJY, true);
 				calDmgJYForJHB(unknownDataForJHB, lastJY, false);
 				jhbRepository.save(unknownDataForJHB);
 			}
-			String str = max ? "Max" : "Min";
-			CommonUtil.sleep(futures, 100);
-			logger.info("End of calDsx" + str + "RedCounts...");
 		} catch (Exception e) {
 			if (DataAccessException.class.isAssignableFrom(e.getClass())) {
 				logger.error(e.getMessage(), e);
@@ -159,65 +153,47 @@ public class YZ4Service extends YZ3Service {
 	}
 
 	@Async
-	public <Q extends DmgJyYz, D extends DmgJyYz, H extends DmgJyYz> Future<Exception> doCalDmgJY(Class<Q> jqbClass,
-			Class<D> jdbClass, Class<H> jhbClass, BaseYzRepository<Q> jqbRepository, BaseYzRepository<D> jdbRepository,
-			BaseYzRepository<H> jhbRepository, boolean max, Page<FxSw1> result1, Page<FxSw2> result2,
-			Page<FxSw3> result3, Page<FxSw4> result4, Page<FxSw5> result5, Page<FxSw6> result6, Page<FxSw7> result7,
-			Page<FxSw8> result8, Page<FxSw9> result9, Page<FxSw10> result10, Page<FxSw11> result11,
-			Page<FxSw12> result12, DsxJY lastJY) {
-
+	public <JQ extends DmgJyYz, JD extends DmgJyYz, JH extends DmgJyYz> Future<Exception> doCalDmgJY(Class<JQ> jqbClass, Class<JD> jdbClass,
+			Class<JH> jhbClass, BaseYzRepository<JQ> jqbRepository, BaseYzRepository<JD> jdbRepository, BaseYzRepository<JH> jhbRepository, DsxJY jy,
+			DsxJY lastJY) {
 		Exception t = null;
 		try {
-			if (result1 != null && result1.hasContent()) {
-				for (int i = 0; i < result1.getContent().size(); i++) {
-					FxSw temp = result1.getContent().get(i);
-					DsxJY jy = new DsxJY();
-					jy.setDate(temp.getDate());
-					jy.setYear(temp.getYear());
-					jy.setPhase(temp.getPhase());
-					KaiJiang kj = repositories.kaiJiangRepository.findByYearAndPhase(temp.getYear(), temp.getPhase());
-					Q jqb = jqbRepository.findByYearAndPhase(temp.getYear(), temp.getPhase());
-					if (jqb == null) {
-						jqb = jqbClass.newInstance();
-						jqb.setYear(temp.getYear());
-						jqb.setPhase(temp.getPhase());
-						jqb.setDate(temp.getDate());
-						jqb.setSpecialNum(kj.getSpecialNum());
-					}
-					D jdb = jdbRepository.findByYearAndPhase(temp.getYear(), temp.getPhase());
-					if (jdb == null) {
-						jdb = jdbClass.newInstance();
-						jdb.setYear(temp.getYear());
-						jdb.setPhase(temp.getPhase());
-						jdb.setDate(temp.getDate());
-						jdb.setSpecialNum(kj.getSpecialNum());
-					}
-					H jhb = jhbRepository.findByYearAndPhase(temp.getYear(), temp.getPhase());
-					if (jhb == null) {
-						jhb = jhbClass.newInstance();
-						jhb.setYear(temp.getYear());
-						jhb.setPhase(temp.getPhase());
-						jhb.setDate(temp.getDate());
-						jhb.setSpecialNum(kj.getSpecialNum());
-					}
-					setFxSwDataForDsx(result1, result2, result3, result4, result5, result6, result7, result8, result9,
-							result10, result11, result12, jy, i, max);
-					if (lastJY != null) {
-						calDmgJYForJQB(jqb, lastJY, true);
-						calDmgJYForJQB(jqb, lastJY, false);
-						calDmgJYForJDB(jdb, lastJY, true);
-						calDmgJYForJDB(jdb, lastJY, false);
-						calDmgJYForJHB(jhb, lastJY, true);
-						calDmgJYForJHB(jhb, lastJY, false);
-					}
-					jqbRepository.save(jqb);
-					jdbRepository.save(jdb);
-					jhbRepository.save(jhb);
-					lastJY = jy;
-				}
+			KaiJiang kj = repositories.kaiJiangRepository.findByYearAndPhase(jy.getYear(), jy.getPhase());
+			JQ jqb = jqbRepository.findByYearAndPhase(jy.getYear(), jy.getPhase());
+			if (jqb == null) {
+				jqb = jqbClass.newInstance();
+				jqb.setYear(jy.getYear());
+				jqb.setPhase(jy.getPhase());
+				jqb.setDate(jy.getDate());
+				jqb.setSpecialNum(kj.getSpecialNum());
 			}
-			String str = max ? "Max" : "Min";
-			logger.info("End of partition of Dmg" + str + "JY...");
+			JD jdb = jdbRepository.findByYearAndPhase(jy.getYear(), jy.getPhase());
+			if (jdb == null) {
+				jdb = jdbClass.newInstance();
+				jdb.setYear(jy.getYear());
+				jdb.setPhase(jy.getPhase());
+				jdb.setDate(jy.getDate());
+				jdb.setSpecialNum(kj.getSpecialNum());
+			}
+			JH jhb = jhbRepository.findByYearAndPhase(jy.getYear(), jy.getPhase());
+			if (jhb == null) {
+				jhb = jhbClass.newInstance();
+				jhb.setYear(jy.getYear());
+				jhb.setPhase(jy.getPhase());
+				jhb.setDate(jy.getDate());
+				jhb.setSpecialNum(kj.getSpecialNum());
+			}
+			if (lastJY != null) {
+				calDmgJYForJQB(jqb, lastJY, true);
+				calDmgJYForJQB(jqb, lastJY, false);
+				calDmgJYForJDB(jdb, lastJY, true);
+				calDmgJYForJDB(jdb, lastJY, false);
+				calDmgJYForJHB(jhb, lastJY, true);
+				calDmgJYForJHB(jhb, lastJY, false);
+			}
+			jqbRepository.save(jqb);
+			jdbRepository.save(jdb);
+			jhbRepository.save(jhb);
 		} catch (Exception e) {
 			if (DataAccessException.class.isAssignableFrom(e.getClass())) {
 				logger.error(e.getMessage(), e);
@@ -225,7 +201,19 @@ public class YZ4Service extends YZ3Service {
 			t = e;
 		}
 		return new AsyncResult<Exception>(t);
+	}
 
+	@Async
+	public <Q extends DmgJyYz, D extends DmgJyYz, H extends DmgJyYz> Future<DsxJY> doCalDmgJY(Page<FxSw1> result1, Page<FxSw2> result2,
+			Page<FxSw3> result3, Page<FxSw4> result4, Page<FxSw5> result5, Page<FxSw6> result6, Page<FxSw7> result7, Page<FxSw8> result8,
+			Page<FxSw9> result9, Page<FxSw10> result10, Page<FxSw11> result11, Page<FxSw12> result12, int i, boolean max) throws Exception {
+		FxSw temp = result1.getContent().get(i);
+		DsxJY jy = new DsxJY();
+		jy.setDate(temp.getDate());
+		jy.setYear(temp.getYear());
+		jy.setPhase(temp.getPhase());
+		setFxSwDataForDsx(result1, result2, result3, result4, result5, result6, result7, result8, result9, result10, result11, result12, jy, i, max);
+		return new AsyncResult<DsxJY>(jy);
 	}
 
 	protected void calDmgJYForJQB(DmgJyYz data, DsxJY lastJY, boolean reverse) throws Exception {
@@ -390,8 +378,8 @@ public class YZ4Service extends YZ3Service {
 		assembleDmgJY(data, nums, reverse);
 	}
 
-	protected Set<Integer>[] collectConditionListForDmg(Set<Integer> A, Set<Integer> B, Set<Integer> C, Set<Integer> D,
-			Set<Integer> E, Set<Integer> F, Set<Integer> G, Set<Integer> H, boolean reverse) throws Exception {
+	protected Set<Integer>[] collectConditionListForDmg(Set<Integer> A, Set<Integer> B, Set<Integer> C, Set<Integer> D, Set<Integer> E,
+			Set<Integer> F, Set<Integer> G, Set<Integer> H, boolean reverse) throws Exception {
 		Set<Integer> AE = combineConditionList(A, E, null, null, reverse);
 		Set<Integer> BF = combineConditionList(B, F, null, null, reverse);
 		Set<Integer> CG = combineConditionList(C, G, null, null, reverse);

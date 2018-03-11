@@ -13,8 +13,8 @@ public interface KaiJiangRepository extends BaseYzRepository<KaiJiang> {
 
 	List<KaiJiang> findByYearOrderByPhaseDesc(int year);
 
-	@Query(value = "from KaiJiang group by year order by year desc")
-	List<KaiJiang> findGroupByYear();
+	@Query(value = "select distinct year from kai_jiang group by year, id order by year desc", nativeQuery=true)
+	List<Integer> findGroupByYear();
 
 	void deleteByYear(int year);
 }

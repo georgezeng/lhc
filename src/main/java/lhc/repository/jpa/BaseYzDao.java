@@ -26,7 +26,7 @@ import lhc.util.QueryUtil;
 @SuppressWarnings("unchecked")
 public abstract class BaseYzDao<T extends BaseYz> {
 	protected Logger logger = LoggerFactory.getLogger(getClass());
-	
+
 	@Autowired
 	protected EntityManager em;
 
@@ -89,5 +89,22 @@ public abstract class BaseYzDao<T extends BaseYz> {
 			return new PageResult<T>(list, count, queryInfo.getPageInfo());
 		}
 		return new PageResult<T>(new ArrayList<T>(), 0, queryInfo.getPageInfo());
+	}
+
+	public List<T> queryUpTo(int year, int phase) {
+		List<Object> args = new ArrayList<Object>();
+		StringBuilder sql = new StringBuilder("select * from " + getTableName()).append("\n");
+		sql.append("where (year = ? and phase <= ?)").append("\n");
+		args.add(year);
+		args.add(phase);
+		if (phase < 3) {
+			sql.append("or (year = ?)").append("\n");
+			args.add(year - 1);
+		}
+		sql.append("order by year desc, phase desc").append("\n");
+		sql.append("limit 0, 3").append("\n");
+		Query query = em.createNativeQuery(sql.toString(), clazz);
+		QueryUtil.setArgs(args, query);
+		return query.getResultList();
 	}
 }
