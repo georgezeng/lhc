@@ -1,0 +1,74 @@
+<!doctype html>
+<html xmlns:th="http://www.thymeleaf.org">
+<body>
+	<div id="page-wrapper" th:fragment="content">
+		<div class="row">
+			<div class="col-lg-12">
+				<h3 class="page-header">投注-一网打尽</h3>
+				<div class="buttonArea">
+					<button id="downloadBtn" class="btn btn-success">导出</button>
+					<button id="pickupBtn" class="btn btn-primary">筛选</button>
+					<button id="clearBtn" class="btn btn-danger">清空</button>
+					<button id="qlBtn" class="btn btn-danger">清零</button>
+					<button id="addBtn" class="btn btn-info">添加</button>
+					<div class="clearfix"></div>
+					<form id="download" name="download" action="/mvc/yz/downloadTZXBW" method="post" class="hidden">
+					</form>
+					<span class="title">选择分段:</span>
+					<select id="fdlist">
+						<option value="A">A</option>
+						<option value="B">B</option>
+						<option value="C">C</option>
+						<option value="E">E</option>
+						<option value="F">F</option>
+						<option value="G">G</option>
+					</select>
+					<span class="title">选择种类:</span>
+					<select id="category">
+					</select>
+					<span id="subTitle" class="title">:</span>
+					<span id="hmlist_p">
+					</span>
+					<input id='hmlist' size='70' />
+				</div>
+			</div>
+		</div>
+		
+		<div class="row">
+			<div class="col-lg-12">
+				<h4>筛选条件</h4>
+				<table id="conditionTable" width="100%"
+					class="table table-striped table-bordered table-hover">
+					<thead>
+						<tr>
+							<th>分段</th>
+							<th>种类</th>
+							<th>号码</th>
+							<th>操作</th>
+						</tr>
+					</thead>
+					<tbody></tbody>
+				</table>
+			</div>
+		</div>
+		
+		<div class="row">
+			<div class="col-lg-12">
+				<h4>筛选结果</h4>
+				<table width="100%"
+					class="table table-striped table-bordered table-hover"
+					id="datatable">
+					<thead>
+						<tr>
+							<th width="20%">组合</th>
+							<th width="80%">号码</th>
+						</tr>
+					</thead>
+					<tbody></tbody>
+				</table>
+			</div>
+		</div>
+		
+	</div>
+</body>
+</html>
