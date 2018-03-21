@@ -2,15 +2,14 @@ package lhc.repository.jpa.dao;
 
 import org.springframework.stereotype.Repository;
 
-import lhc.domain.SxYz;
+import lhc.domain.My1Yz;
 import lhc.repository.jpa.BaseYzDao;
 
 @Repository
-public class SxYzDao extends BaseYzDao<SxYz> {
+public class My1Dao extends BaseYzDao<My1Yz> {
 
 	@Override
 	protected String getTableName() {
-		return "sx_yz";
+		return "my1_yz";
 	}
-	
 }

@@ -127,7 +127,7 @@ import lhc.repository.jpa.BaseYzRepository;
 import lhc.util.CommonUtil;
 import lhc.util.DateUtil;
 
-@Service
+//@Service
 @Transactional
 @SuppressWarnings("unchecked")
 public class YZ5Service extends YZ4Service {

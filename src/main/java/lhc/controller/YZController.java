@@ -438,6 +438,15 @@ public class YZController {
 		logger.info("End of calFXSW stage...");
 	}
 
+	public void calMY() throws Exception {
+		List<Future<Exception>> futures = new ArrayList<Future<Exception>>();
+		futures.add(repositories.yzService.calMy1());
+		futures.add(repositories.yzService.calMy2());
+		futures.add(repositories.yzService.calMy200());
+		CommonUtil.sleep(futures, 100);
+		logger.info("End of calMY stage...");
+	}
+
 	@RequestMapping("/calYZ")
 	public BaseResult calYZ() throws Exception {
 		calBS();
@@ -456,6 +465,7 @@ public class YZController {
 		calZS();
 		calZX();
 		calFXSW();
+		calMY();
 		logger.info("Done calYZ...");
 		return BaseResult.EMPTY;
 	}
@@ -3495,6 +3505,33 @@ public class YZController {
 	@RequestMapping("/listXBWJY2")
 	public BaseResult listXBWJY2(@RequestBody XbwJYCondition queryInfo) throws Exception {
 		return new BaseResult(repositories.yzService.getXbwJY2(queryInfo));
+	}
+
+	@RequestMapping("/listMY1")
+	public BaseResult listMY1(@RequestBody QueryInfo<My1Yz> queryInfo) throws Exception {
+		PageResult<My1Yz> result = repositories.my1Dao.query(queryInfo);
+		if (result != null && result.getTotal() > 0) {
+			result.getList().add(new My1Yz());
+		}
+		return new BaseResult(result);
+	}
+	
+	@RequestMapping("/listMY2")
+	public BaseResult listMY2(@RequestBody QueryInfo<My2Yz> queryInfo) throws Exception {
+		PageResult<My2Yz> result = repositories.my2Dao.query(queryInfo);
+		if (result != null && result.getTotal() > 0) {
+			result.getList().add(new My2Yz());
+		}
+		return new BaseResult(result);
+	}
+
+	@RequestMapping("/listMY200")
+	public BaseResult listMY200(@RequestBody QueryInfo<My200Yz> queryInfo) throws Exception {
+		PageResult<My200Yz> result = repositories.my200Dao.query(queryInfo);
+		if (result != null && result.getTotal() > 0) {
+			result.getList().add(new My200Yz());
+		}
+		return new BaseResult(result);
 	}
 
 	@RequestMapping("/listFXSW1")

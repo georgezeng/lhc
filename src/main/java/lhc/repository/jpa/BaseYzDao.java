@@ -7,6 +7,7 @@ import java.util.List;
 
 import javax.annotation.PostConstruct;
 import javax.persistence.EntityManager;
+import javax.persistence.NoResultException;
 import javax.persistence.Query;
 
 import org.slf4j.Logger;
@@ -106,5 +107,65 @@ public abstract class BaseYzDao<T extends BaseYz> {
 		Query query = em.createNativeQuery(sql.toString(), clazz);
 		QueryUtil.setArgs(args, query);
 		return query.getResultList();
+	}
+
+	public List<T> queryUpToLatest(Long ltId, Long gtId) {
+		List<Object> args = new ArrayList<Object>();
+		StringBuilder sql = new StringBuilder("select * from " + getTableName()).append("\n");
+		sql.append("where id <= ?").append("\n");
+		args.add(ltId);
+		sql.append("and id >= ?").append("\n");
+		args.add(gtId);
+		sql.append("order by id desc").append("\n");
+		Query query = em.createNativeQuery(sql.toString(), clazz);
+		QueryUtil.setArgs(args, query);
+		return query.getResultList();
+	}
+
+	public T getLastYzWithSamePos(T currentData, String column) {
+		List<Object> args = new ArrayList<Object>();
+		StringBuilder sql = new StringBuilder("select * from " + getTableName()).append("\n");
+		sql.append("where id < ?").append("\n");
+		args.add(currentData.getId());
+		sql.append("and " + column + "=0").append("\n");
+		sql.append("order by year desc, phase desc").append("\n");
+		sql.append("limit 0, 1").append("\n");
+		Query query = em.createNativeQuery(sql.toString(), clazz);
+		QueryUtil.setArgs(args, query);
+		T result = null;
+		try {
+			result = (T) query.getSingleResult();
+		} catch (NoResultException e) {
+		}
+		return result;
+	}
+
+	public List<T> getLastYzListWithSamePos(T currentData, String column) {
+		List<Object> args = new ArrayList<Object>();
+		StringBuilder sql = new StringBuilder("select * from " + getTableName()).append("\n");
+		sql.append("where id < ?").append("\n");
+		args.add(currentData.getId());
+		sql.append("and " + column + "=0").append("\n");
+		sql.append("order by year desc, phase desc").append("\n");
+		Query query = em.createNativeQuery(sql.toString(), clazz);
+		QueryUtil.setArgs(args, query);
+		return query.getResultList();
+	}
+
+	public T getLastYzIn(Long id, int presize) {
+		List<Object> args = new ArrayList<Object>();
+		StringBuilder sql = new StringBuilder("select * from " + getTableName()).append("\n");
+		sql.append("where id < ?").append("\n");
+		args.add(id);
+		sql.append("order by year desc, phase desc").append("\n");
+		sql.append("limit " + presize + ", 1").append("\n");
+		Query query = em.createNativeQuery(sql.toString(), clazz);
+		QueryUtil.setArgs(args, query);
+		T result = null;
+		try {
+			result = (T) query.getSingleResult();
+		} catch (NoResultException e) {
+		}
+		return result;
 	}
 }

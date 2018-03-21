@@ -3627,3 +3627,383 @@ function createFXSW(url) {
 	
 	return showOrHide;
 }
+
+function createMY(url) {
+	var count = 0;
+	var totalCount = 0;
+	var lastHms = null;
+	var redCounts = [];
+	var lastReds = [];
+	var continueReds = [];
+	var continueRedsCount = 0;
+	var fzTdNo = 39;
+	var downloadForm = $("#download");
+	$("#columns").combobox();
+	
+	var showOrHide = function (value) {
+		var table = $("#dataTable");
+		lastHms = null;
+		if(value < 2) {
+			switch(value) {
+			case -1: {
+				showOrHide(4);
+				showOrHide(9);
+				showOrHide(25);
+			} break;
+			case -2: {
+				showOrHide(13);
+				showOrHide(14);
+				showOrHide(26);
+			} break;
+			}
+			
+		} else {
+			table.find("tr").each(function() {
+				var td = $(this).children().eq(value);
+				if(td.attr("status") == "hide") {
+					td.attr("status", "show");
+					td.show();
+				} else {
+					td.attr("status", "hide");
+					td.hide();
+				}
+				td = $(this).children().eq(fzTdNo);
+				if(td.text() != "反转") {
+					if(lastHms) {
+						td.text(lastHms);
+					}
+					lastHms = countReverseNums(td);
+				}
+			});
+		}
+		countNumber();
+		countTotalNumber();
+	}
+	
+	$("#showOrHideBtn").click(function() {
+		showOrHide(parseInt($("#columns").val()));
+	});
+	
+	function countNumber() {
+		count = 0;
+		var table = $("#dataTable").find("tbody");
+		table.find("tr").each(function() {
+			var tr = $(this);
+			var subCount = 0;
+			tr.children().each(function() {
+				if($(this).attr("status") == "show" && $(this).attr("red") == "true") {
+					count++;
+					subCount++;
+					return false;
+				}
+			});
+			if(subCount > 0) {
+				$(tr).find("td[name='counter']").text("1");
+			} else {
+				$(tr).find("td[name='counter']").text("0");
+			}
+		});
+		$("#counter").text(count);
+	}
+	
+	function countTotalNumber() {
+		totalCount = 0;
+		var table = $("#dataTable").find("tbody");
+		table.find("tr").each(function() {
+			var tr = $(this);
+			var subCount = 0;
+			tr.children().each(function() {
+				if($(this).attr("status") == "show" && $(this).attr("red") == "true") {
+					totalCount++;
+					subCount++;
+				}
+			});
+			$(tr).find("td[name='totalCounter']").text(subCount);
+		});
+		$("#totalCounter").text(totalCount);
+	}
+	
+	function countReverseNums(nTd) {
+		var allHms = [];
+		nTd.parent("tr").find("td[status='show']").each(function() {
+			if($(this).attr("hms")) {
+				allHms = allHms.concat($(this).attr("hms").split(/,\s*/));
+			}
+		});
+		var reverseNums = [];
+		for(var i = 1; i < 50; i++) {
+			if(!isInArr(allHms, i)) {
+				reverseNums.push(i);
+			}
+		}
+		return reverseNums.join(", ");
+	}
+	
+	var numlist = [
+		"sxNums", 
+		"dsNums", 
+		"swNums", 
+		"mwNums", 
+		"lhNums",
+		"bsNums",
+		"zsNums",
+		"wxNums",
+		"wxdsNums",
+		"pdNums",
+		"fdNums",
+		"qqNums",
+		"qiwNums",
+		"twelveNums",
+		"slqNums",
+		"zx1Nums",
+		"zx2Nums",
+		"zx3Nums",
+		"zx4Nums",
+		"zx5Nums",
+		"zx6Nums",
+		"zx7Nums",
+		"zx8Nums",
+		"zx9Nums",
+		"zx10Nums",
+		"zx11Nums",
+		"zx12Nums",
+		"zx13Nums",
+		"zx14Nums",
+		"zx15Nums",
+		"zx16Nums",
+		"zx17Nums",
+		"zx18Nums"
+	];
+	
+	var sxlist = [
+		"sx",
+		"ds",
+		"sw",
+		"mw",
+		"lh",
+		"bs",
+		"zs",
+		"wx",
+		"wxds",
+		"pd",
+		"fd",
+		"qq",
+		"qiw",
+		"twelve",
+		"slq",
+		"zx1",
+		"zx2",
+		"zx3",
+		"zx4",
+		"zx5",
+		"zx6",
+		"zx7",
+		"zx8",
+		"zx9",
+		"zx10",
+		"zx11",
+		"zx12",
+		"zx13",
+		"zx14",
+		"zx15",
+		"zx16",
+		"zx17",
+		"zx18"
+	];
+	var cols = ["year", "phase"];
+	for(var i in sxlist) {
+		cols.push(sxlist[i] + "yz");
+	}
+	cols.push("phase");
+	cols.push("phase");
+	cols.push("phase");
+	cols.push("phase");
+	cols.push("phase");
+	var columns = [];
+	for(var i in cols) {
+		var col = cols[i];
+		columns.push({
+			name : col,
+			data : col,
+			sortable: false
+		});
+	}
+	var columnDefs = [];
+	columnDefs.push({
+		aTargets: [0],
+		fnCreatedCell: function(nTd, sData, item, iRow, iCol) {
+			var value = "";
+			if(item.date) {
+				value = item.year;
+			} else {
+				value = "个数";
+			}
+			$(nTd).text(value).css("fontSize", "12px");
+		}
+	});
+	columnDefs.push({
+		aTargets: [1],
+		fnCreatedCell: function(nTd, sData, item, iRow, iCol) {
+			$(nTd).text(item.phase).css("fontSize", "12px");
+		}
+	});
+	for(var i = 2; i < 35; i++) {
+		(function(index) {
+			columnDefs.push({
+				aTargets: [index],
+				fnCreatedCell: function(nTd, sData, item, iRow, iCol) {
+					var value = "";
+					if(item.date) {
+						if(!redCounts[index-2]) {
+							redCounts[index-2] = 0;
+						}
+						if(!lastReds[index-2]) {
+							lastReds[index-2] = false;
+						}
+						if(!continueReds[index-2]) {
+							continueReds[index-2] = 0;
+						}
+						value = item[sxlist[index-2] + "yz"];
+						if(value == 0) {
+							$(nTd).attr("red", "true").css("backgroundColor", "red").css("color", "white");
+							redCounts[index-2]++;
+							if(lastReds[index-2]) {
+								continueReds[index - 2] = 1;
+							}
+						} else {
+							$(nTd).css("backgroundColor", "#ffc")
+						}
+						lastReds[index-2] = value == 0;
+						var yz = item[sxlist[index-2] + "yz"];
+						var my = item[sxlist[index-2] + "my"];
+						value = "<div>" + (yz != null ? yz : "") + "</div><div style='min-width: 40px;'>" + (my != null ? "(" + my + ")" : "") + "</div>";
+						$(nTd).attr("hms", item[numlist[index-2]]);
+					} else {
+						value = redCounts[index-2];
+					}
+					var th = $("#dataTable").find("th").eq(index);
+					if(th.attr("status") == "hide") {
+						$(nTd).attr("status", "hide");
+						setTimeout(function() {
+							$(nTd).hide();
+						}, 100);
+					} else {
+						$(nTd).attr("status", "show");
+					}
+					if(index % 2 == 0) {
+						$(nTd).attr("zf", "false");
+					} else {
+						$(nTd).attr("zf", "true");
+					}
+					$(nTd).html(value);
+				}
+			});
+		})(i);
+	}
+	columnDefs.push({
+		aTargets: [35],
+		fnCreatedCell: function(nTd, sData, item, iRow, iCol) {
+			var value = 0;
+			if(item.date) {
+				for(var i in sxlist) {
+					if(item[sxlist[i] + "yz"] == 0) {
+						value = 1;
+						count++;
+						break;
+					}
+				}
+				$(nTd).attr("name", "counter").text(value);
+			} else {
+				value = count;
+				$(nTd).attr("id", "counter").text(count);
+			}
+			$(nTd).text(value);
+		}
+	});
+	columnDefs.push({
+		aTargets: [36],
+		fnCreatedCell: function(nTd, sData, item, iRow, iCol) {
+			var currentCount = 0;
+			if(item.date) {
+				for(var i in sxlist) {
+					if(item[sxlist[i] + "yz"] == 0) {
+						currentCount++;
+						totalCount++;
+					}
+				}
+				$(nTd).attr("name", "totalCounter").text(currentCount);
+			} else {
+				$(nTd).attr("id", "totalCounter").text(totalCount);
+			}
+		}
+	});
+	columnDefs.push({
+		aTargets: [37],
+		fnCreatedCell: function(nTd, sData, item, iRow, iCol) {
+			if(item.date) {
+				var isContinuos = false;
+				for(var i in continueReds) {
+					if(continueReds[i] == 1) {
+						isContinuos = true;
+						continueRedsCount++;
+						break;
+					}
+				}
+				$(nTd).text(isContinuos ? "1" : "0");
+				continueReds = [];
+			} else {
+				$(nTd).text(continueRedsCount);
+			}
+		}
+	});
+	columnDefs.push({
+		aTargets: [38],
+		fnCreatedCell: function(nTd, sData, item, iRow, iCol) {
+			if(lastHms) {
+				$(nTd).text(lastHms.split(/,\s*/).length);
+			} else {
+				$(nTd).text("0");
+			}
+		}
+	});
+	columnDefs.push({
+		aTargets: [fzTdNo],
+		fnCreatedCell: function(nTd, sData, item, iRow, iCol) {
+			if(lastHms) {
+				$(nTd).text(lastHms);
+			} else {
+				$(nTd).text("");
+			}
+			if(item.date) {
+				lastHms = countReverseNums($(nTd));
+			} else {
+				lastHms = null;
+			}
+		}
+	});
+	datatables.push(createDataTable({
+		id : "dataTable",
+		url : url,
+		bFilter: false,
+		data : function(queryInfo, infoSettings) {
+			count = 0;
+			totalCount = 0;
+			lastHms = null;
+			redCounts = [];
+			lastReds = [];
+			continueReds = [];
+			continueRedsCount = 0;
+			
+			queryInfo.object = {};
+			queryInfo.object.year = parseInt($("#years").val());
+			queryInfo.object.phase = parseInt($("#phases").val());
+			
+			$("#endYear").val(queryInfo.object.year);
+			$("#endPhase").val(queryInfo.object.phase);
+			$("#size").val(queryInfo.pageInfo.pageSize);
+		},
+		columns : columns,
+		aoColumnDefs: columnDefs
+	}));
+	
+}

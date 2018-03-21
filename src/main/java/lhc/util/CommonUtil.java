@@ -46,4 +46,31 @@ public class CommonUtil {
 		}
 		return list;
 	}
+
+	@SuppressWarnings("unchecked")
+	public static <T> List<T> getAsyncResultsWithException(List<Future<Object>> futures, long time) throws Exception {
+		while (true) {
+			int count = 0;
+			for (Future<Object> f : futures) {
+				if (f.isDone()) {
+					if (f.get() instanceof Exception) {
+						Exception t = (Exception) f.get();
+						throw t;
+					}
+					count++;
+				}
+			}
+			if (count == futures.size()) {
+				break;
+			}
+			if (time > 0) {
+				Thread.sleep(time);
+			}
+		}
+		List<T> list = new ArrayList<T>();
+		for (Future<Object> f : futures) {
+			list.add((T) f.get());
+		}
+		return list;
+	}
 }
