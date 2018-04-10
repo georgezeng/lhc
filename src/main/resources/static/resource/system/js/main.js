@@ -3239,6 +3239,116 @@ function createFXSW(url) {
 					showOrHide(50);
 					showOrHide(51);
 				} break;
+				case -3: {
+					showOrHide(2);
+					showOrHide(4);
+					showOrHide(5);
+					showOrHide(6);
+					showOrHide(8);
+					showOrHide(10);
+					showOrHide(12);
+					showOrHide(14);
+					showOrHide(16);
+					showOrHide(17);
+					showOrHide(18);
+					showOrHide(20);
+					showOrHide(22);
+					showOrHide(24);
+					showOrHide(25);
+					showOrHide(26);
+					showOrHide(28);
+					showOrHide(30);
+					showOrHide(32);
+					showOrHide(33);
+					showOrHide(34);
+					showOrHide(35);
+					showOrHide(36);
+					showOrHide(37);
+					showOrHide(38);
+					showOrHide(39);
+					showOrHide(40);
+					showOrHide(41);
+					showOrHide(42);
+					showOrHide(43);
+					showOrHide(44);
+					showOrHide(45);
+					showOrHide(46);
+					showOrHide(47);
+					showOrHide(48);
+					showOrHide(49);
+					showOrHide(50);
+					showOrHide(51);
+					showOrHide(52);
+					showOrHide(53);
+					showOrHide(54);
+					showOrHide(56);
+					showOrHide(57);
+					showOrHide(58);
+					showOrHide(59);
+					showOrHide(60);
+					showOrHide(61);
+					showOrHide(62);
+					showOrHide(63);
+					showOrHide(64);
+					showOrHide(65);
+					showOrHide(66);
+					showOrHide(67);
+				} break;
+				case -4: {
+					showOrHide(3);
+					showOrHide(4);
+					showOrHide(5);
+					showOrHide(7);
+					showOrHide(9);
+					showOrHide(11);
+					showOrHide(13);
+					showOrHide(15);
+					showOrHide(16);
+					showOrHide(17);
+					showOrHide(19);
+					showOrHide(21);
+					showOrHide(23);
+					showOrHide(24);
+					showOrHide(25);
+					showOrHide(27);
+					showOrHide(29);
+					showOrHide(31);
+					showOrHide(32);
+					showOrHide(33);
+					showOrHide(34);
+					showOrHide(35);
+					showOrHide(36);
+					showOrHide(37);
+					showOrHide(38);
+					showOrHide(39);
+					showOrHide(40);
+					showOrHide(41);
+					showOrHide(42);
+					showOrHide(43);
+					showOrHide(44);
+					showOrHide(45);
+					showOrHide(46);
+					showOrHide(47);
+					showOrHide(48);
+					showOrHide(49);
+					showOrHide(50);
+					showOrHide(51);
+					showOrHide(52);
+					showOrHide(53);
+					showOrHide(55);
+					showOrHide(56);
+					showOrHide(57);
+					showOrHide(58);
+					showOrHide(59);
+					showOrHide(60);
+					showOrHide(61);
+					showOrHide(62);
+					showOrHide(63);
+					showOrHide(64);
+					showOrHide(65);
+					showOrHide(66);
+					showOrHide(67);
+				} break;
 				}
 			}
 			
@@ -3655,6 +3765,53 @@ function createMY(url) {
 				showOrHide(14);
 				showOrHide(26);
 			} break;
+			case -3: {
+				showOrHide(1);
+				showOrHide(3);
+				showOrHide(9);
+				showOrHide(13);
+				showOrHide(17);
+				showOrHide(18);
+				showOrHide(19);
+				showOrHide(20);
+				showOrHide(21);
+				showOrHide(22);
+				showOrHide(23);
+				showOrHide(24);
+				showOrHide(25);
+				showOrHide(26);
+				showOrHide(27);
+				showOrHide(29);
+				showOrHide(30);
+				showOrHide(31);
+				showOrHide(32);
+				showOrHide(33);
+				showOrHide(34);
+			} break;
+			case -4: {
+				showOrHide(1);
+				showOrHide(3);
+				showOrHide(10);
+				showOrHide(13);
+				showOrHide(16);
+				showOrHide(17);
+				showOrHide(18);
+				showOrHide(19);
+				showOrHide(20);
+				showOrHide(21);
+				showOrHide(22);
+				showOrHide(23);
+				showOrHide(24);
+				showOrHide(25);
+				showOrHide(27);
+				showOrHide(28);
+				showOrHide(29);
+				showOrHide(30);
+				showOrHide(31);
+				showOrHide(32);
+				showOrHide(33);
+				showOrHide(34);
+			} break;
 			}
 			
 		} else {
@@ -3682,6 +3839,42 @@ function createMY(url) {
 	
 	$("#showOrHideBtn").click(function() {
 		showOrHide(parseInt($("#columns").val()));
+	});
+	
+	$("#downloadBtn").unbind().click(function() {
+		var years = [];
+		var phases = [];
+		var counts01 = [];
+		var countsTotals = [];
+		var continuosCounts = [];
+		var fzNums = [];
+		var fzArrs = [];
+		
+		var table = $("#dataTable");
+		table.find("tbody").find("tr").each(function() {
+			var tds = $(this).find("td");
+			years.push(tds.eq(0).text());
+			phases.push(tds.eq(1).text());
+			counts01.push(tds.eq(35).text());
+			countsTotals.push(tds.eq(36).text());
+			continuosCounts.push(tds.eq(37).text());
+			fzNums.push(tds.eq(38).text());
+			var arr = tds.eq(39).text().replace(/,\s*/g, "|");
+			if(arr == "") {
+				arr = " ";
+			}
+			fzArrs.push(arr);
+		});
+		
+		$("#yearList").val(years.join(","));
+		$("#phaseList").val(phases.join(","));
+		$("#counts01").val(counts01.join(","));
+		$("#countsTotals").val(countsTotals.join(","));
+		$("#continuosCounts").val(continuosCounts.join(","));
+		$("#fzNums").val(fzNums.join(","));
+		$("#fzArrs").val(fzArrs.join(","));
+		
+		downloadForm.submit();
 	});
 	
 	function countNumber() {

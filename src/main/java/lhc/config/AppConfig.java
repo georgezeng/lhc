@@ -35,8 +35,8 @@ public class AppConfig extends AsyncConfigurerSupport {
 	@Bean
 	public Executor subExecutor() {
 		ThreadPoolTaskExecutor executor = new ThreadPoolTaskExecutor();
-		executor.setCorePoolSize(poolSize);
-		executor.setMaxPoolSize(poolSize);
+		executor.setCorePoolSize(50);
+		executor.setMaxPoolSize(50);
 		executor.setQueueCapacity(Integer.MAX_VALUE);
 		executor.setThreadNamePrefix("Async-SubExecutor-");
 		executor.initialize();

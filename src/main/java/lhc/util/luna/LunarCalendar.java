@@ -300,9 +300,10 @@ public class LunarCalendar implements Serializable{
 			this.month = month;
 			this.day = date;
 		} else {
-			this.computeBySolarDate(year, month, date);
+			solar = new GregorianCalendar();
+			this.computeBySolarDate(year, month + 1, date);
 			this.getSolar().set(Calendar.YEAR, year);
-			this.getSolar().set(Calendar.MONTH, month - 1);
+			this.getSolar().set(Calendar.MONTH, month);
 			this.getSolar().set(Calendar.DATE, date);
 		}
 	}

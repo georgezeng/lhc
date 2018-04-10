@@ -26,7 +26,7 @@ public class ParseService {
 
 	public void syncKaiJiang(int year) {
 		try {
-			String url = "http://138lh.com/kj/" + year + ".html";
+			String url = "https://138lh.com/kj/" + year + ".html";
 			Document doc = Jsoup.connect(url).get();
 			List<Element> trs = doc.getElementById("main").getElementsByTag("tr");
 			List<KaiJiang> list = new ArrayList<KaiJiang>();

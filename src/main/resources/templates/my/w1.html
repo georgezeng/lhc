@@ -10,6 +10,8 @@
 					<span class="title">截止期数:</span><select id="phases"></select>
 					<span class="title">显示/隐藏:</span>
 					<select id="columns">
+						<option value="-4">倒2</option>
+						<option value="-3">倒1</option>
 						<option value="-2">七区/七位/杂10</option>
 						<option value="-1">首位/五行/杂9</option>
 						<option value="2">生肖</option>
@@ -51,6 +53,19 @@
 					<button id="searchBtn" class="btn btn-primary">搜索</button>
 					<button id="showOrHideBtn" class="btn btn-primary">显示/隐藏</button>
 					<div class="clearfix"></div>
+					<form id="download" name="download" action="/mvc/yz/downloadMY" method="post" class="hidden">
+						<input type="hidden" name="filename" value="w1" />
+						<input id="size" type="hidden" name="size" />
+						<input id="endYear" type="hidden" name="year" />
+						<input id="endPhase" type="hidden" name="phase" />
+						<input id="yearList" type="hidden" name="years" />
+						<input id="phaseList" type="hidden" name="phases" />
+						<input id="counts01" type="hidden" name="counts01" />
+						<input id="countsTotals" type="hidden" name="countsTotals" />
+						<input id="fzNums" type="hidden" name="fzNums" />
+						<input id="fzArrs" type="hidden" name="fzArrs" />
+						<input id="continuosCounts" type="hidden" name="continuosCounts" />
+					</form>
 				</div>
 			</div>
 		</div>

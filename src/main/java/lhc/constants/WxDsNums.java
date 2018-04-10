@@ -106,4 +106,18 @@ public class WxDsNums {
 		TUEVEN.add(46);
 
 	}
+	
+	public static final Map<String, List<Integer>> NUMS_MAP = new HashMap<String, List<Integer>>();
+	static {
+		NUMS_MAP.put("金单", JINODD);
+		NUMS_MAP.put("金双", JINEVEN);
+		NUMS_MAP.put("木单", MUODD);
+		NUMS_MAP.put("木双", MUEVEN);
+		NUMS_MAP.put("水单", SHUIODD);
+		NUMS_MAP.put("水双", SHUIEVEN);
+		NUMS_MAP.put("火单", HUOODD);
+		NUMS_MAP.put("火双", HUOEVEN);
+		NUMS_MAP.put("土单", TUODD);
+		NUMS_MAP.put("土双", TUEVEN);
+	}
 }

@@ -67,6 +67,8 @@ $(document).ready(function() {
 	
 	function filter() {
 		var tbody = $("#conditionTable").find("tbody");
+		var allCFHms = [];
+		
 		function collectSZ(index) {
 			var sz = [];
 			tbody.find("tr[name='sz"+index+"']").each(function() {
@@ -75,6 +77,19 @@ $(document).ready(function() {
 					var hm = hms[i];
 					if(!isInArr(sz, hm)) {
 						sz.push(hm);
+					}
+					var item = null;
+					for(var j in allCFHms) {
+						item = allCFHms[j];
+						if(item && item.num == hm) {
+							item.count++;
+							break;
+						} else {
+							item = null;
+						}
+					}
+					if(!item) {
+						allCFHms.push({num:hm, count:1});
 					}
 				}
 			});
@@ -87,6 +102,7 @@ $(document).ready(function() {
 		var E = collectSZ('E');
 		var F = collectSZ('F');
 		var G = collectSZ('G');
+		
 		
 		function collectFD(fd1, fd2, fd3) {
 			var sz = [];
@@ -116,13 +132,13 @@ $(document).ready(function() {
 		}
 		
 		function collectFDForCF(fd1, fd2) {
-			var sz = [];
+			var temp = [];
 			function collect(fd) {
 				for(var i in fd) {
 					var hm = fd[i];
 					var item = null;
-					for(var j in sz) {
-						item = sz[j];
+					for(var j in temp) {
+						item = temp[j];
 						if(item.num == hm) {
 							item.count++;
 							break;
@@ -131,12 +147,19 @@ $(document).ready(function() {
 						}
 					}
 					if(!item) {
-						sz.push({num:hm, count:1});
+						temp.push({num:hm, count:1});
 					}
 				}
 			}
 			collect(fd1);
 			collect(fd2);
+			var sz = [];
+			for(var i in temp) {
+				var item = temp[i];
+				if(item.count > 1) {
+					sz.push(item);
+				}
+			}
 			return sz;
 		}
 		
@@ -318,6 +341,31 @@ $(document).ready(function() {
 				.css("border", "1px solid #ddd"))
 				.html(cgHtml);
 		
+		var allCFHmsHtml = "";
+		allCFHms.sort(function(a, b) {
+			return a.count < b.count ? -1 : (a.count == b.count ? (a.num < b.num ? -1 : (a.num == b.num ? 0 : 1)) : 1); 
+		});
+		lastCount = 0;
+		for(var i in allCFHms) {
+			var hm = allCFHms[i];
+			if(lastCount != hm.count) {
+				if(lastCount > 0) {
+					allCFHmsHtml += "<div class='clearfix'></div>";
+				}
+				lastCount = hm.count;
+			} 
+			allCFHmsHtml += "<div style='float: left; border: 1px solid black; margin-right: 10px; margin-bottom: 10px;'>";
+			allCFHmsHtml += "<div style='padding: 5px; color: white; background-color: red;'>" + (hm.num > 9 ? hm.num : "&nbsp;" + hm.num + "&nbsp;") + "</div>";
+			allCFHmsHtml += "<div style='padding: 5px;'>" + (hm.count > 9 ? hm.count : "&nbsp;" + hm.count + "&nbsp;") + "</div>";
+			allCFHmsHtml += "</div>";
+		}
+		$("<td></td>").appendTo(
+				$("<tr name='totalPart'><td>选重</td></tr>")
+				.appendTo(datatable)
+				.css("backgroundColor", "#f9f9f9")
+				.css("border", "1px solid #ddd"))
+				.html(allCFHmsHtml);
+		
 		var allHmsHtml = "";
 		allHms.sort(function(a, b) {
 			return a.count < b.count ? -1 : (a.count == b.count ? (a.num < b.num ? -1 : (a.num == b.num ? 0 : 1)) : 1); 
@@ -338,7 +386,7 @@ $(document).ready(function() {
 		}
 		
 		$("<td></td>").appendTo(
-				$("<tr name='totalPart'><td>合计</td></tr>")
+				$("<tr name='totalPart'><td>组内去重</td></tr>")
 				.appendTo(datatable)
 				.css("backgroundColor", "#f9f9f9")
 				.css("border", "1px solid #ddd"))

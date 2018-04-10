@@ -35,6 +35,8 @@ import lhc.dto.DownloadDTO;
 import lhc.dto.DownloadPrepareTZ;
 import lhc.dto.DsxJYCondition;
 import lhc.dto.DsxJYViewBean;
+import lhc.dto.DsxMnCondition;
+import lhc.dto.DsxMnViewBean;
 import lhc.dto.DsyJYViewBean;
 import lhc.dto.FxSwADTO;
 import lhc.dto.J0Yz;
@@ -326,18 +328,28 @@ public class YZController {
 		futures.add(repositories.yzService.calZX1YZ());
 		futures.add(repositories.yzService.calZX2YZ());
 		futures.add(repositories.yzService.calZX3YZ());
+		CommonUtil.sleep(futures, 100);
+		futures.clear();
 		futures.add(repositories.yzService.calZX4YZ());
 		futures.add(repositories.yzService.calZX5YZ());
 		futures.add(repositories.yzService.calZX6YZ());
+		CommonUtil.sleep(futures, 100);
+		futures.clear();
 		futures.add(repositories.yzService.calZX7YZ());
 		futures.add(repositories.yzService.calZX8YZ());
 		futures.add(repositories.yzService.calZX9YZ());
+		CommonUtil.sleep(futures, 100);
+		futures.clear();
 		futures.add(repositories.yzService.calZX10YZ());
 		futures.add(repositories.yzService.calZX11YZ());
 		futures.add(repositories.yzService.calZX12YZ());
+		CommonUtil.sleep(futures, 100);
+		futures.clear();
 		futures.add(repositories.yzService.calZX13YZ());
 		futures.add(repositories.yzService.calZX14YZ());
 		futures.add(repositories.yzService.calZX15YZ());
+		CommonUtil.sleep(futures, 100);
+		futures.clear();
 		futures.add(repositories.yzService.calZX16YZ());
 		futures.add(repositories.yzService.calZX17YZ());
 		futures.add(repositories.yzService.calZX18YZ());
@@ -349,30 +361,42 @@ public class YZController {
 		futures.add(parallelYzServiceWrapper.calAvg(repositories.zx2zfyzRepository, "calZx2zfAvg"));
 		futures.add(parallelYzServiceWrapper.calAvg(repositories.zx3yzRepository, "calZx3yzAvg"));
 		futures.add(parallelYzServiceWrapper.calAvg(repositories.zx3zfyzRepository, "calZx3zfAvg"));
+		CommonUtil.sleep(futures, 100);
+		futures.clear();
+		CommonUtil.sleep(futures, 100);
+		futures.clear();
 		futures.add(parallelYzServiceWrapper.calAvg(repositories.zx4yzRepository, "calZx4yzAvg"));
 		futures.add(parallelYzServiceWrapper.calAvg(repositories.zx4zfyzRepository, "calZx4zfAvg"));
 		futures.add(parallelYzServiceWrapper.calAvg(repositories.zx5yzRepository, "calZx5yzAvg"));
 		futures.add(parallelYzServiceWrapper.calAvg(repositories.zx5zfyzRepository, "calZx5zfAvg"));
 		futures.add(parallelYzServiceWrapper.calAvg(repositories.zx6yzRepository, "calZx6yzAvg"));
 		futures.add(parallelYzServiceWrapper.calAvg(repositories.zx6zfyzRepository, "calZx6zfAvg"));
+		CommonUtil.sleep(futures, 100);
+		futures.clear();
 		futures.add(parallelYzServiceWrapper.calAvg(repositories.zx7yzRepository, "calZx7yzAvg"));
 		futures.add(parallelYzServiceWrapper.calAvg(repositories.zx7zfyzRepository, "calZx7zfAvg"));
 		futures.add(parallelYzServiceWrapper.calAvg(repositories.zx8yzRepository, "calZx8yzAvg"));
 		futures.add(parallelYzServiceWrapper.calAvg(repositories.zx8zfyzRepository, "calZx8zfAvg"));
 		futures.add(parallelYzServiceWrapper.calAvg(repositories.zx9yzRepository, "calZx9yzAvg"));
 		futures.add(parallelYzServiceWrapper.calAvg(repositories.zx9zfyzRepository, "calZx9zfAvg"));
+		CommonUtil.sleep(futures, 100);
+		futures.clear();
 		futures.add(parallelYzServiceWrapper.calAvg(repositories.zx10yzRepository, "calZx10yzAvg"));
 		futures.add(parallelYzServiceWrapper.calAvg(repositories.zx10zfyzRepository, "calZx10zfAvg"));
 		futures.add(parallelYzServiceWrapper.calAvg(repositories.zx11yzRepository, "calZx11yzAvg"));
 		futures.add(parallelYzServiceWrapper.calAvg(repositories.zx11zfyzRepository, "calZx11zfAvg"));
 		futures.add(parallelYzServiceWrapper.calAvg(repositories.zx12yzRepository, "calZx12yzAvg"));
 		futures.add(parallelYzServiceWrapper.calAvg(repositories.zx12zfyzRepository, "calZx12zfAvg"));
+		CommonUtil.sleep(futures, 100);
+		futures.clear();
 		futures.add(parallelYzServiceWrapper.calAvg(repositories.zx13yzRepository, "calZx13yzAvg"));
 		futures.add(parallelYzServiceWrapper.calAvg(repositories.zx13zfyzRepository, "calZx13zfAvg"));
 		futures.add(parallelYzServiceWrapper.calAvg(repositories.zx14yzRepository, "calZx14yzAvg"));
 		futures.add(parallelYzServiceWrapper.calAvg(repositories.zx14zfyzRepository, "calZx14zfAvg"));
 		futures.add(parallelYzServiceWrapper.calAvg(repositories.zx15yzRepository, "calZx15yzAvg"));
 		futures.add(parallelYzServiceWrapper.calAvg(repositories.zx15zfyzRepository, "calZx15zfAvg"));
+		CommonUtil.sleep(futures, 100);
+		futures.clear();
 		futures.add(parallelYzServiceWrapper.calAvg(repositories.zx16yzRepository, "calZx16yzAvg"));
 		futures.add(parallelYzServiceWrapper.calAvg(repositories.zx16zfyzRepository, "calZx16zfAvg"));
 		futures.add(parallelYzServiceWrapper.calAvg(repositories.zx17yzRepository, "calZx17yzAvg"));
@@ -389,6 +413,12 @@ public class YZController {
 		futures.add(repositories.yzService.calFxSw1());
 		futures.add(repositories.yzService.calFxSw2());
 		futures.add(repositories.yzService.calFxSw3());
+		CommonUtil.sleep(futures, 100);
+		repositories.yzService.saveFxSwData();
+		repositories.yzService.clearFxSwData();
+		futures.clear();
+		repositories.yzService.saveFxSwData();
+		repositories.yzService.clearFxSwData();
 		CommonUtil.sleep(futures, 100);
 		repositories.yzService.saveFxSwData();
 		repositories.yzService.clearFxSwData();
@@ -440,32 +470,61 @@ public class YZController {
 
 	public void calMY() throws Exception {
 		List<Future<Exception>> futures = new ArrayList<Future<Exception>>();
+		futures.add(repositories.yzService.calMyD1());
+		CommonUtil.sleep(futures, 100);
+		futures.clear();
 		futures.add(repositories.yzService.calMy1());
+		CommonUtil.sleep(futures, 100);
+		futures.clear();
 		futures.add(repositories.yzService.calMy2());
+		CommonUtil.sleep(futures, 100);
+		futures.clear();
+		futures.add(repositories.yzService.calMy100());
+		CommonUtil.sleep(futures, 100);
+		futures.clear();
+		futures.add(repositories.yzService.calMy150());
+		CommonUtil.sleep(futures, 100);
+		futures.clear();
 		futures.add(repositories.yzService.calMy200());
+		CommonUtil.sleep(futures, 100);
+		futures.clear();
+		futures.add(repositories.yzService.calMy250());
 		CommonUtil.sleep(futures, 100);
 		logger.info("End of calMY stage...");
 	}
 
+	public void calMN() throws Exception {
+		List<Future<Exception>> futures = new ArrayList<Future<Exception>>();
+		futures.add(repositories.yzService.calMyMn());
+		futures.add(repositories.yzService.calMy100Mn());
+		futures.add(repositories.yzService.calSwMn());
+		CommonUtil.sleep(futures, 100);
+		futures.clear();
+		futures.add(repositories.yzService.calCyht());
+		CommonUtil.sleep(futures, 100);
+		logger.info("End of calMN stage...");
+	}
+
 	@RequestMapping("/calYZ")
 	public BaseResult calYZ() throws Exception {
-		calBS();
-		calDS();
-		calLH();
-		calMW();
-		calPD();
-		calQiw();
-		calQQ();
-		calSLQ();
-		calSX();
-		calSW();
-		calTM();
-		calTwelve();
-		calWX();
-		calZS();
-		calZX();
-		calFXSW();
-		calMY();
+//		 calBS();
+//		 calDS();
+//		 calLH();
+//		 calMW();
+//		 calPD();
+//		 calQiw();
+//		 calQQ();
+//		 calSLQ();
+//		 calSX();
+//		 calSW();
+//		 calTM();
+//		 calTwelve();
+//		 calWX();
+//		 calZS();
+//		 calZX();
+//		 calFXSW();
+//		 calMY();
+		calMN();
 		logger.info("Done calYZ...");
 		return BaseResult.EMPTY;
 	}
@@ -2300,6 +2359,37 @@ public class YZController {
 		return null;
 	}
 
+	@RequestMapping("/downloadMY")
+	public String downloadMY(HttpServletRequest request, HttpServletResponse response) throws Exception {
+		response.setContentType("text/csv;charset=gbk;");
+		response.addHeader("Content-Disposition", "attachment;filename=my" + request.getParameter("filename") + ".csv");
+		Writer writer = response.getWriter();
+		writer.append("年份").append(", ");
+		writer.append("期数").append(", ");
+		writer.append("计数(0/1)").append(", ");
+		writer.append("计数").append(", ");
+		writer.append("连续计数(0/1)").append(", ");
+		writer.append("反转个数").append(", ");
+		writer.append("反转").append("\n");
+		String[] years = request.getParameter("years").split(",");
+		String[] phases = request.getParameter("phases").split(",");
+		String[] counts01 = request.getParameter("counts01").split(",");
+		String[] countsTotals = request.getParameter("countsTotals").split(",");
+		String[] continuosCounts = request.getParameter("continuosCounts").split(",");
+		String[] fzNums = request.getParameter("fzNums").split(",");
+		String[] fzArrs = request.getParameter("fzArrs").split(",");
+		for (int i = 0; i < years.length; i++) {
+			writer.append(years[i]).append(", ");
+			writer.append(phases[i]).append(", ");
+			writer.append(counts01[i]).append(", ");
+			writer.append(countsTotals[i]).append(", ");
+			writer.append(continuosCounts[i]).append(", ");
+			writer.append(fzNums[i]).append(", ");
+			writer.append(fzArrs[i]).append("\n");
+		}
+		return null;
+	}
+
 	@RequestMapping("/downloadDSX")
 	public String downloadDSX(HttpServletRequest request, HttpServletResponse response) throws Exception {
 		response.setContentType("text/csv;charset=gbk;");
@@ -3515,12 +3605,48 @@ public class YZController {
 		}
 		return new BaseResult(result);
 	}
-	
+
+	@RequestMapping("/listMYD1")
+	public BaseResult listMYD1(@RequestBody QueryInfo<MyD1Yz> queryInfo) throws Exception {
+		PageResult<MyD1Yz> result = repositories.myD1Dao.query(queryInfo);
+		if (result != null && result.getTotal() > 0) {
+			result.getList().add(new MyD1Yz());
+		}
+		return new BaseResult(result);
+	}
+
 	@RequestMapping("/listMY2")
 	public BaseResult listMY2(@RequestBody QueryInfo<My2Yz> queryInfo) throws Exception {
 		PageResult<My2Yz> result = repositories.my2Dao.query(queryInfo);
 		if (result != null && result.getTotal() > 0) {
 			result.getList().add(new My2Yz());
+		}
+		return new BaseResult(result);
+	}
+
+	@RequestMapping("/listMY100")
+	public BaseResult listMY100(@RequestBody QueryInfo<My100Yz> queryInfo) throws Exception {
+		PageResult<My100Yz> result = repositories.my100Dao.query(queryInfo);
+		if (result != null && result.getTotal() > 0) {
+			result.getList().add(new My100Yz());
+		}
+		return new BaseResult(result);
+	}
+
+	@RequestMapping("/listMY150")
+	public BaseResult listMY150(@RequestBody QueryInfo<My150Yz> queryInfo) throws Exception {
+		PageResult<My150Yz> result = repositories.my150Dao.query(queryInfo);
+		if (result != null && result.getTotal() > 0) {
+			result.getList().add(new My150Yz());
+		}
+		return new BaseResult(result);
+	}
+
+	@RequestMapping("/listMY250")
+	public BaseResult listMY250(@RequestBody QueryInfo<My250Yz> queryInfo) throws Exception {
+		PageResult<My250Yz> result = repositories.my250Dao.query(queryInfo);
+		if (result != null && result.getTotal() > 0) {
+			result.getList().add(new My250Yz());
 		}
 		return new BaseResult(result);
 	}
@@ -3639,6 +3765,33 @@ public class YZController {
 		if (result != null && result.getTotal() > 0) {
 			result.getList().add(new FxSw12());
 		}
+		return new BaseResult(result);
+	}
+
+	@RequestMapping("/listCyht")
+	public BaseResult listCyht(@RequestBody QueryInfo<CyhtYz> queryInfo) throws Exception {
+		PageResult<CyhtYz> result = repositories.cyhtDao.query(queryInfo);
+		if (result != null && result.getTotal() > 0) {
+			result.getList().add(new CyhtYz());
+		}
+		return new BaseResult(result);
+	}
+
+	@RequestMapping("/listMyMn")
+	public BaseResult listMyMn(@RequestBody QueryInfo<DsxMnCondition> queryInfo) throws Exception {
+		PageResult<DsxMnViewBean> result = repositories.myMnDao.query(queryInfo);
+		return new BaseResult(result);
+	}
+
+	@RequestMapping("/listMy100Mn")
+	public BaseResult listMy100Mn(@RequestBody QueryInfo<DsxMnCondition> queryInfo) throws Exception {
+		PageResult<DsxMnViewBean> result = repositories.my100MnDao.query(queryInfo);
+		return new BaseResult(result);
+	}
+
+	@RequestMapping("/listSwMn")
+	public BaseResult listSwMn(@RequestBody QueryInfo<DsxMnCondition> queryInfo) throws Exception {
+		PageResult<DsxMnViewBean> result = repositories.swMnDao.query(queryInfo);
 		return new BaseResult(result);
 	}
 

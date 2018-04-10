@@ -5,7 +5,7 @@ import org.springframework.stereotype.Service;
 
 import lhc.repository.jpa.api.*;
 import lhc.repository.jpa.dao.*;
-import lhc.service.YZ6Service;
+import lhc.service.YZ7Service;
 
 @Service
 public class Repositories {
@@ -767,20 +767,68 @@ public class Repositories {
 	public My1Repository my1Repository;
 	
 	@Autowired
+	public My150Dao my150Dao;
+	
+	@Autowired
+	public My150Repository my150Repository;
+	
+	@Autowired
+	public My250Dao my250Dao;
+	
+	@Autowired
+	public My250Repository my250Repository;
+	
+	@Autowired
 	public My200Dao my200Dao;
 	
 	@Autowired
 	public My200Repository my200Repository;
 	
 	@Autowired
+	public My100Dao my100Dao;
+	
+	@Autowired
+	public My100Repository my100Repository;
+	
+	@Autowired
 	public My2Dao my2Dao;
 	
 	@Autowired
 	public My2Repository my2Repository;
+	
+	@Autowired
+	public MyD1Dao myD1Dao;
+	
+	@Autowired
+	public MyD1Repository myD1Repository;
+	
+	@Autowired
+	public MyMnDao myMnDao;
+	
+	@Autowired
+	public MyMnRepository myMnRepository;
+	
+	@Autowired
+	public My100MnDao my100MnDao;
+	
+	@Autowired
+	public My100MnRepository my100MnRepository;
+	
+	@Autowired
+	public SwMnDao swMnDao;
+	
+	@Autowired
+	public SwMnRepository swMnRepository;
+	
+	@Autowired
+	public CyhtDao cyhtDao;
+	
+	@Autowired
+	public CyhtRepository cyhtRepository;
 
 	@Autowired
 	public CommonDao commonDao;
 
 	@Autowired
-	public YZ6Service yzService;
+	public YZ7Service yzService;
 }
