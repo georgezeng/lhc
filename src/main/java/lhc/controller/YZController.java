@@ -500,30 +500,36 @@ public class YZController {
 		futures.add(repositories.yzService.calSwMn());
 		CommonUtil.sleep(futures, 100);
 		futures.clear();
+		futures.add(repositories.yzService.calMyXcMn());
+		futures.add(repositories.yzService.calMy100XcMn());
+		futures.add(repositories.yzService.calSwXcMn());
+		CommonUtil.sleep(futures, 100);
+		futures.clear();
 		futures.add(repositories.yzService.calCyht());
+		futures.add(repositories.yzService.calScyd());
 		CommonUtil.sleep(futures, 100);
 		logger.info("End of calMN stage...");
 	}
 
 	@RequestMapping("/calYZ")
 	public BaseResult calYZ() throws Exception {
-//		 calBS();
-//		 calDS();
-//		 calLH();
-//		 calMW();
-//		 calPD();
-//		 calQiw();
-//		 calQQ();
-//		 calSLQ();
-//		 calSX();
-//		 calSW();
-//		 calTM();
-//		 calTwelve();
-//		 calWX();
-//		 calZS();
-//		 calZX();
-//		 calFXSW();
-//		 calMY();
+		calBS();
+		calDS();
+		calLH();
+		calMW();
+		calPD();
+		calQiw();
+		calQQ();
+		calSLQ();
+		calSX();
+		calSW();
+		calTM();
+		calTwelve();
+		calWX();
+		calZS();
+		calZX();
+		calFXSW();
+		calMY();
 		calMN();
 		logger.info("Done calYZ...");
 		return BaseResult.EMPTY;
@@ -3773,6 +3779,15 @@ public class YZController {
 		PageResult<CyhtYz> result = repositories.cyhtDao.query(queryInfo);
 		if (result != null && result.getTotal() > 0) {
 			result.getList().add(new CyhtYz());
+		}
+		return new BaseResult(result);
+	}
+
+	@RequestMapping("/listScyd")
+	public BaseResult listScyd(@RequestBody QueryInfo<ScydYz> queryInfo) throws Exception {
+		PageResult<ScydYz> result = repositories.scydDao.query(queryInfo);
+		if (result != null && result.getTotal() > 0) {
+			result.getList().add(new ScydYz());
 		}
 		return new BaseResult(result);
 	}

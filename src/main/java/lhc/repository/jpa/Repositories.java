@@ -827,6 +827,30 @@ public class Repositories {
 	public CyhtRepository cyhtRepository;
 
 	@Autowired
+	public MyXcMnDao myxcMnDao;
+	
+	@Autowired
+	public MyXcMnRepository myxcMnRepository;
+	
+	@Autowired
+	public My100XcMnDao my100xcMnDao;
+	
+	@Autowired
+	public My100XcMnRepository my100xcMnRepository;
+	
+	@Autowired
+	public SwXcMnDao swxcMnDao;
+	
+	@Autowired
+	public SwXcMnRepository swxcMnRepository;
+	
+	@Autowired
+	public ScydDao scydDao;
+	
+	@Autowired
+	public ScydRepository scydRepository;
+
+	@Autowired
 	public CommonDao commonDao;
 
 	@Autowired
