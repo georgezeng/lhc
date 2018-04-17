@@ -5,6 +5,7 @@ import java.lang.reflect.Method;
 import java.math.BigDecimal;
 import java.math.RoundingMode;
 import java.util.ArrayList;
+import java.util.Collection;
 import java.util.Collections;
 import java.util.Comparator;
 import java.util.HashMap;
@@ -5262,7 +5263,7 @@ public class YZService {
 		}
 	}
 
-	protected void addNumsToConditionList(Set<Integer> conditionSet, List<Integer> nums) {
+	protected void addNumsToConditionList(Collection<Integer> conditionSet, List<Integer> nums) {
 		if (nums != null && !nums.isEmpty()) {
 			for (Integer num : nums) {
 				conditionSet.add(num);
@@ -5270,7 +5271,7 @@ public class YZService {
 		}
 	}
 
-	protected void addNumsToConditionList(Set<Integer> conditionSet, Set<Integer> nums) {
+	protected void addNumsToConditionList(Collection<Integer> conditionSet, Collection<Integer> nums) {
 		if (nums != null) {
 			addNumsToConditionList(conditionSet, new ArrayList<Integer>(nums));
 		}

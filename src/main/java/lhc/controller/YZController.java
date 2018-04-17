@@ -508,6 +508,9 @@ public class YZController {
 		futures.add(repositories.yzService.calCyht());
 		futures.add(repositories.yzService.calScyd());
 		CommonUtil.sleep(futures, 100);
+		futures.clear();
+		futures.add(repositories.yzService.calZmkm());
+		CommonUtil.sleep(futures, 100);
 		logger.info("End of calMN stage...");
 	}
 
@@ -2334,6 +2337,205 @@ public class YZController {
 		return null;
 	}
 
+	@RequestMapping("/downloadCYHT")
+	public String downloadCYHT(HttpServletRequest request, HttpServletResponse response) throws Exception {
+		response.setContentType("text/csv;charset=gbk;");
+		response.addHeader("Content-Disposition", "attachment;filename=cyht.csv");
+		CyhtYz condition = new CyhtYz();
+		condition.setYear(Integer.valueOf(request.getParameter("year")));
+		condition.setPhase(Integer.valueOf(request.getParameter("phase")));
+		QueryInfo<CyhtYz> queryInfo = new QueryInfo<CyhtYz>();
+		queryInfo.setObject(condition);
+		PageInfo pageInfo = new PageInfo();
+		pageInfo.setPageNo(1);
+		pageInfo.setPageSize(Integer.valueOf(request.getParameter("size")));
+		queryInfo.setPageInfo(pageInfo);
+		PageResult<CyhtYz> result = repositories.cyhtDao.query(queryInfo);
+		Writer writer = response.getWriter();
+		writer.append("年份").append(", ");
+		writer.append("期数").append(", ");
+		writer.append("特码").append(", ");
+		writer.append("倒1-1位").append(", ");
+		writer.append("号码(倒1-1位)").append(", ");
+		writer.append("前100-前200").append(", ");
+		writer.append("号码(前100-前200)").append(", ");
+		writer.append("顺2-顺3").append(", ");
+		writer.append("号码(顺2-顺3)").append(", ");
+		writer.append("倒1-1位-前100-前200").append(", ");
+		writer.append("号码(倒1-1位-前100-前200)").append(", ");
+		writer.append("倒1-1位-顺2-顺3").append(", ");
+		writer.append("号码(倒1-1位-顺2-顺3)").append(", ");
+		writer.append("前100-前200-顺2-顺3").append(", ");
+		writer.append("号码(前100-前200-顺2-顺3)").append("\n");
+		if (result.getTotal() > 0) {
+			for (CyhtYz data : result.getList()) {
+				writer.append(data.getYear() + "").append(", ");
+				writer.append(data.getPhase() + "").append(", ");
+				writer.append(data.getSpecialNum() + "").append(", ");
+				writer.append(data.getMyYz() + "").append(", ");
+				writer.append(getNumsForDownload(data.getMyNums())).append(", ");
+				writer.append(data.getMy100Yz() + "").append(", ");
+				writer.append(getNumsForDownload(data.getMy100Nums())).append(", ");
+				writer.append(data.getSwYz() + "").append(", ");
+				writer.append(getNumsForDownload(data.getSwNums())).append(", ");
+				writer.append(data.getV1Yz() + "").append(", ");
+				writer.append(getNumsForDownload(data.getV1Nums())).append(", ");
+				writer.append(data.getV2Yz() + "").append(", ");
+				writer.append(getNumsForDownload(data.getV2Nums())).append(", ");
+				writer.append(data.getV3Yz() + "").append(", ");
+				writer.append(getNumsForDownload(data.getV3Nums())).append("\n");
+			}
+		}
+		return null;
+	}
+
+	@RequestMapping("/downloadSCYD")
+	public String downloadSCYD(HttpServletRequest request, HttpServletResponse response) throws Exception {
+		response.setContentType("text/csv;charset=gbk;");
+		response.addHeader("Content-Disposition", "attachment;filename=scyd.csv");
+		ScydYz condition = new ScydYz();
+		condition.setYear(Integer.valueOf(request.getParameter("year")));
+		condition.setPhase(Integer.valueOf(request.getParameter("phase")));
+		QueryInfo<ScydYz> queryInfo = new QueryInfo<ScydYz>();
+		queryInfo.setObject(condition);
+		PageInfo pageInfo = new PageInfo();
+		pageInfo.setPageNo(1);
+		pageInfo.setPageSize(Integer.valueOf(request.getParameter("size")));
+		queryInfo.setPageInfo(pageInfo);
+		PageResult<ScydYz> result = repositories.scydDao.query(queryInfo);
+		Writer writer = response.getWriter();
+		writer.append("年份").append(", ");
+		writer.append("期数").append(", ");
+		writer.append("特码").append(", ");
+		writer.append("倒1-1位").append(", ");
+		writer.append("号码(倒1-1位)").append(", ");
+		writer.append("前100-前200").append(", ");
+		writer.append("号码(前100-前200)").append(", ");
+		writer.append("顺2-顺3").append(", ");
+		writer.append("号码(顺2-顺3)").append(", ");
+		writer.append("倒1-1位-前100-前200").append(", ");
+		writer.append("号码(倒1-1位-前100-前200)").append(", ");
+		writer.append("倒1-1位-顺2-顺3").append(", ");
+		writer.append("号码(倒1-1位-顺2-顺3)").append(", ");
+		writer.append("前100-前200-顺2-顺3").append(", ");
+		writer.append("号码(前100-前200-顺2-顺3)").append("\n");
+		if (result.getTotal() > 0) {
+			for (ScydYz data : result.getList()) {
+				writer.append(data.getYear() + "").append(", ");
+				writer.append(data.getPhase() + "").append(", ");
+				writer.append(data.getSpecialNum() + "").append(", ");
+				writer.append(data.getMyYz() + "").append(", ");
+				writer.append(getNumsForDownload(data.getMyNums())).append(", ");
+				writer.append(data.getMy100Yz() + "").append(", ");
+				writer.append(getNumsForDownload(data.getMy100Nums())).append(", ");
+				writer.append(data.getSwYz() + "").append(", ");
+				writer.append(getNumsForDownload(data.getSwNums())).append(", ");
+				writer.append(data.getV1Yz() + "").append(", ");
+				writer.append(getNumsForDownload(data.getV1Nums())).append(", ");
+				writer.append(data.getV2Yz() + "").append(", ");
+				writer.append(getNumsForDownload(data.getV2Nums())).append(", ");
+				writer.append(data.getV3Yz() + "").append(", ");
+				writer.append(getNumsForDownload(data.getV3Nums())).append("\n");
+			}
+		}
+		return null;
+	}
+
+	private String getNumsForDownload(String nums) {
+		if (nums != null) {
+			return nums.replaceAll(",\\s*", "|");
+		}
+		return "";
+	}
+
+	@RequestMapping("/downloadZMKM")
+	public String downloadZMKM(HttpServletRequest request, HttpServletResponse response) throws Exception {
+		response.setContentType("text/csv;charset=gbk;");
+		response.addHeader("Content-Disposition", "attachment;filename=zmkm.csv");
+		ZmkmYz condition = new ZmkmYz();
+		condition.setYear(Integer.valueOf(request.getParameter("year")));
+		condition.setPhase(Integer.valueOf(request.getParameter("phase")));
+		QueryInfo<ZmkmYz> queryInfo = new QueryInfo<ZmkmYz>();
+		queryInfo.setObject(condition);
+		PageInfo pageInfo = new PageInfo();
+		pageInfo.setPageNo(1);
+		pageInfo.setPageSize(Integer.valueOf(request.getParameter("size")));
+		queryInfo.setPageInfo(pageInfo);
+		PageResult<ZmkmYz> result = repositories.zmkmDao.query(queryInfo);
+		Writer writer = response.getWriter();
+		writer.append("年份").append(", ");
+		writer.append("期数").append(", ");
+		writer.append("特码").append(", ");
+		writer.append("1次").append(", ");
+		writer.append("号码(1次)").append(", ");
+		writer.append("2次").append(", ");
+		writer.append("号码(2次)").append(", ");
+		writer.append("3次").append(", ");
+		writer.append("号码(3次)").append(", ");
+		writer.append("4次").append(", ");
+		writer.append("号码(4次)").append(", ");
+		writer.append("5次").append(", ");
+		writer.append("号码(5次)").append(", ");
+		writer.append("6次").append(", ");
+		writer.append("号码(6次)").append(", ");
+		writer.append("7次").append(", ");
+		writer.append("号码(7次)").append(", ");
+		writer.append("8次").append(", ");
+		writer.append("号码(8次)").append(", ");
+		writer.append("9次").append(", ");
+		writer.append("号码(9次)").append(", ");
+		writer.append("10次").append(", ");
+		writer.append("号码(10次)").append(", ");
+		writer.append("11次").append(", ");
+		writer.append("号码(11次)").append(", ");
+		writer.append("12次").append(", ");
+		writer.append("号码(12次)").append(", ");
+		writer.append("13次").append(", ");
+		writer.append("号码(13次)").append(", ");
+		writer.append("14次").append(", ");
+		writer.append("号码(14次)").append(", ");
+		writer.append("15次").append(", ");
+		writer.append("号码(15次)").append("\n");
+		if (result.getTotal() > 0) {
+			for (ZmkmYz data : result.getList()) {
+				writer.append(data.getYear() + "").append(", ");
+				writer.append(data.getPhase() + "").append(", ");
+				writer.append(data.getSpecialNum() + "").append(", ");
+				writer.append(data.getC1yz() + "").append(", ");
+				writer.append(getNumsForDownload(data.getC1Nums())).append(", ");
+				writer.append(data.getC2yz() + "").append(", ");
+				writer.append(getNumsForDownload(data.getC2Nums())).append(", ");
+				writer.append(data.getC3yz() + "").append(", ");
+				writer.append(getNumsForDownload(data.getC3Nums())).append(", ");
+				writer.append(data.getC4yz() + "").append(", ");
+				writer.append(getNumsForDownload(data.getC4Nums())).append(", ");
+				writer.append(data.getC5yz() + "").append(", ");
+				writer.append(getNumsForDownload(data.getC5Nums())).append(", ");
+				writer.append(data.getC6yz() + "").append(", ");
+				writer.append(getNumsForDownload(data.getC6Nums())).append(", ");
+				writer.append(data.getC7yz() + "").append(", ");
+				writer.append(getNumsForDownload(data.getC7Nums())).append(", ");
+				writer.append(data.getC8yz() + "").append(", ");
+				writer.append(getNumsForDownload(data.getC8Nums())).append(", ");
+				writer.append(data.getC9yz() + "").append(", ");
+				writer.append(getNumsForDownload(data.getC9Nums())).append(", ");
+				writer.append(data.getC10yz() + "").append(", ");
+				writer.append(getNumsForDownload(data.getC10Nums())).append(", ");
+				writer.append(data.getC11yz() + "").append(", ");
+				writer.append(getNumsForDownload(data.getC11Nums())).append(", ");
+				writer.append(data.getC12yz() + "").append(", ");
+				writer.append(getNumsForDownload(data.getC12Nums())).append(", ");
+				writer.append(data.getC13yz() + "").append(", ");
+				writer.append(getNumsForDownload(data.getC13Nums())).append(", ");
+				writer.append(data.getC14yz() + "").append(", ");
+				writer.append(getNumsForDownload(data.getC14Nums())).append(", ");
+				writer.append(data.getC15yz() + "").append(", ");
+				writer.append(getNumsForDownload(data.getC15Nums())).append("\n");
+			}
+		}
+		return null;
+	}
+
 	@RequestMapping("/downloadFXSW")
 	public String downloadFXSW(HttpServletRequest request, HttpServletResponse response) throws Exception {
 		response.setContentType("text/csv;charset=gbk;");
@@ -3788,6 +3990,15 @@ public class YZController {
 		PageResult<ScydYz> result = repositories.scydDao.query(queryInfo);
 		if (result != null && result.getTotal() > 0) {
 			result.getList().add(new ScydYz());
+		}
+		return new BaseResult(result);
+	}
+
+	@RequestMapping("/listZmkm")
+	public BaseResult listZmkm(@RequestBody QueryInfo<ZmkmYz> queryInfo) throws Exception {
+		PageResult<ZmkmYz> result = repositories.zmkmDao.query(queryInfo);
+		if (result != null && result.getTotal() > 0) {
+			result.getList().add(new ZmkmYz());
 		}
 		return new BaseResult(result);
 	}

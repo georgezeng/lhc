@@ -5,7 +5,7 @@ import org.springframework.stereotype.Service;
 
 import lhc.repository.jpa.api.*;
 import lhc.repository.jpa.dao.*;
-import lhc.service.YZ7Service;
+import lhc.service.YZ8Service;
 
 @Service
 public class Repositories {
@@ -849,10 +849,16 @@ public class Repositories {
 	
 	@Autowired
 	public ScydRepository scydRepository;
+	
+	@Autowired
+	public ZmkmYzDao zmkmDao;
+	
+	@Autowired
+	public ZmkmYzRepository zmkmRepository;
 
 	@Autowired
 	public CommonDao commonDao;
 
 	@Autowired
-	public YZ7Service yzService;
+	public YZ8Service yzService;
 }

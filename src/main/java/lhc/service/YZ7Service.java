@@ -55,7 +55,6 @@ import lhc.enums.SX;
 import lhc.repository.jpa.BaseYzRepository;
 import lhc.util.DateUtil;
 
-@Service
 @Transactional
 @SuppressWarnings("unchecked")
 public class YZ7Service extends YZ6Service {
@@ -786,21 +785,21 @@ public class YZ7Service extends YZ6Service {
 							data.setPhase(kj.getPhase());
 							data.setSpecialNum(kj.getSpecialNum());
 						}
-						MyMnYz my = repositories.myMnRepository.findByYearAndPhase(kj.getYear(), kj.getPhase());
+						MyXcMnYz my = repositories.myxcMnRepository.findByYearAndPhase(kj.getYear(), kj.getPhase());
 						Set<Integer> myNums = new HashSet<Integer>();
 						myNums.addAll(getNums(my.getC2Nums()));
 						myNums.addAll(getNums(my.getC3Nums()));
 						myNums.addAll(getNums(my.getC4Nums()));
 						data.setMyNums(Joiner.on(",").join(myNums));
 
-						My100MnYz my100 = repositories.my100MnRepository.findByYearAndPhase(kj.getYear(), kj.getPhase());
+						My100XcMnYz my100 = repositories.my100xcMnRepository.findByYearAndPhase(kj.getYear(), kj.getPhase());
 						Set<Integer> my100Nums = new HashSet<Integer>();
 						my100Nums.addAll(getNums(my100.getC2Nums()));
 						my100Nums.addAll(getNums(my100.getC3Nums()));
 						my100Nums.addAll(getNums(my100.getC4Nums()));
 						data.setMy100Nums(Joiner.on(",").join(my100Nums));
 
-						SwMnYz sw = repositories.swMnRepository.findByYearAndPhase(kj.getYear(), kj.getPhase());
+						SwXcMnYz sw = repositories.swxcMnRepository.findByYearAndPhase(kj.getYear(), kj.getPhase());
 						Set<Integer> swNums = new HashSet<Integer>();
 						swNums.addAll(getNums(sw.getC2Nums()));
 						swNums.addAll(getNums(sw.getC3Nums()));

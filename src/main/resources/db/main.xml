@@ -112,6 +112,7 @@
 	<include file="/db/v105.sql" />
 	<include file="/db/v106.sql" />
 	<include file="/db/v107.sql" />
-	-->
 	<include file="/db/v108.sql" />
+	-->
+	<include file="/db/v109.sql" />
 </databaseChangeLog>
