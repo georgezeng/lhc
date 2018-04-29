@@ -17,9 +17,6 @@ import org.springframework.data.domain.Sort;
 import org.springframework.data.domain.Sort.Direction;
 import org.springframework.scheduling.annotation.Async;
 import org.springframework.scheduling.annotation.AsyncResult;
-import org.springframework.stereotype.Service;
-import org.springframework.transaction.annotation.Propagation;
-import org.springframework.transaction.annotation.Transactional;
 import org.springframework.util.ReflectionUtils;
 import org.springframework.util.StringUtils;
 
@@ -55,11 +52,9 @@ import lhc.enums.SX;
 import lhc.repository.jpa.BaseYzRepository;
 import lhc.util.DateUtil;
 
-@Transactional
 @SuppressWarnings("unchecked")
 public class YZ7Service extends YZ6Service {
 	@Async
-	@Transactional(propagation = Propagation.NOT_SUPPORTED)
 	public Future<Exception> calMyMn() {
 		Exception t = null;
 		try {
@@ -74,7 +69,6 @@ public class YZ7Service extends YZ6Service {
 	}
 
 	@Async
-	@Transactional(propagation = Propagation.NOT_SUPPORTED)
 	public Future<Exception> calMyXcMn() {
 		Exception t = null;
 		try {
@@ -89,7 +83,6 @@ public class YZ7Service extends YZ6Service {
 	}
 
 	@Async
-	@Transactional(propagation = Propagation.NOT_SUPPORTED)
 	public Future<Exception> calMy100Mn() {
 		Exception t = null;
 		try {
@@ -104,7 +97,6 @@ public class YZ7Service extends YZ6Service {
 	}
 
 	@Async
-	@Transactional(propagation = Propagation.NOT_SUPPORTED)
 	public Future<Exception> calMy100XcMn() {
 		Exception t = null;
 		try {
@@ -119,7 +111,6 @@ public class YZ7Service extends YZ6Service {
 	}
 
 	@Async
-	@Transactional(propagation = Propagation.NOT_SUPPORTED)
 	public Future<Exception> calSwMn() {
 		Exception t = null;
 		try {
@@ -134,7 +125,6 @@ public class YZ7Service extends YZ6Service {
 	}
 
 	@Async
-	@Transactional(propagation = Propagation.NOT_SUPPORTED)
 	public Future<Exception> calSwXcMn() {
 		Exception t = null;
 		try {
@@ -456,28 +446,36 @@ public class YZ7Service extends YZ6Service {
 			result = repositories.kaiJiangRepository.findAll(request);
 			if (result != null && result.hasContent()) {
 				for (KaiJiang kj : result.getContent()) {
+//					if(kj.getYear() < 2018 || kj.getYear() == 2018 && kj.getPhase() < 42) {
+//						continue;
+//					}
 					BaseYz abcdYz = abcdRepository.findByYearAndPhase(kj.getYear(), kj.getPhase());
+//					logger.info("year: " + kj.getYear() + ", phase: " + kj.getPhase());
 
 					Set<Integer> A = new HashSet<Integer>();
 					addNumsToConditionList(A, getNums(abcdYz, "Sx"));
 					addNumsToConditionList(A, getNums(abcdYz, "Twelve"));
 					addNumsToConditionList(A, getNums(abcdYz, "Slq"));
 					addNumsToConditionList(A, getNums(abcdYz, "Zx12"));
+//					logger.info("A: " + A);
 
 					Set<Integer> B = new HashSet<Integer>();
 					addNumsToConditionList(B, getNums(abcdYz, "Lh"));
 					addNumsToConditionList(B, getNums(abcdYz, "Mw"));
 					addNumsToConditionList(B, getNums(abcdYz, "Fd"));
 					addNumsToConditionList(B, getNums(abcdYz, "Pd"));
+//					logger.info("B: " + B);
 
 					Set<Integer> C = new HashSet<Integer>();
 					addNumsToConditionList(C, getNums(abcdYz, "Zs"));
 					addNumsToConditionList(C, getNums(abcdYz, "Wxds"));
 					addNumsToConditionList(C, getNums(abcdYz, "Bs"));
+//					logger.info("C: " + C);
 
 					Set<Integer> D = new HashSet<Integer>();
 					addNumsToConditionList(D, getNums(abcdYz, "Sw"));
 					addNumsToConditionList(D, getNums(abcdYz, "Qiw"));
+//					logger.info("D: " + D);
 
 					BaseYz efghYz = efghRepository.findByYearAndPhase(kj.getYear(), kj.getPhase());
 
@@ -486,21 +484,25 @@ public class YZ7Service extends YZ6Service {
 					addNumsToConditionList(E, getNums(efghYz, "Twelve"));
 					addNumsToConditionList(E, getNums(efghYz, "Slq"));
 					addNumsToConditionList(E, getNums(efghYz, "Zx12"));
+//					logger.info("E: " + E);
 
 					Set<Integer> F = new HashSet<Integer>();
 					addNumsToConditionList(F, getNums(efghYz, "Lh"));
 					addNumsToConditionList(F, getNums(efghYz, "Mw"));
 					addNumsToConditionList(F, getNums(efghYz, "Fd"));
 					addNumsToConditionList(F, getNums(efghYz, "Pd"));
+//					logger.info("F: " + F);
 
 					Set<Integer> G = new HashSet<Integer>();
 					addNumsToConditionList(G, getNums(efghYz, "Zs"));
 					addNumsToConditionList(G, getNums(efghYz, "Wxds"));
 					addNumsToConditionList(G, getNums(efghYz, "Bs"));
+//					logger.info("G: " + G);
 
 					Set<Integer> H = new HashSet<Integer>();
 					addNumsToConditionList(H, getNums(efghYz, "Sw"));
 					addNumsToConditionList(H, getNums(efghYz, "Qiw"));
+//					logger.info("H: " + H);
 
 					Set<Integer>[] nums = collectConditionList(A, B, C, D, E, F, G, H, true);
 					T data = repository.findByYearAndPhase(kj.getYear(), kj.getPhase());
@@ -638,7 +640,6 @@ public class YZ7Service extends YZ6Service {
 	}
 
 	@Async
-	@Transactional(propagation = Propagation.NOT_SUPPORTED)
 	public Future<Exception> calCyht() {
 		Exception t = null;
 		try {
@@ -766,7 +767,6 @@ public class YZ7Service extends YZ6Service {
 	}
 
 	@Async
-	@Transactional(propagation = Propagation.NOT_SUPPORTED)
 	public Future<Exception> calScyd() {
 		Exception t = null;
 		try {

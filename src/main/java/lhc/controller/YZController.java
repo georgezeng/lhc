@@ -510,6 +510,7 @@ public class YZController {
 		CommonUtil.sleep(futures, 100);
 		futures.clear();
 		futures.add(repositories.yzService.calZmkm());
+		futures.add(repositories.yzService.calDjdl());
 		CommonUtil.sleep(futures, 100);
 		logger.info("End of calMN stage...");
 	}
@@ -2501,35 +2502,123 @@ public class YZController {
 				writer.append(data.getYear() + "").append(", ");
 				writer.append(data.getPhase() + "").append(", ");
 				writer.append(data.getSpecialNum() + "").append(", ");
-				writer.append(data.getC1yz() + "").append(", ");
+				writer.append(data.getC1yz() == 0 ? "1" : "").append(", ");
 				writer.append(getNumsForDownload(data.getC1Nums())).append(", ");
-				writer.append(data.getC2yz() + "").append(", ");
+				writer.append(data.getC2yz() == 0 ? "1" : "").append(", ");
 				writer.append(getNumsForDownload(data.getC2Nums())).append(", ");
-				writer.append(data.getC3yz() + "").append(", ");
+				writer.append(data.getC3yz() == 0 ? "1" : "").append(", ");
 				writer.append(getNumsForDownload(data.getC3Nums())).append(", ");
-				writer.append(data.getC4yz() + "").append(", ");
+				writer.append(data.getC4yz() == 0 ? "1" : "").append(", ");
 				writer.append(getNumsForDownload(data.getC4Nums())).append(", ");
-				writer.append(data.getC5yz() + "").append(", ");
+				writer.append(data.getC5yz() == 0 ? "1" : "").append(", ");
 				writer.append(getNumsForDownload(data.getC5Nums())).append(", ");
-				writer.append(data.getC6yz() + "").append(", ");
+				writer.append(data.getC6yz() == 0 ? "1" : "").append(", ");
 				writer.append(getNumsForDownload(data.getC6Nums())).append(", ");
-				writer.append(data.getC7yz() + "").append(", ");
+				writer.append(data.getC7yz() == 0 ? "1" : "").append(", ");
 				writer.append(getNumsForDownload(data.getC7Nums())).append(", ");
-				writer.append(data.getC8yz() + "").append(", ");
+				writer.append(data.getC8yz() == 0 ? "1" : "").append(", ");
 				writer.append(getNumsForDownload(data.getC8Nums())).append(", ");
-				writer.append(data.getC9yz() + "").append(", ");
+				writer.append(data.getC9yz() == 0 ? "1" : "").append(", ");
 				writer.append(getNumsForDownload(data.getC9Nums())).append(", ");
-				writer.append(data.getC10yz() + "").append(", ");
+				writer.append(data.getC10yz() == 0 ? "1" : "").append(", ");
 				writer.append(getNumsForDownload(data.getC10Nums())).append(", ");
-				writer.append(data.getC11yz() + "").append(", ");
+				writer.append(data.getC11yz() == 0 ? "1" : "").append(", ");
 				writer.append(getNumsForDownload(data.getC11Nums())).append(", ");
-				writer.append(data.getC12yz() + "").append(", ");
+				writer.append(data.getC12yz() == 0 ? "1" : "").append(", ");
 				writer.append(getNumsForDownload(data.getC12Nums())).append(", ");
-				writer.append(data.getC13yz() + "").append(", ");
+				writer.append(data.getC13yz() == 0 ? "1" : "").append(", ");
 				writer.append(getNumsForDownload(data.getC13Nums())).append(", ");
-				writer.append(data.getC14yz() + "").append(", ");
+				writer.append(data.getC14yz() == 0 ? "1" : "").append(", ");
 				writer.append(getNumsForDownload(data.getC14Nums())).append(", ");
-				writer.append(data.getC15yz() + "").append(", ");
+				writer.append(data.getC15yz() == 0 ? "1" : "").append(", ");
+				writer.append(getNumsForDownload(data.getC15Nums())).append("\n");
+			}
+		}
+		return null;
+	}
+	
+	@RequestMapping("/downloadDJDL")
+	public String downloadDJDL(HttpServletRequest request, HttpServletResponse response) throws Exception {
+		response.setContentType("text/csv;charset=gbk;");
+		response.addHeader("Content-Disposition", "attachment;filename=djdl.csv");
+		DjdlYz condition = new DjdlYz();
+		condition.setYear(Integer.valueOf(request.getParameter("year")));
+		condition.setPhase(Integer.valueOf(request.getParameter("phase")));
+		QueryInfo<DjdlYz> queryInfo = new QueryInfo<DjdlYz>();
+		queryInfo.setObject(condition);
+		PageInfo pageInfo = new PageInfo();
+		pageInfo.setPageNo(1);
+		pageInfo.setPageSize(Integer.valueOf(request.getParameter("size")));
+		queryInfo.setPageInfo(pageInfo);
+		PageResult<DjdlYz> result = repositories.djdlDao.query(queryInfo);
+		Writer writer = response.getWriter();
+		writer.append("年份").append(", ");
+		writer.append("期数").append(", ");
+		writer.append("特码").append(", ");
+		writer.append("1次").append(", ");
+		writer.append("号码(1次)").append(", ");
+		writer.append("2次").append(", ");
+		writer.append("号码(2次)").append(", ");
+		writer.append("3次").append(", ");
+		writer.append("号码(3次)").append(", ");
+		writer.append("4次").append(", ");
+		writer.append("号码(4次)").append(", ");
+		writer.append("5次").append(", ");
+		writer.append("号码(5次)").append(", ");
+		writer.append("6次").append(", ");
+		writer.append("号码(6次)").append(", ");
+		writer.append("7次").append(", ");
+		writer.append("号码(7次)").append(", ");
+		writer.append("8次").append(", ");
+		writer.append("号码(8次)").append(", ");
+		writer.append("9次").append(", ");
+		writer.append("号码(9次)").append(", ");
+		writer.append("10次").append(", ");
+		writer.append("号码(10次)").append(", ");
+		writer.append("11次").append(", ");
+		writer.append("号码(11次)").append(", ");
+		writer.append("12次").append(", ");
+		writer.append("号码(12次)").append(", ");
+		writer.append("13次").append(", ");
+		writer.append("号码(13次)").append(", ");
+		writer.append("14次").append(", ");
+		writer.append("号码(14次)").append(", ");
+		writer.append("15次").append(", ");
+		writer.append("号码(15次)").append("\n");
+		if (result.getTotal() > 0) {
+			for (DjdlYz data : result.getList()) {
+				writer.append(data.getYear() + "").append(", ");
+				writer.append(data.getPhase() + "").append(", ");
+				writer.append(data.getSpecialNum() + "").append(", ");
+				writer.append(data.getC1yz() == 0 ? "1" : "").append(", ");
+				writer.append(getNumsForDownload(data.getC1Nums())).append(", ");
+				writer.append(data.getC2yz() == 0 ? "1" : "").append(", ");
+				writer.append(getNumsForDownload(data.getC2Nums())).append(", ");
+				writer.append(data.getC3yz() == 0 ? "1" : "").append(", ");
+				writer.append(getNumsForDownload(data.getC3Nums())).append(", ");
+				writer.append(data.getC4yz() == 0 ? "1" : "").append(", ");
+				writer.append(getNumsForDownload(data.getC4Nums())).append(", ");
+				writer.append(data.getC5yz() == 0 ? "1" : "").append(", ");
+				writer.append(getNumsForDownload(data.getC5Nums())).append(", ");
+				writer.append(data.getC6yz() == 0 ? "1" : "").append(", ");
+				writer.append(getNumsForDownload(data.getC6Nums())).append(", ");
+				writer.append(data.getC7yz() == 0 ? "1" : "").append(", ");
+				writer.append(getNumsForDownload(data.getC7Nums())).append(", ");
+				writer.append(data.getC8yz() == 0 ? "1" : "").append(", ");
+				writer.append(getNumsForDownload(data.getC8Nums())).append(", ");
+				writer.append(data.getC9yz() == 0 ? "1" : "").append(", ");
+				writer.append(getNumsForDownload(data.getC9Nums())).append(", ");
+				writer.append(data.getC10yz() == 0 ? "1" : "").append(", ");
+				writer.append(getNumsForDownload(data.getC10Nums())).append(", ");
+				writer.append(data.getC11yz() == 0 ? "1" : "").append(", ");
+				writer.append(getNumsForDownload(data.getC11Nums())).append(", ");
+				writer.append(data.getC12yz() == 0 ? "1" : "").append(", ");
+				writer.append(getNumsForDownload(data.getC12Nums())).append(", ");
+				writer.append(data.getC13yz() == 0 ? "1" : "").append(", ");
+				writer.append(getNumsForDownload(data.getC13Nums())).append(", ");
+				writer.append(data.getC14yz() == 0 ? "1" : "").append(", ");
+				writer.append(getNumsForDownload(data.getC14Nums())).append(", ");
+				writer.append(data.getC15yz() == 0 ? "1" : "").append(", ");
 				writer.append(getNumsForDownload(data.getC15Nums())).append("\n");
 			}
 		}
@@ -3999,6 +4088,15 @@ public class YZController {
 		PageResult<ZmkmYz> result = repositories.zmkmDao.query(queryInfo);
 		if (result != null && result.getTotal() > 0) {
 			result.getList().add(new ZmkmYz());
+		}
+		return new BaseResult(result);
+	}
+	
+	@RequestMapping("/listDjdl")
+	public BaseResult listDjdl(@RequestBody QueryInfo<DjdlYz> queryInfo) throws Exception {
+		PageResult<DjdlYz> result = repositories.djdlDao.query(queryInfo);
+		if (result != null && result.getTotal() > 0) {
+			result.getList().add(new DjdlYz());
 		}
 		return new BaseResult(result);
 	}

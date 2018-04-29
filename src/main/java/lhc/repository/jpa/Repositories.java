@@ -855,6 +855,12 @@ public class Repositories {
 	
 	@Autowired
 	public ZmkmYzRepository zmkmRepository;
+	
+	@Autowired
+	public DjdlYzDao djdlDao;
+	
+	@Autowired
+	public DjdlYzRepository djdlRepository;
 
 	@Autowired
 	public CommonDao commonDao;

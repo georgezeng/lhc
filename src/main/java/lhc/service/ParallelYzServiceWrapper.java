@@ -14,12 +14,10 @@ import org.springframework.data.repository.PagingAndSortingRepository;
 import org.springframework.scheduling.annotation.Async;
 import org.springframework.scheduling.annotation.AsyncResult;
 import org.springframework.stereotype.Service;
-import org.springframework.transaction.annotation.Transactional;
 
 import lhc.domain.Avg;
 
 @Service
-@Transactional
 public class ParallelYzServiceWrapper {
 	private Logger logger = LoggerFactory.getLogger(getClass());
 

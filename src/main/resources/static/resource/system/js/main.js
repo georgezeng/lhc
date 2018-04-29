@@ -1194,7 +1194,7 @@ var categories = [
 		text: "杂项12",
 		subs: [
 			{
-				value: "12, 26, 26, 41",
+				value: "12, 26, 40, 41",
 				text: "位1"
 			},
 			{

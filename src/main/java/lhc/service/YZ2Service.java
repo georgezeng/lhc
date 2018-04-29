@@ -12,6 +12,7 @@ import java.util.concurrent.Future;
 
 import javax.persistence.EntityManager;
 import javax.persistence.PersistenceContext;
+import javax.transaction.Transactional;
 
 import org.springframework.dao.DataAccessException;
 import org.springframework.data.domain.Page;
@@ -21,8 +22,6 @@ import org.springframework.data.domain.Sort;
 import org.springframework.data.domain.Sort.Direction;
 import org.springframework.scheduling.annotation.Async;
 import org.springframework.scheduling.annotation.AsyncResult;
-import org.springframework.transaction.annotation.Propagation;
-import org.springframework.transaction.annotation.Transactional;
 import org.springframework.util.ReflectionUtils;
 
 import com.google.common.base.Joiner;
@@ -147,7 +146,6 @@ import lhc.repository.jpa.BaseYzRepository;
 import lhc.util.CommonUtil;
 import lhc.util.DateUtil;
 
-@Transactional
 @SuppressWarnings("unchecked")
 public abstract class YZ2Service extends YZService {
 	@Async
@@ -418,10 +416,10 @@ public abstract class YZ2Service extends YZService {
 					handler.getData(list, clazz, numsClass, yz);
 					Collections.sort(list, fxComparator);
 					R data = null;
-					synchronized (this) {
-						data = (R) fxswMap.get(yz.getDate() + "_" + pos);
-						// data = swRepository.findByYearAndPhase(yz.getYear(), yz.getPhase());
-						if (data == null) {
+//					synchronized (this) {
+//						data = (R) fxswMap.get(yz.getDate() + "_" + pos);
+//						 data = swRepository.findByYearAndPhase(yz.getYear(), yz.getPhase());
+//						if (data == null) {
 							data = swRepository.findByYearAndPhase(yz.getYear(), yz.getPhase());
 							if (data == null) {
 								data = swClass.newInstance();
@@ -429,17 +427,18 @@ public abstract class YZ2Service extends YZService {
 								data.setYear(yz.getYear());
 								data.setPhase(yz.getPhase());
 							}
-							fxswMap.put(yz.getDate() + "_" + pos, data);
-						}
-					}
+//							fxswMap.put(yz.getDate() + "_" + pos, data);
+//						}
+//					}
 					if (last != null) {
 						XbwInfo info = list.get(pos - 1);
-						R lastData = (R) fxswMap.get(last.getDate() + "_" + pos);
-						if (lastData == null) {
-							lastData = swRepository.findByYearAndPhase(last.getYear(), last.getPhase());
-						}
+//						R lastData = (R) fxswMap.get(last.getDate() + "_" + pos);
+						R lastData = swRepository.findByYearAndPhase(last.getYear(), last.getPhase());
+//						if (lastData == null) {
+//							lastData = swRepository.findByYearAndPhase(last.getYear(), last.getPhase());
+//						}
 						handler.setData(pos, info, list, lastList, data, lastData, prefix, numsClass);
-						// swRepository.save(data);
+						 swRepository.save(data);
 					}
 					last = yz;
 					lastList = list;
@@ -564,8 +563,8 @@ public abstract class YZ2Service extends YZService {
 					}
 					Collections.sort(list, fxComparator);
 					if (last != null) {
-						R data = (R) fxswMap.get(yz.getDate() + "_" + pos);
-						// R data = swRepository.findByYearAndPhase(yz.getYear(), yz.getPhase());
+//						R data = (R) fxswMap.get(yz.getDate() + "_" + pos);
+						 R data = swRepository.findByYearAndPhase(yz.getYear(), yz.getPhase());
 						XbwInfo info = list.get(pos - 1);
 						Integer zf = (Integer) info.obj;
 						XbwInfo firstInfo = list.get(0);
@@ -575,7 +574,8 @@ public abstract class YZ2Service extends YZService {
 						if (lastZf.equals(firstZf)) {
 							sm.invoke(data, 0);
 						}
-						R lastData = (R) fxswMap.get(last.getDate() + "_" + pos);
+//						R lastData = (R) fxswMap.get(last.getDate() + "_" + pos);
+						R lastData = swRepository.findByYearAndPhase(last.getYear(), last.getPhase());
 						if (gm.invoke(lastData) != null) {
 							if (gm.invoke(data) == null) {
 								Integer value = (Integer) gm.invoke(lastData);
@@ -585,7 +585,7 @@ public abstract class YZ2Service extends YZService {
 							m.invoke(data, "振幅" + zf);
 							handler.setData(zf, pos, data, prefix, numsClass, yzRepository);
 						}
-						// swRepository.save(data);
+						swRepository.save(data);
 					}
 					last = yz;
 					lastList = list;
@@ -6784,7 +6784,6 @@ public abstract class YZ2Service extends YZService {
 	}
 
 	@Async
-	@Transactional(propagation = Propagation.NEVER)
 	public Future<Exception> calFxSw1() {
 		Exception t = null;
 		try {
@@ -6792,37 +6791,57 @@ public abstract class YZ2Service extends YZService {
 			futures.add(repositories.yzService.calFxSxSw1());
 			futures.add(repositories.yzService.calFxDsSw1());
 			futures.add(repositories.yzService.calFxSwSw1());
+			CommonUtil.sleep(futures, 100);
+			futures.clear();
 			futures.add(repositories.yzService.calFxMwSw1());
 			futures.add(repositories.yzService.calFxLhSw1());
 			futures.add(repositories.yzService.calFxBsSw1());
+			CommonUtil.sleep(futures, 100);
+			futures.clear();
 			futures.add(repositories.yzService.calFxZsSw1());
 			futures.add(repositories.yzService.calFxWxSw1());
 			futures.add(repositories.yzService.calFxWxdsSw1());
+			CommonUtil.sleep(futures, 100);
+			futures.clear();
 			futures.add(repositories.yzService.calFxPdSw1());
 			futures.add(repositories.yzService.calFxFdSw1());
 			futures.add(repositories.yzService.calFxQqSw1());
+			CommonUtil.sleep(futures, 100);
+			futures.clear();
 			futures.add(repositories.yzService.calFxQiwSw1());
 			futures.add(repositories.yzService.calFxTwelveSw1());
 			futures.add(repositories.yzService.calFxSlqSw1());
+			CommonUtil.sleep(futures, 100);
+			futures.clear();
 			futures.add(repositories.yzService.calFxZx1Sw1());
 			futures.add(repositories.yzService.calFxZx2Sw1());
 			futures.add(repositories.yzService.calFxZx3Sw1());
+			CommonUtil.sleep(futures, 100);
+			futures.clear();
 			futures.add(repositories.yzService.calFxZx4Sw1());
 			futures.add(repositories.yzService.calFxZx5Sw1());
 			futures.add(repositories.yzService.calFxZx6Sw1());
+			CommonUtil.sleep(futures, 100);
+			futures.clear();
 			futures.add(repositories.yzService.calFxZx7Sw1());
 			futures.add(repositories.yzService.calFxZx8Sw1());
 			futures.add(repositories.yzService.calFxZx9Sw1());
+			CommonUtil.sleep(futures, 100);
+			futures.clear();
 			futures.add(repositories.yzService.calFxZx10Sw1());
 			futures.add(repositories.yzService.calFxZx11Sw1());
 			futures.add(repositories.yzService.calFxZx12Sw1());
+			CommonUtil.sleep(futures, 100);
+			futures.clear();
 			futures.add(repositories.yzService.calFxZx13Sw1());
 			futures.add(repositories.yzService.calFxZx14Sw1());
 			futures.add(repositories.yzService.calFxZx15Sw1());
+			CommonUtil.sleep(futures, 100);
+			futures.clear();
 			futures.add(repositories.yzService.calFxZx16Sw1());
 			futures.add(repositories.yzService.calFxZx17Sw1());
 			futures.add(repositories.yzService.calFxZx18Sw1());
-			CommonUtil.sleep(futures, 10000);
+			CommonUtil.sleep(futures, 100);
 			for (FxSw data : fxswMap.values()) {
 				if (data instanceof FxSw1) {
 					repositories.fxsw1Repository.save((FxSw1) data);
@@ -6838,7 +6857,6 @@ public abstract class YZ2Service extends YZService {
 	}
 
 	@Async
-	@Transactional(propagation = Propagation.NEVER)
 	public Future<Exception> calFxSw2() {
 		Exception t = null;
 		try {
@@ -6846,37 +6864,57 @@ public abstract class YZ2Service extends YZService {
 			futures.add(repositories.yzService.calFxSxSw2());
 			futures.add(repositories.yzService.calFxDsSw2());
 			futures.add(repositories.yzService.calFxSwSw2());
+			CommonUtil.sleep(futures, 100);
+			futures.clear();
 			futures.add(repositories.yzService.calFxMwSw2());
 			futures.add(repositories.yzService.calFxLhSw2());
 			futures.add(repositories.yzService.calFxBsSw2());
+			CommonUtil.sleep(futures, 100);
+			futures.clear();
 			futures.add(repositories.yzService.calFxZsSw2());
 			futures.add(repositories.yzService.calFxWxSw2());
 			futures.add(repositories.yzService.calFxWxdsSw2());
+			CommonUtil.sleep(futures, 100);
+			futures.clear();
 			futures.add(repositories.yzService.calFxPdSw2());
 			futures.add(repositories.yzService.calFxFdSw2());
 			futures.add(repositories.yzService.calFxQqSw2());
+			CommonUtil.sleep(futures, 100);
+			futures.clear();
 			futures.add(repositories.yzService.calFxQiwSw2());
 			futures.add(repositories.yzService.calFxTwelveSw2());
 			futures.add(repositories.yzService.calFxSlqSw2());
+			CommonUtil.sleep(futures, 100);
+			futures.clear();
 			futures.add(repositories.yzService.calFxZx1Sw2());
 			futures.add(repositories.yzService.calFxZx2Sw2());
 			futures.add(repositories.yzService.calFxZx3Sw2());
+			CommonUtil.sleep(futures, 100);
+			futures.clear();
 			futures.add(repositories.yzService.calFxZx4Sw2());
 			futures.add(repositories.yzService.calFxZx5Sw2());
 			futures.add(repositories.yzService.calFxZx6Sw2());
+			CommonUtil.sleep(futures, 100);
+			futures.clear();
 			futures.add(repositories.yzService.calFxZx7Sw2());
 			futures.add(repositories.yzService.calFxZx8Sw2());
 			futures.add(repositories.yzService.calFxZx9Sw2());
+			CommonUtil.sleep(futures, 100);
+			futures.clear();
 			futures.add(repositories.yzService.calFxZx10Sw2());
 			futures.add(repositories.yzService.calFxZx11Sw2());
 			futures.add(repositories.yzService.calFxZx12Sw2());
+			CommonUtil.sleep(futures, 100);
+			futures.clear();
 			futures.add(repositories.yzService.calFxZx13Sw2());
 			futures.add(repositories.yzService.calFxZx14Sw2());
 			futures.add(repositories.yzService.calFxZx15Sw2());
+			CommonUtil.sleep(futures, 100);
+			futures.clear();
 			futures.add(repositories.yzService.calFxZx16Sw2());
 			futures.add(repositories.yzService.calFxZx17Sw2());
 			futures.add(repositories.yzService.calFxZx18Sw2());
-			CommonUtil.sleep(futures, 10000);
+			CommonUtil.sleep(futures, 100);
 		} catch (Exception e) {
 			if (DataAccessException.class.isAssignableFrom(e.getClass())) {
 				logger.error(e.getMessage(), e);
@@ -6887,7 +6925,6 @@ public abstract class YZ2Service extends YZService {
 	}
 
 	@Async
-	@Transactional(propagation = Propagation.NEVER)
 	public Future<Exception> calFxSw3() {
 		Exception t = null;
 		try {
@@ -6895,37 +6932,57 @@ public abstract class YZ2Service extends YZService {
 			futures.add(repositories.yzService.calFxSxSw3());
 			futures.add(repositories.yzService.calFxDsSw3());
 			futures.add(repositories.yzService.calFxSwSw3());
+			CommonUtil.sleep(futures, 100);
+			futures.clear();
 			futures.add(repositories.yzService.calFxMwSw3());
 			futures.add(repositories.yzService.calFxLhSw3());
 			futures.add(repositories.yzService.calFxBsSw3());
+			CommonUtil.sleep(futures, 100);
+			futures.clear();
 			futures.add(repositories.yzService.calFxZsSw3());
 			futures.add(repositories.yzService.calFxWxSw3());
 			futures.add(repositories.yzService.calFxWxdsSw3());
+			CommonUtil.sleep(futures, 100);
+			futures.clear();
 			futures.add(repositories.yzService.calFxPdSw3());
 			futures.add(repositories.yzService.calFxFdSw3());
 			futures.add(repositories.yzService.calFxQqSw3());
+			CommonUtil.sleep(futures, 100);
+			futures.clear();
 			futures.add(repositories.yzService.calFxQiwSw3());
 			futures.add(repositories.yzService.calFxTwelveSw3());
 			futures.add(repositories.yzService.calFxSlqSw3());
+			CommonUtil.sleep(futures, 100);
+			futures.clear();
 			futures.add(repositories.yzService.calFxZx1Sw3());
 			futures.add(repositories.yzService.calFxZx2Sw3());
 			futures.add(repositories.yzService.calFxZx3Sw3());
+			CommonUtil.sleep(futures, 100);
+			futures.clear();
 			futures.add(repositories.yzService.calFxZx4Sw3());
 			futures.add(repositories.yzService.calFxZx5Sw3());
 			futures.add(repositories.yzService.calFxZx6Sw3());
+			CommonUtil.sleep(futures, 100);
+			futures.clear();
 			futures.add(repositories.yzService.calFxZx7Sw3());
 			futures.add(repositories.yzService.calFxZx8Sw3());
 			futures.add(repositories.yzService.calFxZx9Sw3());
+			CommonUtil.sleep(futures, 100);
+			futures.clear();
 			futures.add(repositories.yzService.calFxZx10Sw3());
 			futures.add(repositories.yzService.calFxZx11Sw3());
 			futures.add(repositories.yzService.calFxZx12Sw3());
+			CommonUtil.sleep(futures, 100);
+			futures.clear();
 			futures.add(repositories.yzService.calFxZx13Sw3());
 			futures.add(repositories.yzService.calFxZx14Sw3());
 			futures.add(repositories.yzService.calFxZx15Sw3());
+			CommonUtil.sleep(futures, 100);
+			futures.clear();
 			futures.add(repositories.yzService.calFxZx16Sw3());
 			futures.add(repositories.yzService.calFxZx17Sw3());
 			futures.add(repositories.yzService.calFxZx18Sw3());
-			CommonUtil.sleep(futures, 10000);
+			CommonUtil.sleep(futures, 100);
 		} catch (Exception e) {
 			if (DataAccessException.class.isAssignableFrom(e.getClass())) {
 				logger.error(e.getMessage(), e);
@@ -6936,7 +6993,6 @@ public abstract class YZ2Service extends YZService {
 	}
 
 	@Async
-	@Transactional(propagation = Propagation.NEVER)
 	public Future<Exception> calFxSw4() {
 		Exception t = null;
 		try {
@@ -6944,37 +7000,57 @@ public abstract class YZ2Service extends YZService {
 			futures.add(repositories.yzService.calFxSxSw4());
 			futures.add(repositories.yzService.calFxDsSw4());
 			futures.add(repositories.yzService.calFxSwSw4());
+			CommonUtil.sleep(futures, 100);
+			futures.clear();
 			futures.add(repositories.yzService.calFxMwSw4());
 			futures.add(repositories.yzService.calFxLhSw4());
 			futures.add(repositories.yzService.calFxBsSw4());
+			CommonUtil.sleep(futures, 100);
+			futures.clear();
 			futures.add(repositories.yzService.calFxZsSw4());
 			futures.add(repositories.yzService.calFxWxSw4());
 			futures.add(repositories.yzService.calFxWxdsSw4());
+			CommonUtil.sleep(futures, 100);
+			futures.clear();
 			futures.add(repositories.yzService.calFxPdSw4());
 			futures.add(repositories.yzService.calFxFdSw4());
 			futures.add(repositories.yzService.calFxQqSw4());
+			CommonUtil.sleep(futures, 100);
+			futures.clear();
 			futures.add(repositories.yzService.calFxQiwSw4());
 			futures.add(repositories.yzService.calFxTwelveSw4());
 			futures.add(repositories.yzService.calFxSlqSw4());
+			CommonUtil.sleep(futures, 100);
+			futures.clear();
 			futures.add(repositories.yzService.calFxZx1Sw4());
 			futures.add(repositories.yzService.calFxZx2Sw4());
 			futures.add(repositories.yzService.calFxZx3Sw4());
+			CommonUtil.sleep(futures, 100);
+			futures.clear();
 			futures.add(repositories.yzService.calFxZx4Sw4());
 			futures.add(repositories.yzService.calFxZx5Sw4());
 			futures.add(repositories.yzService.calFxZx6Sw4());
+			CommonUtil.sleep(futures, 100);
+			futures.clear();
 			futures.add(repositories.yzService.calFxZx7Sw4());
 			futures.add(repositories.yzService.calFxZx8Sw4());
 			futures.add(repositories.yzService.calFxZx9Sw4());
+			CommonUtil.sleep(futures, 100);
+			futures.clear();
 			futures.add(repositories.yzService.calFxZx10Sw4());
 			futures.add(repositories.yzService.calFxZx11Sw4());
 			futures.add(repositories.yzService.calFxZx12Sw4());
+			CommonUtil.sleep(futures, 100);
+			futures.clear();
 			futures.add(repositories.yzService.calFxZx13Sw4());
 			futures.add(repositories.yzService.calFxZx14Sw4());
 			futures.add(repositories.yzService.calFxZx15Sw4());
+			CommonUtil.sleep(futures, 100);
+			futures.clear();
 			futures.add(repositories.yzService.calFxZx16Sw4());
 			futures.add(repositories.yzService.calFxZx17Sw4());
 			futures.add(repositories.yzService.calFxZx18Sw4());
-			CommonUtil.sleep(futures, 10000);
+			CommonUtil.sleep(futures, 100);
 		} catch (Exception e) {
 			if (DataAccessException.class.isAssignableFrom(e.getClass())) {
 				logger.error(e.getMessage(), e);
@@ -6985,7 +7061,6 @@ public abstract class YZ2Service extends YZService {
 	}
 
 	@Async
-	@Transactional(propagation = Propagation.NEVER)
 	public Future<Exception> calFxSw5() {
 		Exception t = null;
 		try {
@@ -6993,37 +7068,57 @@ public abstract class YZ2Service extends YZService {
 			futures.add(repositories.yzService.calFxSxSw5());
 			futures.add(repositories.yzService.calFxDsSw5());
 			futures.add(repositories.yzService.calFxSwSw5());
+			CommonUtil.sleep(futures, 100);
+			futures.clear();
 			futures.add(repositories.yzService.calFxMwSw5());
 			futures.add(repositories.yzService.calFxLhSw5());
 			futures.add(repositories.yzService.calFxBsSw5());
+			CommonUtil.sleep(futures, 100);
+			futures.clear();
 			futures.add(repositories.yzService.calFxZsSw5());
 			futures.add(repositories.yzService.calFxWxSw5());
 			futures.add(repositories.yzService.calFxWxdsSw5());
+			CommonUtil.sleep(futures, 100);
+			futures.clear();
 			futures.add(repositories.yzService.calFxPdSw5());
 			futures.add(repositories.yzService.calFxFdSw5());
 			futures.add(repositories.yzService.calFxQqSw5());
+			CommonUtil.sleep(futures, 100);
+			futures.clear();
 			futures.add(repositories.yzService.calFxQiwSw5());
 			futures.add(repositories.yzService.calFxTwelveSw5());
 			futures.add(repositories.yzService.calFxSlqSw5());
+			CommonUtil.sleep(futures, 100);
+			futures.clear();
 			futures.add(repositories.yzService.calFxZx1Sw5());
 			futures.add(repositories.yzService.calFxZx2Sw5());
 			futures.add(repositories.yzService.calFxZx3Sw5());
+			CommonUtil.sleep(futures, 100);
+			futures.clear();
 			futures.add(repositories.yzService.calFxZx4Sw5());
 			futures.add(repositories.yzService.calFxZx5Sw5());
 			futures.add(repositories.yzService.calFxZx6Sw5());
+			CommonUtil.sleep(futures, 100);
+			futures.clear();
 			futures.add(repositories.yzService.calFxZx7Sw5());
 			futures.add(repositories.yzService.calFxZx8Sw5());
 			futures.add(repositories.yzService.calFxZx9Sw5());
+			CommonUtil.sleep(futures, 100);
+			futures.clear();
 			futures.add(repositories.yzService.calFxZx10Sw5());
 			futures.add(repositories.yzService.calFxZx11Sw5());
 			futures.add(repositories.yzService.calFxZx12Sw5());
+			CommonUtil.sleep(futures, 100);
+			futures.clear();
 			futures.add(repositories.yzService.calFxZx13Sw5());
 			futures.add(repositories.yzService.calFxZx14Sw5());
 			futures.add(repositories.yzService.calFxZx15Sw5());
+			CommonUtil.sleep(futures, 100);
+			futures.clear();
 			futures.add(repositories.yzService.calFxZx16Sw5());
 			futures.add(repositories.yzService.calFxZx17Sw5());
 			futures.add(repositories.yzService.calFxZx18Sw5());
-			CommonUtil.sleep(futures, 10000);
+			CommonUtil.sleep(futures, 100);
 		} catch (Exception e) {
 			if (DataAccessException.class.isAssignableFrom(e.getClass())) {
 				logger.error(e.getMessage(), e);
@@ -7034,7 +7129,6 @@ public abstract class YZ2Service extends YZService {
 	}
 
 	@Async
-	@Transactional(propagation = Propagation.NEVER)
 	public Future<Exception> calFxSw6() {
 		Exception t = null;
 		try {
@@ -7042,34 +7136,52 @@ public abstract class YZ2Service extends YZService {
 			futures.add(repositories.yzService.calFxSxSw6());
 			futures.add(repositories.yzService.calFxDsSw6());
 			futures.add(repositories.yzService.calFxMwSw6());
+			CommonUtil.sleep(futures, 100);
+			futures.clear();
 			futures.add(repositories.yzService.calFxLhSw6());
 			futures.add(repositories.yzService.calFxBsSw6());
 			futures.add(repositories.yzService.calFxZsSw6());
+			CommonUtil.sleep(futures, 100);
+			futures.clear();
 			futures.add(repositories.yzService.calFxWxdsSw6());
 			futures.add(repositories.yzService.calFxPdSw6());
 			futures.add(repositories.yzService.calFxFdSw6());
+			CommonUtil.sleep(futures, 100);
+			futures.clear();
 			futures.add(repositories.yzService.calFxQqSw6());
 			futures.add(repositories.yzService.calFxQiwSw6());
 			futures.add(repositories.yzService.calFxTwelveSw6());
+			CommonUtil.sleep(futures, 100);
+			futures.clear();
 			futures.add(repositories.yzService.calFxSlqSw6());
 			futures.add(repositories.yzService.calFxZx1Sw6());
 			futures.add(repositories.yzService.calFxZx2Sw6());
+			CommonUtil.sleep(futures, 100);
+			futures.clear();
 			futures.add(repositories.yzService.calFxZx3Sw6());
 			futures.add(repositories.yzService.calFxZx4Sw6());
 			futures.add(repositories.yzService.calFxZx5Sw6());
+			CommonUtil.sleep(futures, 100);
+			futures.clear();
 			futures.add(repositories.yzService.calFxZx6Sw6());
 			futures.add(repositories.yzService.calFxZx7Sw6());
 			futures.add(repositories.yzService.calFxZx8Sw6());
+			CommonUtil.sleep(futures, 100);
+			futures.clear();
 			futures.add(repositories.yzService.calFxZx10Sw6());
 			futures.add(repositories.yzService.calFxZx11Sw6());
 			futures.add(repositories.yzService.calFxZx12Sw6());
+			CommonUtil.sleep(futures, 100);
+			futures.clear();
 			futures.add(repositories.yzService.calFxZx13Sw6());
 			futures.add(repositories.yzService.calFxZx14Sw6());
 			futures.add(repositories.yzService.calFxZx15Sw6());
+			CommonUtil.sleep(futures, 100);
+			futures.clear();
 			futures.add(repositories.yzService.calFxZx16Sw6());
 			futures.add(repositories.yzService.calFxZx17Sw6());
 			futures.add(repositories.yzService.calFxZx18Sw6());
-			CommonUtil.sleep(futures, 10000);
+			CommonUtil.sleep(futures, 100);
 		} catch (Exception e) {
 			if (DataAccessException.class.isAssignableFrom(e.getClass())) {
 				logger.error(e.getMessage(), e);
@@ -7080,7 +7192,6 @@ public abstract class YZ2Service extends YZService {
 	}
 
 	@Async
-	@Transactional(propagation = Propagation.NEVER)
 	public Future<Exception> calFxSw7() {
 		Exception t = null;
 		try {
@@ -7088,34 +7199,52 @@ public abstract class YZ2Service extends YZService {
 			futures.add(repositories.yzService.calFxSxSw7());
 			futures.add(repositories.yzService.calFxDsSw7());
 			futures.add(repositories.yzService.calFxMwSw7());
+			CommonUtil.sleep(futures, 100);
+			futures.clear();
 			futures.add(repositories.yzService.calFxLhSw7());
 			futures.add(repositories.yzService.calFxBsSw7());
 			futures.add(repositories.yzService.calFxZsSw7());
+			CommonUtil.sleep(futures, 100);
+			futures.clear();
 			futures.add(repositories.yzService.calFxWxdsSw7());
 			futures.add(repositories.yzService.calFxPdSw7());
 			futures.add(repositories.yzService.calFxFdSw7());
+			CommonUtil.sleep(futures, 100);
+			futures.clear();
 			futures.add(repositories.yzService.calFxQqSw7());
 			futures.add(repositories.yzService.calFxQiwSw7());
 			futures.add(repositories.yzService.calFxTwelveSw7());
+			CommonUtil.sleep(futures, 100);
+			futures.clear();
 			futures.add(repositories.yzService.calFxSlqSw7());
 			futures.add(repositories.yzService.calFxZx1Sw7());
 			futures.add(repositories.yzService.calFxZx2Sw7());
+			CommonUtil.sleep(futures, 100);
+			futures.clear();
 			futures.add(repositories.yzService.calFxZx3Sw7());
 			futures.add(repositories.yzService.calFxZx4Sw7());
 			futures.add(repositories.yzService.calFxZx5Sw7());
+			CommonUtil.sleep(futures, 100);
+			futures.clear();
 			futures.add(repositories.yzService.calFxZx6Sw7());
 			futures.add(repositories.yzService.calFxZx7Sw7());
 			futures.add(repositories.yzService.calFxZx8Sw7());
+			CommonUtil.sleep(futures, 100);
+			futures.clear();
 			futures.add(repositories.yzService.calFxZx10Sw7());
 			futures.add(repositories.yzService.calFxZx11Sw7());
 			futures.add(repositories.yzService.calFxZx12Sw7());
+			CommonUtil.sleep(futures, 100);
+			futures.clear();
 			futures.add(repositories.yzService.calFxZx13Sw7());
 			futures.add(repositories.yzService.calFxZx14Sw7());
 			futures.add(repositories.yzService.calFxZx15Sw7());
+			CommonUtil.sleep(futures, 100);
+			futures.clear();
 			futures.add(repositories.yzService.calFxZx16Sw7());
 			futures.add(repositories.yzService.calFxZx17Sw7());
 			futures.add(repositories.yzService.calFxZx18Sw7());
-			CommonUtil.sleep(futures, 10000);
+			CommonUtil.sleep(futures, 100);
 		} catch (Exception e) {
 			if (DataAccessException.class.isAssignableFrom(e.getClass())) {
 				logger.error(e.getMessage(), e);
@@ -7126,7 +7255,6 @@ public abstract class YZ2Service extends YZService {
 	}
 
 	@Async
-	@Transactional(propagation = Propagation.NEVER)
 	public Future<Exception> calFxSw8() {
 		Exception t = null;
 		try {
@@ -7134,31 +7262,47 @@ public abstract class YZ2Service extends YZService {
 			futures.add(repositories.yzService.calFxSxSw8());
 			futures.add(repositories.yzService.calFxDsSw8());
 			futures.add(repositories.yzService.calFxMwSw8());
+			CommonUtil.sleep(futures, 100);
+			futures.clear();
 			futures.add(repositories.yzService.calFxLhSw8());
 			futures.add(repositories.yzService.calFxBsSw8());
 			futures.add(repositories.yzService.calFxZsSw8());
+			CommonUtil.sleep(futures, 100);
+			futures.clear();
 			futures.add(repositories.yzService.calFxWxdsSw8());
 			futures.add(repositories.yzService.calFxPdSw8());
 			futures.add(repositories.yzService.calFxFdSw8());
+			CommonUtil.sleep(futures, 100);
+			futures.clear();
 			futures.add(repositories.yzService.calFxTwelveSw8());
 			futures.add(repositories.yzService.calFxSlqSw8());
 			futures.add(repositories.yzService.calFxZx1Sw8());
+			CommonUtil.sleep(futures, 100);
+			futures.clear();
 			futures.add(repositories.yzService.calFxZx2Sw8());
 			futures.add(repositories.yzService.calFxZx3Sw8());
 			futures.add(repositories.yzService.calFxZx4Sw8());
+			CommonUtil.sleep(futures, 100);
+			futures.clear();
 			futures.add(repositories.yzService.calFxZx5Sw8());
 			futures.add(repositories.yzService.calFxZx6Sw8());
 			futures.add(repositories.yzService.calFxZx7Sw8());
+			CommonUtil.sleep(futures, 100);
+			futures.clear();
 			futures.add(repositories.yzService.calFxZx8Sw8());
 			futures.add(repositories.yzService.calFxZx11Sw8());
 			futures.add(repositories.yzService.calFxZx12Sw8());
+			CommonUtil.sleep(futures, 100);
+			futures.clear();
 			futures.add(repositories.yzService.calFxZx13Sw8());
 			futures.add(repositories.yzService.calFxZx14Sw8());
 			futures.add(repositories.yzService.calFxZx15Sw8());
+			CommonUtil.sleep(futures, 100);
+			futures.clear();
 			futures.add(repositories.yzService.calFxZx16Sw8());
 			futures.add(repositories.yzService.calFxZx17Sw8());
 			futures.add(repositories.yzService.calFxZx18Sw8());
-			CommonUtil.sleep(futures, 10000);
+			CommonUtil.sleep(futures, 100);
 		} catch (Exception e) {
 			if (DataAccessException.class.isAssignableFrom(e.getClass())) {
 				logger.error(e.getMessage(), e);
@@ -7169,7 +7313,6 @@ public abstract class YZ2Service extends YZService {
 	}
 
 	@Async
-	@Transactional(propagation = Propagation.NEVER)
 	public Future<Exception> calFxSw9() {
 		Exception t = null;
 		try {
@@ -7177,31 +7320,47 @@ public abstract class YZ2Service extends YZService {
 			futures.add(repositories.yzService.calFxSxSw9());
 			futures.add(repositories.yzService.calFxDsSw9());
 			futures.add(repositories.yzService.calFxMwSw9());
+			CommonUtil.sleep(futures, 100);
+			futures.clear();
 			futures.add(repositories.yzService.calFxLhSw9());
 			futures.add(repositories.yzService.calFxBsSw9());
 			futures.add(repositories.yzService.calFxZsSw9());
+			CommonUtil.sleep(futures, 100);
+			futures.clear();
 			futures.add(repositories.yzService.calFxWxdsSw9());
 			futures.add(repositories.yzService.calFxPdSw9());
 			futures.add(repositories.yzService.calFxFdSw9());
+			CommonUtil.sleep(futures, 100);
+			futures.clear();
 			futures.add(repositories.yzService.calFxTwelveSw9());
 			futures.add(repositories.yzService.calFxSlqSw9());
 			futures.add(repositories.yzService.calFxZx1Sw9());
+			CommonUtil.sleep(futures, 100);
+			futures.clear();
 			futures.add(repositories.yzService.calFxZx2Sw9());
 			futures.add(repositories.yzService.calFxZx3Sw9());
 			futures.add(repositories.yzService.calFxZx4Sw9());
+			CommonUtil.sleep(futures, 100);
+			futures.clear();
 			futures.add(repositories.yzService.calFxZx5Sw9());
 			futures.add(repositories.yzService.calFxZx6Sw9());
 			futures.add(repositories.yzService.calFxZx7Sw9());
+			CommonUtil.sleep(futures, 100);
+			futures.clear();
 			futures.add(repositories.yzService.calFxZx8Sw9());
 			futures.add(repositories.yzService.calFxZx11Sw9());
 			futures.add(repositories.yzService.calFxZx12Sw9());
+			CommonUtil.sleep(futures, 100);
+			futures.clear();
 			futures.add(repositories.yzService.calFxZx13Sw9());
 			futures.add(repositories.yzService.calFxZx14Sw9());
 			futures.add(repositories.yzService.calFxZx15Sw9());
+			CommonUtil.sleep(futures, 100);
+			futures.clear();
 			futures.add(repositories.yzService.calFxZx16Sw9());
 			futures.add(repositories.yzService.calFxZx17Sw9());
 			futures.add(repositories.yzService.calFxZx18Sw9());
-			CommonUtil.sleep(futures, 10000);
+			CommonUtil.sleep(futures, 100);
 		} catch (Exception e) {
 			if (DataAccessException.class.isAssignableFrom(e.getClass())) {
 				logger.error(e.getMessage(), e);
@@ -7212,7 +7371,6 @@ public abstract class YZ2Service extends YZService {
 	}
 
 	@Async
-	@Transactional(propagation = Propagation.NEVER)
 	public Future<Exception> calFxSw10() {
 		Exception t = null;
 		try {
@@ -7220,29 +7378,43 @@ public abstract class YZ2Service extends YZService {
 			futures.add(repositories.yzService.calFxSxSw10());
 			futures.add(repositories.yzService.calFxDsSw10());
 			futures.add(repositories.yzService.calFxMwSw10());
+			CommonUtil.sleep(futures, 100);
+			futures.clear();
 			futures.add(repositories.yzService.calFxLhSw10());
 			futures.add(repositories.yzService.calFxWxdsSw10());
 			futures.add(repositories.yzService.calFxPdSw10());
+			CommonUtil.sleep(futures, 100);
+			futures.clear();
 			futures.add(repositories.yzService.calFxFdSw10());
 			futures.add(repositories.yzService.calFxTwelveSw10());
 			futures.add(repositories.yzService.calFxSlqSw10());
+			CommonUtil.sleep(futures, 100);
+			futures.clear();
 			futures.add(repositories.yzService.calFxZx1Sw10());
 			futures.add(repositories.yzService.calFxZx2Sw10());
 			futures.add(repositories.yzService.calFxZx3Sw10());
+			CommonUtil.sleep(futures, 100);
+			futures.clear();
 			futures.add(repositories.yzService.calFxZx4Sw10());
 			futures.add(repositories.yzService.calFxZx5Sw10());
 			futures.add(repositories.yzService.calFxZx6Sw10());
+			CommonUtil.sleep(futures, 100);
+			futures.clear();
 			futures.add(repositories.yzService.calFxZx7Sw10());
 			futures.add(repositories.yzService.calFxZx8Sw10());
 			futures.add(repositories.yzService.calFxZx11Sw10());
+			CommonUtil.sleep(futures, 100);
+			futures.clear();
 			futures.add(repositories.yzService.calFxZx12Sw10());
 			futures.add(repositories.yzService.calFxZx13Sw10());
 			futures.add(repositories.yzService.calFxZx14Sw10());
+			CommonUtil.sleep(futures, 100);
+			futures.clear();
 			futures.add(repositories.yzService.calFxZx15Sw10());
 			futures.add(repositories.yzService.calFxZx16Sw10());
 			futures.add(repositories.yzService.calFxZx17Sw10());
 			futures.add(repositories.yzService.calFxZx18Sw10());
-			CommonUtil.sleep(futures, 10000);
+			CommonUtil.sleep(futures, 100);
 		} catch (Exception e) {
 			if (DataAccessException.class.isAssignableFrom(e.getClass())) {
 				logger.error(e.getMessage(), e);
@@ -7253,7 +7425,6 @@ public abstract class YZ2Service extends YZService {
 	}
 
 	@Async
-	@Transactional(propagation = Propagation.NEVER)
 	public Future<Exception> calFxSw11() {
 		Exception t = null;
 		try {
@@ -7261,23 +7432,33 @@ public abstract class YZ2Service extends YZService {
 			futures.add(repositories.yzService.calFxSxSw11());
 			futures.add(repositories.yzService.calFxPdSw11());
 			futures.add(repositories.yzService.calFxFdSw11());
+			CommonUtil.sleep(futures, 100);
+			futures.clear();
 			futures.add(repositories.yzService.calFxTwelveSw11());
 			futures.add(repositories.yzService.calFxSlqSw11());
 			futures.add(repositories.yzService.calFxZx1Sw11());
+			CommonUtil.sleep(futures, 100);
+			futures.clear();
 			futures.add(repositories.yzService.calFxZx2Sw11());
 			futures.add(repositories.yzService.calFxZx3Sw11());
 			futures.add(repositories.yzService.calFxZx4Sw11());
+			CommonUtil.sleep(futures, 100);
+			futures.clear();
 			futures.add(repositories.yzService.calFxZx5Sw11());
 			futures.add(repositories.yzService.calFxZx6Sw11());
 			futures.add(repositories.yzService.calFxZx11Sw11());
+			CommonUtil.sleep(futures, 100);
+			futures.clear();
 			futures.add(repositories.yzService.calFxZx12Sw11());
 			futures.add(repositories.yzService.calFxZx13Sw11());
 			futures.add(repositories.yzService.calFxZx14Sw11());
+			CommonUtil.sleep(futures, 100);
+			futures.clear();
 			futures.add(repositories.yzService.calFxZx15Sw11());
 			futures.add(repositories.yzService.calFxZx16Sw11());
 			futures.add(repositories.yzService.calFxZx17Sw11());
 			futures.add(repositories.yzService.calFxZx18Sw11());
-			CommonUtil.sleep(futures, 10000);
+			CommonUtil.sleep(futures, 100);
 		} catch (Exception e) {
 			if (DataAccessException.class.isAssignableFrom(e.getClass())) {
 				logger.error(e.getMessage(), e);
@@ -7288,7 +7469,6 @@ public abstract class YZ2Service extends YZService {
 	}
 
 	@Async
-	@Transactional(propagation = Propagation.NEVER)
 	public Future<Exception> calFxSw12() {
 		Exception t = null;
 		try {
@@ -7296,23 +7476,33 @@ public abstract class YZ2Service extends YZService {
 			futures.add(repositories.yzService.calFxSxSw12());
 			futures.add(repositories.yzService.calFxPdSw12());
 			futures.add(repositories.yzService.calFxFdSw12());
+			CommonUtil.sleep(futures, 100);
+			futures.clear();
 			futures.add(repositories.yzService.calFxTwelveSw12());
 			futures.add(repositories.yzService.calFxSlqSw12());
 			futures.add(repositories.yzService.calFxZx1Sw12());
+			CommonUtil.sleep(futures, 100);
+			futures.clear();
 			futures.add(repositories.yzService.calFxZx2Sw12());
 			futures.add(repositories.yzService.calFxZx3Sw12());
 			futures.add(repositories.yzService.calFxZx4Sw12());
+			CommonUtil.sleep(futures, 100);
+			futures.clear();
 			futures.add(repositories.yzService.calFxZx5Sw12());
 			futures.add(repositories.yzService.calFxZx6Sw12());
 			futures.add(repositories.yzService.calFxZx11Sw12());
+			CommonUtil.sleep(futures, 100);
+			futures.clear();
 			futures.add(repositories.yzService.calFxZx12Sw12());
 			futures.add(repositories.yzService.calFxZx13Sw12());
 			futures.add(repositories.yzService.calFxZx14Sw12());
+			CommonUtil.sleep(futures, 100);
+			futures.clear();
 			futures.add(repositories.yzService.calFxZx15Sw12());
 			futures.add(repositories.yzService.calFxZx16Sw12());
 			futures.add(repositories.yzService.calFxZx17Sw12());
 			futures.add(repositories.yzService.calFxZx18Sw12());
-			CommonUtil.sleep(futures, 10000);
+			CommonUtil.sleep(futures, 100);
 		} catch (Exception e) {
 			if (DataAccessException.class.isAssignableFrom(e.getClass())) {
 				logger.error(e.getMessage(), e);
@@ -7329,17 +7519,17 @@ public abstract class YZ2Service extends YZService {
 	@PersistenceContext
 	private EntityManager em;
 
+	@Transactional
 	public void saveFxSwData() {
-		for (FxSw data : fxswMap.values()) {
-			if (data.getId() != null) {
-				em.merge(data);
-			} else {
-				em.persist(data);
-			}
-		}
+//		for (FxSw data : fxswMap.values()) {
+//			if (data.getId() != null) {
+//				em.merge(data);
+//			} else {
+//				em.persist(data);
+//			}
+//		}
 	}
 
-	@Transactional(propagation = Propagation.NEVER)
 	public List<Future<Exception>> calFxSwRedCounts() throws Exception {
 		List<Future<Exception>> futures = new ArrayList<Future<Exception>>();
 		List<Future<Exception>> subFutures = new ArrayList<Future<Exception>>();
@@ -7361,7 +7551,6 @@ public abstract class YZ2Service extends YZService {
 	}
 
 	@Async
-	@Transactional(propagation = Propagation.NEVER)
 	public <T extends FxSw> Future<Exception> calFxSwRedCountsForSw(List<Future<Exception>> futures, BaseFxSwDao<T> dao, BaseYzRepository<T> repository) {
 		Exception t = null;
 		try {
@@ -7371,9 +7560,7 @@ public abstract class YZ2Service extends YZService {
 				result = repository.findAll(request);
 				if (result != null && result.hasContent()) {
 					for (T yz : result.getContent()) {
-						synchronized (this) {
-							futures.add(dao.countReds(yz.getYear(), yz.getPhase(), 100));
-						}
+						dao.countReds(yz.getYear(), yz.getPhase(), 100);
 					}
 				}
 				request = request.next();

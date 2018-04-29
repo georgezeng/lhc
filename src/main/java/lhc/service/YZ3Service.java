@@ -21,7 +21,6 @@ import org.springframework.data.domain.Sort;
 import org.springframework.data.domain.Sort.Direction;
 import org.springframework.scheduling.annotation.Async;
 import org.springframework.scheduling.annotation.AsyncResult;
-import org.springframework.transaction.annotation.Transactional;
 import org.springframework.util.ReflectionUtils;
 
 import com.google.common.base.Joiner;
@@ -53,7 +52,6 @@ import lhc.dto.XbwJYSub;
 import lhc.repository.jpa.BaseYzRepository;
 import lhc.util.CommonUtil;
 
-@Transactional
 @SuppressWarnings("unchecked")
 public class YZ3Service extends YZ2Service {
 	@Async

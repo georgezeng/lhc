@@ -26,7 +26,6 @@ import org.springframework.data.domain.Sort;
 import org.springframework.data.domain.Sort.Direction;
 import org.springframework.scheduling.annotation.Async;
 import org.springframework.scheduling.annotation.AsyncResult;
-import org.springframework.transaction.annotation.Transactional;
 import org.springframework.util.ReflectionUtils;
 
 import lhc.constants.Bs9qNums;
@@ -155,7 +154,6 @@ import lhc.util.CommonUtil;
 import lhc.util.DateUtil;
 
 //@Service
-@Transactional
 @SuppressWarnings("unchecked")
 public class YZService {
 	protected Logger logger = LoggerFactory.getLogger(getClass());
@@ -4510,7 +4508,7 @@ public class YZService {
 		yz.setSxzfNums(getSxNums(bmnSX, nextSX));
 	}
 
-	protected List<Integer> getSxNums(SX bmnSX, SX sx) {
+	protected static List<Integer> getSxNums(SX bmnSX, SX sx) {
 		int delta = sx.getPos() - bmnSX.getPos();
 		if (delta < 0) {
 			delta = 12 + delta;

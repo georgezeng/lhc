@@ -2,7 +2,6 @@ package lhc.service;
 
 import java.lang.reflect.Method;
 import java.util.ArrayList;
-import java.util.Date;
 import java.util.List;
 import java.util.concurrent.Future;
 
@@ -14,8 +13,6 @@ import org.springframework.data.domain.Sort;
 import org.springframework.data.domain.Sort.Direction;
 import org.springframework.scheduling.annotation.Async;
 import org.springframework.scheduling.annotation.AsyncResult;
-import org.springframework.transaction.annotation.Propagation;
-import org.springframework.transaction.annotation.Transactional;
 import org.springframework.util.ReflectionUtils;
 
 import com.google.common.base.Joiner;
@@ -102,10 +99,8 @@ import lhc.repository.jpa.BaseYzRepository;
 import lhc.util.CommonUtil;
 import lhc.util.DateUtil;
 
-@Transactional
 public class YZ6Service extends YZ5Service {
 	@Async
-	@Transactional(propagation = Propagation.NOT_SUPPORTED)
 	public Future<Exception> calMy1() {
 		Exception t = null;
 		try {
@@ -140,7 +135,6 @@ public class YZ6Service extends YZ5Service {
 	}
 
 	@Async
-	@Transactional(propagation = Propagation.NOT_SUPPORTED)
 	public Future<Exception> calMyD1() {
 		Exception t = null;
 		try {
@@ -175,7 +169,6 @@ public class YZ6Service extends YZ5Service {
 	}
 
 	@Async
-	@Transactional(propagation = Propagation.NOT_SUPPORTED)
 	public Future<Exception> calMy2() {
 		Exception t = null;
 		try {
@@ -210,7 +203,6 @@ public class YZ6Service extends YZ5Service {
 	}
 
 	@Async
-	@Transactional(propagation = Propagation.NOT_SUPPORTED)
 	public Future<Exception> calMy100() {
 		Exception t = null;
 		try {
@@ -246,7 +238,6 @@ public class YZ6Service extends YZ5Service {
 	}
 
 	@Async
-	@Transactional(propagation = Propagation.NOT_SUPPORTED)
 	public Future<Exception> calMy150() {
 		Exception t = null;
 		try {
@@ -282,7 +273,6 @@ public class YZ6Service extends YZ5Service {
 	}
 
 	@Async
-	@Transactional(propagation = Propagation.NOT_SUPPORTED)
 	public Future<Exception> calMy250() {
 		Exception t = null;
 		try {
@@ -318,7 +308,6 @@ public class YZ6Service extends YZ5Service {
 	}
 
 	@Async
-	@Transactional(propagation = Propagation.NOT_SUPPORTED)
 	public Future<Exception> calMy200() {
 		Exception t = null;
 		try {

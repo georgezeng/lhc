@@ -20,8 +20,6 @@ import org.springframework.data.domain.Sort;
 import org.springframework.data.domain.Sort.Direction;
 import org.springframework.scheduling.annotation.Async;
 import org.springframework.scheduling.annotation.AsyncResult;
-import org.springframework.stereotype.Service;
-import org.springframework.transaction.annotation.Transactional;
 import org.springframework.util.ReflectionUtils;
 
 import com.google.common.base.Joiner;
@@ -128,7 +126,6 @@ import lhc.util.CommonUtil;
 import lhc.util.DateUtil;
 
 //@Service
-@Transactional
 @SuppressWarnings("unchecked")
 public class YZ5Service extends YZ4Service {
 	@Async
