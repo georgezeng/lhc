@@ -5,11 +5,14 @@ import java.lang.reflect.Method;
 import java.math.BigDecimal;
 import java.math.RoundingMode;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.Collections;
 import java.util.Date;
 import java.util.HashMap;
+import java.util.LinkedHashSet;
 import java.util.List;
 import java.util.Map;
+import java.util.Set;
 import java.util.concurrent.Future;
 
 import javax.servlet.http.HttpServletRequest;
@@ -51,6 +54,7 @@ import lhc.dto.query.PageInfo;
 import lhc.dto.query.PageResult;
 import lhc.dto.query.QueryInfo;
 import lhc.enums.SX;
+import lhc.repository.jpa.BaseFxSwDao;
 import lhc.repository.jpa.BaseYzDao;
 import lhc.repository.jpa.Repositories;
 import lhc.service.ParallelYzServiceWrapper;
@@ -443,28 +447,28 @@ public class YZController {
 		CommonUtil.sleep(futures, 100);
 		repositories.yzService.saveFxSwData();
 		repositories.yzService.clearFxSwData();
-		futures.clear();
-		futures = repositories.yzService.calFxSwRedCounts();
-		CommonUtil.sleep(futures, 100);
-		logger.info("End of calFxSwRedCounts...");
-		futures.clear();
-		futures.add(repositories.yzService.calDsxMinJY());
-		futures.add(repositories.yzService.calDsxMaxJY());
-		CommonUtil.sleep(futures, 100);
-		logger.info("End of calDsxJY...");
-		futures.clear();
-		futures.add(repositories.yzService.calDmgMinJY());
-		futures.add(repositories.yzService.calDmgMaxJY());
-		CommonUtil.sleep(futures, 100);
-		logger.info("End of calDmgJY...");
-		futures.clear();
-		futures.add(repositories.yzService.calDsyMinJY());
-		futures.add(repositories.yzService.calDsyMaxJY());
-		CommonUtil.sleep(futures, 100);
-		logger.info("End of calDsyJY...");
-		futures.clear();
-		futures.add(repositories.yzService.calFxSwA());
-		CommonUtil.sleep(futures, 100);
+		// futures.clear();
+		// futures = repositories.yzService.calFxSwRedCounts();
+		// CommonUtil.sleep(futures, 100);
+		// logger.info("End of calFxSwRedCounts...");
+		// futures.clear();
+		// futures.add(repositories.yzService.calDsxMinJY());
+		// futures.add(repositories.yzService.calDsxMaxJY());
+		// CommonUtil.sleep(futures, 100);
+		// logger.info("End of calDsxJY...");
+		// futures.clear();
+		// futures.add(repositories.yzService.calDmgMinJY());
+		// futures.add(repositories.yzService.calDmgMaxJY());
+		// CommonUtil.sleep(futures, 100);
+		// logger.info("End of calDmgJY...");
+		// futures.clear();
+		// futures.add(repositories.yzService.calDsyMinJY());
+		// futures.add(repositories.yzService.calDsyMaxJY());
+		// CommonUtil.sleep(futures, 100);
+		// logger.info("End of calDsyJY...");
+		// futures.clear();
+		// futures.add(repositories.yzService.calFxSwA());
+		// CommonUtil.sleep(futures, 100);
 		logger.info("End of calFXSW stage...");
 	}
 
@@ -1313,6 +1317,43 @@ public class YZController {
 			result.getList().add(totalLine);
 		}
 		return new BaseResult(result);
+	}
+
+	private List<String> getNums(String nums) {
+		return nums != null ? Arrays.asList(nums.split(",\\s*")) : new ArrayList<String>();
+	}
+
+	@RequestMapping("/listAbcdD1ForXBW/{sw}")
+	public BaseResult listAbcdD1ForXBW(@PathVariable int sw) throws Exception {
+		Map<String, Object> map = new HashMap<String, Object>();
+
+		FxSw fxsw = ((BaseFxSwDao<?>) ReflectionUtils.findField(repositories.getClass(), "fxsw" + sw + "Dao").get(repositories)).findLast();
+		Map<String, Set<String>> aData = new HashMap<String, Set<String>>();
+		aData.put("sx", new LinkedHashSet<String>(getNums(fxsw.getSxNums())));
+		aData.put("twelve", new LinkedHashSet<String>(getNums(fxsw.getTwelveNums())));
+		aData.put("slq", new LinkedHashSet<String>(getNums(fxsw.getSlqNums())));
+		aData.put("zx12", new LinkedHashSet<String>(getNums(fxsw.getZx12Nums())));
+		map.put("A", aData);
+
+		Map<String, Set<String>> bData = new HashMap<String, Set<String>>();
+		bData.put("lh", new LinkedHashSet<String>(getNums(fxsw.getLhNums())));
+		bData.put("mw", new LinkedHashSet<String>(getNums(fxsw.getMwNums())));
+		bData.put("fd", new LinkedHashSet<String>(getNums(fxsw.getFdNums())));
+		bData.put("pd", new LinkedHashSet<String>(getNums(fxsw.getPdNums())));
+		map.put("B", bData);
+
+		Map<String, Set<String>> cData = new HashMap<String, Set<String>>();
+		cData.put("zs", new LinkedHashSet<String>(getNums(fxsw.getZsNums())));
+		cData.put("wxds", new LinkedHashSet<String>(getNums(fxsw.getWxdsNums())));
+		cData.put("bs", new LinkedHashSet<String>(getNums(fxsw.getBsNums())));
+		map.put("C", cData);
+
+		Map<String, Set<String>> dData = new HashMap<String, Set<String>>();
+		dData.put("sw", new LinkedHashSet<String>(getNums(fxsw.getSwNums())));
+		dData.put("qiw", new LinkedHashSet<String>(getNums(fxsw.getQiwNums())));
+		map.put("D", dData);
+
+		return new BaseResult(map);
 	}
 
 	@RequestMapping("/listSXZF")
@@ -2536,7 +2577,7 @@ public class YZController {
 		}
 		return null;
 	}
-	
+
 	@RequestMapping("/downloadDJDL")
 	public String downloadDJDL(HttpServletRequest request, HttpServletResponse response) throws Exception {
 		response.setContentType("text/csv;charset=gbk;");
@@ -4091,7 +4132,7 @@ public class YZController {
 		}
 		return new BaseResult(result);
 	}
-	
+
 	@RequestMapping("/listDjdl")
 	public BaseResult listDjdl(@RequestBody QueryInfo<DjdlYz> queryInfo) throws Exception {
 		PageResult<DjdlYz> result = repositories.djdlDao.query(queryInfo);

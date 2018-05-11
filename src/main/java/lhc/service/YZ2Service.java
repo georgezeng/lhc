@@ -416,10 +416,10 @@ public abstract class YZ2Service extends YZService {
 					handler.getData(list, clazz, numsClass, yz);
 					Collections.sort(list, fxComparator);
 					R data = null;
-//					synchronized (this) {
-//						data = (R) fxswMap.get(yz.getDate() + "_" + pos);
-//						 data = swRepository.findByYearAndPhase(yz.getYear(), yz.getPhase());
-//						if (data == null) {
+					synchronized (this) {
+						data = (R) fxswMap.get(yz.getDate() + "_" + pos);
+						// data = swRepository.findByYearAndPhase(yz.getYear(), yz.getPhase());
+						if (data == null) {
 							data = swRepository.findByYearAndPhase(yz.getYear(), yz.getPhase());
 							if (data == null) {
 								data = swClass.newInstance();
@@ -427,18 +427,17 @@ public abstract class YZ2Service extends YZService {
 								data.setYear(yz.getYear());
 								data.setPhase(yz.getPhase());
 							}
-//							fxswMap.put(yz.getDate() + "_" + pos, data);
-//						}
-//					}
+							fxswMap.put(yz.getDate() + "_" + pos, data);
+						}
+					}
 					if (last != null) {
 						XbwInfo info = list.get(pos - 1);
-//						R lastData = (R) fxswMap.get(last.getDate() + "_" + pos);
-						R lastData = swRepository.findByYearAndPhase(last.getYear(), last.getPhase());
-//						if (lastData == null) {
-//							lastData = swRepository.findByYearAndPhase(last.getYear(), last.getPhase());
-//						}
+						R lastData = (R) fxswMap.get(last.getDate() + "_" + pos);
+						if (lastData == null) {
+							lastData = swRepository.findByYearAndPhase(last.getYear(), last.getPhase());
+						}
 						handler.setData(pos, info, list, lastList, data, lastData, prefix, numsClass);
-						 swRepository.save(data);
+						// swRepository.save(data);
 					}
 					last = yz;
 					lastList = list;
@@ -474,10 +473,10 @@ public abstract class YZ2Service extends YZService {
 					if (data.getSx() == null) {
 						data.setSx(lastData.getSx() + 1);
 					}
-					data.setSxDW(sx.getText());
-					SX bmnSX = DateUtil.getSxByYear(data.getDate());
-					data.setSxNums(Joiner.on(",").join(getSxNums(bmnSX, sx)));
 				}
+				data.setSxDW(sx.getText());
+				SX bmnSX = DateUtil.getSxByYear(data.getDate());
+				data.setSxNums(Joiner.on(",").join(getSxNums(bmnSX, sx)));
 			}
 		}, null);
 	}
@@ -489,7 +488,7 @@ public abstract class YZ2Service extends YZService {
 				for (int i = 1; i < 13; i++) {
 					Method m = ReflectionUtils.findMethod(clazz, "getW" + i);
 					Integer value = (Integer) m.invoke(yz);
-					list.add(new XbwInfo("W" + i, i, value));
+					list.add(new XbwInfo("" + i, i, value));
 				}
 			}
 
@@ -515,11 +514,6 @@ public abstract class YZ2Service extends YZService {
 					int range = 4;
 					int length = 12;
 					int currentPos = (Integer) info.obj;
-					if (currentPos % range == 0) {
-						currentPos = currentPos / range;
-					} else {
-						currentPos = currentPos / range + 1;
-					}
 					int maxLength = 4;
 					if (currentPos >= length) {
 						currentPos = length;
@@ -563,8 +557,8 @@ public abstract class YZ2Service extends YZService {
 					}
 					Collections.sort(list, fxComparator);
 					if (last != null) {
-//						R data = (R) fxswMap.get(yz.getDate() + "_" + pos);
-						 R data = swRepository.findByYearAndPhase(yz.getYear(), yz.getPhase());
+						R data = (R) fxswMap.get(yz.getDate() + "_" + pos);
+						// R data = swRepository.findByYearAndPhase(yz.getYear(), yz.getPhase());
 						XbwInfo info = list.get(pos - 1);
 						Integer zf = (Integer) info.obj;
 						XbwInfo firstInfo = list.get(0);
@@ -574,8 +568,7 @@ public abstract class YZ2Service extends YZService {
 						if (lastZf.equals(firstZf)) {
 							sm.invoke(data, 0);
 						}
-//						R lastData = (R) fxswMap.get(last.getDate() + "_" + pos);
-						R lastData = swRepository.findByYearAndPhase(last.getYear(), last.getPhase());
+						R lastData = (R) fxswMap.get(last.getDate() + "_" + pos);
 						if (gm.invoke(lastData) != null) {
 							if (gm.invoke(data) == null) {
 								Integer value = (Integer) gm.invoke(lastData);
@@ -585,7 +578,7 @@ public abstract class YZ2Service extends YZService {
 							m.invoke(data, "振幅" + zf);
 							handler.setData(zf, pos, data, prefix, numsClass, yzRepository);
 						}
-						swRepository.save(data);
+						// swRepository.save(data);
 					}
 					last = yz;
 					lastList = list;
@@ -615,7 +608,7 @@ public abstract class YZ2Service extends YZService {
 							sxpos -= len;
 						}
 						SX bmnSX = DateUtil.getSxByYear(data.getDate());
-						data.setSxNums(Joiner.on(",").join(getSxNums(bmnSX, SX.posOf(sxpos))));
+						data.setSxzfNums(Joiner.on(",").join(getSxNums(bmnSX, SX.posOf(sxpos))));
 					}
 				});
 	}
@@ -6842,11 +6835,6 @@ public abstract class YZ2Service extends YZService {
 			futures.add(repositories.yzService.calFxZx17Sw1());
 			futures.add(repositories.yzService.calFxZx18Sw1());
 			CommonUtil.sleep(futures, 100);
-			for (FxSw data : fxswMap.values()) {
-				if (data instanceof FxSw1) {
-					repositories.fxsw1Repository.save((FxSw1) data);
-				}
-			}
 		} catch (Exception e) {
 			if (DataAccessException.class.isAssignableFrom(e.getClass())) {
 				logger.error(e.getMessage(), e);
@@ -7519,15 +7507,20 @@ public abstract class YZ2Service extends YZService {
 	@PersistenceContext
 	private EntityManager em;
 
-	@Transactional
+	
 	public void saveFxSwData() {
-//		for (FxSw data : fxswMap.values()) {
-//			if (data.getId() != null) {
-//				em.merge(data);
-//			} else {
-//				em.persist(data);
-//			}
-//		}
+		for (FxSw data : fxswMap.values()) {
+			repositories.yzService.saveFxSwData(data);
+		}
+	}
+	
+	@Transactional
+	public void saveFxSwData(FxSw data) {
+		if (data.getId() != null) {
+			em.merge(data);
+		} else {
+			em.persist(data);
+		}
 	}
 
 	public List<Future<Exception>> calFxSwRedCounts() throws Exception {

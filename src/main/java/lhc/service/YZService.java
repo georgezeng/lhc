@@ -4511,7 +4511,7 @@ public class YZService {
 	protected static List<Integer> getSxNums(SX bmnSX, SX sx) {
 		int delta = sx.getPos() - bmnSX.getPos();
 		if (delta < 0) {
-			delta = 12 + delta;
+			delta = 0 - delta;
 		}
 		return SxNums.NUMS[delta];
 	}

@@ -23,7 +23,71 @@ $(document).ready(function() {
 		lastResult = 0;
 		lastColor = null;
 		totalHms = [];
-	})
+	});
+	
+	$("#d1List").combobox().css("float", "right");
+	
+	$("#addD1Btn").click(function() {
+		post({
+			url: '/mvc/yz/listAbcdD1ForXBW/' + $("#d1List").val(),
+			success: function(map) {
+				for(var i in map) {
+					for(j in map[i]) {
+						var text = null;
+						switch(j) {
+						case "sx":  text = "生肖"; break;
+						case "twelve":  text = "十二区"; break;
+						case "slq":  text = "十六区"; break;
+						case "zx12":  text = "杂十二"; break;
+						case "lh":  text = "合数"; break;
+						case "mw":  text = "末位"; break;
+						case "fd":  text = "分段"; break;
+						case "pd":  text = "配对"; break;
+						case "zs":  text = "质数"; break;
+						case "wxds":  text = "五行单双"; break;
+						case "bs":  text = "波色"; break;
+						case "sw":  text = "首位"; break;
+						case "qiw":  text = "七位"; break;
+						}
+						if(text) {
+							addLine(i, text, map[i][j].sort(function(a, b){return a-b}).join(", "));
+						}
+					}
+					function addLine(sz, text, arrStr) {
+						if(!lastSz) {
+							lastSz = sz;
+							lastSZColor = "#ffc";
+						} else if(lastSz != sz) {
+							lastSz = sz;
+							if(lastSZColor == "#ffc") {
+								lastSZColor = "#ffffff";
+							} else {
+								lastSZColor = "#ffc";
+							}
+						}
+						
+						var tbody = $("#conditionTable").find("tbody");
+						var sameSzTr = tbody.find("tr[name='sz"+sz+"']:last-child");
+						var tr = $("<tr name='sz"+sz+"'></tr>").appendTo(tbody);
+						if(sameSzTr.length > 0) {
+							sameSzTr.after(tr);
+						} 
+						tr.css("backgroundColor", lastSZColor).css("border", "1px solid #ddd");
+						$("<td></td>").text(sz).appendTo(tr);
+						$("<td></td>").text("倒1-" + text).appendTo(tr);
+						$("<td name='hm'></td>").text(arrStr).appendTo(tr).attr("txt", arrStr).attr("hm", arrStr);
+						$("<a href='javascript:;'>删除</a>").appendTo($("<td></td>").appendTo(tr)).click(function() {
+							$(this).parents("tr").remove();
+							if(tbody.children().length == 0) {
+								lastSZColor = null;
+								lastSz = null;
+							}
+						});
+					}
+				}
+			}
+		});
+	});
 	
 	var totalHms;
 	var lastSZColor;

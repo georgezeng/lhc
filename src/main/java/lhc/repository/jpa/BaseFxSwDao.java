@@ -817,4 +817,11 @@ public abstract class BaseFxSwDao<T extends FxSw> extends BaseYzDao<T> {
 		QueryUtil.setArgs(args, query);
 		query.executeUpdate();
 	}
+	
+	public <T extends FxSw> T findLast() {
+		StringBuilder sql = new StringBuilder();
+		sql.append("select * from " + getTableName() + " order by date desc limit 0, 1");
+		Query query = em.createNativeQuery(sql.toString(), clazz);
+		return (T) query.getSingleResult();
+	}
 }
