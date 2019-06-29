@@ -1,6 +1,7 @@
 FROM java:8
-FROM maven:3.5.0
-WORKDIR /lhc
-ADD . /lhc
-RUN mvn clean install
-CMD ["java", "-DLOG_PATH=/home/ubuntu/logs/lhc", "-Dspring.profiles.active=uat", "-jar", "lhc.web.jar"]
+ARG project
+ENV artifact=${project}
+RUN echo "Asia/Hong_Kong" > /etc/timezone
+ADD ${project}.jar ./${artifact}.jar
+CMD java -jar ${artifact}.jar
+EXPOSE 8080
