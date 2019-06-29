@@ -536,9 +536,9 @@ public class YZController {
 		calWX();
 		calZS();
 		calZX();
-		calFXSW();
-		calMY();
-		calMN();
+//		calFXSW();
+//		calMY();
+//		calMN();
 		logger.info("Done calYZ...");
 		return BaseResult.EMPTY;
 	}
